@@ -18,7 +18,7 @@ namespace Kitbox_project
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-
+               
             return builder.Build();
         }
     }
