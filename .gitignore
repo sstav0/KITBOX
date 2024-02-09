@@ -1,5 +1,5 @@
 *.vsidx
 .vs/
-obj/
-bin/
+Kitbox_project/obj/
+Kitbox_project/bin/
 *.suo
