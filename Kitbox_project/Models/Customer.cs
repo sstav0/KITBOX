@@ -20,5 +20,15 @@ namespace Kitbox_project.Models
             this.orders = orders;
             this.email = email;
         }
+
+        private void Add_Order(Order order)
+        {
+
+        }
+
+        private void Remove_Order() 
+        {
+
+        }
     }
 }

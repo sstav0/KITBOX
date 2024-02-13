@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kitbox_project.Views.HomePage"
-             Title="Home">
+             x:Class="Kitbox_project.Views.BasketPage"
+             Title="Basket">
+    
     <ScrollView>
-        <Grid>
+            <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="400"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Logo of a cute robot..."
-                HeightRequest="200"
-                HorizontalOptions="Center" 
-                Grid.Row="0"/>
 
             <Label 
-                Text="Welcome to the Kitbox Management App !"
+                Text="Welcome to your basket !"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="26"
                 HorizontalOptions="Center" 
                 Grid.Row="1"/>
-        </Grid>
-    </ScrollView>
-</ContentPage>
+            </Grid>
+        </ScrollView>
+    </ContentPage>

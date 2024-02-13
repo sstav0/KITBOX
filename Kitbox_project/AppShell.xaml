@@ -14,6 +14,22 @@
             ContentTemplate="{DataTemplate views:HomePage}"
             Route="HomePage" />
 
+        <ShellContent
+            Title="Basket"
+            ContentTemplate="{DataTemplate views:BasketPage}"
+            Route="BasketPage" />
+
     </TabBar>
+
+    <ShellContent
+    Title="Cabinet Creator"
+    ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
+    Route="CabinetCreatorPage" />
+
+    <ShellContent
+    Title="Locker Creator"
+    ContentTemplate="{DataTemplate views:LockerCreatorPage}"
+    Route="LockerCreatorPage" />
+
 
 </Shell>

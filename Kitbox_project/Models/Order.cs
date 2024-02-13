@@ -16,5 +16,15 @@ namespace Kitbox_project.Models
             this.state = state;
             this.basket = basket;
         }
+
+        private void Confirm()
+        {
+
+        }
+
+        private void Change_Status()
+        {
+
+        }
     }
 }

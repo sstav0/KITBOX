@@ -57,7 +57,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\BasketPage.xaml.cs">
+	    <DependentUpon>BasketPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\CabinetCreatorPage.xaml.cs">
+	    <DependentUpon>CabinetCreatorPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\LockerCreatorPage.xaml.cs">
+	    <DependentUpon>LockerCreatorPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\BasketPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\CabinetCreatorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LockerCreatorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
