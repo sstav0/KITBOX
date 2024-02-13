@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Cabinet
+    public class Cabinet
     {
-        public List<Locker> lockers { get; set; }
+        public List<Locker> lockers { get; set; } = new List<Locker>();
         public float price { get; set; }
         public float width { get; set; }
         public float length { get; set; }

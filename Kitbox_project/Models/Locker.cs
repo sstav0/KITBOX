@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Locker
+    public class Locker
     {
         public float height { get; set; }
         public string color { get; set; }
