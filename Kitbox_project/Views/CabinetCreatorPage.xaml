@@ -43,7 +43,7 @@
                 Clicked="AddSelectedLocker_Clicked" />
 
 
-        <!-- List of added lockers -->
+        <!-- List of added lockers - There's a max of 7 -->
         <Label Text="Added Lockers" FontSize="Large" HorizontalOptions="Center" Margin="0,20"/>
         <ListView ItemsSource="{Binding Lockers}">
             <ListView.ItemTemplate>

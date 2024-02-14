@@ -20,8 +20,9 @@ namespace Kitbox_project.Views
 
         private void LoadAvailableLockers()
         {
-            // Load your available lockers into the view model
-            // For example:
+            // Few randoms lockers I created to test until we get the DB ready. 
+            // To delete once we've created the DB 
+  
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
                 new LockerViewModel { Height = 50, Color = "Red", Door = true, Price = 500 },
@@ -32,17 +33,18 @@ namespace Kitbox_project.Views
 
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
+            // Si on a plus de 7 lockers ça fait rien 
             if (_viewModel.Lockers.Count >= 7)
             {
                 return;
             }
-            // Add the selected locker to the cabinet
+            // On ajoute le locker choisi au cabinet
             LockerViewModel selectedLocker = _viewModel.SelectedLocker;
             if (selectedLocker != null)
             {
                 _viewModel.Lockers.Add(selectedLocker);
                 System.Diagnostics.Debug.WriteLine(_viewModel.Lockers.Count);
-                // Optionally, clear the selection in the picker
+                // On remets le picker à 0 parce que c'est plus cool
                 lockerPicker.SelectedItem = null;
             }
         }

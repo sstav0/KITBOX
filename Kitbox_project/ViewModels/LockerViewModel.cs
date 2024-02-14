@@ -50,6 +50,8 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        //Pour voir les lockers. Il faudra peut-être changer ça une fois la DB faite
         public override string ToString()
         {
             return $"Height: {Height}, Color: {Color}, Door: {(Door ? "Yes" : "No")}, Price {Price}";
