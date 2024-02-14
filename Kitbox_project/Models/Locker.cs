@@ -12,11 +12,14 @@ namespace Kitbox_project.Models
         public string color { get; set; }
         public bool door { get; set; }
 
-        public Locker(float height, string color, bool door) 
+        public float price { get; set; }
+
+        public Locker(float height, string color, bool door, float price) 
         {
             this.height = height;
             this.color = color;
             this.door = door;
+            this.price = price;
         }
     }
 }

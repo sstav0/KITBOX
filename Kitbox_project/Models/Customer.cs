@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Customer
+    public class Customer
     {
         public string firstname { get; set; }
         public string lastname { get; set; }

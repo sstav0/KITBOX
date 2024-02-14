@@ -24,9 +24,9 @@ namespace Kitbox_project.Views
             // For example:
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-                new LockerViewModel { Height = 50, Color = "Red", Door = true },
-                new LockerViewModel { Height = 60, Color = "Blue", Door = false },
-                new LockerViewModel { Height = 70, Color = "Green", Door = true }
+                new LockerViewModel { Height = 50, Color = "Red", Door = true, Price = 500 },
+                new LockerViewModel { Height = 60, Color = "Blue", Door = false, Price = 1000 },
+                new LockerViewModel { Height = 70, Color = "Green", Door = true, Price = 250}
             };
         }
 

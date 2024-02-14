@@ -39,9 +39,20 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        private float _price;
+        public float Price
+        {
+            get => _price;
+            set
+            {
+                _price = value;
+                OnPropertyChanged();
+            }
+        }
         public override string ToString()
         {
-            return $"Height: {Height}, Color: {Color}, Door: {(Door ? "Yes" : "No")}";
+            return $"Height: {Height}, Color: {Color}, Door: {(Door ? "Yes" : "No")}, Price {Price}";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

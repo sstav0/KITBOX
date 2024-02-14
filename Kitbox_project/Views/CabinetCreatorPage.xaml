@@ -20,8 +20,11 @@
         <Label Text="Quantity:" />
         <Entry Text="{Binding Quantity}" />
 
-        <Label Text="Bitch:" />
+        <Label Text="Total Height:" />
         <Label Text="{Binding TotalSize}" />
+
+        <Label Text="Total Price:" />
+        <Label Text="{Binding TotalPrice}" />
 
 
 

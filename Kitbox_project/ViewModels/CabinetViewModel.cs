@@ -11,6 +11,8 @@ namespace Kitbox_project.ViewModels
         public CabinetViewModel()
         {
             Lockers = new ObservableCollection<LockerViewModel>();
+            Lockers.CollectionChanged += (sender, e) => CalculateTotalPrice();
+
             Lockers.CollectionChanged += (sender, e) => CalculateTotalSize();
 
 
@@ -26,6 +28,8 @@ namespace Kitbox_project.ViewModels
                 _lockers = value;
                 OnPropertyChanged();
                 CalculateTotalSize(); // Call CalculateTotalSize whenever Lockers collection changes
+                CalculateTotalPrice();
+
 
             }
         }
@@ -112,6 +116,21 @@ namespace Kitbox_project.ViewModels
         {
             TotalSize = Lockers.Sum(locker => locker.Height);
 
+        }
+
+        private float _totalPrice;
+        public float TotalPrice
+        {
+            get => _totalPrice;
+            set
+            {
+                _totalPrice = value;
+                OnPropertyChanged();
+            }
+        }
+        private void CalculateTotalPrice()
+        {
+            TotalPrice = Lockers.Sum(locker =>locker.Price);
         }
 
 
