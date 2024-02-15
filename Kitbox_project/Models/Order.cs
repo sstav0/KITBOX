@@ -6,25 +6,40 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Order
+    public class Order
     {
-        public string state { get; set; }
-        public List<Cabinet> basket { get; set; }
+        private string status { get; set; }
+        private List<Cabinet> basket { get; set; }
 
-        public Order(string state, List<Cabinet> basket)
+        private Order(string status, List<Cabinet> basket)
         {
-            this.state = state;
+            this.status = status;
             this.basket = basket;
         }
 
-        private void Confirm()
+        public void Confirm()
         {
 
         }
 
-        private void Change_Status()
+        public void Change_Status(string status)
         {
+            this.status = status;
+        }
 
+        public void AddCabinet(Cabinet cabinet)
+        {
+            basket.Add(cabinet);
+        }
+
+        public void RemoveCabinet(int index)
+        {
+            basket.RemoveAt(index);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

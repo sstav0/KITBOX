@@ -1,34 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Customer
+    public class Customer
     {
-        public string firstname { get; set; }
-        public string lastname { get; set; }
-        public List<Order> orders { get; set; }
-        public string email { get; set; }
+        private string firstName { get; set; }
+        private string lastName { get; set; }
+        private List<Order> orders { get; set; }
+        private string email { get; set; }
 
-        public Customer(string firstname, string lastname, List<Order> orders, string email)
+        private Customer(string firstName, string lastName, List<Order> orders, string email)
         {
-            this.firstname = firstname;
-            this.lastname = lastname;
+            this.firstName = firstName;
+            this.lastName = lastName;
             this.orders = orders;
             this.email = email;
         }
 
-        private void Add_Order(Order order)
+        public void Add_Order(Order order)
         {
-
+            orders.Add(order);
         }
 
-        private void Remove_Order() 
+        public void Remove_Order(int index) 
         {
+            orders.RemoveAt(index);
+        }
 
+        public List<Order> Get_Orders() 
+        {
+            return orders;
+        }
+
+        public Order Get_Order(int index) 
+        {
+            return orders[index];
+        }
+
+        public string Get_Email() 
+        {
+            return this.email;
+        }
+        public string Get_FirstName() 
+        {
+            return this.firstName;
+        }
+        public string Get_LastName() 
+        {
+            return this.lastName;
+        }
+        public void Set_Email(string email)
+        {
+            this.email = email;
+        }
+
+        public void Set_FirstName(string firstName)
+        {
+            this.firstName = firstName;
+        }
+
+        public void Set_LastName(string lastName)
+        {
+            this.lastName = lastName;
         }
     }
 }
