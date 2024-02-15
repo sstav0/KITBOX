@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Locker
+    public class Locker
     {
         private int height { get; set; }
         private string color { get; set; }
@@ -27,6 +27,11 @@ namespace Kitbox_project.Models
             return this.height;
         }
 
+        public float GetPrice()
+        {
+            return this.price;
+        }
+
         public string GetColor()
         {
             return this.color;
@@ -35,6 +40,16 @@ namespace Kitbox_project.Models
         public Door GetDoor() 
         {
             return this.door;
+        }
+
+        public void SetDoorColor(string color)
+        {
+            this.door.SetColor(color);
+        }
+
+        public void SetDoorMaterial(string color, string material)
+        {
+            this.door.SetMaterial(material);
         }
     }
 }

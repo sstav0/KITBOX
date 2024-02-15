@@ -34,12 +34,12 @@ namespace Kitbox_project.Models
 
         public void AddCabinet(Cabinet cabinet)
         {
-            ;
+            basket.Add(cabinet);
         }
 
         public void RemoveCabinet(int index)
         {
-            ;
+            basket.RemoveAt(index);
         }
     }
 }

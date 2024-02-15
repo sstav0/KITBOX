@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Cabinet
+    public class Cabinet
     {
         private List<Locker> lockers { get; set; }
         private float price { get; set; }
@@ -50,12 +50,12 @@ namespace Kitbox_project.Models
 
         public void AddLocker(Locker locker, int index)
         {
-            ;
+            lockers.Insert(index, locker);
         }
 
         public void RemoveLocker(int index) 
         {
-            ;
+            lockers.RemoveAt(index);
         }
     }
 }

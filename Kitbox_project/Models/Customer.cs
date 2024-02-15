@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Customer
+    public class Customer
     {
         private string firstName { get; set; }
         private string lastName { get; set; }
