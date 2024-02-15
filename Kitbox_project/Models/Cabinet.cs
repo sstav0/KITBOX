@@ -23,6 +23,11 @@ namespace Kitbox_project.Models
             this.quantity = quantity;
         }
 
+        public int GetLockerCount() 
+        {
+            return lockers.Count; 
+        }
+
         public float GetHeight()
         {
             int i = 0;
@@ -50,7 +55,12 @@ namespace Kitbox_project.Models
 
         public float GetPrice()
         {
-            return this.price;
+            float price = 0;
+            foreach(Locker locker in lockers)
+            {
+                price += locker.GetPrice();
+            }
+            return price;
         }
 
         public void SetWidth(int width)
@@ -68,7 +78,12 @@ namespace Kitbox_project.Models
             this.quantity = quantity;
         }
 
-        public void AddLocker(Locker locker, int index)
+        public void AddLocker(Locker locker)
+        {
+            lockers.Add(locker);
+        }
+
+        public void AddLockerWithIndex(Locker locker, int index)
         {
             lockers.Insert(index, locker);
         }
