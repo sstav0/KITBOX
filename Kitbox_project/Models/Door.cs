@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Door
+    public class Door
     {
         private string color { get; set; }
         private string material { get; set; }

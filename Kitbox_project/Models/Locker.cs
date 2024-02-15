@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UIKit;
 
 namespace Kitbox_project.Models
 {
@@ -15,7 +14,7 @@ namespace Kitbox_project.Models
 
         public float price { get; set; }
 
-        public Locker(float height, string color, bool door, float price) 
+        public Locker(int height, string color, Door door, float price) 
         {
             this.height = height;
             this.color = color;
