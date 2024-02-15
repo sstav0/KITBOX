@@ -18,7 +18,6 @@ namespace Kitbox_project
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
-            builder.Services.AddSingleton<DBService>();
             return builder.Build();
         }
     }
