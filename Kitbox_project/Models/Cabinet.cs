@@ -10,8 +10,8 @@ namespace Kitbox_project.Models
     {
         public List<Locker> lockers { get; set; } = new List<Locker>();
         public float price { get; set; }
-        public float width { get; set; }
-        public float length { get; set; }
+        public int width { get; set; }
+        public int length { get; set; }
         public int quantity { get; set; }
 
         private Cabinet(List<Locker> lockers, float price, int width, float length, int quantity)
