@@ -11,7 +11,7 @@ namespace Kitbox_project.Models
         private Color color { get; set; }
         private string material { get; set; }
 
-        private Door(Color color, string material) 
+        public Door(Color color, string material) 
         {
             this.color = color;
             this.material = material;
