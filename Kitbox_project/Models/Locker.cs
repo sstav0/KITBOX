@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UIKit;
 
 namespace Kitbox_project.Models
 {
     public class Locker
     {
-        public float height { get; set; }
-        public string color { get; set; }
-        public bool door { get; set; }
+        private int height { get; set; }
+        private string color { get; set; }
+        private Door door { get; set; }
 
         public float price { get; set; }
 
@@ -20,6 +21,21 @@ namespace Kitbox_project.Models
             this.color = color;
             this.door = door;
             this.price = price;
+        }
+
+        public int GetHeight()
+        {
+            return this.height;
+        }
+
+        public string GetColor()
+        {
+            return this.color;
+        }
+
+        public Door GetDoor() 
+        {
+            return this.door;
         }
     }
 }
