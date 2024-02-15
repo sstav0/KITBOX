@@ -10,15 +10,15 @@ namespace Kitbox_project.Models
     {
         private List<Locker> lockers { get; set; } = new List<Locker>();
         private float price { get; set; }
-        private int width { get; set; }
+        private int depth { get; set; }
         private int length { get; set; }
         private int quantity { get; set; }
 
-        private Cabinet(List<Locker> lockers, float price, int width, int length, int quantity)
+        private Cabinet(List<Locker> lockers, float price, int depth, int length, int quantity)
         {
             this.lockers = lockers;
             this.price = price;
-            this.width = width;
+            this.depth = depth;
             this.length = length;
             this.quantity = quantity;
         }
@@ -38,9 +38,9 @@ namespace Kitbox_project.Models
             return i;
         }
 
-        public float GetWidth()
+        public float GetDepth()
         {
-            return this.width;
+            return this.depth;
         }
 
         public int GetLength() 
@@ -60,12 +60,13 @@ namespace Kitbox_project.Models
             {
                 price += locker.GetPrice();
             }
+            this.price = price;
             return price;
         }
 
-        public void SetWidth(int width)
+        public void SetDepth(int depth)
         {
-            this.width = width;
+            this.depth = depth;
         }
 
         public void SetLength(int length)

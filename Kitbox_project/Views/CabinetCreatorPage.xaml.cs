@@ -45,8 +45,10 @@ namespace Kitbox_project.Views
                 _viewModel.Lockers.Add(selectedLocker);
                 System.Diagnostics.Debug.WriteLine(_viewModel.Lockers.Count);
                 // On remets le picker à 0 parce que c'est plus cool
-                lockerPicker.SelectedItem = null;
+                //lockerPicker.SelectedItem = null;
             }
         }
+
+        private void OnAddLockerButtonClicked(object sender, EventArgs e) { }
     }
 }

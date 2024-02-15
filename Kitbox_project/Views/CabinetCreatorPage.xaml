@@ -4,60 +4,111 @@
              x:Class="Kitbox_project.Views.CabinetCreatorPage"
              x:DataType="local:CabinetViewModel">
 
-    <StackLayout Margin="20">
-        <Label Text="Cabinet Details" FontSize="Large" HorizontalOptions="Center" Margin="0,10"/>
+    <ScrollView>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="300"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="550"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
 
-        <!-- Cabinet properties -->
-        <Label Text="Price:" />
-        <Entry Text="{Binding Price}" />
+            <Frame BackgroundColor="DarkBlue" Grid.Row="0" Grid.Column="1">
 
-        <Label Text="Width:" />
-        <Entry Text="{Binding Width}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="250"/>
+                    </Grid.ColumnDefinitions>
 
-        <Label Text="Length:" />
-        <Entry Text="{Binding Length}" />
+                    <Picker x:Name="LengthPicker" Title="Select Length" HorizontalOptions="Center"
+                            Grid.Column="0"
+                            TitleColor="white" BackgroundColor="Gray"/>
 
-        <Label Text="Quantity:" />
-        <Entry Text="{Binding Quantity}" />
+                    <Picker x:Name="DepthPicker" Title="Select Depth" HorizontalOptions="Center"
+                            Grid.Column="1"
+                            TitleColor="white" BackgroundColor="Gray"/>
+                
+                </Grid>
 
-        <Label Text="Total Height:" />
-        <Label Text="{Binding TotalSize}" />
+            </Frame>
 
-        <Label Text="Total Price:" />
-        <Label Text="{Binding TotalPrice}" />
+            <Frame BackgroundColor="DarkBlue"  Grid.Row="1" Grid.Column="1">
 
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="75"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid.ColumnDefinitions>    
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125"/>
+                    </Grid.ColumnDefinitions>
 
+                    <Label Text="New Locker" x:Name="LockerNumber" HorizontalOptions="Center" 
+                           Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="0"
+                           TextColor="white"/>
 
-        <!-- Picker to select lockers -->
-        <Picker x:Name="lockerPicker" Title="Select Locker"
-        ItemsSource="{Binding AvailableLockers}"
-        SelectedItem="{Binding SelectedLocker}"
-        ItemDisplayBinding="{Binding .}">
-        </Picker>
+                    <Label Text="Door" Grid.Row="1" Grid.Column="0" HorizontalOptions="End" 
+                           TextColor="white"/>
 
+                    <CheckBox x:Name="DoorCheckbox" Grid.Row="1" Grid.Column="1" 
+                              VerticalOptions="Start" HorizontalOptions="Center"/>
 
+                    <Label Text="Glass" Grid.Row="1" Grid.Column="2" HorizontalOptions="End" 
+                           TextColor="white"/>
 
+                    <CheckBox x:Name="GlassCheckbox" Grid.Row="1" Grid.Column="3" 
+                              VerticalOptions="Start" HorizontalOptions="Center"/>
 
-        <!-- Button to add selected locker -->
-        <Button Text="Add Selected Locker"
-                Clicked="AddSelectedLocker_Clicked" />
+                    <Picker x:Name="DoorColorPicker" Title="Select the color of the door" HorizontalOptions="Center" 
+                            Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0"
+                            TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
 
+                    <Picker x:Name="HeightPicker" Title="Select the height of the locker" HorizontalOptions="Center" 
+                            Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="2"
+                            TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
 
-        <!-- List of added lockers - There's a max of 7 -->
-        <Label Text="Added Lockers" FontSize="Large" HorizontalOptions="Center" Margin="0,20"/>
-        <ListView ItemsSource="{Binding Lockers}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout>
-                            <Label Text="{Binding .}" />
+                    <Picker x:Name="LockerColorPicker" Title="Select the color of the panels" HorizontalOptions="Center" 
+                            Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"
+                           TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
 
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    <Button x:Name="AddLockerButton" Clicked="OnAddLockerButtonClicked" 
+                            Grid.Row="3" Grid.ColumnSpan="2"  Grid.Column="2"
+                            TextColor="White" BackgroundColor="Gray"/>
 
+                </Grid>
 
-    </StackLayout>
+            </Frame>
+
+            <!-- List of added lockers - There's a max of 7 -->
+                    <ListView ItemsSource="{Binding Lockers}" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <Label Text="{Binding .}" />
+
+                                    </StackLayout>
+                                 </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+        </Grid>
+        
+    </ScrollView>
+    
 </ContentPage>
