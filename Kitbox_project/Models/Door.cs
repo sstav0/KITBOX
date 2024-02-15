@@ -17,24 +17,24 @@ namespace Kitbox_project.Models
             this.material = material;
         }
 
-        public void SetColor(string color)
-        {
-            this.color = color;
-        }
-
         public string GetColor()
         { 
             return color; 
+        }
+
+        public string GetMaterial()
+        {
+            return material;
+        }
+
+        public void SetColor(string color)
+        {
+            this.color = color;
         }
 
         public void SetMaterial(string material)
         {
             this.material = material;
         }
-
-        public string GetMaterial()
-        {
-            return material;
-        }   
     }
 }

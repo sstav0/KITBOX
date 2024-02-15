@@ -24,17 +24,22 @@ namespace Kitbox_project.Models
 
         public void Add_Order(Order order)
         {
-
+            orders.Add(order);
         }
 
         public void Remove_Order(int index) 
         {
-
+            orders.RemoveAt(index);
         }
 
         public List<Order> Get_Orders() 
         {
             return orders;
+        }
+
+        public Order Get_Order(int index) 
+        {
+            return orders[index];
         }
 
         public string Get_Email() 

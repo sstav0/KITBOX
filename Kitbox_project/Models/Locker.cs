@@ -51,5 +51,20 @@ namespace Kitbox_project.Models
         {
             this.door.SetMaterial(material);
         }
+
+        public void SetHeight(int height)
+        {
+            this.height = height;
+        }
+
+        public void SetColor(string color) 
+        {
+            this.color = color;
+        }
+
+        public void SetPrice(float price)
+        {
+            this.price = price;
+        }
     }
 }
