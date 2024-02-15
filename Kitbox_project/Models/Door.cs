@@ -8,16 +8,16 @@ namespace Kitbox_project.Models
 {
     public class Door
     {
-        private string color { get; set; }
+        private Color color { get; set; }
         private string material { get; set; }
 
-        private Door(string color, string material) 
+        public Door(Color color, string material) 
         {
             this.color = color;
             this.material = material;
         }
 
-        public string GetColor()
+        public Color GetColor()
         { 
             return color; 
         }
@@ -27,7 +27,7 @@ namespace Kitbox_project.Models
             return material;
         }
 
-        public void SetColor(string color)
+        public void SetColor(Color color)
         {
             this.color = color;
         }
