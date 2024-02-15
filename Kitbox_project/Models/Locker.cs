@@ -12,9 +12,9 @@ namespace Kitbox_project.Models
         private string color { get; set; }
         private Door door { get; set; }
 
-        private float price { get; set; }
+        public float price { get; set; }
 
-        private Locker(int height, string color, Door door, float price) 
+        public Locker(int height, string color, Door door, float price) 
         {
             this.height = height;
             this.color = color;

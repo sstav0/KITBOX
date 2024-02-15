@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    internal class Order
+    public class Order
     {
         private string status { get; set; }
         private List<Cabinet> basket { get; set; }
