@@ -58,7 +58,7 @@
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50" />
+                        <RowDefinition Height="40" />
                         <RowDefinition Height="50" />
                         <RowDefinition Height="75" />
                         <RowDefinition Height="75" />
@@ -74,17 +74,14 @@
 
                     <Label
                         x:Name="LockerNumber"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="4"
-                        HorizontalOptions="Center"
-                        Text="New Locker"
-                        TextColor="white" />
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4"
+                        HorizontalOptions="Center" Text="New Locker"
+                        TextColor="white" FontSize="Medium"/>
 
                     <Label
                         Grid.Row="1"
                         Grid.Column="0"
-                        HorizontalOptions="End"
+                        HorizontalOptions="End" VerticalOptions="Center"
                         Text="Door"
                         TextColor="white" />
 
@@ -95,12 +92,12 @@
                         HorizontalOptions="Center"
                         IsChecked="{Binding IsDoorChecked}"
                         IsVisible="{Binding IsDoorVisible}"
-                        VerticalOptions="Start" />
+                        VerticalOptions="Center" />
 
                     <Label
                         Grid.Row="1"
                         Grid.Column="2"
-                        HorizontalOptions="End"
+                        HorizontalOptions="End" VerticalOptions="Center"
                         IsVisible="{Binding IsGlassVisible}"
                         Text="Glass"
                         TextColor="white" />
@@ -112,7 +109,7 @@
                         HorizontalOptions="Center"
                         IsChecked="{Binding IsGlassChecked}"
                         IsVisible="{Binding IsGlassVisible}"
-                        VerticalOptions="Start" />
+                        VerticalOptions="Center" />
 
                     <Picker
                         x:Name="DoorColorPicker"
