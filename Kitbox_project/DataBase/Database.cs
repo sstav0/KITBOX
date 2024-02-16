@@ -1,28 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-namespace Kitbox_project.DataBase
+namespace Kitbox_project;
+
+public abstract class Database
 {
-    internal abstract class Database<T>
-    {
-        protected Database() { }
+    public abstract string user();
+    public abstract string password();
+    public abstract string tablename();
 
-        protected string user = "root";
-        protected string password = "root";
-        protected string tableDoor = "Door";
-        protected string tableCustomer = "Customer";
-        protected string tableLocker = "Locker";
-        protected string tableCabinet = "Cabinet";
-
-
-        public abstract IEnumerable<T> GetList();
-        public abstract T GetById();
-        public abstract void Save();
-        public abstract void Update();
-
-
-    }
+    public abstract void GetList();
+    public abstract void GetById();
+    public abstract void Save();
+    public abstract void Update();
+   
 }

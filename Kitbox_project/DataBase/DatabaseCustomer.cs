@@ -1,6 +1,6 @@
 ﻿namespace Kitbox_project;
 
-public class CabinetDBFunctions
+public class DatabaseCustomer
 {
 
 }

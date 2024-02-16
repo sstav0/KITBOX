@@ -29,6 +29,7 @@ public partial class MainPage : ContentPage
 
         private void OnCounterClicked(object sender, EventArgs e)
         { 
+            _dbService.AjouterElement("Jean", "Dujardin", "coucou");
             count++;
 
             if (count == 1)
@@ -38,6 +39,8 @@ public partial class MainPage : ContentPage
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
+        
     }
+    
 
 
