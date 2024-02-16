@@ -1,92 +1,155 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:Kitbox_project.ViewModels"
-             x:Class="Kitbox_project.Views.CabinetCreatorPage"
-             x:DataType="local:CabinetViewModel">
+<ContentPage
+    x:Class="Kitbox_project.Views.CabinetCreatorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Kitbox_project.ViewModels"
+    x:DataType="local:CabinetViewModel">
 
     <ScrollView>
         <Grid Padding="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
-                <RowDefinition Height="300"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="550"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="550" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
 
-            <Frame BackgroundColor="DarkBlue" Grid.Row="0" Grid.Column="1">
+            <Frame
+                Grid.Row="0"
+                Grid.Column="1"
+                BackgroundColor="DarkBlue">
 
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
-                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="250" />
+                        <ColumnDefinition Width="250" />
                     </Grid.ColumnDefinitions>
 
-                    <Picker x:Name="LengthPicker" Title="Select Length" HorizontalOptions="Center"
-                            Grid.Column="0"
-                            TitleColor="white" BackgroundColor="Gray"/>
+                    <Picker
+                        x:Name="LengthPicker"
+                        Title="Select Length"
+                        Grid.Column="0"
+                        BackgroundColor="Gray"
+                        HorizontalOptions="Center"
+                        TitleColor="white" />
 
-                    <Picker x:Name="DepthPicker" Title="Select Depth" HorizontalOptions="Center"
-                            Grid.Column="1"
-                            TitleColor="white" BackgroundColor="Gray"/>
-                
+                    <Picker
+                        x:Name="DepthPicker"
+                        Title="Select Depth"
+                        Grid.Column="1"
+                        BackgroundColor="Gray"
+                        HorizontalOptions="Center"
+                        TitleColor="white" />
+
                 </Grid>
 
             </Frame>
 
-            <Frame BackgroundColor="DarkBlue"  Grid.Row="1" Grid.Column="1">
+            <Frame
+                Grid.Row="1"
+                Grid.Column="1"
+                BackgroundColor="DarkBlue">
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="75"/>
-                        <RowDefinition Height="75"/>
-                        <RowDefinition Height="75"/>
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="75" />
+                        <RowDefinition Height="75" />
+                        <RowDefinition Height="75" />
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
-                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125" />
+                        <ColumnDefinition Width="125" />
+                        <ColumnDefinition Width="125" />
+                        <ColumnDefinition Width="125" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Text="New Locker" x:Name="LockerNumber" HorizontalOptions="Center" 
-                           Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="0"
-                           TextColor="white" FontSize="Medium"/>
+                    <Label
+                        x:Name="LockerNumber"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="4"
+                        HorizontalOptions="Center"
+                        Text="New Locker"
+                        TextColor="white" />
 
-                    <Label Text="Door" Grid.Row="1" Grid.Column="0" HorizontalOptions="End" 
-                           TextColor="white"
-                           VerticalOptions="Center"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalOptions="End"
+                        Text="Door"
+                        TextColor="white" />
 
-                    <CheckBox x:Name="DoorCheckbox" Grid.Row="1" Grid.Column="1" 
-                              VerticalOptions="Start" HorizontalOptions="Center"/>
+                    <CheckBox
+                        x:Name="DoorCheckbox"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalOptions="Center"
+                        IsChecked="{Binding IsDoorChecked}"
+                        IsVisible="{Binding IsDoorVisible}"
+                        VerticalOptions="Start" />
 
-                    <Label Text="Glass" Grid.Row="1" Grid.Column="2" HorizontalOptions="End" 
-                           TextColor="white"
-                           VerticalOptions="Center"/>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        IsVisible="{Binding IsGlassVisible}"
+                        Text="Glass"
+                        TextColor="white" />
 
-                    <CheckBox x:Name="GlassCheckbox" Grid.Row="1" Grid.Column="3" 
-                              VerticalOptions="Start" HorizontalOptions="Center"/>
+                    <CheckBox
+                        x:Name="GlassCheckbox"
+                        Grid.Row="1"
+                        Grid.Column="3"
+                        HorizontalOptions="Center"
+                        IsChecked="{Binding IsGlassChecked}"
+                        IsVisible="{Binding IsGlassVisible}"
+                        VerticalOptions="Start" />
 
-                    <Picker x:Name="DoorColorPicker" Title="Select the color of the door" HorizontalOptions="Center" 
-                            Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0"
-                            TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
+                    <Picker
+                        x:Name="DoorColorPicker"
+                        Title="Select the color of the door"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="Gray"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding IsDoorPickerVisible}"
+                        ItemsSource="{Binding ItemSourceDoorPicker}"
+                        TextColor="white"
+                        TitleColor="White" />
 
-                    <Picker x:Name="HeightPicker" Title="Select the height of the locker" HorizontalOptions="Center" 
-                            Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="2"
-                            TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
+                    <Picker
+                        x:Name="HeightPicker"
+                        Title="Select the height of the locker"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="Gray"
+                        HorizontalOptions="Center"
+                        TextColor="white"
+                        TitleColor="White" />
 
-                    <Picker x:Name="LockerColorPicker" Title="Select the color of the panels" HorizontalOptions="Center" 
-                            Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"
-                           TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
+                    <Picker
+                        x:Name="LockerColorPicker"
+                        Title="Select the color of the panels"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="Gray"
+                        HorizontalOptions="Center"
+                        TextColor="white"
+                        TitleColor="White" />
 
+                   
                     <Button x:Name="AddLockerButton" Clicked="OnAddLockerButtonClicked" Text="ADD"
                             Grid.Row="3" Grid.ColumnSpan="2"  Grid.Column="2"
                             TextColor="White" BackgroundColor="Gray"/>
@@ -94,6 +157,8 @@
                 </Grid>
 
             </Frame>
+
+            <!--  List of added lockers - There's a max of 7  -->
             
             <ListView ItemsSource="{Binding Lockers}" Grid.RowSpan="3" Grid.Row="0" Grid.Column="2">
                 <ListView.ItemTemplate>
@@ -139,7 +204,7 @@
             </ListView>
 
         </Grid>
-        
+
     </ScrollView>
-    
+
 </ContentPage>
