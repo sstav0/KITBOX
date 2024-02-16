@@ -116,9 +116,9 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
- 
+
         private List<string> _itemSourceDoorPicker;
-        public  List<string> ItemSourceDoorPicker
+        public List<string> ItemSourceDoorPicker
         {
             get => _itemSourceDoorPicker;
             set
@@ -199,7 +199,7 @@ namespace Kitbox_project.ViewModels
         }
         private void CalculateTotalPrice()
         {
-            TotalPrice = Lockers.Sum(locker =>locker.Price);
+            TotalPrice = Lockers.Sum(locker => locker.Price);
         }
 
 
@@ -254,7 +254,7 @@ namespace Kitbox_project.ViewModels
             }
             ShowColorPicker();
         }
-        
+
         private void ShowColorPicker()
         {
             if (selectColorEnabler)
@@ -267,6 +267,8 @@ namespace Kitbox_project.ViewModels
                 IsDoorPickerVisible = false;
             }
         }
+
+        //private void OnAddCabinet(){}
     }
 
 }
