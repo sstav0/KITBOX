@@ -14,7 +14,7 @@ namespace Kitbox_project.Models
         private int length { get; set; }
         private int quantity { get; set; }
 
-        private Cabinet(List<Locker> lockers, float price, int depth, int length, int quantity)
+        public Cabinet(List<Locker> lockers, float price, int depth, int length, int quantity)
         {
             this.lockers = lockers;
             this.price = price;
