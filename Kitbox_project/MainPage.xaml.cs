@@ -41,12 +41,17 @@ public partial class MainPage : ContentPage
         }
         private void OnCounterClicked2(object sender, EventArgs e)
         { 
-            string customerName = _dbService.GetById(14);
+            Dictionary<string, object> customerData = _dbService.GetById(14);
 
-        // Affichage du nom du client dans la console
-        if (customerName != null)
+        // Affichage des informations du client dans la console
+        if (customerData != null)
         {
-            Console.WriteLine($"Le nom du client avec l'ID {14} est : {customerName}");
+            Console.WriteLine($"Informations du client avec l'ID {14}:");
+            
+            foreach (var kvp in customerData)
+            {
+                Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+            }
         }
         else
         {

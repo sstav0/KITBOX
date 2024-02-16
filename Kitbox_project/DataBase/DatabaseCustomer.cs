@@ -65,14 +65,14 @@ public class DatabaseCustomer
             }
         }
     }
-    public string GetById(int idCustomer)
+    public Dictionary<string, object> GetById(int idCustomer)
     {
         using (MySqlConnection connection = new MySqlConnection(connectionString))
         {
             connection.Open();
 
             // Remplacez "VotreTable", "VotreColonne" par les noms réels de votre table et colonne
-            string query = "SELECT name FROM Customer WHERE idCustomer = @idCustomer";
+            string query = "SELECT * FROM Customer WHERE idCustomer = @idCustomer";
 
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
@@ -82,7 +82,16 @@ public class DatabaseCustomer
                 {
                     if (reader.Read())
                     {
-                        return reader["name"].ToString();
+                         Dictionary<string, object> customerData = new Dictionary<string, object>();
+
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            string columnName = reader.GetName(i);
+                            object columnValue = reader.GetValue(i);
+                            customerData.Add(columnName, columnValue);
+                        }
+
+                        return customerData;
                     }
                 }
             }
