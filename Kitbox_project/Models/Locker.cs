@@ -14,7 +14,7 @@ namespace Kitbox_project.Models
 
         private float price { get; set; }
 
-        private Locker(int height, Color color, Door door, float price) 
+        public Locker(int height, Color color, Door door, float price) 
         {
             this.height = height;
             this.color = color;

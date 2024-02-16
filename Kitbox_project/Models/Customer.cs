@@ -14,7 +14,7 @@ namespace Kitbox_project.Models
         private List<Order> orders { get; set; }
         private string email { get; set; }
 
-        private Customer(string firstName, string lastName, List<Order> orders, string email)
+        public Customer(string firstName, string lastName, List<Order> orders, string email)
         {
             this.firstName = firstName;
             this.lastName = lastName;
