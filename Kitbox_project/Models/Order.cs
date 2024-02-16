@@ -11,7 +11,7 @@ namespace Kitbox_project.Models
         private string status { get; set; }
         private List<Cabinet> basket { get; set; }
 
-        private Order(string status, List<Cabinet> basket)
+        public Order(string status, List<Cabinet> basket)
         {
             this.status = status;
             this.basket = basket;

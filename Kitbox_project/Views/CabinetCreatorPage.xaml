@@ -49,8 +49,8 @@
                         <RowDefinition Height="75"/>
                         <RowDefinition Height="75"/>
                     </Grid.RowDefinitions>
-                    
-                    <Grid.ColumnDefinitions>    
+
+                    <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="125"/>
                         <ColumnDefinition Width="125"/>
                         <ColumnDefinition Width="125"/>
@@ -85,17 +85,16 @@
                             Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"
                            TextColor="white" TitleColor="White" BackgroundColor="Gray"/>
 
-                    <Button x:Name="AddLockerButton" Clicked="OnAddLockerButtonClicked" 
+                    <Button x:Name="AddLockerButton" Clicked="OnAddLockerButtonClicked" Text="ADD"
                             Grid.Row="3" Grid.ColumnSpan="2"  Grid.Column="2"
                             TextColor="White" BackgroundColor="Gray"/>
 
                 </Grid>
 
             </Frame>
-
-            <!-- List of added lockers - There's a max of 7 -->
-                    <ListView ItemsSource="{Binding Lockers}" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1">
-                        <ListView.ItemTemplate>
+            
+            <ListView ItemsSource="{Binding Lockers}" Grid.RowSpan="3" Grid.Row="0" Grid.Column="2">
+                <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
                                     <StackLayout>
