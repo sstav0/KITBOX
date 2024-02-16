@@ -4,15 +4,15 @@ namespace Kitbox_project;
 public partial class MainPage : ContentPage
     {
         int count = 0;
-        private readonly DBService _dbService;
+        private readonly DatabaseCustomer _dbService;
         public MainPage()
         {
             
             InitializeComponent();
-            _dbService = new DBService();
-            TestDatabaseConnection();
+            _dbService = new DatabaseCustomer();
+            //TestDatabaseConnection();
         }
-         private void TestDatabaseConnection()
+        /* private void TestDatabaseConnection()
     {
         bool isConnected = _dbService.TestConnection();
 
@@ -24,12 +24,12 @@ public partial class MainPage : ContentPage
         {
             Console.WriteLine("Échec de la connexion à la base de données.");
         }
-    }
+    }*/
        
 
         private void OnCounterClicked(object sender, EventArgs e)
         { 
-            _dbService.AjouterElement("Jean", "Dujardin", "coucou");
+            _dbService.Add("Jean", "Dujardin", "coucou");
             count++;
 
             if (count == 1)
@@ -39,7 +39,28 @@ public partial class MainPage : ContentPage
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
-        
+        private void OnCounterClicked2(object sender, EventArgs e)
+        { 
+            string customerName = _dbService.GetById(14);
+
+        // Affichage du nom du client dans la console
+        if (customerName != null)
+        {
+            Console.WriteLine($"Le nom du client avec l'ID {14} est : {customerName}");
+        }
+        else
+        {
+            Console.WriteLine($"Aucun client trouvé avec l'ID {14}");
+        }
+            count++;
+
+            if (count == 1)
+                CounterBtn2.Text = $"Clicked {count} time";
+            else
+                CounterBtn2.Text = $"Clicked {count} times";
+
+            SemanticScreenReader.Announce(CounterBtn2.Text);
+        }
     }
     
 
