@@ -5,7 +5,7 @@
              x:DataType="local:CabinetViewModel">
 
     <ScrollView>
-        <Grid Margin="5">
+        <Grid Padding="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="300"/>
@@ -43,7 +43,7 @@
 
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="75"/>
                         <RowDefinition Height="75"/>
@@ -59,16 +59,18 @@
 
                     <Label Text="New Locker" x:Name="LockerNumber" HorizontalOptions="Center" 
                            Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="0"
-                           TextColor="white"/>
+                           TextColor="white" FontSize="Medium"/>
 
                     <Label Text="Door" Grid.Row="1" Grid.Column="0" HorizontalOptions="End" 
-                           TextColor="white"/>
+                           TextColor="white"
+                           VerticalOptions="Center"/>
 
                     <CheckBox x:Name="DoorCheckbox" Grid.Row="1" Grid.Column="1" 
                               VerticalOptions="Start" HorizontalOptions="Center"/>
 
                     <Label Text="Glass" Grid.Row="1" Grid.Column="2" HorizontalOptions="End" 
-                           TextColor="white"/>
+                           TextColor="white"
+                           VerticalOptions="Center"/>
 
                     <CheckBox x:Name="GlassCheckbox" Grid.Row="1" Grid.Column="3" 
                               VerticalOptions="Start" HorizontalOptions="Center"/>
@@ -95,16 +97,46 @@
             
             <ListView ItemsSource="{Binding Lockers}" Grid.RowSpan="3" Grid.Row="0" Grid.Column="2">
                 <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout>
-                                        <Label Text="{Binding .}" />
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame BorderColor="Gray">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                        <RowDefinition Height="50"/>
+                                    </Grid.RowDefinitions>
 
-                                    </StackLayout>
-                                 </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="{Binding .}" Grid.Row="0" Grid.Column="0"/> <!-- Binding LockerName -->
+                                    <Label Text="Copy" Grid.Row="0" Grid.Column="1"/>
+                                    <Label Text="Update" Grid.Row="0" Grid.Column="2"/>
+                                    <Label Text="X" Grid.Row="0" Grid.Column="3"/>
+                                    <Label Text="/\" Grid.Row="0" Grid.Column="3"/>
+
+                                    <Label Text="Panel Color :" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"/>
+                                    <Label Text="{Binding .}" Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="2"/> <!-- Binding PanelColor -->
+                                    <Label Text="Locker Height :" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0"/>
+                                    <Label Text="{Binding .}" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="2"/> <!-- Binding Height -->
+                                    <Label Text="Door Material :" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"/>
+                                    <Label Text="{Binding .}" Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="2"/> <!-- Binding DoorMaterial -->
+                                    <Label Text="Door Color :" Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0"/>
+                                    <Label Text="{Binding .}" Grid.Row="4" Grid.ColumnSpan="3" Grid.Column="2"/> <!-- Binding DoorColor -->
+
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
         </Grid>
         
