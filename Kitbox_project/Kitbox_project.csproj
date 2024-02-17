@@ -70,6 +70,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Utilities\ExpansionPanel.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\BasketPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
