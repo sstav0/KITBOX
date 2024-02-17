@@ -3,21 +3,94 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kitbox_project.Views.BasketPage"
              Title="Basket">
-    
-    <ScrollView>
-            <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="400"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
 
+    <Grid Padding="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="75"/>
+            <RowDefinition Height="45"/>
+        </Grid.RowDefinitions>
 
-            <Label 
-                Text="Welcome to your basket !"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="26"
-                HorizontalOptions="Center" 
-                Grid.Row="1"/>
-            </Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="50"/>
+        </Grid.ColumnDefinitions>
+
+    <Label Text="BASKET" Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="0"
+           FontSize="Large" HorizontalOptions="Center"/>
+
+    <ScrollView Grid.Row="1" Grid.ColumnSpan="5" Grid.Column="1">
+            <ListView ItemsSource="{Binding Basket}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Frame BorderColor="Gray">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="50"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Label Text="Nbr" Grid.Column="1" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="/\" Grid.Column="2" Grid.Row="0"/>
+                                    <Label Text="\/" Grid.Column="2" Grid.Row="1"/>
+                                    <Label Text="Length :" Grid.Column="4" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="{Binding .}" Grid.Column="5" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetLenght()} -->
+                                    <Label Text="Height :" Grid.Column="6" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="{Binding .}" Grid.Column="7" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetHeight()} -->
+                                    <Label Text="Depth :" Grid.Column="8" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="{Binding .}" Grid.Column="9" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetDepth()} -->
+                                    <Label Text="Nb. Lockers :" Grid.Column="10" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="{Binding .}" Grid.Column="11" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding lockers.Count()} -->
+                                    <Label Text="Price :" Grid.Column="12" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="{Binding .}" Grid.Column="13" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetPrice()} -->
+                                    <Label Text="Edit" Grid.Column="15" Grid.RowSpan="2" Grid.Row="0"/>
+                                    <Label Text="X" Grid.Column="16" Grid.RowSpan="2" Grid.Row="0"/>
+                                
+                                </Grid>
+                            </Frame>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </ScrollView>
+    
+        <Label Text="TOTAL" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1"
+               FontSize="Small" HorizontalOptions="Center"/>
+
+        <Label x:Name="TotalPrice" Grid.Row="2" Grid.Column="4"
+               FontSize="Small"/>
+
+        <Label Text="€" Grid.Row="2" Grid.Column="5"
+               FontSize="Small"/>
+        
+        <Button Text="BACK" Grid.Row="3" Grid.Column="2" />
+        
+        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="5" />
+
+    </Grid>
     </ContentPage>
