@@ -41,18 +41,18 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- All the text inside the Cabinet Size -->
-                <Label Text="Cabinet Size" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" FontSize="30" FontAttributes="Bold"/>
+                <Label Text="Cabinet Size" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" FontSize="20" FontAttributes="Bold"/>
                 <Label Text="Cabinet Length" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0" />
                 <Label Text="Cabinet Depth" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1" />
 
                 <!-- All the Pickers inside the Cabinet Size -->
-                <Picker Grid.Column="0" Grid.Row="2" BackgroundColor="White" Margin="10" HorizontalOptions="FillAndExpand">
+                <Picker Grid.Column="0" Grid.Row="2" BackgroundColor="White" Margin="10" HorizontalOptions="Center">
                     <Picker.Items>
                         <x:String>Option 1</x:String>
                         <x:String>Option 2</x:String>
                     </Picker.Items>
                 </Picker>
-                <Picker Grid.Column="1" Grid.Row="2" BackgroundColor="White" Margin ="10" HorizontalOptions="FillAndExpand">
+                <Picker Grid.Column="1" Grid.Row="2" BackgroundColor="White" Margin ="10" HorizontalOptions="Center">
                     <Picker.Items>
                         <x:String>Option 1</x:String>
                         <x:String>Option 2</x:String>
@@ -60,7 +60,6 @@
                 </Picker>
             </Grid>
         </Frame>
-
 
         <!-- Middle Locker -->
         <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Margin="10" Grid.ColumnSpan="4" BackgroundColor="#A7DAFF">
@@ -73,7 +72,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -84,21 +83,21 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- All the Buttons inside Outside Frame-->
-                <Button Text="Add" Grid.Row="4" Grid.Column="3" Margin="30" BackgroundColor="#0066FF" FontSize="20"/>
+                <Button Text="Add" Grid.Row="4" Grid.Column="4" Margin="30" BackgroundColor="#0066FF" FontSize="20"/>
 
                 <!-- All the Text inside the Outside Frame -->
-                <Label Text="Locker 7" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="4"  FontSize="30" FontAttributes="Bold"/>
+                <Label Text="Locker 7" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="4"  FontSize="20" FontAttributes="Bold"/>
                 <Label Text="Pannel Colors" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2"/>
                 <Label Text="Height" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
 
                 <!-- All the Pickers inside the Outside Frame -->
-                <Picker Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10">
+                <Picker Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
                     <Picker.Items>
                         <x:String>Option 1</x:String>
                         <x:String>Option 2</x:String>
                     </Picker.Items>
                 </Picker>
-                <Picker Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10">
+                <Picker Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
                     <Picker.Items>
                         <x:String>Option 1</x:String>
                         <x:String>Option 2</x:String>
@@ -106,7 +105,7 @@
                 </Picker>
 
                 <!-- Midle Locker Inside Frame -->
-                <Frame Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="4" Margin="10" BackgroundColor="#A7DAFF" BorderColor="Black">
+                <Frame Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="10" Grid.RowSpan="3" BackgroundColor="#A7DAFF" BorderColor="Black">
                     <Grid>
 
                         <!-- Grid definition of the inside frame (door, glass, ..) -->
@@ -131,7 +130,7 @@
                         <Label Text="Door Color" Grid.Column="2" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center"/>
 
                         <!-- Pickers -->
-                        <Picker Grid.Column="2" Grid.Row="1" BackgroundColor="White" Margin="10">
+                        <Picker Grid.Column="2" Grid.Row="1" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
                             <Picker.Items>
                                 <x:String>Option 1</x:String>
                                 <x:String>Option 2</x:String>
@@ -153,9 +152,9 @@
         <Frame Grid.Column="4" Grid.RowSpan="3" Grid.Row ="0" Grid.ColumnSpan="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
             <ScrollView>
                 <VerticalStackLayout
-                Spacing="25"
-                Padding="30"
-                VerticalOptions="Start">
+                    Spacing="25"
+                    Padding="30"
+                    VerticalOptions="Start">
 
                     <!-- Allow the expansion when we click on it -->
                     <panel:ExpansionPanel IsExpanded="False">
@@ -264,3 +263,5 @@
     </Grid>
 
 </ContentPage>
+
+
