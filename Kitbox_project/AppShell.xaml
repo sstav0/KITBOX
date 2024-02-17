@@ -19,11 +19,11 @@
             ContentTemplate="{DataTemplate views:BasketPage}"
             Route="BasketPage" />
 
-    </TabBar>
+        <ShellContent
+            Title="Cabinet Creator"
+            ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
+            Route="CabinetCreatorPage" />
 
-    <ShellContent
-    Title="Cabinet Creator"
-    ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-    Route="CabinetCreatorPage" />
+    </TabBar>
 
 </Shell>

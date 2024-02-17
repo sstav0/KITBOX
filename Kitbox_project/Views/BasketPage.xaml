@@ -6,53 +6,54 @@
 
     <Grid Padding="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="75"/>
-            <RowDefinition Height="45"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/> 
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50"/>
-            <ColumnDefinition Width="25"/>
-            <ColumnDefinition Width="75"/>
-            <ColumnDefinition Width="25"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.75*"/>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.25*"/>
         </Grid.ColumnDefinitions>
 
-    <Label Text="BASKET" Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="0"
-           FontSize="Large" HorizontalOptions="Center"/>
+    <Label Text="BASKET" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1"
+           FontSize="30" FontAttributes="Bold" HorizontalOptions="Center"/>
 
     <ScrollView Grid.Row="1" Grid.ColumnSpan="5" Grid.Column="1">
             <ListView ItemsSource="{Binding Basket}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame BorderColor="Gray">
+                            <Frame BackgroundColor="#A7DAFF" CornerRadius="10" Margin="10">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="50"/>
-                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
+                                        <ColumnDefinition Width="0.25*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label Text="Nbr" Grid.Column="1" Grid.RowSpan="2" Grid.Row="0"/>
@@ -85,12 +86,12 @@
         <Label x:Name="TotalPrice" Grid.Row="2" Grid.Column="4"
                FontSize="Small"/>
 
-        <Label Text="€" Grid.Row="2" Grid.Column="5"
+        <Label Text="€" Grid.Row="2" Grid.Column="6"
                FontSize="Small"/>
         
         <Button Text="BACK" Grid.Row="3" Grid.Column="2" />
         
-        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="5" />
+        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="6" />
 
     </Grid>
     </ContentPage>
