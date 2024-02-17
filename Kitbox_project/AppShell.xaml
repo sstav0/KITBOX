@@ -26,10 +26,4 @@
     ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
     Route="CabinetCreatorPage" />
 
-    <ShellContent
-    Title="Locker Creator"
-    ContentTemplate="{DataTemplate views:LockerCreatorPage}"
-    Route="LockerCreatorPage" />
-
-
 </Shell>

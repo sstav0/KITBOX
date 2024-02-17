@@ -17,10 +17,10 @@ namespace Kitbox_project.Services
         public static bool AddLockerToCabinet(Locker locker, Cabinet cabinet)
         {
             // Check si on a pas plus de 7 lockers
-            if (cabinet.lockers.Count < 7)
+            if (cabinet.GetLockerCount() < 7)
             {
                 // Add the locker to the cabinet
-                cabinet.lockers.Add(locker);
+                cabinet.AddLocker(locker);
                 return true; // Added successfully
             }
             else

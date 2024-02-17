@@ -11,7 +11,7 @@ namespace Kitbox_project.Models
         private string status { get; set; }
         private List<Cabinet> basket { get; set; }
 
-        private Order(string status, List<Cabinet> basket)
+        public Order(string status, List<Cabinet> basket)
         {
             this.status = status;
             this.basket = basket;
@@ -27,11 +27,6 @@ namespace Kitbox_project.Models
             this.status = status;
         }
 
-        public override string ToString() 
-        {
-            return "";
-        }
-
         public void AddCabinet(Cabinet cabinet)
         {
             basket.Add(cabinet);
@@ -40,6 +35,11 @@ namespace Kitbox_project.Models
         public void RemoveCabinet(int index)
         {
             basket.RemoveAt(index);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

@@ -8,47 +8,83 @@ namespace Kitbox_project.Models
 {
     public class Cabinet
     {
-        public List<Locker> lockers { get; set; } = new List<Locker>();
-        public float price { get; set; }
-        public int width { get; set; }
-        public int length { get; set; }
-        public int quantity { get; set; }
+        private List<Locker> lockers { get; set; } = new List<Locker>();
+        private float price { get; set; }
+        private int depth { get; set; }
+        private int length { get; set; }
+        private int quantity { get; set; }
 
-        private Cabinet(List<Locker> lockers, float price, int width, int length, int quantity)
+        public Cabinet(List<Locker> lockers, float price, int depth, int length, int quantity)
         {
             this.lockers = lockers;
             this.price = price;
-            this.width = width;
+            this.depth = depth;
             this.length = length;
             this.quantity = quantity;
         }
 
+        public int GetLockerCount() 
+        {
+            return lockers.Count; 
+        }
+
         public float GetHeight()
         {
-            return 0;
+            int i = 0;
+            foreach (Locker locker in lockers) 
+            {
+                i += locker.GetHeight();
+            }
+            return i;
         }
 
-        public float GetWidth()
+        public float GetDepth()
         {
-            return this.width;
+            return this.depth;
         }
 
-        public void SetWidth(int width) 
+        public int GetLength() 
         {
-            this.width = width;
+            return this.length;
         }
 
-        public int Quantity()
+        public int GetQuantity()
         {
             return this.quantity;
         }
 
         public float GetPrice()
         {
-            return this.price;
+            float price = 0;
+            foreach(Locker locker in lockers)
+            {
+                price += locker.GetPrice();
+            }
+            this.price = price;
+            return price;
         }
 
-        public void AddLocker(Locker locker, int index)
+        public void SetDepth(int depth)
+        {
+            this.depth = depth;
+        }
+
+        public void SetLength(int length)
+        {
+            this.length = length;
+        }
+
+        public void SetQuantity(int quantity)
+        {
+            this.quantity = quantity;
+        }
+
+        public void AddLocker(Locker locker)
+        {
+            lockers.Add(locker);
+        }
+
+        public void AddLockerWithIndex(Locker locker, int index)
         {
             lockers.Insert(index, locker);
         }
@@ -56,6 +92,11 @@ namespace Kitbox_project.Models
         public void RemoveLocker(int index) 
         {
             lockers.RemoveAt(index);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }
