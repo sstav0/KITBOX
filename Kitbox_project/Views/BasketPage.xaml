@@ -60,15 +60,15 @@
                                     <Label Text="/\" Grid.Column="2" Grid.Row="0"/>
                                     <Label Text="\/" Grid.Column="2" Grid.Row="1"/>
                                     <Label Text="Length :" Grid.Column="4" Grid.RowSpan="2" Grid.Row="0"/>
-                                    <Label Text="{Binding .}" Grid.Column="5" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetLenght()} -->
+                                    <Label Text="{Binding length}" Grid.Column="5" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetLenght()} -->
                                     <Label Text="Height :" Grid.Column="6" Grid.RowSpan="2" Grid.Row="0"/>
                                     <Label Text="{Binding .}" Grid.Column="7" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetHeight()} -->
                                     <Label Text="Depth :" Grid.Column="8" Grid.RowSpan="2" Grid.Row="0"/>
-                                    <Label Text="{Binding .}" Grid.Column="9" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetDepth()} -->
+                                    <Label Text="{Binding depth}" Grid.Column="9" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetDepth()} -->
                                     <Label Text="Nb. Lockers :" Grid.Column="10" Grid.RowSpan="2" Grid.Row="0"/>
-                                    <Label Text="{Binding .}" Grid.Column="11" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding lockers.Count()} -->
+                                    <Label Text="{Binding quantity}" Grid.Column="11" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding lockers.Count()} -->
                                     <Label Text="Price :" Grid.Column="12" Grid.RowSpan="2" Grid.Row="0"/>
-                                    <Label Text="{Binding .}" Grid.Column="13" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetPrice()} -->
+                                    <Label Text="{Binding price}" Grid.Column="13" Grid.RowSpan="2" Grid.Row="0"/> <!-- {Binding cabinet.GetPrice()} -->
                                     <Label Text="Edit" Grid.Column="15" Grid.RowSpan="2" Grid.Row="0"/>
                                     <Label Text="X" Grid.Column="16" Grid.RowSpan="2" Grid.Row="0"/>
                                 
