@@ -24,6 +24,9 @@
     <MauiXaml Update="Resources\Styles\Styles.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Utilities\ExpansionPanel.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\BasketPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
