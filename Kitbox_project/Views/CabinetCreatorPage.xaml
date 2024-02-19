@@ -1,195 +1,267 @@
-<ContentPage
-    x:Class="Kitbox_project.Views.CabinetCreatorPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Kitbox_project.ViewModels"
-    x:DataType="local:CabinetViewModel">
-
-    <ScrollView>
-        <Grid Margin="5">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="100" />
-                <RowDefinition Height="300" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100" />
-                <ColumnDefinition Width="550" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="100" />
-            </Grid.ColumnDefinitions>
-
-            <Frame
-                Grid.Row="0"
-                Grid.Column="1"
-                BackgroundColor="DarkBlue">
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250" />
-                        <ColumnDefinition Width="250" />
-                    </Grid.ColumnDefinitions>
-
-                    <Picker
-                        x:Name="LengthPicker"
-                        Title="Select Length"
-                        Grid.Column="0"
-                        BackgroundColor="Gray"
-                        HorizontalOptions="Center"
-                        SelectedIndex="{Binding SelectedLengthItem}"
-                        TitleColor="white" />
-
-                    <Picker
-                        x:Name="DepthPicker"
-                        Title="Select Depth"
-                        Grid.Column="1"
-                        BackgroundColor="Gray"
-                        HorizontalOptions="Center"
-                        SelectedIndex="{Binding SelectedDepthItem}"
-                        TitleColor="white" />
-
-                </Grid>
-
-            </Frame>
-
-            <Frame
-                Grid.Row="1"
-                Grid.Column="1"
-                BackgroundColor="DarkBlue">
-
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="50" />
-                        <RowDefinition Height="75" />
-                        <RowDefinition Height="75" />
-                        <RowDefinition Height="75" />
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="125" />
-                        <ColumnDefinition Width="125" />
-                        <ColumnDefinition Width="125" />
-                        <ColumnDefinition Width="125" />
-                    </Grid.ColumnDefinitions>
-
-                    <Label
-                        x:Name="LockerNumber"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="4"
-                        HorizontalOptions="Center"
-                        Text="New Locker"
-                        TextColor="white" />
-
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        HorizontalOptions="End"
-                        Text="Door"
-                        TextColor="white" />
-
-                    <CheckBox
-                        x:Name="DoorCheckbox"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        HorizontalOptions="Center"
-                        IsChecked="{Binding IsDoorChecked}"
-                        IsVisible="{Binding IsDoorVisible}"
-                        VerticalOptions="Start" />
-
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        HorizontalOptions="End"
-                        IsVisible="{Binding IsGlassVisible}"
-                        Text="Glass"
-                        TextColor="white" />
-
-                    <CheckBox
-                        x:Name="GlassCheckbox"
-                        Grid.Row="1"
-                        Grid.Column="3"
-                        HorizontalOptions="Center"
-                        IsChecked="{Binding IsGlassChecked}"
-                        IsVisible="{Binding IsGlassVisible}"
-                        VerticalOptions="Start" />
-
-                    <Picker
-                        x:Name="DoorColorPicker"
-                        Title="Select the color of the door"
-                        Grid.Row="2"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        BackgroundColor="Gray"
-                        HorizontalOptions="Center"
-                        IsVisible="{Binding IsDoorPickerVisible}"
-                        ItemsSource="{Binding ItemSourceDoorPicker}"
-                        SelectedItem="{Binding SelectedDoorColorItem}"
-                        TextColor="white"
-                        TitleColor="White" />
-
-                    <Picker
-                        x:Name="HeightPicker"
-                        Title="Select the height of the locker"
-                        Grid.Row="2"
-                        Grid.Column="2"
-                        Grid.ColumnSpan="2"
-                        BackgroundColor="Gray"
-                        HorizontalOptions="Center"
-                        SelectedItem="{Binding SelectedHeightItem}"
-                        TextColor="white"
-                        TitleColor="White" />
-
-                    <Picker
-                        x:Name="LockerColorPicker"
-                        Title="Select the color of the panels"
-                        Grid.Row="3"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        BackgroundColor="Gray"
-                        HorizontalOptions="Center"
-                        SelectedItem="{Binding SelectedLockerColorItem}"
-                        TextColor="white"
-                        TitleColor="White" />
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kitbox_project.Views.CabinetCreatorPage"
+             xmlns:panel="clr-namespace:Kitbox_project.Utilities">
 
 
-                    <Button
-                        x:Name="AddLockerButton"
-                        Grid.Row="3"
-                        Grid.Column="2"
-                        Grid.ColumnSpan="2"
-                        BackgroundColor="Gray"
-                        Command="{Binding OnAddLockerButtonClicked}"
-                        Text="ADD"
-                        TextColor="White" />
+    <Grid>
 
-                </Grid>
+        <!-- Nbr and Size of our main UI's columns and rows -->
+        <!-- We can easily adjust it to change each rounded rectangle's sizes -->
 
-            </Frame>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.4*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.5*" />
+        </Grid.ColumnDefinitions>
 
-            <!--  List of added lockers - There's a max of 7  -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <ListView
-                Grid.Row="0"
-                Grid.RowSpan="3"
-                Grid.Column="2"
-                ItemsSource="{Binding Lockers}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout>
-                                <Label Text="{Binding .}" />
+        <!-- Cabinet Size Rounded Rectangle -->
+        <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#A7DAFF" CornerRadius="10" Margin="10" Grid.ColumnSpan="4">
 
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+            <!-- Grid informations inside the Cabinet Rectangle -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        </Grid>
+                <!-- All the text inside the Cabinet Size -->
+                <Label Text="Cabinet Size" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" FontSize="20" FontAttributes="Bold"/>
+                <Label Text="Cabinet Length" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0" />
+                <Label Text="Cabinet Depth" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1" />
 
-    </ScrollView>
+                <!-- All the Pickers inside the Cabinet Size -->
+                <Picker Grid.Column="0" Grid.Row="2" BackgroundColor="White" Margin="10" HorizontalOptions="Center">
+                    <Picker.Items>
+                        <x:String>Option 1</x:String>
+                        <x:String>Option 2</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Picker Grid.Column="1" Grid.Row="2" BackgroundColor="White" Margin ="10" HorizontalOptions="Center">
+                    <Picker.Items>
+                        <x:String>Option 1</x:String>
+                        <x:String>Option 2</x:String>
+                    </Picker.Items>
+                </Picker>
+            </Grid>
+        </Frame>
+
+        <!-- Middle Locker -->
+        <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Margin="10" Grid.ColumnSpan="4" BackgroundColor="#A7DAFF">
+
+            <!-- Grid definition of outer frame (Button, Inside Frame, ..) -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- All the Buttons inside Outside Frame-->
+                <Button Text="Add" Grid.Row="4" Grid.Column="4" Margin="30" BackgroundColor="#0066FF" FontSize="20"/>
+
+                <!-- All the Text inside the Outside Frame -->
+                <Label Text="Locker 7" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="4"  FontSize="20" FontAttributes="Bold"/>
+                <Label Text="Pannel Colors" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2"/>
+                <Label Text="Height" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
+
+                <!-- All the Pickers inside the Outside Frame -->
+                <Picker Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
+                    <Picker.Items>
+                        <x:String>Option 1</x:String>
+                        <x:String>Option 2</x:String>
+                    </Picker.Items>
+                </Picker>
+                <Picker Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
+                    <Picker.Items>
+                        <x:String>Option 1</x:String>
+                        <x:String>Option 2</x:String>
+                    </Picker.Items>
+                </Picker>
+
+                <!-- Midle Locker Inside Frame -->
+                <Frame Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="10" Grid.RowSpan="3" BackgroundColor="#A7DAFF" BorderColor="Black">
+                    <Grid>
+
+                        <!-- Grid definition of the inside frame (door, glass, ..) -->
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Checkboxes -->
+                        <CheckBox  Grid.Column="0" Grid.Row="0" HorizontalOptions="Start" VerticalOptions="Center" Color="#0066FF" />
+                        <CheckBox Grid.Column="0" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center" Color="#0066FF"/>
+
+                        <!-- Texts -->
+                        <Label Text="Door" Grid.Column="1" Grid.Row="0" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Text="Glass" Grid.Column="1" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        <Label Text="Door Color" Grid.Column="2" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                        <!-- Pickers -->
+                        <Picker Grid.Column="2" Grid.Row="1" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
+                            <Picker.Items>
+                                <x:String>Option 1</x:String>
+                                <x:String>Option 2</x:String>
+                            </Picker.Items>
+                        </Picker>
+                    </Grid>
+
+                </Frame>
+            </Grid>
+        </Frame>
+
+        <!-- Cabinet Image. Randome Right now but we'll have to code something here -->
+        <Image Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Source="dotnet_bot.png" Aspect="AspectFit" Margin="10" />
+
+
+
+        <!-- Right side with all the lockers -->
+        <!-- I haven't done it with grids only yet, but it shouldn't change much so we can keep it as it if needed. -->
+        <Frame Grid.Column="4" Grid.RowSpan="3" Grid.Row ="0" Grid.ColumnSpan="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+            <ScrollView>
+                <VerticalStackLayout
+                    Spacing="25"
+                    Padding="30"
+                    VerticalOptions="Start">
+
+                    <!-- Allow the expansion when we click on it -->
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame Grid.Row="0" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+                                <StackLayout>
+                                    <Label Text="Locker 1" HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+
+                            <!-- Put these as entry right now for the fun, but they're label and we'll have to bind them -->
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
+
+
+                    <!-- I put multiple just so we have an idea, but we'll have to delete every lockers under this and bind the 1st one to our list of locker -->
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+
+                                <StackLayout>
+                                    <Label Text="Locker 2" HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
+
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+
+                                <StackLayout>
+                                    <Label Text="Locker 3" HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
+
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+
+                                <StackLayout>
+                                    <Label Text="Locker 4" HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
+
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+
+                                <StackLayout>
+                                    <Label Text="Locker 5" HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
+
+
+
+                </VerticalStackLayout>
+
+
+
+            </ScrollView>
+
+
+            <!-- Bottom Buttons -->
+            <!-- Don't forget to bind them too  -->
+        </Frame>
+        <Button Text="Reset" BackgroundColor="Red" Grid.Column="0" Grid.Row="3" FontSize="20"/>
+        <Button Text="Confirm" BackgroundColor="Green" Grid.Column="6" Grid.Row="3" FontSize="20"/>
+
+    </Grid>
 
 </ContentPage>
+
+
