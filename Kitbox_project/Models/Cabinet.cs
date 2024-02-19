@@ -9,12 +9,12 @@ namespace Kitbox_project.Models
     public class Cabinet
     {
         private List<Locker> lockers { get; set; } = new List<Locker>();
-        private float price { get; set; }
+        private double price { get; set; }
         private int depth { get; set; }
         private int length { get; set; }
         private int quantity { get; set; }
 
-        public Cabinet(List<Locker> lockers, float price, int depth, int length, int quantity)
+        public Cabinet(List<Locker> lockers, double price, int depth, int length, int quantity)
         {
             this.lockers = lockers;
             this.price = price;
@@ -53,9 +53,9 @@ namespace Kitbox_project.Models
             return this.quantity;
         }
 
-        public float GetPrice()
+        public double GetPrice()
         {
-            float price = 0;
+            double price = 0;
             foreach(Locker locker in lockers)
             {
                 price += locker.GetPrice();

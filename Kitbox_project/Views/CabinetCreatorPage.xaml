@@ -37,6 +37,7 @@
                         Grid.Column="0"
                         BackgroundColor="Gray"
                         HorizontalOptions="Center"
+                        SelectedIndex="{Binding SelectedLengthItem}"
                         TitleColor="white" />
 
                     <Picker
@@ -45,6 +46,7 @@
                         Grid.Column="1"
                         BackgroundColor="Gray"
                         HorizontalOptions="Center"
+                        SelectedIndex="{Binding SelectedDepthItem}"
                         TitleColor="white" />
 
                 </Grid>
@@ -124,6 +126,7 @@
                         HorizontalOptions="Center"
                         IsVisible="{Binding IsDoorPickerVisible}"
                         ItemsSource="{Binding ItemSourceDoorPicker}"
+                        SelectedItem="{Binding SelectedDoorColorItem}"
                         TextColor="white"
                         TitleColor="White" />
 
@@ -135,6 +138,7 @@
                         Grid.ColumnSpan="2"
                         BackgroundColor="Gray"
                         HorizontalOptions="Center"
+                        SelectedItem="{Binding SelectedHeightItem}"
                         TextColor="white"
                         TitleColor="White" />
 
@@ -146,25 +150,36 @@
                         Grid.ColumnSpan="2"
                         BackgroundColor="Gray"
                         HorizontalOptions="Center"
+                        SelectedItem="{Binding SelectedLockerColorItem}"
                         TextColor="white"
                         TitleColor="White" />
 
-                   
-                    <Button x:Name="AddLockerButton" Clicked="OnAddLockerButtonClicked" Text="ADD"
-                            Grid.Row="3" Grid.ColumnSpan="2"  Grid.Column="2"
-                            TextColor="White" BackgroundColor="Gray"/>
+
+                    <Button
+                        x:Name="AddLockerButton"
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="2"
+                        BackgroundColor="Gray"
+                        Command="{Binding OnAddLockerButtonClicked}"
+                        Text="ADD"
+                        TextColor="White" />
 
                 </Grid>
 
             </Frame>
 
             <!--  List of added lockers - There's a max of 7  -->
-            
-            <ListView ItemsSource="{Binding Lockers}" Grid.RowSpan="3" Grid.Row="0" Grid.Column="2">
+
+            <ListView
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="2"
+                ItemsSource="{Binding Lockers}">
                 <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout>
                                 <Label Text="{Binding .}" />
 
                             </StackLayout>

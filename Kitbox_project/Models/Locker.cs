@@ -12,9 +12,9 @@ namespace Kitbox_project.Models
         private Color color { get; set; }
         private Door door { get; set; }
 
-        private float price { get; set; }
+        private double price { get; set; }
 
-        public Locker(int height, Color color, Door door, float price) 
+        public Locker(int height, Color color, Door door, double price) 
         {
             this.height = height;
             this.color = color;
@@ -27,7 +27,7 @@ namespace Kitbox_project.Models
             return this.height;
         }
 
-        public float GetPrice()
+        public double GetPrice()
         {
             return this.price;
         }
@@ -62,7 +62,7 @@ namespace Kitbox_project.Models
             this.color = color;
         }
 
-        public void SetPrice(float price)
+        public void SetPrice(double price)
         {
             this.price = price;
         }
