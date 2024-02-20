@@ -9,7 +9,7 @@ public class DatabaseCustomer
         {
             connection.Open();
 
-            // Remplacez "VotreTable", "Colonne1", "Colonne2", "Colonne3" par les noms réels de votre table et colonnes
+            
             string query = "INSERT IGNORE INTO Customer (firstname, name, email) VALUES (@firstname, @name, @email)";
             
             using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -18,7 +18,7 @@ public class DatabaseCustomer
                 command.Parameters.AddWithValue("@name", name);
                 command.Parameters.AddWithValue("@email", email);
 
-                // Exécute la commande
+                
                 command.ExecuteNonQuery();
             }
         }
@@ -30,14 +30,13 @@ public class DatabaseCustomer
         {
             connection.Open();
 
-            // Remplacez "VotreTable" et "VotreColonne" par les noms réels de votre table et colonne
+            
             string query = "DELETE FROM Customer WHERE idCustomer = @idCustomer";
 
             using (MySqlCommand command = new MySqlCommand(query, connection))
             {
                 command.Parameters.AddWithValue("@idCustomer", idCustomer);
 
-                // Exécute la commande
                 command.ExecuteNonQuery();
             }
         
@@ -50,7 +49,7 @@ public class DatabaseCustomer
         {
             connection.Open();
 
-            // Remplacez "VotreTable", "Colonne1", "Colonne2", "Colonne3" par les noms réels de votre table et colonnes
+            
             string query = "UPDATE Customer SET firstname = @firstname, name = @name, email = @email WHERE idCustomer = @idCustomer";
 
             using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -60,7 +59,7 @@ public class DatabaseCustomer
                 command.Parameters.AddWithValue("@email", email);
                 command.Parameters.AddWithValue("@idCustomer", idCustomer);
 
-                // Exécute la commande
+                
                 command.ExecuteNonQuery();
             }
         }
@@ -71,7 +70,7 @@ public class DatabaseCustomer
         {
             connection.Open();
 
-            // Remplacez "VotreTable", "VotreColonne" par les noms réels de votre table et colonne
+            
             string query = "SELECT * FROM Customer WHERE idCustomer = @idCustomer";
 
             using (MySqlCommand command = new MySqlCommand(query, connection))
