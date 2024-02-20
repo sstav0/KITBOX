@@ -8,19 +8,28 @@ namespace Kitbox_project.ViewModels
 {
     class CabinetViewModelV2
     {
-        private ObservableCollection<LockerViewModelV2> lockers {  get; set; }
-        private string price { get; set; }
-        private string depth { get; set; }
-        private string length { get; set; }
-        private string quantity { get; set; }
+        public ObservableCollection<LockerViewModelV2> lockers {  get; set; }
+        public string price { get; set; }
+        public string depth { get; set; }
+        public string length { get; set; }
+        public string quantity { get; set; }
+        public string nbrLockers { get; set; }
+        public string height { get; set; }
 
-        public CabinetViewModelV2(ObservableCollection<LockerViewModelV2> lockers, string price, string depth, string length, string quantity) 
+        public CabinetViewModelV2(ObservableCollection<LockerViewModelV2> lockers,string price, string depth, string length, string quantity) 
         {
             this.lockers = lockers;
             this.price = price;
             this.depth = depth;
             this.length = length;
             this.quantity = quantity;
+            this.nbrLockers = lockers.Count().ToString();
+            int i = 0;
+            foreach (LockerViewModelV2 locker in lockers)
+            {
+                i += locker.height;
+            }
+            this.height = i.ToString();
         }
 
         public void AddLocker(LockerViewModelV2 locker)
@@ -54,6 +63,36 @@ namespace Kitbox_project.ViewModels
             i += $"{this.length}, ";
             i += $"{this.quantity}";
             return i;
+        }
+
+        public string GetPrice() 
+        {
+            return this.price;
+        }
+
+        public string GetDepth()
+        {
+            return this.depth;
+        }
+
+        public string GetLength()
+        {
+            return this.length;
+        }
+
+        public string GetQuantity()
+        {
+            return this.quantity;
+        }
+
+        public string GetNbrLockers() 
+        {
+            return this.nbrLockers;
+        }
+
+        public string GetHeight()
+        {
+            return this.height;
         }
     }
 }

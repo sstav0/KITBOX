@@ -8,12 +8,12 @@ namespace Kitbox_project.ViewModels
 {
     class LockerViewModelV2
     {
-        private string height { get; set; }
-        private string color { get; set; }
-        private DoorViewModel door { get; set; }
-        private string price { get; set; }
+        public int height { get; set; }
+        public string color { get; set; }
+        public DoorViewModel door { get; set; }
+        public string price { get; set; }
 
-        public LockerViewModelV2(string height, string color, DoorViewModel door, string price)
+        public LockerViewModelV2(int height, string color, DoorViewModel door, string price)
         {
             this.height = height;
             this.color = color;
@@ -24,7 +24,7 @@ namespace Kitbox_project.ViewModels
         public ObservableCollection<string> GetLockerViewModelV2()
         {
             ObservableCollection<string> i = new ObservableCollection<string>();
-            i.Add(this.height);
+            i.Add(this.height.ToString());
             i.Add(this.color);
             i.Add(this.door.GetColor());
             i.Add(this.door.GetMaterial());
@@ -34,7 +34,7 @@ namespace Kitbox_project.ViewModels
         public string GetLockerViewModelStringV2()
         {
             string i = string.Empty;
-            i += $"{this.height}, ";
+            i += $"{this.height.ToString()}, ";
             i += $"{this.color}, ";
             i += $"{this.door.GetColor()}, ";
             i += $"{this.door.GetMaterial()}, ";
@@ -42,7 +42,7 @@ namespace Kitbox_project.ViewModels
             return i;
         }
 
-        public void SetLockerViewModelV2(string height, string color, string doorColor, string doorMaterial, string price)
+        public void SetLockerViewModelV2(int height, string color, string doorColor, string doorMaterial, string price)
         {
             this.height = height;
             this.color = color;
