@@ -18,7 +18,7 @@ namespace Kitbox_project.DataBase
         {
             Color doorColor  = new Color();
             
-            return new Door(doorColor, "wood");
+            return new Door("doorColor", "wood", 12, 12);
         }
         public override void Save()
         {

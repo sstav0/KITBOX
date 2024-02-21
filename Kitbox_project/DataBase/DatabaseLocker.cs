@@ -16,10 +16,8 @@ namespace Kitbox_project.DataBase
         }
         public override Locker GetById()
         {
-            Color doorColor = new Color();
-
-            ;
-            return new Locker(12, doorColor, new Door(doorColor, "wood"), 5.5);
+            
+            return new Locker(12,12, 12, "doorColor", new Door("doorColor", "wood", 12, 12), 5.5);
         }
         public override void Save()
         {
