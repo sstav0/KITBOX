@@ -17,6 +17,11 @@ namespace Kitbox_project.Models
             this.basket = basket;
         }
 
+        public string GetStatus()
+        {
+            return this.status;
+        }
+
         public void Confirm()
         {
 
@@ -39,7 +44,10 @@ namespace Kitbox_project.Models
 
         public override string ToString()
         {
-            return base.ToString();
+            string i = string.Empty;
+            i += $"{this.status}, ";
+            i += $"{this.basket.ToString()}";
+            return i;
         }
     }
 }

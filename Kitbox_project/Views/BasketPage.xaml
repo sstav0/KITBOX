@@ -6,32 +6,30 @@
 
     <Grid Padding="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="10*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/> 
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1.25*"/> 
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.1*"/>
-            <ColumnDefinition Width="0.25*"/>
-            <ColumnDefinition Width="0.75*"/>
-            <ColumnDefinition Width="0.25*"/>
-            <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.1*"/>
         </Grid.ColumnDefinitions>
 
-    <Label Text="BASKET" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1"
-           FontSize="30" FontAttributes="Bold" HorizontalOptions="Center"/>
+    <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="1"
+           FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
 
-    <ScrollView Grid.Row="1" Grid.ColumnSpan="5" Grid.Column="1">
+    <ScrollView Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1">
             <ListView x:Name="ListCabinets">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Frame BackgroundColor="#A7DAFF" CornerRadius="10" Margin="10">
+                            <Frame BackgroundColor="#A7DAFF" CornerRadius="10" Margin="3">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -80,19 +78,31 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollView>
-    
-        <Label Text="TOTAL" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1"
-               FontSize="Small" HorizontalOptions="Center"/>
 
-        <Label x:Name="TotalPrice" Grid.Row="2" Grid.Column="4"
-               FontSize="Small" HorizontalOptions="End"/>
+        <Frame BackgroundColor="LightGray" CornerRadius="10" Margin="3"
+               Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="1">
 
-        <Label Text="€" Grid.Row="2" Grid.Column="6"
-               FontSize="Small"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+            <Label Text="TOTAL" Grid.ColumnSpan="2" Grid.Column="0"
+               FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start"/>
+
+            <Label x:Name="TotalPrice" Grid.ColumnSpan="2" Grid.Column="3"
+               FontSize="Medium" FontAttributes="Bold" HorizontalOptions="End"/>
+
+            </Grid>
+        </Frame>
         
-        <Button Text="BACK" Grid.Row="3" Grid.Column="2" />
+        <Button Text="BACK" Grid.Row="3" Grid.Column="1" Margin="3"/>
         
-        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="6" />
+        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="4" Margin="3"/>
 
     </Grid>
     </ContentPage>

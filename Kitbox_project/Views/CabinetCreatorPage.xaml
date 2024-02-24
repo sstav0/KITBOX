@@ -3,7 +3,6 @@
              x:Class="Kitbox_project.Views.CabinetCreatorPage"
              xmlns:panel="clr-namespace:Kitbox_project.Utilities">
 
-
     <Grid>
 
         <!-- Nbr and Size of our main UI's columns and rows -->
@@ -146,7 +145,6 @@
         <Image Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Source="dotnet_bot.png" Aspect="AspectFit" Margin="10" />
 
 
-
         <!-- Right side with all the lockers -->
         <!-- I haven't done it with grids only yet, but it shouldn't change much so we can keep it as it if needed. -->
         <Frame Grid.Column="4" Grid.RowSpan="3" Grid.Row ="0" Grid.ColumnSpan="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
@@ -174,7 +172,6 @@
                             <Entry Placeholder="Panel Color" />
                         </StackLayout>
                     </panel:ExpansionPanel>
-
 
                     <!-- I put multiple just so we have an idea, but we'll have to delete every lockers under this and bind the 1st one to our list of locker -->
                     <panel:ExpansionPanel IsExpanded="False">
@@ -245,14 +242,26 @@
                         </StackLayout>
                     </panel:ExpansionPanel>
 
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
 
+                                <StackLayout>
+                                    <Label Text="Locker 6" HorizontalOptions="Center" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
 
                 </VerticalStackLayout>
 
-
-
             </ScrollView>
-
 
             <!-- Bottom Buttons -->
             <!-- Don't forget to bind them too  -->

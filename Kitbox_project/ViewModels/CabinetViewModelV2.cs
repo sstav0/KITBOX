@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kitbox_project.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Kitbox_project.ViewModels
 {
     class CabinetViewModelV2
     {
-        public ObservableCollection<LockerViewModelV2> lockers {  get; set; }
+        public ObservableCollection<Locker> lockers {  get; set; }
         public string price { get; set; }
         public string depth { get; set; }
         public string length { get; set; }
@@ -16,23 +17,18 @@ namespace Kitbox_project.ViewModels
         public string nbrLockers { get; set; }
         public string height { get; set; }
 
-        public CabinetViewModelV2(ObservableCollection<LockerViewModelV2> lockers,string price, string depth, string length, string quantity) 
+        public CabinetViewModelV2(Cabinet cabinet) 
         {
-            this.lockers = lockers;
-            this.price = price;
-            this.depth = depth;
-            this.length = length;
-            this.quantity = quantity;
-            this.nbrLockers = lockers.Count().ToString();
-            int i = 0;
-            foreach (LockerViewModelV2 locker in lockers)
-            {
-                i += locker.height;
-            }
-            this.height = i.ToString();
+            this.lockers = cabinet.GetObservableLockers();
+            this.price = cabinet.GetPrice().ToString();
+            this.depth = cabinet.GetDepth().ToString();
+            this.length = cabinet.GetLength().ToString();
+            this.quantity = cabinet.GetQuantity().ToString();
+            this.nbrLockers = cabinet.GetLockerCount().ToString();
+            this.height = cabinet.GetHeight().ToString();
         }
 
-        public void AddLocker(LockerViewModelV2 locker)
+        public void AddLocker(Locker locker)
         {
             this.lockers.Add(locker);
         }
@@ -40,9 +36,9 @@ namespace Kitbox_project.ViewModels
         public ObservableCollection<string> GetCabinetViewModelV2()
         {
             ObservableCollection<string> i = new ObservableCollection<string>();
-            foreach (LockerViewModelV2 locker in this.lockers)
+            foreach (Locker locker in this.lockers)
             {
-                i.Add(locker.GetLockerViewModelStringV2());
+                i.Add(locker.ToString());
             }
             i.Add(this.price);
             i.Add(this.depth);
@@ -54,9 +50,9 @@ namespace Kitbox_project.ViewModels
         public string GetCabinetViewModelStringV2() 
         {
             string i = string.Empty;
-            foreach (LockerViewModelV2 locker in this.lockers)
+            foreach (Locker locker in this.lockers)
             {
-                i += $"{locker.GetLockerViewModelStringV2()}, ";
+                i += $"{locker.ToString()}, ";
             }
             i += $"{this.price}, ";
             i += $"{this.depth}, ";

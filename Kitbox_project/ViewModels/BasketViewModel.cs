@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Kitbox_project.Models;
+using Microsoft.Maui.Graphics.Text;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,9 +28,19 @@ namespace Kitbox_project.ViewModels
             ObservableCollection<string> i = new ObservableCollection<string>();
             foreach (var item in this.basket)
             {
-                i.Add(item.GetCabinetViewModelStringV2());
+                i.Add(item.ToString());
             }
             return i;
+        }
+
+        public string GetTotalPrice()
+        {
+            double i = 0;
+            foreach(var item in this.basket)
+            {
+                i += Convert.ToDouble(item.GetPrice());
+            }
+            return i.ToString();
         }
     }
 }
