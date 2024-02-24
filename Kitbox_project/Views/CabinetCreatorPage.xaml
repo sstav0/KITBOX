@@ -1,12 +1,14 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kitbox_project.Views.CabinetCreatorPage"
-             xmlns:panel="clr-namespace:Kitbox_project.Utilities">
+<ContentPage
+    x:Class="Kitbox_project.Views.CabinetCreatorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:panel="clr-namespace:Kitbox_project.Utilities"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
 
     <Grid>
 
-        <!-- Nbr and Size of our main UI's columns and rows -->
-        <!-- We can easily adjust it to change each rounded rectangle's sizes -->
+        <!--  Nbr and Size of our main UI's columns and rows  -->
+        <!--  We can easily adjust it to change each rounded rectangle's sizes  -->
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*" />
@@ -24,10 +26,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Cabinet Size Rounded Rectangle -->
-        <Frame Grid.Row="0" Grid.Column="0" BackgroundColor="#A7DAFF" CornerRadius="10" Margin="10" Grid.ColumnSpan="4">
+        <!--  Cabinet Size Rounded Rectangle  -->
+        <Frame
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Margin="10"
+            BackgroundColor="#A7DAFF"
+            CornerRadius="10">
 
-            <!-- Grid informations inside the Cabinet Rectangle -->
+            <!--  Grid informations inside the Cabinet Rectangle  -->
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -39,31 +47,58 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- All the text inside the Cabinet Size -->
-                <Label Text="Cabinet Size" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="2" FontSize="20" FontAttributes="Bold"/>
-                <Label Text="Cabinet Length" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0" />
-                <Label Text="Cabinet Depth" HorizontalOptions="Center" Grid.Row="1" Grid.Column="1" />
+                <!--  All the text inside the Cabinet Size  -->
+                <Label
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalOptions="Center"
+                    Text="Cabinet Size" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    Text="Cabinet Width" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalOptions="Center"
+                    Text="Cabinet Depth" />
 
-                <!-- All the Pickers inside the Cabinet Size -->
-                <Picker Grid.Column="0" Grid.Row="2" BackgroundColor="White" Margin="10" HorizontalOptions="Center">
-                    <Picker.Items>
-                        <x:String>Option 1</x:String>
-                        <x:String>Option 2</x:String>
-                    </Picker.Items>
-                </Picker>
-                <Picker Grid.Column="1" Grid.Row="2" BackgroundColor="White" Margin ="10" HorizontalOptions="Center">
-                    <Picker.Items>
-                        <x:String>Option 1</x:String>
-                        <x:String>Option 2</x:String>
-                    </Picker.Items>
-                </Picker>
+                <!--  All the Pickers inside the Cabinet Size  -->
+                <!--  SelectedIndexChanged="UpdateAvailability"  -->
+                <!--  SelectedIndexChanged="{Binding UpdateAvailability}"  -->
+                <Picker
+                    x:Name="CabinetWidth"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    SelectedItem="{Binding SelectedWidthItem}" />
+
+                <Picker
+                    x:Name="CabinetDepth"
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    SelectedItem="{Binding SelectedDepthItem}" />
             </Grid>
         </Frame>
 
-        <!-- Middle Locker -->
-        <Frame Grid.Row="1" Grid.Column="0" CornerRadius="10" Margin="10" Grid.ColumnSpan="4" BackgroundColor="#A7DAFF">
+        <!--  Middle Locker  -->
+        <Frame
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Margin="10"
+            BackgroundColor="#A7DAFF"
+            CornerRadius="10">
 
-            <!-- Grid definition of outer frame (Button, Inside Frame, ..) -->
+            <!--  Grid definition of outer frame (Button, Inside Frame, ..)  -->
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -81,55 +116,132 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <!-- All the Buttons inside Outside Frame-->
-                <Button Text="Add" Grid.Row="4" Grid.Column="4" Margin="30" BackgroundColor="#0066FF" FontSize="20"/>
+                <!--  All the Buttons inside Outside Frame  -->
+                <Button
+                    Grid.Row="4"
+                    Grid.Column="4"
+                    Margin="30"
+                    BackgroundColor="#0066FF"
+                    Command="{Binding OnAddLockerButtonClicked}"
+                    FontSize="20"
+                    Text="Add" />
 
-                <!-- All the Text inside the Outside Frame -->
-                <Label Text="Locker 7" HorizontalOptions="Center" Grid.Row="0" Grid.ColumnSpan="4"  FontSize="20" FontAttributes="Bold"/>
-                <Label Text="Pannel Colors" HorizontalOptions="Center" Grid.Row="1" Grid.Column="0"  Grid.ColumnSpan="2"/>
-                <Label Text="Height" HorizontalOptions="Center" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
+                <!--  All the Text inside the Outside Frame  -->
+                <Label
+                    Grid.Row="0"
+                    Grid.ColumnSpan="4"
+                    FontAttributes="Bold"
+                    FontSize="20"
+                    HorizontalOptions="Center"
+                    Text="Locker 7" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Center"
+                    Text="Pannel Colors" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Center"
+                    Text="Height" />
 
-                <!-- All the Pickers inside the Outside Frame -->
-                <Picker Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
-                    <Picker.Items>
-                        <x:String>Option 1</x:String>
-                        <x:String>Option 2</x:String>
-                    </Picker.Items>
-                </Picker>
-                <Picker Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
-                    <Picker.Items>
-                        <x:String>Option 1</x:String>
-                        <x:String>Option 2</x:String>
-                    </Picker.Items>
-                </Picker>
+                <!--  All the Pickers inside the Outside Frame  -->
+                <Picker
+                    x:Name=" PannelColor"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="CenterAndExpand"
+                    SelectedItem="{Binding SelectedLockerColorItem}" />
+                <Picker
+                    x:Name=" LockerHeight"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="CenterAndExpand"
+                    SelectedItem="{Binding SelectedHeightItem}" />
 
-                <!-- Midle Locker Inside Frame -->
-                <Frame Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="10" Grid.RowSpan="3" BackgroundColor="#A7DAFF" BorderColor="Black">
+
+
+                <!--  Midle Locker Inside Frame  -->
+                <Frame
+                    Grid.Row="3"
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="10"
+                    BackgroundColor="#A7DAFF"
+                    BorderColor="Black">
                     <Grid>
 
-                        <!-- Grid definition of the inside frame (door, glass, ..) -->
+                        <!--  Grid definition of the inside frame (door, glass, ..)  -->
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.1*"/>
-                            <ColumnDefinition Width="0.5*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="0.5*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <!-- Checkboxes -->
-                        <CheckBox  Grid.Column="0" Grid.Row="0" HorizontalOptions="Start" VerticalOptions="Center" Color="#0066FF" />
-                        <CheckBox Grid.Column="0" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center" Color="#0066FF"/>
+                        <!--  Checkboxes  -->
+                        <CheckBox
+                            x:Name="Door"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HorizontalOptions="Start"
+                            IsChecked="{Binding IsDoorChecked}"
+                            IsEnabled="{Binding UncheckDoor}"
+                            VerticalOptions="Center"
+                            Color="#0066FF" />
+                        <CheckBox
+                            x:Name="Glass"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            HorizontalOptions="Start"
+                            IsChecked="{Binding IsGlassChecked}"
+                            IsVisible="{Binding IsGlassVisible}"
+                            VerticalOptions="Center"
+                            Color="#0066FF" />
 
-                        <!-- Texts -->
-                        <Label Text="Door" Grid.Column="1" Grid.Row="0" HorizontalOptions="Start" VerticalOptions="Center"/>
-                        <Label Text="Glass" Grid.Column="1" Grid.Row="1" HorizontalOptions="Start" VerticalOptions="Center"/>
-                        <Label Text="Door Color" Grid.Column="2" Grid.Row="0" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <!--  Texts  -->
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HorizontalOptions="Start"
+                            Text="Door"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            HorizontalOptions="Start"
+                            Text="Glass"
+                            VerticalOptions="Center" />
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            HorizontalOptions="Center"
+                            Text="Door Color"
+                            VerticalOptions="Center" />
 
-                        <!-- Pickers -->
-                        <Picker Grid.Column="2" Grid.Row="1" BackgroundColor="White" Margin="10" HorizontalOptions="CenterAndExpand">
+                        <!--  Pickers  -->
+                        <Picker
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="10"
+                            BackgroundColor="White"
+                            HorizontalOptions="CenterAndExpand"
+                            IsVisible="{Binding IsDoorPickerVisible}"
+                            SelectedItem="{Binding SelectedDoorColorItem}">
+
                             <Picker.Items>
                                 <x:String>Option 1</x:String>
                                 <x:String>Option 2</x:String>
@@ -141,62 +253,70 @@
             </Grid>
         </Frame>
 
-        <!-- Cabinet Image. Randome Right now but we'll have to code something here -->
-        <Image Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Source="dotnet_bot.png" Aspect="AspectFit" Margin="10" />
+        <!--  Cabinet Image. Randome Right now but we'll have to code something here  -->
+        <Image
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="4"
+            Margin="10"
+            Aspect="AspectFit"
+            Source="dotnet_bot.png" />
 
 
-        <!-- Right side with all the lockers -->
-        <!-- I haven't done it with grids only yet, but it shouldn't change much so we can keep it as it if needed. -->
-        <Frame Grid.Column="4" Grid.RowSpan="3" Grid.Row ="0" Grid.ColumnSpan="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+
+        <!--  Right side with all the lockers  -->
+        <!--  I haven't done it with grids only yet, but it shouldn't change much so we can keep it as it if needed.  -->
+        <Frame
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Grid.Column="4"
+            Grid.ColumnSpan="2"
+            Margin="10"
+            BackgroundColor="#FFFFFFFF"
+            CornerRadius="10">
             <ScrollView>
                 <VerticalStackLayout
-                    Spacing="25"
                     Padding="30"
+                    Spacing="25"
                     VerticalOptions="Start">
 
-                    <!-- Allow the expansion when we click on it -->
+                    <!--  Allow the expansion when we click on it  -->
                     <panel:ExpansionPanel IsExpanded="False">
                         <panel:ExpansionPanel.HeaderContent>
-                            <Frame Grid.Row="0" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+                            <Frame
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="10"
+                                BackgroundColor="#FFFFFFFF"
+                                CornerRadius="10">
                                 <StackLayout>
-                                    <Label Text="Locker 1" HorizontalOptions="Center" />
+                                    <Label HorizontalOptions="Center" Text="Locker 1" />
 
                                 </StackLayout>
                             </Frame>
                         </panel:ExpansionPanel.HeaderContent>
                         <StackLayout>
 
-                            <!-- Put these as entry right now for the fun, but they're label and we'll have to bind them -->
+                            <!--  Put these as entry right now for the fun, but they're label and we'll have to bind them  -->
                             <Entry Placeholder="Height" />
                             <Entry Placeholder="Door Color" />
                             <Entry Placeholder="Panel Color" />
                         </StackLayout>
                     </panel:ExpansionPanel>
 
-                    <!-- I put multiple just so we have an idea, but we'll have to delete every lockers under this and bind the 1st one to our list of locker -->
+
+                    <!--  I put multiple just so we have an idea, but we'll have to delete every lockers under this and bind the 1st one to our list of locker  -->
                     <panel:ExpansionPanel IsExpanded="False">
                         <panel:ExpansionPanel.HeaderContent>
-                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+                            <Frame
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Margin="10"
+                                BackgroundColor="#FFFFFFFF"
+                                CornerRadius="10">
 
                                 <StackLayout>
-                                    <Label Text="Locker 2" HorizontalOptions="Center" />
-
-                                </StackLayout>
-                            </Frame>
-                        </panel:ExpansionPanel.HeaderContent>
-                        <StackLayout>
-                            <Entry Placeholder="Height" />
-                            <Entry Placeholder="Door Color" />
-                            <Entry Placeholder="Panel Color" />
-                        </StackLayout>
-                    </panel:ExpansionPanel>
-
-                    <panel:ExpansionPanel IsExpanded="False">
-                        <panel:ExpansionPanel.HeaderContent>
-                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
-
-                                <StackLayout>
-                                    <Label Text="Locker 3" HorizontalOptions="Center" />
+                                    <Label HorizontalOptions="Center" Text="Locker 2" />
 
                                 </StackLayout>
                             </Frame>
@@ -210,10 +330,15 @@
 
                     <panel:ExpansionPanel IsExpanded="False">
                         <panel:ExpansionPanel.HeaderContent>
-                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+                            <Frame
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Margin="10"
+                                BackgroundColor="#FFFFFFFF"
+                                CornerRadius="10">
 
                                 <StackLayout>
-                                    <Label Text="Locker 4" HorizontalOptions="Center" />
+                                    <Label HorizontalOptions="Center" Text="Locker 3" />
 
                                 </StackLayout>
                             </Frame>
@@ -227,10 +352,37 @@
 
                     <panel:ExpansionPanel IsExpanded="False">
                         <panel:ExpansionPanel.HeaderContent>
-                            <Frame Grid.Row="3" Grid.Column="2" BackgroundColor="#FFFFFFFF" CornerRadius="10" Margin="10">
+                            <Frame
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Margin="10"
+                                BackgroundColor="#FFFFFFFF"
+                                CornerRadius="10">
 
                                 <StackLayout>
-                                    <Label Text="Locker 5" HorizontalOptions="Center" />
+                                    <Label HorizontalOptions="Center" Text="Locker 4" />
+
+                                </StackLayout>
+                            </Frame>
+                        </panel:ExpansionPanel.HeaderContent>
+                        <StackLayout>
+                            <Entry Placeholder="Height" />
+                            <Entry Placeholder="Door Color" />
+                            <Entry Placeholder="Panel Color" />
+                        </StackLayout>
+                    </panel:ExpansionPanel>
+
+                    <panel:ExpansionPanel IsExpanded="False">
+                        <panel:ExpansionPanel.HeaderContent>
+                            <Frame
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Margin="10"
+                                BackgroundColor="#FFFFFFFF"
+                                CornerRadius="10">
+
+                                <StackLayout>
+                                    <Label HorizontalOptions="Center" Text="Locker 5" />
 
                                 </StackLayout>
                             </Frame>
@@ -263,11 +415,22 @@
 
             </ScrollView>
 
-            <!-- Bottom Buttons -->
-            <!-- Don't forget to bind them too  -->
+
+            <!--  Bottom Buttons  -->
+            <!--  Don't forget to bind them too  -->
         </Frame>
-        <Button Text="Reset" BackgroundColor="Red" Grid.Column="0" Grid.Row="3" FontSize="20"/>
-        <Button Text="Confirm" BackgroundColor="Green" Grid.Column="6" Grid.Row="3" FontSize="20"/>
+        <Button
+            Grid.Row="3"
+            Grid.Column="0"
+            BackgroundColor="Red"
+            FontSize="20"
+            Text="Reset" />
+        <Button
+            Grid.Row="3"
+            Grid.Column="6"
+            BackgroundColor="Green"
+            FontSize="20"
+            Text="Confirm" />
 
     </Grid>
 

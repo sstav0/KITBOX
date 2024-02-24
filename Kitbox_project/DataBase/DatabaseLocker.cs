@@ -7,18 +7,17 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.DataBase
 {
-    internal class DatabaseDoor : Database<Door>
+    internal class DatabaseLocker : Database<Locker>
     {
-        public DatabaseDoor() { }
-        public override List<Door> GetList()
+        public DatabaseLocker() { }
+        public override List<Locker> GetList()
         {
-            return new List<Door>();
+            return new List<Locker>();
         }
-        public override Door GetById()
+        public override Locker GetById()
         {
-            Color doorColor  = new Color();
             
-            return new Door("doorColor", "wood", 12, 12);
+            return new Locker(12,12, 12, "doorColor", new Door("doorColor", "wood", 12, 12), 5.5);
         }
         public override void Save()
         {
