@@ -495,7 +495,7 @@ namespace Kitbox_project.ViewModels
                         return;
                     }
                 }
-                Locker newLocker = new Locker(_selectedHeightItem, _selectedWidthItem, _selectedDepthItem, _selectedLockerColorItem, newDoor, _price);
+                Locker newLocker = new Locker(_selectedHeightItem, _selectedDepthItem, _selectedWidthItem, _selectedLockerColorItem, newDoor, _price);
             }
         }
     }

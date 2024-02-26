@@ -16,7 +16,7 @@ namespace Kitbox_project.Models
 
         private double price { get; set; }
 
-        public Locker(int height, Color color, Door door, double price) 
+        public Locker(int height, int depth, int width, string color, Door door, double price) 
         {
             this.height = height;
             this.width = width;
@@ -31,7 +31,7 @@ namespace Kitbox_project.Models
             return this.height;
         }
 
-        public double GetPrice()
+        public double GetDepth()
         {
             return this.depth;
         }
@@ -46,6 +46,11 @@ namespace Kitbox_project.Models
             return this.color;
         }
 
+        public int GetWidth()
+        {
+            return this.width;
+        }
+
         public Door GetDoor() 
         {
             return this.door;
@@ -55,14 +60,14 @@ namespace Kitbox_project.Models
         {
             string i = string.Empty;
             i += $"{this.height.ToString()}, ";
-            i += $"{this.color.ToString}, ";
+            i += $"{this.color}, ";
             i += $"{this.door.GetColor().ToString()}, ";
             i += $"{this.door.GetMaterial().ToString()}, ";
             i += $"{this.price.ToString()}";
             return i;
         }
 
-        public void SetDoorColor(Color color)
+        public void SetDoorColor(string color)
         {
             this.door.SetColor(color);
         }

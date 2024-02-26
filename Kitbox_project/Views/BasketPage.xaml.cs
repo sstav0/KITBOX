@@ -17,11 +17,11 @@ public partial class BasketPage : ContentPage
 
 	private void LoadBasket()
 	{
-		Color color1 = Colors.Red;
-		Door door1 = new Door(color1, "wood");
-        Door door1bis = new Door(color1, "wood");
-        Locker locker1 = new Locker(50, color1, door1, 25);
-        Locker locker1bis = new Locker(40, color1, door1bis, 25);
+		string color1 = "red";
+		Door door1 = new Door(color1, "wood", 50, 50); // 50x50 door (example)
+		Door door1bis = new Door(color1, "wood", 50, 50);
+        Locker locker1 = new Locker(50, 20, 50, color1, door1, 25);
+        Locker locker1bis = new Locker(50, 20, 50, color1, door1bis, 25);
 		List<Locker> lockers1 = new List<Locker>();
 		lockers1.Add(locker1);
 		lockers1.Add(locker1bis);
