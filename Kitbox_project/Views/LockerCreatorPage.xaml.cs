@@ -1,11 +1,6 @@
 using Kitbox_project.Models;
 using Kitbox_project.DataBase;
-using System.Collections.ObjectModel;
-using Microsoft.Maui.Controls;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http.Json;
-using System.Collections.ObjectModel;
 
 namespace Kitbox_project.Views;
 
