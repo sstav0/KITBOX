@@ -7,7 +7,8 @@ namespace Kitbox_project.Views;
 public partial class BasketPage : ContentPage
 {
 	private ObservableCollection<CabinetViewModelV2> Basket;
-	public BasketPage()
+
+    public BasketPage()
 	{
 		InitializeComponent();
 		Basket = new ObservableCollection<CabinetViewModelV2>();
@@ -40,4 +41,27 @@ public partial class BasketPage : ContentPage
 		string totalPrice = $"{i.ToString()} €";
 		TotalPrice.Text = totalPrice;
     }
+
+	private void UpdateBasket() 
+	{
+		ListCabinets.ItemsSource = Basket;
+
+        double i = 0;
+        foreach (CabinetViewModelV2 item in Basket)
+        {
+            i += Convert.ToDouble(item.GetPrice());
+        }
+        string totalPrice = $"{i.ToString()} €";
+        TotalPrice.Text = totalPrice;
+    }
+
+	private async void OnAddNewClicked(object sender, EventArgs e)
+    {
+        await Navigation.PushAsync(new CabinetCreatorPage());
+    }
+
+	private void OnConfirmClicked(object sender, EventArgs e)
+	{
+
+	}
 }

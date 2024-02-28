@@ -27,22 +27,8 @@ namespace Kitbox_project.Views
             {
                 new LockerViewModel { Height = 50, Color = "Red", Door = true, Price = 500 },
                 new LockerViewModel { Height = 60, Color = "Blue", Door = false, Price = 1000 },
-                new LockerViewModel { Height = 70, Color = "Green", Door = true, Price = 250}
+                new LockerViewModel { Height = 70, Color = "Green", Door = true, Price = 250 }
             };
-
-            //Color brown = new Color(139, 69, 19);
-
-            //Door door1 = new Door(brown, "wood");
-            //Locker locker1 = new Locker(45, brown, door1, 100);
-            //Lockers.Add(locker1);
-
-            //Color white = new Color(0, 0, 0);
-
-            //Door door2 = new Door(white, "glass");
-            //Locker locker2 = new Locker(50, white, door2, 100);
-            //Lockers.Add(locker2);
-
-            //ListLockers.ItemsSource = Lockers;
         }
 
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
