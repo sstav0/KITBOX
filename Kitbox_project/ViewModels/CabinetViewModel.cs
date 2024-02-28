@@ -78,7 +78,18 @@ namespace Kitbox_project.ViewModels
                 CalculateTotalPrice();
             }
         }
-        
+
+        private ObservableCollection<LockerViewModel> _availableLockers;
+        public ObservableCollection<LockerViewModel> AvailableLockers
+        {
+            get => _availableLockers;
+            set
+            {
+                _availableLockers = value;
+                OnPropertyChanged();
+            }
+        }
+
         private LockerViewModel _selectedLocker;
         public LockerViewModel SelectedLocker
         {
