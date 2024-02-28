@@ -1,4 +1,6 @@
 ﻿namespace Kitbox_project;
+
+using System;
 using MySql.Data.MySqlClient;
 public class DatabaseCustomer 
 {
@@ -98,5 +100,10 @@ public class DatabaseCustomer
 
         // Retournez une valeur par défaut si l'élément n'est pas trouvé
         return null;
+    }
+
+    public static implicit operator DatabaseCustomer(DatabaseCatalog v)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -5,10 +5,12 @@ public partial class MainPage : ContentPage
     {
         int count = 0;
         private readonly DatabaseCustomer _dbService;
+        private readonly DatabaseCatalog _dbService2;
         public MainPage()
         {
             
             InitializeComponent();
+            _dbService2 = new DatabaseCatalog();
             _dbService = new DatabaseCustomer();
             //TestDatabaseConnection();
         }
@@ -41,22 +43,26 @@ public partial class MainPage : ContentPage
         }
         private void OnCounterClicked2(object sender, EventArgs e)
         { 
-            Dictionary<string, object> customerData = _dbService.GetById(14);
+           List<Dictionary<string, object>> dataList = _dbService2.GetByReference("Vertical batten");
 
-        // Affichage des informations du client dans la console
-        if (customerData != null)
-        {
-            Console.WriteLine($"Informations du client avec l'ID {14}:");
-            
-            foreach (var kvp in customerData)
+            if (dataList != null && dataList.Count > 0)
             {
-                Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+                Console.WriteLine($"Informations du client avec la référence 'Vertical batten':");
+
+                foreach (var data in dataList)
+                {
+                    foreach (var kvp in data)
+                    {
+                        Console.WriteLine($"{kvp.Key}: {kvp.Value}");
+                    }
+
+                    Console.WriteLine(); // Add a newline between each row for better readability
+                }
             }
-        }
-        else
-        {
-            Console.WriteLine($"Aucun client trouvé avec l'ID {14}");
-        }
+            else
+            {
+                Console.WriteLine($"Aucun client trouvé avec la référence 'Vertical batten'");
+            }
             count++;
 
             if (count == 1)
