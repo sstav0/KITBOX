@@ -33,7 +33,7 @@ namespace Kitbox_project.Views
 
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
-            // Si on a plus de 7 lockers ça fait rien 
+            // Si on a plus de 7 lockers ï¿½a fait rien 
             if (_viewModel.Lockers.Count >= 7)
             {
                 return;
@@ -44,7 +44,7 @@ namespace Kitbox_project.Views
             {
                 _viewModel.Lockers.Add(selectedLocker);
                 System.Diagnostics.Debug.WriteLine(_viewModel.Lockers.Count);
-                // On remets le picker à 0 parce que c'est plus cool
+                // On remets le picker ï¿½ 0 parce que c'est plus cool
                 //lockerPicker.SelectedItem = null;
             }
         }

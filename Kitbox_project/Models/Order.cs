@@ -8,45 +8,37 @@ namespace Kitbox_project.Models
 {
     public class Order
     {
-        private string status { get; set; }
-        private List<Cabinet> basket { get; set; }
+        private string _status;
+        private List<Cabinet> _cart;
+        public string Status { get => _status; set => _status = value; }
+        private List<Cabinet> Cart { get => _cart; set=> _cart = value; }
 
-        public Order(string status, List<Cabinet> basket)
+        public Order(string status, List<Cabinet> cart)
         {
-            this.status = status;
-            this.basket = basket;
-        }
-
-        public string GetStatus()
-        {
-            return this.status;
+            this._status = status;
+            this._cart = cart;
         }
 
         public void Confirm()
         {
-
-        }
-
-        public void Change_Status(string status)
-        {
-            this.status = status;
+            //TODO
         }
 
         public void AddCabinet(Cabinet cabinet)
         {
-            basket.Add(cabinet);
+            this._cart.Add(cabinet);
         }
 
         public void RemoveCabinet(int index)
         {
-            basket.RemoveAt(index);
+            this._cart.RemoveAt(index);
         }
 
         public override string ToString()
         {
             string i = string.Empty;
-            i += $"{this.status}, ";
-            i += $"{this.basket.ToString()}";
+            i += $"{this._status}, ";
+            i += $"{this._cart.ToString()}"; //Does it work ?
             return i;
         }
     }

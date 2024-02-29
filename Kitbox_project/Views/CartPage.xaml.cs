@@ -31,14 +31,14 @@ public partial class BasketPage : ContentPage
 
 		Basket.Add(cabinet1view);
 
-		cabinet1.GetHeight();
+        _ = cabinet1.Height; //?
 		ListCabinets.ItemsSource = Basket;
 		double i = 0;
 		foreach(CabinetViewModelV2 item in Basket)
 		{
 			i += Convert.ToDouble(item.GetPrice());
 		}
-		string totalPrice = $"{i.ToString()} €";
+		string totalPrice = $"{i.ToString()} ï¿½";
 		TotalPrice.Text = totalPrice;
     }
 
@@ -51,7 +51,7 @@ public partial class BasketPage : ContentPage
         {
             i += Convert.ToDouble(item.GetPrice());
         }
-        string totalPrice = $"{i.ToString()} €";
+        string totalPrice = $"{i.ToString()} ï¿½";
         TotalPrice.Text = totalPrice;
     }
 

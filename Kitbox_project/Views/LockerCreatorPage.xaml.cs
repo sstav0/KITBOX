@@ -23,7 +23,7 @@ public partial class LockerCreatorPage : ContentPage
         List<Door> doorList = DatabaseDoorObject.GetList();
 		foreach (Door door in doorList)
 		{
-			doors.Add(door.GetColor().ToString());
+			doors.Add(door.Color.ToString());
 		}
         return doors;
     }
