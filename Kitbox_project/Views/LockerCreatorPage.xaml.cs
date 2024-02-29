@@ -6,7 +6,7 @@ namespace Kitbox_project.Views;
 
 public partial class LockerCreatorPage : ContentPage
 {
-	private DatabaseDoor DatabaseDoorObject = new DatabaseDoor();
+	
 	private bool selectColorEnabler = true;
 
 	
