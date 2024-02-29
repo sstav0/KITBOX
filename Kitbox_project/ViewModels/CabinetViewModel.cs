@@ -24,17 +24,16 @@ namespace Kitbox_project.ViewModels
 
 
 
-        private static DatabaseDoor DatabaseDoorObject = new DatabaseDoor();
-        private static DatabaseLocker DatabaseLockerObject = new DatabaseLocker();
+       
 
         
         private List<Door> doors = new List<Door>();
         private List<Locker> lockers = new List<Locker>();
 
-        private List<Door> availableDoor = DatabaseDoorObject.GetList();
-        private List<Locker> availableLocker = DatabaseLockerObject.GetList();
-        private readonly List<Door> allDoor = DatabaseDoorObject.GetList();
-        private readonly  List<Locker> allLocker = DatabaseLockerObject.GetList();
+        private List<Door> availableDoor = new List<Door>();
+        private List<Locker> availableLocker = new List<Locker>();
+        private readonly List<Door> allDoor = new List<Door>();
+        private readonly  List<Locker> allLocker = new List<Locker>();
 
         private bool selectColorEnabler = true;
 

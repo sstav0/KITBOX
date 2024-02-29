@@ -31,7 +31,14 @@ public partial class MainPage : ContentPage
 
         private void OnCounterClicked(object sender, EventArgs e)
         { 
-            _dbService.Add("Jean", "Dujardin", "coucou");
+            Dictionary<string, object> customerData = new Dictionary<string, object>
+{
+    { "firstname", "John" },
+    { "name", "Doe" },
+    { "email", "john.doe@example.com" }
+};
+
+            _dbService.Add(customerData);
             count++;
 
             if (count == 1)

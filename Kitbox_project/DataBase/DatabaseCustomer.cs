@@ -4,28 +4,30 @@ using System;
 using MySql.Data.MySqlClient;
 public class DatabaseCustomer 
 {
+    private string tablename = "Customer";
     private const string connectionString = "Server= pat.infolab.ecam.be ; port=63417;Database=KitBoxing;User ID=kitboxer;Password=kitboxing;";
-    public void Add(string firstname, string name, string email)
+   public void Add(Dictionary<string, object> data)
+{
+    using (MySqlConnection connection = new MySqlConnection(connectionString))
     {
-        using (MySqlConnection connection = new MySqlConnection(connectionString) )
+        connection.Open();
+
+        string columns = string.Join(", ", data.Keys);
+        string values = string.Join(", ", data.Keys.Select(key => "@" + key));
+        
+        string query = $"INSERT IGNORE INTO {tablename} ({columns}) VALUES ({values})";
+
+        using (MySqlCommand command = new MySqlCommand(query, connection))
         {
-            connection.Open();
-
-            
-            string query = "INSERT IGNORE INTO Customer (firstname, name, email) VALUES (@firstname, @name, @email)";
-            
-            using (MySqlCommand command = new MySqlCommand(query, connection))
+            foreach (var entry in data)
             {
-                command.Parameters.AddWithValue("@firstname", firstname);
-                command.Parameters.AddWithValue("@name", name);
-                command.Parameters.AddWithValue("@email", email);
-
-                
-                command.ExecuteNonQuery();
+                command.Parameters.AddWithValue("@" + entry.Key, entry.Value);
             }
+
+            command.ExecuteNonQuery();
         }
-    
     }
+}
     public void Delete(int idCustomer)
     {
        using (MySqlConnection connection = new MySqlConnection(connectionString))
