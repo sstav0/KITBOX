@@ -25,6 +25,11 @@
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
             Route="CabinetCreatorPage" />
 
+        <ShellContent
+            Title="Login Page"
+            ContentTemplate="{DataTemplate views:LoginPage}"
+            Route="Login Page"/>
+
     </TabBar>
 
 </Shell>
