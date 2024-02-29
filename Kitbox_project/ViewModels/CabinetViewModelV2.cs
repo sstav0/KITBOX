@@ -9,7 +9,7 @@ namespace Kitbox_project.ViewModels
 {
     class CabinetViewModelV2
     {
-        public ObservableCollection<Locker> lockers {  get; set; }
+        private ObservableCollection<Locker> lockers;
         public string price { get; set; }
         public string depth { get; set; }
         public string length { get; set; }

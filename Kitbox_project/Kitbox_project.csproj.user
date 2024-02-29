@@ -30,7 +30,7 @@
     <MauiXaml Update="Views\CartPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\CabinetPage.xaml">
+    <MauiXaml Update="Views\CabinetCreatorPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\HomePage.xaml">

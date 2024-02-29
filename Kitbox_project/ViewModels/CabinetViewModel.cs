@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Kitbox_project.ViewModels
 {
-    public class CabinetViewModel : INotifyPropertyChanged
+    public class CabinetViewModel : INotifyPropertyChanged 
     {
         public ICommand OnAddLockerButtonClicked { get; }
 
@@ -64,13 +64,6 @@ namespace Kitbox_project.ViewModels
 
         }
 
-        public event PropertyChangedEventHandler PropertyChanged; 
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private ObservableCollection<LockerViewModel> _lockers;
         public ObservableCollection<LockerViewModel> Lockers
         {
@@ -84,6 +77,12 @@ namespace Kitbox_project.ViewModels
                 CalculateTotalSize(); // Pas sûr d'en avoir besoin si j'ai mes Lockers.CollectionChanged quelques lignes au dessus
                 CalculateTotalPrice();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private ObservableCollection<LockerViewModel> _availableLockers;

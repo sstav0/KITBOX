@@ -63,8 +63,8 @@
 	  <Compile Update="Views\CartPage.xaml.cs">
 	    <DependentUpon>CartPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\CabinetPage.xaml.cs">
-	    <DependentUpon>CabinetPage.xaml</DependentUpon>
+	  <Compile Update="Views\CabinetCreatorPage.xaml.cs">
+	    <DependentUpon>CabinetCreatorPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -75,7 +75,7 @@
 	  <MauiXaml Update="Views\CartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\CabinetPage.xaml">
+	  <MauiXaml Update="Views\CabinetCreatorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">
