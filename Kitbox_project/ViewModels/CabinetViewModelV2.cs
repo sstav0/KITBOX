@@ -17,10 +17,10 @@ namespace Kitbox_project.ViewModels
         public string nbrLockers { get; set; }
         public string height { get; set; }
 
-        public CabinetViewModelV2(Cabinet cabinet) 
+        public CabinetViewModelV2(Cabinet cabinet)
         {
             this.lockers = cabinet.GetObservableLockers();
-            this.price = cabinet.GetPrice().ToString();
+            this.price = $"{cabinet.GetPrice().ToString()}";
             this.depth = cabinet.GetDepth().ToString();
             this.length = cabinet.GetLength().ToString();
             this.quantity = cabinet.GetQuantity().ToString();
