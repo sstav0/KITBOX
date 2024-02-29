@@ -27,7 +27,7 @@
     <MauiXaml Update="Utilities\ExpansionPanel.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\BasketPage.xaml">
+    <MauiXaml Update="Views\CartPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\CabinetCreatorPage.xaml">

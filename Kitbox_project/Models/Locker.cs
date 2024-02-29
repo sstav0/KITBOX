@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kitbox_project.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,90 +7,80 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
+    /// <summary>Creates a locker with specified dimensions, color, door characteristics, and price.
+    /// <list type="bullet">
+    /// <item> <description>To get the height of the locker use Locker.Height </description>
+    /// </item>
+    /// <item> <description>To get the width of the locker use Locker.Width </description> </item>
+    /// <item> <description>To get the depth of the locker use Locker.Depth </description> </item>
+    /// <item> <description>To get the color of the locker use Locker.Color </description> </item>
+    /// <item> <description>To get the door of the locker use Locker.Door </description> </item>
+    /// <item> <description>To get the price of the locker use Locker.Price </description> </item>
+    /// <item> <description>To set the color of the locker, use <c>Locker.Color = string color</c>.</description> </item>
+    /// </list>
+    /// </summary>
+    /// <param name="height"> height of the locker.</param>
+    /// <param name="width"> width of the locker.</param>
+    /// <param name="depth"> depth of the locker.</param>
+    /// <param name="color"> color of the locker.</param>
+    /// <param name="door"> door of the locker.</param>
+    /// <param name="price"> price of the locker</param>
     public class Locker
     {
-        private int height { get; set; }
-        private int width { get; set; }
-        private int depth { get; set; }
-        private string color { get; set; }
-        private Door door { get; set; }
-
-        private double price { get; set; }
+        private int _height;
+        private int _width;
+        private int _depth;
+        private string _color;
+        private Door _door;
+        private double _price;
 
         public Locker(int height, int depth, int width, string color, Door door, double price) 
         {
-            this.height = height;
-            this.width = width;
-            this.depth = depth;
-            this.color = color;
-            this.door = door;
-            this.price = price;
-        }
-
-        public int GetHeight()
-        {
-            return this.height;
-        }
-
-        public double GetDepth()
-        {
-            return this.depth;
-        }
-
-        public double GetPrice()
-        {
-            return this.price;
-        }
-
-        public string GetColor()
-        {
-            return this.color;
-        }
-
-        public int GetWidth()
-        {
-            return this.width;
-        }
-
-        public Door GetDoor() 
-        {
-            return this.door;
+            this._height = height;
+            this._width = width;
+            this._depth = depth;
+            this._color = color;
+            this._door = door;
+            this._price = price;
         }
 
         public override string ToString()
         {
-            string i = string.Empty;
-            i += $"{this.height.ToString()}, ";
-            i += $"{this.color}, ";
-            i += $"{this.door.GetColor().ToString()}, ";
-            i += $"{this.door.GetMaterial().ToString()}, ";
-            i += $"{this.price.ToString()}";
-            return i;
+            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _color, this._door.Color, this._price.ToString());
         }
 
-        public void SetDoorColor(string color)
+        public int Height
         {
-            this.door.SetColor(color);
+            get => _height;
+            set => _height = value;
+        }
+        public int Width
+        {
+            get => _width;
+            set => _width = value;
+        }
+        public int Depth
+        {
+            get => _depth;
+            set => _depth = value;
         }
 
-        public void SetDoorMaterial(string material)
+        public string Color
         {
-            this.door.SetMaterial(material);
+            get => _color;
+            set => _color = value;
         }
 
-        public void SetHeight(int height)
+        public Door Door
         {
-            this.height = height;
+            get => _door;
+            set => _door = value;
         }
 
-        public void SetColor(string color) 
+        public double Price
         {
-            this.color = color;
-        }
-
-        public void SetPrice(double price)
-        {
-            this.price = price;
+            get => _price;
+            set => _price = value;
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Kitbox_project.ViewModels
 {
-    public class CabinetViewModel : INotifyPropertyChanged
+    public class CabinetViewModel : INotifyPropertyChanged 
     {
         public ICommand OnAddLockerButtonClicked { get; }
 
@@ -37,8 +37,8 @@ namespace Kitbox_project.ViewModels
         private readonly  List<Locker> allLocker = DatabaseLockerObject.GetList();
 
         private bool selectColorEnabler = true;
-        
-            
+
+
         public CabinetViewModel()
         {
 
@@ -77,6 +77,12 @@ namespace Kitbox_project.ViewModels
                 CalculateTotalSize(); // Pas sûr d'en avoir besoin si j'ai mes Lockers.CollectionChanged quelques lignes au dessus
                 CalculateTotalPrice();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private ObservableCollection<LockerViewModel> _availableLockers;
@@ -249,9 +255,9 @@ namespace Kitbox_project.ViewModels
                 List<string> colorDoorList = new List<string>();
                 foreach(Door door in availableDoor)
                 {
-                    if (!colorDoorList.Contains(door.GetColor()))
+                    if (!colorDoorList.Contains(door.Color))
                     {
-                        colorDoorList.Add(door.GetColor());
+                        colorDoorList.Add(door.Color);
                     }
                 }
                 Debug.Write(colorDoorList.ToString());
@@ -388,14 +394,7 @@ namespace Kitbox_project.ViewModels
         {
             TotalPrice = Lockers.Sum(locker => locker.Price);
         }
-   
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+  
 
         List<string> LoadLockerStringList(string param) 
         {
@@ -405,30 +404,30 @@ namespace Kitbox_project.ViewModels
             {
                 if (param == "color")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetColor()))
+                    if (!itemSourceList.Contains(objectItem.Color))
                     {
-                        itemSourceList.Add(objectItem.GetColor());
+                        itemSourceList.Add(objectItem.Color);
                     }
                 }
                 else if (param == "height")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetHeight().ToString()))
+                    if (!itemSourceList.Contains(objectItem.Height.ToString()))
                     {
-                        itemSourceList.Add(objectItem.GetHeight().ToString());
+                        itemSourceList.Add(objectItem.Height.ToString());
                     }
                 }
                 else if (param == "depth")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetDepth().ToString()))
+                    if (!itemSourceList.Contains(objectItem.Depth.ToString()))
                     {
-                        itemSourceList.Add(objectItem.GetDepth().ToString());
+                        itemSourceList.Add(objectItem.Depth.ToString());
                     }
                 }
                 else if (param == "width")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetWidth().ToString()))
+                    if (!itemSourceList.Contains(objectItem.Width.ToString()))
                     {
-                        itemSourceList.Add(objectItem.GetWidth().ToString());
+                        itemSourceList.Add(objectItem.Width.ToString());
                     }
                 }
             }
@@ -439,7 +438,7 @@ namespace Kitbox_project.ViewModels
             List<string> doors = new List<string>();
             foreach (Door door in availableDoor)
             {
-                doors.Add(door.GetColor().ToString());
+                doors.Add(door.Color.ToString());
             }
             return doors;
         }
@@ -488,11 +487,11 @@ namespace Kitbox_project.ViewModels
         }
         private void SubUpdateAvailabilityDoorsHeight(Door anyDoor)
         {
-            if (anyDoor.GetMaterial() == "glass" && _isGlassChecked)
+            if (anyDoor.Material == "glass" && _isGlassChecked)
             {
                 doors.Add(anyDoor);
             }
-            else if (anyDoor.GetMaterial() == "wood" && _isDoorChecked)
+            else if (anyDoor.Material == "wood" && _isDoorChecked)
             {
                 doors.Add(anyDoor);
             }
@@ -503,7 +502,7 @@ namespace Kitbox_project.ViewModels
         }
         private void SubUpdateAvailabilityDoorsWidth(Door anyDoor)
         {
-            if (anyDoor.GetHeight() == _selectedHeightItem && _selectedHeightItem != 0)
+            if (anyDoor.Height == _selectedHeightItem && _selectedHeightItem != 0)
             {
                 SubUpdateAvailabilityDoorsHeight(anyDoor);
             }
@@ -514,7 +513,7 @@ namespace Kitbox_project.ViewModels
         }
         private void SubUpdateAvailabilityLockersWidth(Locker anyLocker)
         {
-            if (anyLocker.GetDepth() == _selectedDepthItem && _selectedDepthItem != 0)
+            if (anyLocker.Depth == _selectedDepthItem && _selectedDepthItem != 0)
             {
                 SubUpdateAvailabilityLockersDepth(anyLocker);
             }
@@ -525,7 +524,7 @@ namespace Kitbox_project.ViewModels
         }
         private void SubUpdateAvailabilityLockersDepth(Locker anyLocker)
         {
-            if (anyLocker.GetColor().ToString() == _selectedLockerColorItem && _selectedLockerColorItem != null)
+            if (anyLocker.Color.ToString() == _selectedLockerColorItem && _selectedLockerColorItem != null)
             {
                 SubUpdateAvailabilityLockersColor(anyLocker);
             }
@@ -536,7 +535,7 @@ namespace Kitbox_project.ViewModels
         }
         private void SubUpdateAvailabilityLockersColor(Locker anyLocker)
         {
-            if (anyLocker.GetHeight() == _selectedHeightItem && _selectedHeightItem != 0)
+            if (anyLocker.Height == _selectedHeightItem && _selectedHeightItem != 0)
             {
                 lockers.Add(anyLocker);
             }
@@ -553,7 +552,7 @@ namespace Kitbox_project.ViewModels
 
             foreach (Door anyDoor in allDoor)
             {
-                if (anyDoor.GetWidth() == _selectedWidthItem && _selectedWidthItem != 0)
+                if (anyDoor.Width == _selectedWidthItem && _selectedWidthItem != 0)
                 {
                     SubUpdateAvailabilityDoorsWidth(anyDoor);
                 }
@@ -572,7 +571,7 @@ namespace Kitbox_project.ViewModels
 
             foreach (Locker anyLocker in allLocker)
             {
-                if (anyLocker.GetWidth() == _selectedWidthItem && _selectedWidthItem != 0)
+                if (anyLocker.Width == _selectedWidthItem && _selectedWidthItem != 0)
                 {
                     SubUpdateAvailabilityLockersWidth(anyLocker);
                 }

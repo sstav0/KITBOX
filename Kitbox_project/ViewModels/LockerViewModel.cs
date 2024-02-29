@@ -57,7 +57,7 @@ namespace Kitbox_project.ViewModels
             return $"Height: {Height}, Color: {Color}, Door: {(Door ? "Yes" : "No")}, Price {Price}";
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged; //utilité ?
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

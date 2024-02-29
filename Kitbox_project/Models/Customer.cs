@@ -9,64 +9,51 @@ namespace Kitbox_project.Models
 {
     public class Customer
     {
-        private string firstName { get; set; }
-        private string lastName { get; set; }
-        private List<Order> orders { get; set; }
-        private string email { get; set; }
+        private string _firstName;
+        private string _lastName;
+        private List<Order> _orders;
+        private string _email;
 
         public Customer(string firstName, string lastName, List<Order> orders, string email)
         {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.orders = orders;
-            this.email = email;
+            this._firstName = firstName;
+            this._lastName = lastName;
+            this._orders = orders;
+            this._email = email;
         }
 
-        public void Add_Order(Order order)
+        public void AddOrder(Order order)
         {
-            orders.Add(order);
+            this._orders.Add(order);
         }
 
-        public void Remove_Order(int index) 
+        public void RemoveOrder(int index) 
         {
-            orders.RemoveAt(index);
+            this._orders.RemoveAt(index);
         }
 
-        public List<Order> Get_Orders() 
+        public List<Order> Orders
         {
-            return orders;
+            get => _orders;
+            set => _orders = value;
         }
 
-        public Order Get_Order(int index) 
+        public string Email
         {
-            return orders[index];
+            get => _email;
+            set => _email = value;
         }
 
-        public string Get_Email() 
+        public string FirstName
         {
-            return this.email;
-        }
-        public string Get_FirstName() 
-        {
-            return this.firstName;
-        }
-        public string Get_LastName() 
-        {
-            return this.lastName;
-        }
-        public void Set_Email(string email)
-        {
-            this.email = email;
+            get => _firstName;
+            set => _firstName = value;
         }
 
-        public void Set_FirstName(string firstName)
+        public string LastName
         {
-            this.firstName = firstName;
-        }
-
-        public void Set_LastName(string lastName)
-        {
-            this.lastName = lastName;
+            get => _lastName;
+            set => _lastName = value;
         }
     }
 }

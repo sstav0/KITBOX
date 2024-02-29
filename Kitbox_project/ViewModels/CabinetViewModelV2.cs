@@ -9,7 +9,7 @@ namespace Kitbox_project.ViewModels
 {
     class CabinetViewModelV2
     {
-        public ObservableCollection<Locker> lockers {  get; set; }
+        private ObservableCollection<Locker> lockers;
         public string price { get; set; }
         public string depth { get; set; }
         public string length { get; set; }
@@ -17,15 +17,15 @@ namespace Kitbox_project.ViewModels
         public string nbrLockers { get; set; }
         public string height { get; set; }
 
-        public CabinetViewModelV2(Cabinet cabinet) 
+        public CabinetViewModelV2(Cabinet cabinet)
         {
             this.lockers = cabinet.GetObservableLockers();
-            this.price = cabinet.GetPrice().ToString();
-            this.depth = cabinet.GetDepth().ToString();
-            this.length = cabinet.GetLength().ToString();
-            this.quantity = cabinet.GetQuantity().ToString();
+            this.price = cabinet.Price.ToString();
+            this.depth = cabinet.Depth.ToString();
+            this.length = cabinet.Length.ToString();
+            this.quantity = cabinet.Quantity.ToString();
             this.nbrLockers = cabinet.GetLockerCount().ToString();
-            this.height = cabinet.GetHeight().ToString();
+            this.height = cabinet.Height.ToString();
         }
 
         public void AddLocker(Locker locker)
