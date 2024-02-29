@@ -25,6 +25,11 @@
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
             Route="CabinetCreatorPage" />
 
+        <ShellContent
+            Title="Stock"
+            ContentTemplate="{DataTemplate views:StockPage}"
+            Route="StockPage" />
+
     </TabBar>
 
 </Shell>
