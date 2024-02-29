@@ -135,7 +135,7 @@
                     FontAttributes="Bold"
                     FontSize="20"
                     HorizontalOptions="Center"
-                    Text="Locker 7" />
+                    Text="Locker suivant" />
                 <Label
                     Grid.Row="1"
                     Grid.Column="0"
