@@ -124,7 +124,7 @@
                     Grid.Column="4"
                     Margin="30"
                     BackgroundColor="#0066FF"
-                    Command="{Binding OnAddLockerButtonClicked}"
+                    Clicked="AddSelectedLocker_Clicked"
                     FontSize="20"
                     Text="Add" />
 

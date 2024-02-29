@@ -64,6 +64,8 @@ namespace Kitbox_project.ViewModels
 
         }
 
+
+
         private ObservableCollection<LockerViewModel> _lockers;
         public ObservableCollection<LockerViewModel> Lockers
         {
