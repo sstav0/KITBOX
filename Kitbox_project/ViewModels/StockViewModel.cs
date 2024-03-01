@@ -17,7 +17,8 @@ namespace Kitbox_project.ViewModels
         {
             StockData = new List<StockItem>
             {
-                new StockItem("Apple", "Ball", 5, "10x10")
+                new StockItem("Apple", "Ball", 5, "10x10"),
+                new StockItem("Banana", "Line", 7, "2x15")
             };
         }
     }

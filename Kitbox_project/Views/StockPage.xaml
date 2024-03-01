@@ -11,6 +11,30 @@
 
     <VerticalStackLayout>
         <Label Text="Stock" FontSize="Large" HorizontalOptions="Center" Margin="0,20,0,0"/>
+        
+        <!-- ListView to display stock data -->
+        <ListView ItemsSource="{Binding StockData}" HasUnevenRows="True">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Text="{Binding Name}" />
+                            <Label Grid.Column="1" Text="{Binding Code}" />
+                            <Entry Grid.Column="2" Text="{Binding Quantity}" Keyboard="Numeric" />
+                            <Label Grid.Column="3" Text="{Binding Dimensions}" />
+                            <Button Grid.Column="4" Text="Update" Command="{Binding UpdateCommand}" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </VerticalStackLayout>
 
 
