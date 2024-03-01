@@ -47,7 +47,7 @@ namespace Kitbox_project.Models
 
         public override string ToString()
         {
-            return String.Format("{0} {1} {2} {3} {4}", _height.ToString(), _color, this._door, this._price.ToString());
+            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _width.ToString(), _depth.ToString(), _color, _door.ToString(), this._price.ToString());
         }
 
         public int Height
