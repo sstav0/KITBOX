@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using System;
-using Kitbox_project.DataBase;
 using MySql.Data.MySqlClient;
+
 namespace Kitbox_project.DataBase
 {
     public class Database
@@ -21,7 +21,7 @@ namespace Kitbox_project.DataBase
 
                 string columns = string.Join(", ", data.Keys);
                 string values = string.Join(", ", data.Keys.Select(key => "@" + key));
-                
+
                 string query = $"INSERT IGNORE INTO {tablename} ({columns}) VALUES ({values})";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
@@ -85,8 +85,10 @@ namespace Kitbox_project.DataBase
             }
         }
 
-        public Dictionary<string, object> GetData(Dictionary<string, object> conditions)
+        public List<Dictionary<string, object>> GetData(Dictionary<string, object> conditions)
         {
+            List<Dictionary<string, object>> dataList = new List<Dictionary<string, object>>(); 
+
             using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
                 connection.Open();
@@ -120,10 +122,12 @@ namespace Kitbox_project.DataBase
                                 object columnValue = reader.GetValue(i);
                                 resultData.Add(columnName, columnValue);
                             }
+
+                            dataList.Add(resultData);
                         }
                     }
 
-                    return resultData.Count > 0 ? resultData : null; // Return null if no records found
+                    return dataList.Count > 0 ? dataList : null; // Return null if no records found
                 }
             }
         }

@@ -184,7 +184,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedLockerColorItem = value;
                     OnPropertyChanged();
-                    //UpdateAvailability();
                 }
             }
         }
