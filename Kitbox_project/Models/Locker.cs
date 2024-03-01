@@ -33,6 +33,7 @@ namespace Kitbox_project.Models
         private string _color;
         private Door _door;
         private double _price;
+        private int _lockerID;
 
         public Locker(int height, int depth, int width, string color, Door door, double price) 
         {
@@ -82,5 +83,11 @@ namespace Kitbox_project.Models
             get => _price;
             set => _price = value;
         }
-    }
+
+        public int LockerID
+        {
+            get => _lockerID;
+            set => _lockerID = value;
+        }
+    } 
 }
