@@ -6,11 +6,9 @@ using MySql.Data.MySqlClient;
 
 public class DatabaseOrder : Database
 {
- public DatabaseOrder(string id, string password){
+ public DatabaseOrder(string id, string password):base(id, password){
 
     tablename = "Order";
-    ID = id;
-    Password = password;
     }
 
     public List<object> LoadAll()

@@ -6,9 +6,7 @@ using Kitbox_project.Models;
 using MySql.Data.MySqlClient;
 public class DatabaseStock : Database
 {
-    public DatabaseStock(string id, string password){
+    public DatabaseStock(string id, string password):base(id, password){
         tablename = "Stock";
-        ID = id;
-        Password = password;
     }
 }

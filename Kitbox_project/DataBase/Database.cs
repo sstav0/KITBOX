@@ -10,6 +10,10 @@ namespace Kitbox_project.DataBase
 {
     public class Database
     {
+        public Database(string id, string password){
+        ID = id;
+        Password = password;
+    }
         
         protected static string ID;
         protected  static string Password;
