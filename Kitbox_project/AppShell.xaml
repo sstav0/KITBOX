@@ -17,7 +17,7 @@
 
         <ShellContent
             Title="Cart"
-            ContentTemplate="{DataTemplate views:BasketPage}"
+            ContentTemplate="{DataTemplate views:CartPage}"
             Route="CartPage" />
 
         <ShellContent
@@ -29,6 +29,11 @@
             Title="Login Page"
             ContentTemplate="{DataTemplate views:LoginPage}"
             Route="Login Page"/>
+
+        <ShellContent
+            Title="Stock"
+            ContentTemplate="{DataTemplate views:StockPage}"
+            Route="StockPage" />
 
     </TabBar>
 

@@ -1,22 +1,25 @@
 using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Kitbox_project.Views;
 
-public partial class BasketPage : ContentPage
+public partial class CartPage : ContentPage
 {
-	private ObservableCollection<CabinetViewModelV2> Basket;
+	private ObservableCollection<CartViewModel> Cart;
+    private ObservableCollection<CartViewModel> CartVoid;
 
-    public BasketPage()
+    public CartPage()
 	{
 		InitializeComponent();
-		Basket = new ObservableCollection<CabinetViewModelV2>();
+		Cart = new ObservableCollection<CartViewModel>();
+		CartVoid = new ObservableCollection<CartViewModel>();
 
-		LoadBasket();
+		LoadCart();
     }
 
-	private void LoadBasket()
+	private void LoadCart()
 	{
 		string color1 = "red";
 		Door door1 = new Door(color1, "wood", 50, 50); // 50x50 door (example)
@@ -29,27 +32,28 @@ public partial class BasketPage : ContentPage
 		Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 1);
 		CabinetViewModelV2 cabinet1view = new CabinetViewModelV2(cabinet1);
 
-		Basket.Add(cabinet1view);
+		Cart.Add(cabinet1view);
 
-        //_ = cabinet1.Height; //?
-		ListCabinets.ItemsSource = Basket;
+        _ = cabinet1.Height; //?
+		ListCabinets.ItemsSource = Cart;
 		double i = 0;
-		foreach (CabinetViewModelV2 item in Basket)
+		foreach (CartViewModel item in Cart)
 		{
-			i += Convert.ToDouble(item.GetPrice());
+			i += Convert.ToDouble(item.Price);
 		}
 		string totalPrice = $"{i.ToString()} €";
 		TotalPrice.Text = totalPrice;
 	}
 
-	private void UpdateBasket() 
+	private void UpdateCart() 
 	{
-		ListCabinets.ItemsSource = Basket;
+        ListCabinets.ItemsSource = CartVoid;
+        ListCabinets.ItemsSource = Cart;
 
         double i = 0;
-		foreach (CabinetViewModelV2 item in Basket)
+		foreach (CartViewModel item in Cart)
 		{
-			i += Convert.ToDouble(item.GetPrice());
+			i += Convert.ToDouble(item.Price);
 		}
 		string totalPrice = $"{i.ToString()} €";
 		TotalPrice.Text = totalPrice;
@@ -64,4 +68,36 @@ public partial class BasketPage : ContentPage
 	{
 
 	}
+
+	private void OnEditClicked(object sender, EventArgs e)
+	{
+		Debug.WriteLine("Editing");
+	}
+
+	private void OnDeleteClicked(object sender, EventArgs e)
+	{
+        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
+        {
+			Cart.Remove(selectedCabinet);
+			UpdateCart();
+        }
+    }
+
+	private void OnMoreClicked(object sender, EventArgs e)
+	{
+        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
+        {
+			selectedCabinet.Quantity += 1;
+            UpdateCart();
+        }
+	}
+
+	private void OnLessClicked(object sender, EventArgs e)
+	{
+        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
+        {
+            selectedCabinet.Quantity -= 1;
+            UpdateCart();
+        }
+    }
 }

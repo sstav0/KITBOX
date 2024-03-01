@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Kitbox_project.DataBase;
+using MySql.Data.MySqlClient;
 
 namespace Kitbox_project;
 public partial class MainPage : ContentPage
@@ -6,12 +7,15 @@ public partial class MainPage : ContentPage
         int count = 0;
         private readonly DatabaseCustomer _dbService;
         private readonly DatabaseCatalog _dbService2;
+        private readonly DatabaseLogin _dbService3;
         public MainPage()
         {
             
             InitializeComponent();
-            _dbService2 = new DatabaseCatalog();
-            _dbService = new DatabaseCustomer();
+            
+            _dbService2 = new DatabaseCatalog("storekeeper", "storekeeper");
+            _dbService = new DatabaseCustomer("customer", "customer");
+            _dbService3 = new DatabaseLogin();
             //TestDatabaseConnection();
         }
         /* private void TestDatabaseConnection()
@@ -30,21 +34,9 @@ public partial class MainPage : ContentPage
        
 
         private void OnCounterClicked(object sender, EventArgs e)
-        { 
-            Dictionary<string, object> customerData = new Dictionary<string, object>
-{
-    { "firstname", "Miaou" },
-    { "name", "Wouf" },
-    { "email", "Wesh" }
-};
-Dictionary<string, object> conditions = new Dictionary<string, object>
-{
-    { "idCustomer", 14 }
-};
-
-
-            var test =_dbService.GetData(conditions);
-            Console.WriteLine(test);
+        {              
+            bool test =_dbService3.ValidateUser("storekeepr","storekeeper");
+            Console.WriteLine($"Login Result: {test}");
             count++;
 
             if (count == 1)

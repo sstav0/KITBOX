@@ -4,10 +4,10 @@ using System;
 using Kitbox_project.DataBase;
 using Kitbox_project.Models;
 using MySql.Data.MySqlClient;
-public class DatabaseCabinet : Database
+public class DatabaseStock : Database
 {
-    public DatabaseCabinet(string id, string password){
-        tablename = "Cabinet";
+    public DatabaseStock(string id, string password){
+        tablename = "Stock";
         ID = id;
         Password = password;
     }
