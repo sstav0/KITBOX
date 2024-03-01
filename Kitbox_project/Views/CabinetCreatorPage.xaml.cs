@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
-using Windows.ApplicationModel.VoiceCommands;
 
 namespace Kitbox_project.Views
 {
