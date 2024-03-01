@@ -3,10 +3,42 @@
 using System;
 using Kitbox_project.DataBase;
 using MySql.Data.MySqlClient;
+
 public class DatabaseOrder : Database
 {
- public DatabaseOrder(){
+    public DatabaseOrder()
+    {
+        tablename = "Order";
+    }
 
-    tablename = "Order";
+    public List<object> LoadAll()
+    {
+        List<object> l = new List<object>();
+
+        using (MySqlConnection connection = new MySqlConnection(connectionString))
+        {
+            connection.Open();
+
+            string query = $"SELECT * FROM {tablename}";
+
+            using (MySqlCommand command = new MySqlCommand(query, connection))
+            {
+
+                // Execute the SELECT query
+                using (MySqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            //to implement
+                        }
+                    }
+                }
+            }
+            return l;
+
+        }
+
     }
 }
