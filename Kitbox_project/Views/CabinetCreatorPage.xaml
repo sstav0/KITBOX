@@ -280,7 +280,10 @@
                     VerticalOptions="Start">
 
                     <!--  Allow the expansion when we click on it  -->
-                    <panel:ExpansionPanel IsExpanded="False" x:Name="ExpansionPanel1" IsVisible="False">
+                    <panel:ExpansionPanel
+                        x:Name="ExpansionPanel1"
+                        IsExpanded="False"
+                        IsVisible="False">
                         <panel:ExpansionPanel.HeaderContent>
                             <Frame
                                 Grid.Row="0"
@@ -300,7 +303,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Height: " />
-                                        <Span Text="{Binding AvailableLockers[0].Height}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[0].Height}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -309,7 +312,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Door Color: " />
-                                        <Span Text="{Binding AvailableLockers[0].Door}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[0].Door}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -318,7 +321,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Panel Color: " />
-                                        <Span Text="{Binding AvailableLockers[0].Color}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[0].Color}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -326,7 +329,10 @@
                     </panel:ExpansionPanel>
 
 
-                    <panel:ExpansionPanel IsExpanded="False" x:Name="ExpansionPanel2" IsVisible="False">
+                    <panel:ExpansionPanel
+                        x:Name="ExpansionPanel2"
+                        IsExpanded="False"
+                        IsVisible="False">
                         <panel:ExpansionPanel.HeaderContent>
                             <Frame
                                 Grid.Row="0"
@@ -346,7 +352,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Height: " />
-                                        <Span Text="{Binding AvailableLockers[1].Height}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[1].Height}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -355,7 +361,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Door Color: " />
-                                        <Span Text="{Binding AvailableLockers[1].Door}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[1].Door}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -364,7 +370,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Panel Color: " />
-                                        <Span Text="{Binding AvailableLockers[1].Color}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[1].Color}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -372,7 +378,10 @@
                     </panel:ExpansionPanel>
 
 
-                    <panel:ExpansionPanel IsExpanded="False" x:Name="ExpansionPanel3" IsVisible="False">
+                    <panel:ExpansionPanel
+                        x:Name="ExpansionPanel3"
+                        IsExpanded="False"
+                        IsVisible="False">
                         <panel:ExpansionPanel.HeaderContent>
                             <Frame
                                 Grid.Row="0"
@@ -392,7 +401,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Height: " />
-                                        <Span Text="{Binding AvailableLockers[2].Height}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[2].Height}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -401,7 +410,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Door Color: " />
-                                        <Span Text="{Binding AvailableLockers[2].Door}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[2].Door}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -410,14 +419,17 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Panel Color: " />
-                                        <Span Text="{Binding AvailableLockers[2].Color}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[2].Color}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
                         </StackLayout>
                     </panel:ExpansionPanel>
 
-                    <panel:ExpansionPanel IsExpanded="False" x:Name="ExpansionPanel4" IsVisible="False">
+                    <panel:ExpansionPanel
+                        x:Name="ExpansionPanel4"
+                        IsExpanded="False"
+                        IsVisible="False">
                         <panel:ExpansionPanel.HeaderContent>
                             <Frame
                                 Grid.Row="0"
@@ -437,7 +449,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Height: " />
-                                        <Span Text="{Binding AvailableLockers[3].Height}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[3].Height}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -446,7 +458,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Door Color: " />
-                                        <Span Text="{Binding AvailableLockers[3].Door}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[3].Door}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -455,14 +467,17 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Panel Color: " />
-                                        <Span Text="{Binding AvailableLockers[3].Color}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[3].Color}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
                         </StackLayout>
                     </panel:ExpansionPanel>
 
-                    <panel:ExpansionPanel IsExpanded="False" x:Name="ExpansionPanel5" IsVisible="False">
+                    <panel:ExpansionPanel
+                        x:Name="ExpansionPanel5"
+                        IsExpanded="False"
+                        IsVisible="False">
                         <panel:ExpansionPanel.HeaderContent>
                             <Frame
                                 Grid.Row="0"
@@ -482,7 +497,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Height: " />
-                                        <Span Text="{Binding AvailableLockers[4].Height}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[4].Height}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -491,7 +506,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Door Color: " />
-                                        <Span Text="{Binding AvailableLockers[4].Door}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[4].Door}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -500,14 +515,17 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Panel Color: " />
-                                        <Span Text="{Binding AvailableLockers[4].Color}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[4].Color}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
                         </StackLayout>
                     </panel:ExpansionPanel>
 
-                    <panel:ExpansionPanel IsExpanded="False" x:Name="ExpansionPanel6" IsVisible="False">
+                    <panel:ExpansionPanel
+                        x:Name="ExpansionPanel6"
+                        IsExpanded="False"
+                        IsVisible="False">
                         <panel:ExpansionPanel.HeaderContent>
                             <Frame
                                 Grid.Row="0"
@@ -527,7 +545,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Height: " />
-                                        <Span Text="{Binding AvailableLockers[5].Height}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[5].Height}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -536,7 +554,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Door Color: " />
-                                        <Span Text="{Binding AvailableLockers[5].Door}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[5].Door}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -545,7 +563,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="Panel Color: " />
-                                        <Span Text="{Binding AvailableLockers[5].Color}" FontAttributes="Bold" />
+                                        <Span FontAttributes="Bold" Text="{Binding AvailableLockers[5].Color}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
