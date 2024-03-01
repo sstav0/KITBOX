@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using System;
+using Kitbox_project.DataBase;
 using MySql.Data.MySqlClient;
-
 namespace Kitbox_project.DataBase
 {
     public class Database
@@ -15,13 +14,13 @@ namespace Kitbox_project.DataBase
         protected static string ID;
         protected  static string Password;
         protected string tablename;
-         public static string connectionString
-    {
-        get
+        public static string connectionString
         {
-            return $"Server=pat.infolab.ecam.be;port=63417;Database=KitBoxing;User ID={ID};Password={Password};";
+            get
+            {
+                return $"Server=pat.infolab.ecam.be;port=63417;Database=KitBoxing;User ID={ID};Password={Password};";
+            }
         }
-    }
         public void Add(Dictionary<string, object> data)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
@@ -30,7 +29,7 @@ namespace Kitbox_project.DataBase
 
                 string columns = string.Join(", ", data.Keys);
                 string values = string.Join(", ", data.Keys.Select(key => "@" + key));
-
+                
                 string query = $"INSERT IGNORE INTO {tablename} ({columns}) VALUES ({values})";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
