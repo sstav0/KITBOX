@@ -26,12 +26,12 @@ public partial class BasketPage : ContentPage
 		List<Locker> lockers1 = new List<Locker>();
 		lockers1.Add(locker1);
 		lockers1.Add(locker1bis);
-		Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1);
+		Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 1);
 		CabinetViewModelV2 cabinet1view = new CabinetViewModelV2(cabinet1);
 
 		Basket.Add(cabinet1view);
 
-        _ = cabinet1.Height; //?
+        //_ = cabinet1.Height; //?
 		ListCabinets.ItemsSource = Basket;
 		double i = 0;
 		foreach (CabinetViewModelV2 item in Basket)
