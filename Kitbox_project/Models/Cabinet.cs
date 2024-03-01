@@ -89,6 +89,19 @@ namespace Kitbox_project.Models
             i += $"{this._quantity.ToString()}";
             return i;
         }
+        public string ToCart()
+        {
+            this._price = Price;
+
+            string i = string.Join(",", this._lockers);
+
+            i += $"{this._price.ToString()}, ";
+            i += $"{this._depth.ToString()}, ";
+            i += $"{this._length.ToString()}, ";
+            i += $"{GetLockerCount().ToString()}, ";
+            i += $"{this._quantity.ToString()}";
+            return i;
+        }
 
         public int Depth
         {

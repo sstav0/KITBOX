@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.ViewModels
 {
-    class BasketViewModel
+    class CartViewModel
     {
-        private ObservableCollection<CabinetViewModelV2> basket { get; set; }
+        private ObservableCollection<CabinetViewModelV2> cart { get; set; }
 
-        public BasketViewModel() 
+        public CartViewModel() 
         {
-            this.basket = new ObservableCollection<CabinetViewModelV2>();
+            this.cart = new ObservableCollection<CabinetViewModelV2>();
         }
 
         public void AddToBasket(CabinetViewModelV2 cabinet)
         {
-            this.basket.Add(cabinet);
+            this.cart.Add(cabinet);
         }
 
         public ObservableCollection<string> GetBasket()
         {
             ObservableCollection<string> i = new ObservableCollection<string>();
-            foreach (var item in this.basket)
+            foreach (var item in this.cart)
             {
                 i.Add(item.ToString());
             }
@@ -36,7 +36,7 @@ namespace Kitbox_project.ViewModels
         public string GetTotalPrice()
         {
             double i = 0;
-            foreach(var item in this.basket)
+            foreach(var item in this.cart)
             {
                 i += Convert.ToDouble(item.GetPrice());
             }
