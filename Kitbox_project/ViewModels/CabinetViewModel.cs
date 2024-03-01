@@ -20,7 +20,10 @@ namespace Kitbox_project.ViewModels
         private static Door door1 = new Door("color1", "wood", 12, 12);
         private static Door door2 = new Door("color2", "wood", 12, 12);
         private static Locker locker1 = new Locker(12, 12, 12, "Lyla", door1, 45.4);
-        private static Locker locker2 = new Locker(12, 11, 11, "Emeraude", door2, 65.2);
+        private static Locker locker2 = new Locker(12, 12, 10, "Purple", door1, 45.4);
+        private static Locker locker3 = new Locker(12, 12, 15, "Purple", door1, 45.4);
+
+
 
 
         private List<Door> doors = new List<Door>();
@@ -43,6 +46,9 @@ namespace Kitbox_project.ViewModels
 
             availableLocker.Add(locker1);
             availableLocker.Add(locker2);
+            availableLocker.Add(locker3);
+
+
 
             allDoor = availableDoor;
             allLocker = availableLocker;
@@ -106,7 +112,7 @@ namespace Kitbox_project.ViewModels
         public LockerViewModel SelectedLocker
         {
             get => _selectedLocker;
-            set
+            set 
             {
                 _selectedLocker = value;
                 OnPropertyChanged();
@@ -519,8 +525,8 @@ namespace Kitbox_project.ViewModels
         }
         private void UpdateAvailability()
         {
-            doors = new List<Door>();
-            lockers = new List<Locker>();
+            doors = new List<Door>(); // Reset the list
+            lockers = new List<Locker>(); // Reset the list
 
             foreach (Door anyDoor in allDoor)
             {
@@ -533,20 +539,16 @@ namespace Kitbox_project.ViewModels
             availableDoor = doors;
 
             Debug.WriteLine("availableDoor = doors");
-            // /!\ changer le sens du signe > to <
+
             if (availableDoor.Count > 0)
             {
-                //EnablecheckDoor = false;
-                //IsDoorChecked = false;
                 Debug.WriteLine("availableDoor.Count > 0");
             }
             else
             {
-                EnablecheckDoor = true;
-                IsDoorChecked = true;   
                 Debug.WriteLine("availableDoor.Count < 0");
             }
-            
+
             foreach (Locker anyLocker in allLocker)
             {
                 if ((anyLocker.Width == _selectedWidthItem && _selectedWidthItem != 0) || (_selectedWidthItem == 0))
@@ -556,7 +558,7 @@ namespace Kitbox_project.ViewModels
                 }
             }
             availableLocker = lockers;
-            
+
             ItemSourceLockerColor = LoadLockerStringList("color");
             ItemSourceLockerDepth = LoadLockerStringList("depth");
             ItemSourceLockerHeight = LoadLockerStringList("height");
@@ -565,6 +567,7 @@ namespace Kitbox_project.ViewModels
             OnPropertyChanged();
             Debug.WriteLine("UpdateAvailability !!");
         }
+
 
         private void ExecuteOnAddLockerButtonClicked()
         {
