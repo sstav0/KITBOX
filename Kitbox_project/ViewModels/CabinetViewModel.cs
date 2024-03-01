@@ -40,7 +40,7 @@ namespace Kitbox_project.ViewModels
 
         private bool selectColorEnabler = true;
 
-        DatabaseCatalog databaseCatalog = new DatabaseCatalog();
+        DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper","storekeeper");
 
 
         public CabinetViewModel()
@@ -261,6 +261,7 @@ namespace Kitbox_project.ViewModels
             set
             {
                 _itemSourceDoorPicker = value;
+                OnPropertyChanged();
             }
         }
 
@@ -273,6 +274,7 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerHeight != value)
                 {
                     _itemSourceLockerHeight = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -285,6 +287,7 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerColor != value)
                 {
                     _itemSourceLockerColor = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -297,6 +300,7 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerDepth != value)
                 {
                     _itemSourceLockerDepth = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -310,6 +314,7 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerWidth != value)
                 {
                     _itemSourceLockerWidth = value;
+                    OnPropertyChanged();
                 }
             }
         }
