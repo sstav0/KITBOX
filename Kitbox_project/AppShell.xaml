@@ -17,7 +17,7 @@
 
         <ShellContent
             Title="Cart"
-            ContentTemplate="{DataTemplate views:BasketPage}"
+            ContentTemplate="{DataTemplate views:CartPage}"
             Route="CartPage" />
 
         <ShellContent
