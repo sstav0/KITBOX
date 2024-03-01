@@ -282,13 +282,27 @@
                             <uranium:ExpanderView>
                                 <uranium:ExpanderView.Header>
                                     <Frame>
-                                        <Label Margin="5" Text="{Binding ID}" />
+                                        <Label Margin="5" Text="{Binding LockerID}" />
                                     </Frame>
 
                                 </uranium:ExpanderView.Header>
-                                <StackLayout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*"/>
 
-                                    <Label>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+
+                                    </Grid.ColumnDefinitions>
+
+
+                                    <Label Grid.Column="0" Grid.Row="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Height: " />
@@ -297,16 +311,25 @@
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label>
+                                    <Label Grid.Column="0" Grid.Row="1">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Door Color: " />
-                                                <Span Text="{Binding Door}" FontAttributes="Bold" />
+                                                <Span Text="{Binding Door.Color}" FontAttributes="Bold" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label>
+                                    <Label Grid.Column="0" Grid.Row="2">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Door Material: " />
+                                                <Span Text="{Binding Door.Material}" FontAttributes="Bold" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Grid.Row="3" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Panel Color: " />
@@ -314,7 +337,12 @@
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-                                </StackLayout>
+
+                                    <Button Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
+                                            Text="Edit"/>
+
+                                </Grid>
+                                
 
                             </uranium:ExpanderView>
                         </DataTemplate>
@@ -338,6 +366,7 @@
             Grid.Column="6"
             BackgroundColor="Green"
             FontSize="20"
+            Clicked="OnConfimButtonClicked"
             Text="Confirm" />
 
     </Grid>

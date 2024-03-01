@@ -111,7 +111,7 @@ namespace Kitbox_project.ViewModels
         {
             get => _isDoorChecked;
             set
-            {
+            { 
                 _isDoorChecked = value;
                 OnAddDoorClicked();
                 //UpdateAvailability();
