@@ -59,21 +59,24 @@ namespace Kitbox_project.Views
 
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
-            // Si on a plus de 7 lockers �a fait rien 
-            if (_viewModel.Lockers.Count >= 7)
+            // Check if the maximum number of lockers has been reached
+            if (_viewModel.AvailableLockers.Count >= 7)
             {
                 // Display an alert or perform any other action
                 return;
             }
-            // On ajoute le locker choisi au cabinet
-            LockerViewModel selectedLocker = _viewModel.SelectedLocker;
-            if (selectedLocker != null)
+
+            // Create a new LockerViewModel based on the selected parameters
+            LockerViewModel newLocker = new LockerViewModel
             {
-                _viewModel.Lockers.Add(selectedLocker);
-                System.Diagnostics.Debug.WriteLine(_viewModel.Lockers.Count);
-                // On remets le picker � 0 parce que c'est plus cool
-                //lockerPicker.SelectedItem = null;
-            }
+                Height = _viewModel.SelectedHeightItem,
+                Door = _viewModel.IsDoorChecked,
+                Color = _viewModel.SelectedLockerColorItem
+            };
+
+            // Add the new locker to the AvailableLockers collection
+            _viewModel.AvailableLockers.Add(newLocker);
+            System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
         }
 
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 

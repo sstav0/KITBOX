@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kitbox_project.Views.LoginPage"
+             Title="Login Page">
+    
+    <Grid Padding="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Text="Welcome to the Kitbox App" FontSize="Header" FontAttributes="Bold"
+               HorizontalOptions="Center" VerticalOptions="Center"
+               Grid.Row="1" Grid.Column="1"/>
+
+        <Frame BackgroundColor="#A7DAFF" CornerRadius="10"
+               Grid.Row="2" Grid.Column="1">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1.5*"/>
+                    <RowDefinition Height="0.25*"/>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="0.4*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Enter your password" HorizontalOptions="Center" VerticalOptions="Center"
+                       FontAttributes="Bold" FontSize="Large"
+                       Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0"/>
+
+                <Entry x:Name="Password" BackgroundColor="White"
+                       Grid.Column="0" Grid.Row="2"/>
+
+                <Button Text="Confirm" x:Name="PasswordValidated" BackgroundColor="#0066FF"
+                        Grid.Column="2" Grid.Row="2"/>
+
+                <Label x:Name="Notifications" Text="" FontSize="Small"
+                       HorizontalOptions="Center" VerticalOptions="Center"
+                       Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="3"/>
+
+            </Grid>
+
+        </Frame>
+
+    </Grid>
+
+</ContentPage>

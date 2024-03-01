@@ -33,12 +33,18 @@ public partial class MainPage : ContentPage
         { 
             Dictionary<string, object> customerData = new Dictionary<string, object>
 {
-    { "firstname", "John" },
-    { "name", "Doe" },
-    { "email", "john.doe@example.com" }
+    { "firstname", "Miaou" },
+    { "name", "Wouf" },
+    { "email", "Wesh" }
+};
+Dictionary<string, object> conditions = new Dictionary<string, object>
+{
+    { "idCustomer", 14 }
 };
 
-            _dbService.Add(customerData);
+
+            var test =_dbService.GetData(conditions);
+            Console.WriteLine(test);
             count++;
 
             if (count == 1)
@@ -48,6 +54,11 @@ public partial class MainPage : ContentPage
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
+
+
+
+
+        
         private void OnCounterClicked2(object sender, EventArgs e)
         { 
            List<Dictionary<string, object>> dataList = _dbService2.GetByReference("Vertical batten");
