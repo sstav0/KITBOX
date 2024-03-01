@@ -31,29 +31,29 @@ public partial class BasketPage : ContentPage
 
 		Basket.Add(cabinet1view);
 
-		cabinet1.GetHeight();
+        _ = cabinet1.Height; //?
 		ListCabinets.ItemsSource = Basket;
 		double i = 0;
-		foreach(CabinetViewModelV2 item in Basket)
+		foreach (CabinetViewModelV2 item in Basket)
 		{
 			i += Convert.ToDouble(item.GetPrice());
 		}
-		string totalPrice = $"{i.ToString()} €";
+		string totalPrice = $"{i.ToString()} â‚¬";
 		TotalPrice.Text = totalPrice;
-    }
+	}
 
 	private void UpdateBasket() 
 	{
 		ListCabinets.ItemsSource = Basket;
 
         double i = 0;
-        foreach (CabinetViewModelV2 item in Basket)
-        {
-            i += Convert.ToDouble(item.GetPrice());
-        }
-        string totalPrice = $"{i.ToString()} €";
-        TotalPrice.Text = totalPrice;
-    }
+		foreach (CabinetViewModelV2 item in Basket)
+		{
+			i += Convert.ToDouble(item.GetPrice());
+		}
+		string totalPrice = $"{i.ToString()} â‚¬";
+		TotalPrice.Text = totalPrice;
+	}
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {

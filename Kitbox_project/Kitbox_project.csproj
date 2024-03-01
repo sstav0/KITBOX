@@ -57,14 +57,19 @@
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.8" />
 		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.8" />
 		<PackageReference Include="SSH.NET" Version="2023.0.1" />
+		<PackageReference Include="UraniumUI" Version="2.5.6" />
+		<PackageReference Include="UraniumUI.Material" Version="2.5.6" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\BasketPage.xaml.cs">
-	    <DependentUpon>BasketPage.xaml</DependentUpon>
+	  <Compile Update="Views\CartPage.xaml.cs">
+	    <DependentUpon>CartPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\CabinetCreatorPage.xaml.cs">
 	    <DependentUpon>CabinetCreatorPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\LoginPage.xaml.cs">
+	    <DependentUpon>LoginPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -72,13 +77,16 @@
 	  <MauiXaml Update="Utilities\ExpansionPanel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\BasketPage.xaml">
+	  <MauiXaml Update="Views\CartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CabinetCreatorPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -10,66 +10,58 @@ namespace Kitbox_project.Models
 {
     public class Cabinet
     {
-        private List<Locker> lockers { get; set; } = new List<Locker>();
-        private double price { get; set; }
-        private int depth { get; set; }
-        private int length { get; set; }
-        private int quantity { get; set; }
+        private List<Locker> _lockers;
+        private double _price;
+        private int _depth;
+        private int _length;
+        private int _quantity; //necessary ? 
+        private int _height;
+        private int _cabinetID;
 
-        public Cabinet(List<Locker> lockers, int depth, int length, int quantity)
+        public Cabinet(List<Locker> lockers, int depth, int length, int quantity, int cabinetID)
         {
-            this.lockers = lockers;
-            this.price = GetPrice();
-            this.depth = depth;
-            this.length = length;
-            this.quantity = quantity;
+            this._lockers = lockers;
+            this._depth = depth;
+            this._length = length;
+            this._quantity = quantity;
+            this._cabinetID = cabinetID;
+        }
+
+        public int Height
+        {
+            get
+            {
+                this._height = 0;
+                foreach (Locker locker in this._lockers)
+                {
+                    this._height += locker.Height;
+                }
+                return this._height;
+            }
+        }
+
+        public double Price
+        {
+            get
+            {
+                this._price = 0; //reset the price
+                foreach (Locker locker in this._lockers)
+                {
+                    this._price += locker.Price;
+                }
+                return this._price;
+            }
         }
 
         public int GetLockerCount() 
         {
-            return this.lockers.Count(); 
-        }
-
-        public float GetHeight()
-        {
-            int i = 0;
-            foreach (Locker locker in this.lockers) 
-            {
-                i += locker.GetHeight();
-            }
-            return i;
-        }
-
-        public int GetDepth()
-        {
-            return this.depth;
-        }
-
-        public int GetLength() 
-        {
-            return this.length;
-        }
-
-        public int GetQuantity()
-        {
-            return this.quantity;
-        }
-
-        public double GetPrice()
-        {
-            double price = 0;
-            foreach(Locker locker in this.lockers)
-            {
-                price += locker.GetPrice();
-            }
-            this.price = price;
-            return price;
+            return this._lockers.Count; 
         }
 
         public ObservableCollection<Locker> GetObservableLockers()
         {
             ObservableCollection<Locker> i = new ObservableCollection<Locker>();
-            foreach(Locker locker in this.lockers)
+            foreach(Locker locker in this._lockers)
             {
                 i.Add(locker);
             }
@@ -78,47 +70,62 @@ namespace Kitbox_project.Models
 
         public override string ToString()
         {
-            string i = string.Empty;
-            foreach (Locker locker in this.lockers)
-            {
-                i += $"{locker.ToString()}, ";
-            }
-            i += $"{GetPrice().ToString()}, ";
-            i += $"{this.depth.ToString()}, ";
-            i += $"{this.length.ToString()}, ";
-            i += $"{this.quantity.ToString()}";
+            this._price = Price; //recalculate the price
+
+            string i = string.Join(",", this._lockers);
+
+            return String.Format("{0} {1} {2} {3} {4} {5} {6}", i, this._price.ToString(), this._depth.ToString(), this._price.ToString(), this._length.ToString(), this._quantity.ToString());
+        }
+        public string ToCart()
+        {
+            this._price = Price;
+
+            string i = string.Join(",", this._lockers);
+
+            i += $"{this._price.ToString()}, ";
+            i += $"{this._depth.ToString()}, ";
+            i += $"{this._length.ToString()}, ";
+            i += $"{GetLockerCount().ToString()}, ";
+            i += $"{this._quantity.ToString()}";
             return i;
-
         }
 
-        public void SetDepth(int depth)
+        public int Depth
         {
-            this.depth = depth;
+            get => _depth;
+            set => _depth = value;
         }
 
-        public void SetLength(int length)
+        public int Length
         {
-            this.length = length;
+            get => _length;
+            set => _length = value;
         }
 
-        public void SetQuantity(int quantity)
+        public int Quantity
         {
-            this.quantity = quantity;
+            get => _quantity;
+            set => _quantity = value;
+        }
+            
+        public int CabinetID
+        {
+            get => _cabinetID;
         }
 
         public void AddLocker(Locker locker)
         {
-            this.lockers.Add(locker);
+            this._lockers.Add(locker);
         }
 
         public void AddLockerWithIndex(Locker locker, int index)
         {
-            this.lockers.Insert(index, locker);
+            this._lockers.Insert(index, locker);
         }
 
         public void RemoveLocker(int index) 
         {
-            this.lockers.RemoveAt(index);
+            this._lockers.RemoveAt(index);
         }
     }
 }

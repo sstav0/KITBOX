@@ -19,8 +19,26 @@ namespace Kitbox_project.Views
             // Load available lockers into the view model
             LoadAvailableLockers();
             ShowExpansionPanels();
+        }
 
+        private void ShowExpansionPanels()
+        {
+            // Determine the number of available lockers
+            int numberOfLockers = _viewModel.AvailableLockers.Count;
 
+            // Loop through each ExpansionPanel and set its visibility
+            for (int i = 0; i < numberOfLockers; i++)
+            {
+                // Find the ExpansionPanel control by its name
+                var expansionPanel = FindByName("ExpansionPanel" + (i + 1));
+
+                // Cast the result to ExpansionPanel
+                if (expansionPanel is ExpansionPanel panel)
+                {
+                    // Toggle visibility based on whether the item exists in the list
+                    panel.IsVisible = true; // or false depending on your condition
+                }
+            }
         }
 
         private void LoadAvailableLockers()
@@ -59,30 +77,6 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
-
-            // Notify the UI that the collection has changed
-            OnPropertyChanged(nameof(_viewModel.AvailableLockers));
-            ShowExpansionPanels();
-        }
-
-        private void ShowExpansionPanels()
-        {
-            // Determine the number of available lockers
-            int numberOfLockers = _viewModel.AvailableLockers.Count;
-
-            // Loop through each ExpansionPanel and set its visibility
-            for (int i = 0; i < numberOfLockers; i++)
-            {
-                // Find the ExpansionPanel control by its name
-                var expansionPanel = FindByName("ExpansionPanel" + (i + 1));
-
-                // Cast the result to ExpansionPanel
-                if (expansionPanel is ExpansionPanel panel)
-                {
-                    // Toggle visibility based on whether the item exists in the list
-                    panel.IsVisible = true; // or false depending on your condition
-                }
-            }
         }
 
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 

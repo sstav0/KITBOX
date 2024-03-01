@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Kitbox_project.ViewModels
 {
-    public class CabinetViewModel : INotifyPropertyChanged
+    public class CabinetViewModel : INotifyPropertyChanged 
     {
         public ICommand OnAddLockerButtonClicked { get; }
 
@@ -33,8 +33,8 @@ namespace Kitbox_project.ViewModels
         private List<Locker> allLocker = new List<Locker>();
 
         private bool selectColorEnabler = true;
-        
-            
+
+
         public CabinetViewModel()
         {
 
@@ -70,8 +70,6 @@ namespace Kitbox_project.ViewModels
 
         }
 
-
-
         private ObservableCollection<LockerViewModel> _lockers;
         public ObservableCollection<LockerViewModel> Lockers
         {
@@ -85,6 +83,12 @@ namespace Kitbox_project.ViewModels
                 CalculateTotalSize(); // Pas sûr d'en avoir besoin si j'ai mes Lockers.CollectionChanged quelques lignes au dessus
                 CalculateTotalPrice();
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private ObservableCollection<LockerViewModel> _availableLockers;
@@ -250,9 +254,9 @@ namespace Kitbox_project.ViewModels
                 List<string> colorDoorList = new List<string>();
                 foreach(Door door in availableDoor)
                 {
-                    if (!colorDoorList.Contains(door.GetColor()))
+                    if (!colorDoorList.Contains(door.Color))
                     {
-                        colorDoorList.Add(door.GetColor());
+                        colorDoorList.Add(door.Color);
                     }
                 }
                 Debug.WriteLine("ItemSourcePicker");
@@ -383,14 +387,7 @@ namespace Kitbox_project.ViewModels
         {
             TotalPrice = Lockers.Sum(locker => locker.Price);
         }
-   
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+  
 
         List<string> LoadLockerStringList(string param) 
         {
@@ -400,30 +397,30 @@ namespace Kitbox_project.ViewModels
             {
                 if (param == "color")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetColor()))
+                    if (!itemSourceList.Contains(objectItem.Color))
                     {
-                        itemSourceList.Add(objectItem.GetColor());
+                        itemSourceList.Add(objectItem.Color);
                     }
                 }
                 else if (param == "height")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetHeight().ToString()))
+                    if (!itemSourceList.Contains(objectItem.Height.ToString()))
                     {
-                        itemSourceList.Add(objectItem.GetHeight().ToString());
+                        itemSourceList.Add(objectItem.Height.ToString());
                     }
                 }
                 else if (param == "depth")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetDepth().ToString()))
+                    if (!itemSourceList.Contains(objectItem.Depth.ToString()))
                     {
-                        itemSourceList.Add(objectItem.GetDepth().ToString());
+                        itemSourceList.Add(objectItem.Depth.ToString());
                     }
                 }
                 else if (param == "width")
                 {
-                    if (!itemSourceList.Contains(objectItem.GetWidth().ToString()))
+                    if (!itemSourceList.Contains(objectItem.Width.ToString()))
                     {
-                        itemSourceList.Add(objectItem.GetWidth().ToString());
+                        itemSourceList.Add(objectItem.Width.ToString());
                     }
                 }
             }
@@ -435,7 +432,7 @@ namespace Kitbox_project.ViewModels
             List<string> doors = new List<string>();
             foreach (Door door in availableDoor)
             {
-                doors.Add(door.GetColor().ToString());
+                doors.Add(door.Color.ToString());
             }
             Debug.WriteLine("LoadDoorsColor");
             return doors;
