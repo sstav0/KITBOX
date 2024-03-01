@@ -84,5 +84,48 @@ namespace Kitbox_project.DataBase
                 }
             }
         }
+
+        public Dictionary<string, object> GetData(Dictionary<string, object> conditions)
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Create WHERE clause for specifying conditions for the SELECT query
+                string whereClause = string.Join(" AND ", conditions.Keys.Select(key => $"{key} = @{key}"));
+
+                // Construct the SQL SELECT query
+                string query = $"SELECT * FROM {tablename} WHERE {whereClause}";
+
+                // Create a MySqlCommand with the constructed query and the database connection
+                using (MySqlCommand command = new MySqlCommand(query, connection))
+                {
+                    // Add parameters for the conditions in the WHERE clause
+                    foreach (var condition in conditions)
+                    {
+                        command.Parameters.AddWithValue("@" + condition.Key, condition.Value);
+                    }
+
+                    // Create a dictionary to store the result
+                    Dictionary<string, object> resultData = new Dictionary<string, object>();
+
+                    // Execute the SELECT query
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                string columnName = reader.GetName(i);
+                                object columnValue = reader.GetValue(i);
+                                resultData.Add(columnName, columnValue);
+                            }
+                        }
+                    }
+
+                    return resultData.Count > 0 ? resultData : null; // Return null if no records found
+                }
+            }
+        }
     }
 }

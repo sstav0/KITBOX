@@ -43,7 +43,8 @@ Dictionary<string, object> conditions = new Dictionary<string, object>
 };
 
 
-            _dbService.Update(customerData, conditions);
+            var test =_dbService.GetData(conditions);
+            Console.WriteLine(test);
             count++;
 
             if (count == 1)
@@ -53,6 +54,11 @@ Dictionary<string, object> conditions = new Dictionary<string, object>
 
             SemanticScreenReader.Announce(CounterBtn.Text);
         }
+
+
+
+
+        
         private void OnCounterClicked2(object sender, EventArgs e)
         { 
            List<Dictionary<string, object>> dataList = _dbService2.GetByReference("Vertical batten");
