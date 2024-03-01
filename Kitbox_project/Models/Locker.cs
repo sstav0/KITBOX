@@ -33,6 +33,7 @@ namespace Kitbox_project.Models
         private string _color;
         private Door _door;
         private double _price;
+        private int _lockerID;
 
         public Locker(int height, int depth, int width, string color, Door door, double price) 
         {
@@ -46,7 +47,7 @@ namespace Kitbox_project.Models
 
         public override string ToString()
         {
-            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _color, this._door.Color, this._price.ToString());
+            return String.Format("{0} {1} {2} {3} {4}", _height.ToString(), _color, this._door.Color, this._price.ToString());
         }
 
         public int Height
@@ -82,5 +83,11 @@ namespace Kitbox_project.Models
             get => _price;
             set => _price = value;
         }
-    }
+
+        public int LockerID
+        {
+            get => _lockerID;
+            set => _lockerID = value;
+        }
+    } 
 }

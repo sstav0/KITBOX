@@ -14,16 +14,17 @@ namespace Kitbox_project.Models
         private double _price;
         private int _depth;
         private int _length;
-        private int _quantity;
+        private int _quantity; //necessary ? 
         private int _height;
+        private int _cabinetID;
 
-        public Cabinet(List<Locker> lockers, int depth, int length, int quantity)
+        public Cabinet(List<Locker> lockers, int depth, int length, int quantity, int cabinetID)
         {
             this._lockers = lockers;
-            //this._price = GetPrice(); // This line is not necessary ?
             this._depth = depth;
             this._length = length;
             this._quantity = quantity;
+            this._cabinetID = cabinetID;
         }
 
         public int Height
@@ -71,23 +72,9 @@ namespace Kitbox_project.Models
         {
             this._price = Price; //recalculate the price
 
-            //old : 
+            string i = string.Join(",", this._lockers);
 
-            //string i = string.Empty;
-            //foreach (Locker locker in this._lockers)
-            //{
-            //    i += $"{locker.ToString()}, ";
-            //}
-
-            //new : 
-
-            string i = string.Join(",", this._lockers); 
-
-            i += $"{this._price.ToString()}, ";
-            i += $"{this._depth.ToString()}, ";
-            i += $"{this._length.ToString()}, ";
-            i += $"{this._quantity.ToString()}";
-            return i;
+            return String.Format("{0} {1} {2} {3} {4} {5} {6}", i, this._price.ToString(), this._depth.ToString(), this._price.ToString(), this._length.ToString(), this._quantity.ToString());
         }
 
         public int Depth
@@ -106,6 +93,11 @@ namespace Kitbox_project.Models
         {
             get => _quantity;
             set => _quantity = value;
+        }
+            
+        public int CabinetID
+        {
+            get => _cabinetID;
         }
 
         public void AddLocker(Locker locker)
