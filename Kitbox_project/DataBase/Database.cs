@@ -11,8 +11,17 @@ namespace Kitbox_project.DataBase
 {
     public class Database
     {
+        
+        protected static string ID;
+        protected  static string Password;
         protected string tablename;
-        public const string connectionString = "Server= pat.infolab.ecam.be ; port=63417;Database=KitBoxing;User ID=kitboxer;Password=kitboxing;";
+         public static string connectionString
+    {
+        get
+        {
+            return $"Server=pat.infolab.ecam.be;port=63417;Database=KitBoxing;User ID={ID};Password={Password};";
+        }
+    }
         public void Add(Dictionary<string, object> data)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))
