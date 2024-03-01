@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace Kitbox_project.Views
 {
@@ -46,11 +47,17 @@ namespace Kitbox_project.Views
             // Few randoms lockers I created to test until we get the DB ready. 
             // To delete once we've created the DB 
 
+            Door door1 = new Door ( "Red", "Wood",50, 40);
+            Door door2 = new Door("None", "Glass", 50, 30);
+            Door door3 = new Door("Blue", "Wood", 50, 30);
+
+
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-                new LockerViewModel { Height = 50, Color = "Red", Door = true, Price = 500 },
-                new LockerViewModel { Height = 60, Color = "Blue", Door = false, Price = 1000 },
-                new LockerViewModel { Height = 70, Color = "Green", Door = true, Price = 250 },
+                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1},
+                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2 },
+                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3 },
+                
 
             };
         }
@@ -70,7 +77,6 @@ namespace Kitbox_project.Views
             LockerViewModel newLocker = new LockerViewModel
             {
                 Height = _viewModel.SelectedHeightItem,
-                Door = _viewModel.IsDoorChecked,
                 Color = _viewModel.SelectedLockerColorItem
             };
 
@@ -81,6 +87,12 @@ namespace Kitbox_project.Views
 
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
+        }
+
+        private void OnConfimButtonClicked(object sender, EventArgs e)
+        {
+            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
+            //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
     }
 }
