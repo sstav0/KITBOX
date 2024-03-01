@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace Kitbox_project.Views
 {
@@ -46,11 +47,17 @@ namespace Kitbox_project.Views
             // Few randoms lockers I created to test until we get the DB ready. 
             // To delete once we've created the DB 
 
+            Door door1 = new Door ( "Red", "Wood",50, 40);
+            Door door2 = new Door("None", "Glass", 50, 30);
+            Door door3 = new Door("Blue", "Wood", 50, 30);
+
+
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-                new LockerViewModel { Height = 50, Color = "Red", Door = true, Price = 500 },
-                new LockerViewModel { Height = 60, Color = "Blue", Door = false, Price = 1000 },
-                new LockerViewModel { Height = 70, Color = "Green", Door = true, Price = 250 },
+                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1},
+                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2 },
+                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3 },
+                
 
             };
         }
@@ -59,25 +66,33 @@ namespace Kitbox_project.Views
 
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
-            // Si on a plus de 7 lockers �a fait rien 
-            if (_viewModel.Lockers.Count >= 7)
+            // Check if the maximum number of lockers has been reached
+            if (_viewModel.AvailableLockers.Count >= 7)
             {
                 // Display an alert or perform any other action
                 return;
             }
-            // On ajoute le locker choisi au cabinet
-            LockerViewModel selectedLocker = _viewModel.SelectedLocker;
-            if (selectedLocker != null)
+
+            // Create a new LockerViewModel based on the selected parameters
+            LockerViewModel newLocker = new LockerViewModel
             {
-                _viewModel.Lockers.Add(selectedLocker);
-                System.Diagnostics.Debug.WriteLine(_viewModel.Lockers.Count);
-                // On remets le picker � 0 parce que c'est plus cool
-                //lockerPicker.SelectedItem = null;
-            }
+                Height = _viewModel.SelectedHeightItem,
+                Color = _viewModel.SelectedLockerColorItem
+            };
+
+            // Add the new locker to the AvailableLockers collection
+            _viewModel.AvailableLockers.Add(newLocker);
+            System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
         }
 
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
+        }
+
+        private void OnConfimButtonClicked(object sender, EventArgs e)
+        {
+            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
+            //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
     }
 }

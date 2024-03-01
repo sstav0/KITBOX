@@ -23,18 +23,14 @@ namespace Kitbox_project.ViewModels
         private static Locker locker2 = new Locker(12, 11, 11, "Emeraude", door2, 65.2);
 
 
-
-        private static DatabaseDoor DatabaseDoorObject = new DatabaseDoor();
-        private static DatabaseLocker DatabaseLockerObject = new DatabaseLocker();
-
-        
         private List<Door> doors = new List<Door>();
         private List<Locker> lockers = new List<Locker>();
 
-        private List<Door> availableDoor = DatabaseDoorObject.GetList();
-        private List<Locker> availableLocker = DatabaseLockerObject.GetList();
-        private readonly List<Door> allDoor = DatabaseDoorObject.GetList();
-        private readonly  List<Locker> allLocker = DatabaseLockerObject.GetList();
+        private List<Door> availableDoor = new List<Door>();
+        private List<Locker> availableLocker = new List<Locker>();
+
+        private List<Door> allDoor = new List<Door>();
+        private List<Locker> allLocker = new List<Locker>();
 
         private bool selectColorEnabler = true;
 
@@ -48,6 +44,9 @@ namespace Kitbox_project.ViewModels
             availableLocker.Add(locker1);
             availableLocker.Add(locker2);
 
+            allDoor = availableDoor;
+            allLocker = availableLocker;
+
             Lockers = new ObservableCollection<LockerViewModel>();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalPrice();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalSize();
@@ -56,6 +55,13 @@ namespace Kitbox_project.ViewModels
             IsGlassVisible = false;
             EnablecheckDoor = true;
             IsDoorPickerVisible = false;
+
+            SelectedDepthItem = 0;
+            SelectedDoorColorItem = null;
+            SelectedHeightItem = 0;
+            SelectedWidthItem = 0;
+            SelectedLockerColorItem = null;
+
 
             ItemSourceLockerColor = LoadLockerStringList("color");
             ItemSourceLockerDepth = LoadLockerStringList("depth");
@@ -112,11 +118,10 @@ namespace Kitbox_project.ViewModels
         {
             get => _isDoorChecked;
             set
-            {
+            { 
                 _isDoorChecked = value;
                 OnAddDoorClicked();
-                //UpdateAvailability();
-                OnPropertyChanged();
+                UpdateAvailability();
             }
         }
         private bool _isGlassChecked;
@@ -127,8 +132,7 @@ namespace Kitbox_project.ViewModels
             {
                 _isGlassChecked = value;
                 OnGlassDoorClicked();
-                //UpdateAvailability();
-                OnPropertyChanged();
+                UpdateAvailability();
             }
         }
 
@@ -184,8 +188,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedLockerColorItem != value)
                 {
                     _selectedLockerColorItem = value;
-                    OnPropertyChanged();
-                    //UpdateAvailability();
+                    UpdateAvailability();
                 }
             }
         }
@@ -198,8 +201,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedHeightItem != value)
                 {
                     _selectedHeightItem = value;
-                    //UpdateAvailability();
-                    OnPropertyChanged();
+                    UpdateAvailability();
                 }
             }
         }
@@ -212,8 +214,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDoorColorItem != value)
                 {
                     _selectedDoorColorItem = value;
-                    //UpdateAvailability();
-                    OnPropertyChanged();
+                    UpdateAvailability();
                 }
             }
         }
@@ -226,8 +227,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDepthItem != value)
                 {
                     _selectedDepthItem = value;
-                    //UpdateAvailability();
-                    OnPropertyChanged();
+                    UpdateAvailability();
                 }
             }
         }
@@ -240,8 +240,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedWidthItem != value)
                 {
                     _selectedWidthItem = value;
-                    //UpdateAvailability();
-                    OnPropertyChanged();
+                    UpdateAvailability();
                 }
             }
         }
@@ -260,9 +259,8 @@ namespace Kitbox_project.ViewModels
                         colorDoorList.Add(door.Color);
                     }
                 }
-                Debug.Write(colorDoorList.ToString());
+                Debug.WriteLine("ItemSourcePicker");
                 _itemSourceDoorPicker = colorDoorList;
-                OnPropertyChanged();
             }
         }
 
@@ -275,7 +273,6 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerHeight != value)
                 {
                     _itemSourceLockerHeight = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -288,7 +285,6 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerColor != value)
                 {
                     _itemSourceLockerColor = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -301,7 +297,6 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerDepth != value)
                 {
                     _itemSourceLockerDepth = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -315,9 +310,7 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerWidth != value)
                 {
                     _itemSourceLockerWidth = value;
-                    OnPropertyChanged();
                 }
-
             }
         }
 
@@ -431,6 +424,7 @@ namespace Kitbox_project.ViewModels
                     }
                 }
             }
+            Debug.WriteLine("LoadLockerStringList");
             return itemSourceList;
         }
         private List<string> LoadDoorsColor()
@@ -440,9 +434,10 @@ namespace Kitbox_project.ViewModels
             {
                 doors.Add(door.Color.ToString());
             }
+            Debug.WriteLine("LoadDoorsColor");
             return doors;
         }
-  
+
         private void OnAddDoorClicked()
         {
             if (IsDoorChecked)
@@ -454,9 +449,9 @@ namespace Kitbox_project.ViewModels
             {
                 selectColorEnabler = false;
                 IsGlassVisible = false;
-                Debug.WriteLine("false");
             }
             ShowColorPicker();
+            Debug.WriteLine("OnAddDoorClicked");
         }
 
         private void OnGlassDoorClicked()
@@ -471,6 +466,8 @@ namespace Kitbox_project.ViewModels
                 selectColorEnabler = true;
             }
             ShowColorPicker();
+            Debug.WriteLine("OnGlassDoorClicked");
+
         }
 
         private void ShowColorPicker()
@@ -487,64 +484,39 @@ namespace Kitbox_project.ViewModels
         }
         private void SubUpdateAvailabilityDoorsHeight(Door anyDoor)
         {
-            if (anyDoor.Material == "glass" && _isGlassChecked)
-            {
-                doors.Add(anyDoor);
-            }
-            else if (anyDoor.Material == "wood" && _isDoorChecked)
-            {
-                doors.Add(anyDoor);
-            }
-            else if (!_isDoorChecked && !IsGlassChecked)
+            if ((anyDoor.GetMaterial() == "glass" && _isGlassChecked) || (anyDoor.GetMaterial() == "wood" && _isDoorChecked) || (!_isDoorChecked && !IsGlassChecked))
             {
                 doors.Add(anyDoor);
             }
         }
         private void SubUpdateAvailabilityDoorsWidth(Door anyDoor)
         {
-            if (anyDoor.Height == _selectedHeightItem && _selectedHeightItem != 0)
-            {
-                SubUpdateAvailabilityDoorsHeight(anyDoor);
-            }
-            else if (_selectedHeightItem == 0)
+            if ((anyDoor.GetHeight() == _selectedHeightItem && _selectedHeightItem != 0) || _selectedHeightItem == 0)
             {
                 SubUpdateAvailabilityDoorsHeight(anyDoor);
             }
         }
         private void SubUpdateAvailabilityLockersWidth(Locker anyLocker)
         {
-            if (anyLocker.Depth == _selectedDepthItem && _selectedDepthItem != 0)
-            {
-                SubUpdateAvailabilityLockersDepth(anyLocker);
-            }
-            else if (_selectedDepthItem == 0)
+            if ((anyLocker.GetDepth() == _selectedDepthItem && _selectedDepthItem != 0)|| _selectedDepthItem == 0)
             {
                 SubUpdateAvailabilityLockersDepth(anyLocker);
             }
         }
         private void SubUpdateAvailabilityLockersDepth(Locker anyLocker)
         {
-            if (anyLocker.Color.ToString() == _selectedLockerColorItem && _selectedLockerColorItem != null)
-            {
-                SubUpdateAvailabilityLockersColor(anyLocker);
-            }
-            else if (_selectedDoorColorItem == null)
+            if ((anyLocker.GetColor().ToString() == _selectedLockerColorItem && _selectedLockerColorItem != null)|| _selectedDoorColorItem == null)
             {
                 SubUpdateAvailabilityLockersColor(anyLocker);
             }
         }
         private void SubUpdateAvailabilityLockersColor(Locker anyLocker)
         {
-            if (anyLocker.Height == _selectedHeightItem && _selectedHeightItem != 0)
-            {
-                lockers.Add(anyLocker);
-            }
-            else if (_selectedHeightItem == 0)
+            if ((anyLocker.GetHeight() == _selectedHeightItem && _selectedHeightItem != 0) || _selectedHeightItem == 0)
             {
                 lockers.Add(anyLocker);
             }
         }
-
         private void UpdateAvailability()
         {
             doors = new List<Door>();
@@ -552,41 +524,45 @@ namespace Kitbox_project.ViewModels
 
             foreach (Door anyDoor in allDoor)
             {
-                if (anyDoor.Width == _selectedWidthItem && _selectedWidthItem != 0)
+                if ((anyDoor.GetWidth() == _selectedWidthItem && _selectedWidthItem != 0) || (_selectedWidthItem == 0))
                 {
                     SubUpdateAvailabilityDoorsWidth(anyDoor);
-                }
-
-                else if (_selectedWidthItem == 0)
-                {
-                    SubUpdateAvailabilityDoorsWidth(anyDoor);
+                    Debug.WriteLine("Debug 1 !!");
                 }
             }
             availableDoor = doors;
-            Debug.WriteLine("Y A DES PORTES ??");
-            Debug.WriteLine(availableDoor != null && availableDoor.Count > 0);
 
-            EnablecheckDoor = availableDoor != null && availableDoor.Count > 0;
-            IsDoorChecked = availableDoor != null && availableDoor.Count > 0;
-
+            Debug.WriteLine("availableDoor = doors");
+            // /!\ changer le sens du signe > to <
+            if (availableDoor.Count > 0)
+            {
+                //EnablecheckDoor = false;
+                //IsDoorChecked = false;
+                Debug.WriteLine("availableDoor.Count > 0");
+            }
+            else
+            {
+                EnablecheckDoor = true;
+                IsDoorChecked = true;   
+                Debug.WriteLine("availableDoor.Count < 0");
+            }
+            
             foreach (Locker anyLocker in allLocker)
             {
-                if (anyLocker.Width == _selectedWidthItem && _selectedWidthItem != 0)
+                if ((anyLocker.GetWidth() == _selectedWidthItem && _selectedWidthItem != 0) || (_selectedWidthItem == 0))
                 {
                     SubUpdateAvailabilityLockersWidth(anyLocker);
-                }
-                else if (_selectedWidthItem == 0)
-                {
-                    SubUpdateAvailabilityLockersWidth(anyLocker);
+                    Debug.WriteLine("Debug 2 !!");
                 }
             }
             availableLocker = lockers;
-
+            
             ItemSourceLockerColor = LoadLockerStringList("color");
             ItemSourceLockerDepth = LoadLockerStringList("depth");
             ItemSourceLockerHeight = LoadLockerStringList("height");
             ItemSourceLockerWidth = LoadLockerStringList("width");
 
+            OnPropertyChanged();
             Debug.WriteLine("UpdateAvailability !!");
         }
 

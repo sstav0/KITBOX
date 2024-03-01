@@ -26,7 +26,7 @@ public partial class BasketPage : ContentPage
 		List<Locker> lockers1 = new List<Locker>();
 		lockers1.Add(locker1);
 		lockers1.Add(locker1bis);
-		Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1);
+		Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 1);
 		CabinetViewModelV2 cabinet1view = new CabinetViewModelV2(cabinet1);
 
 		Basket.Add(cabinet1view);
@@ -34,26 +34,26 @@ public partial class BasketPage : ContentPage
         _ = cabinet1.Height; //?
 		ListCabinets.ItemsSource = Basket;
 		double i = 0;
-		foreach(CabinetViewModelV2 item in Basket)
+		foreach (CabinetViewModelV2 item in Basket)
 		{
 			i += Convert.ToDouble(item.GetPrice());
 		}
-		string totalPrice = $"{i.ToString()} �";
+		string totalPrice = $"{i.ToString()} €";
 		TotalPrice.Text = totalPrice;
-    }
+	}
 
 	private void UpdateBasket() 
 	{
 		ListCabinets.ItemsSource = Basket;
 
         double i = 0;
-        foreach (CabinetViewModelV2 item in Basket)
-        {
-            i += Convert.ToDouble(item.GetPrice());
-        }
-        string totalPrice = $"{i.ToString()} �";
-        TotalPrice.Text = totalPrice;
-    }
+		foreach (CabinetViewModelV2 item in Basket)
+		{
+			i += Convert.ToDouble(item.GetPrice());
+		}
+		string totalPrice = $"{i.ToString()} €";
+		TotalPrice.Text = totalPrice;
+	}
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {

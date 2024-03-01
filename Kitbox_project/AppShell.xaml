@@ -26,6 +26,11 @@
             Route="CabinetCreatorPage" />
 
         <ShellContent
+            Title="Login Page"
+            ContentTemplate="{DataTemplate views:LoginPage}"
+            Route="Login Page"/>
+
+        <ShellContent
             Title="Stock"
             ContentTemplate="{DataTemplate views:StockPage}"
             Route="StockPage" />
