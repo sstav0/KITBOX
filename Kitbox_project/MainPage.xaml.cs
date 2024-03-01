@@ -33,12 +33,17 @@ public partial class MainPage : ContentPage
         { 
             Dictionary<string, object> customerData = new Dictionary<string, object>
 {
-    { "firstname", "John" },
-    { "name", "Doe" },
-    { "email", "john.doe@example.com" }
+    { "firstname", "Miaou" },
+    { "name", "Wouf" },
+    { "email", "Wesh" }
+};
+Dictionary<string, object> conditions = new Dictionary<string, object>
+{
+    { "idCustomer", 14 }
 };
 
-            _dbService.Add(customerData);
+
+            _dbService.Update(customerData, conditions);
             count++;
 
             if (count == 1)
