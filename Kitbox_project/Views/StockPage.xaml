@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels"
+             x:Class="Kitbox_project.Views.StockPage"
+             Title="StockPage">
+    
+    <ContentPage.BindingContext>
+        <viewModels:StockViewModel />
+    </ContentPage.BindingContext>
+
+    <VerticalStackLayout>
+        <Label Text="Stock" FontSize="Large" HorizontalOptions="Center" Margin="0,20,0,0"/>
+    </VerticalStackLayout>
+
+
+</ContentPage>
