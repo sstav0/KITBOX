@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +26,7 @@ namespace Kitbox_project.Models
     /// <param name="reference"> reference of the stock item.</param>
     /// <param name="code"> code of the stock item.</param>
     /// <param name="quantity"> quantity of the stock item.</param>
-    public class StockItem
+    public class StockItem : INotifyPropertyChanged
     {
         private int _id;
         private string _reference;
@@ -33,32 +35,54 @@ namespace Kitbox_project.Models
 
         public StockItem(int id, string reference, string code, int quantity)
         {
-            this._id = id;
-            this._reference = reference;
-            this._code = code;
-            this._quantity = quantity;
+            _id = id;
+            _reference = reference;
+            _code = code;
+            _quantity = quantity;
         }
 
         public int Id
         {
             get => _id;
-            set => _id = value;
+            set
+            {
+                _id = value;
+                OnPropertyChanged(nameof(Id));
+            }
         }
         public string Reference
         {
             get => _reference;
-            set => _reference = value;
+            set
+            {
+                _reference = value;
+                OnPropertyChanged(nameof(Reference));
+            }
         }
 
         public string Code
         {
             get => _code;
-            set => _code = value;
+            set
+            {
+                _code = value;
+                OnPropertyChanged(nameof(Code));
+            }
         }
         public int Quantity
         {
             get => _quantity;
-            set => _quantity = value;
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged(nameof(Quantity));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
