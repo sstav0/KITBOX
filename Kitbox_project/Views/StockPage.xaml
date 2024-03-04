@@ -9,34 +9,15 @@
         <viewModels:StockViewModel />
     </ContentPage.BindingContext>
 
-    <VerticalStackLayout>
-        <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,20,0,20"/>
+    <VerticalStackLayout Margin="40">
+        <!-- Title -->
+        <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
 
         <!-- ListView to display stock data -->
-        <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None" WidthRequest="1000" Margin="20">
-            <ListView.HeaderTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="3*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="100" />
-                            <ColumnDefinition Width="130" />
-                        </Grid.ColumnDefinitions>
-
-                        <Label Grid.Column="0" Text="Id" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                        <Label Grid.Column="1" Text="Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                        <Label Grid.Column="2" Text="Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                        <Label Grid.Column="3" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                        <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                    </Grid>
-                </DataTemplate>
-            </ListView.HeaderTemplate>
-            
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
+        <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" WidthRequest="1000" Padding="20">
+            <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None">
+                <ListView.HeaderTemplate>
+                    <DataTemplate>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -46,15 +27,37 @@
                                 <ColumnDefinition Width="130" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                            <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                            <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                            <Entry Grid.Column="3" Text="{Binding Quantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body"/>
-                            <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                            <Label Grid.Column="0" Text="Id" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="2" Text="Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="3" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
                         </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                    </DataTemplate>
+                </ListView.HeaderTemplate>
+            
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="130" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Entry Grid.Column="3" Text="{Binding TempQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body"/>
+                                <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
     </VerticalStackLayout>
 </ContentPage>
