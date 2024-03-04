@@ -6,4 +6,17 @@ public partial class LoginPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private void TogglePasswordObscurationClicked(object sender, EventArgs e)
+	{
+		if(Password.IsPassword == true)
+		{
+			Password.IsPassword = false;
+		}
+
+		else
+		{
+			Password.IsPassword = true;
+		}
+	}
 }

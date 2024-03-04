@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kitbox_project.Views.ActiveOrdersPage"
+             Title="ActiveOrdersPage">
+
+    <Grid Padding="10" RowSpacing="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="9*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Text="Active Orders" FontSize="Header" FontAttributes="Bold"
+               HorizontalOptions="Start" VerticalOptions="Center"
+               Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"/>
+
+        <Entry x:Name="OrderIDFilter" Placeholder="Older ID Filter" FontSize="Medium"
+               Grid.Row="1" Grid.Column="0"/>
+
+        <Frame BackgroundColor="White" BorderColor="Black" CornerRadius="0" Padding="10"
+               Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
+
+            <ScrollView>
+                <ListView x:Name="ListOrders">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame BorderColor="Black" BackgroundColor="Gray" CornerRadius="10" Margin="2">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="1.5*"/>
+                                            <ColumnDefinition Width="5*"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Button x:Name="ExpandButton" Text="\/" Grid.Column="0" 
+                                                BorderColor="Gray" BackgroundColor="Gray"/>
+
+                                        <Label x:Name="Notifications" Text="" Grid.Column="1" 
+                                               HorizontalTextAlignment="Center"/>
+
+                                        <HorizontalStackLayout Grid.Column="2">
+                                        
+                                            <Label Text="{Binding OrderID}"
+                                                   HorizontalTextAlignment="Center"/>
+
+                                            <Label Text="{Binding OrderStatus}" 
+                                                   HorizontalTextAlignment="Center"/>
+
+                                        </HorizontalStackLayout>
+
+                                        <Button Text="Cancel" BackgroundColor="Red" Grid.Column="3"
+                                                Clicked="CancelClicked"/>
+
+                                        <Button Text="Ready" BackgroundColor="Green" Grid.Column="3"
+                                                x:Name="ReadyButton" Clicked="ReadyClicked"/>
+
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollView>
+
+        </Frame>
+
+    </Grid>
+
+</ContentPage>
