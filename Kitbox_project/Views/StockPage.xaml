@@ -1,41 +1,60 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels"
+             xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
              x:Class="Kitbox_project.Views.StockPage"
              Title="StockPage">
-    
+
     <ContentPage.BindingContext>
         <viewModels:StockViewModel />
     </ContentPage.BindingContext>
 
     <VerticalStackLayout>
-        <Label Text="Stock" FontSize="Large" HorizontalOptions="Center" Margin="0,20,0,0"/>
-        
+        <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,20,0,20"/>
+
         <!-- ListView to display stock data -->
-        <ListView ItemsSource="{Binding StockData}" HasUnevenRows="True">
+        <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None" WidthRequest="1000" Margin="20">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="130" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0" Text="Id" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                        <Label Grid.Column="2" Text="Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                        <Label Grid.Column="3" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                        <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
+            
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="3*" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="130" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Column="0" Text="{Binding Name}" />
-                            <Label Grid.Column="1" Text="{Binding Code}" />
-                            <Entry Grid.Column="2" Text="{Binding Quantity}" Keyboard="Numeric" />
-                            <Label Grid.Column="3" Text="{Binding Dimensions}" />
-                            <Button Grid.Column="4" Text="Update" Command="{Binding UpdateCommand}" />
+                            <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                            <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                            <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                            <Entry Grid.Column="3" Text="{Binding Quantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body"/>
+                            <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
     </VerticalStackLayout>
-
-
 </ContentPage>
