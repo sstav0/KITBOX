@@ -46,21 +46,27 @@ namespace Kitbox_project.ViewModels
             // If Update button pressed
             if (stockItem.IsEditing)
             {
-                if (stockItem.TempQuantity < 0)
+                // If the input quantity is a number and non-negative
+                if (stockItem.IsValidQuantity)
                 {
-                    stockItem.TempQuantity = stockItem.Quantity;
-                    // Show error message : Quantity must be a positive number
-                    return;
-                }
-                // Update the quantity in the database using appropriate logic
-                // Example: stockItem.Id is assumed to be a unique identifier for the item in the database
-                // Implement your logic to update the quantity in the database
-                // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
-                stockItem.Quantity = stockItem.TempQuantity;
+                    // Update the quantity in the database using appropriate logic
+                    // Example: stockItem.Id is assumed to be a unique identifier for the item in the database
+                    // Implement your logic to update the quantity in the database
+                    // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
+                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0');
+                    stockItem.Quantity = Convert.ToInt16(stockItem.InputQuantity);
 
-                stockItem.IsEditing = false;
-                stockItem.ButtonText = "Edit";
-                stockItem.ButtonColor = Color.Parse("#512BD4");
+                    stockItem.IsEditing = false;
+                    stockItem.ButtonText = "Edit";
+                    stockItem.ButtonColor = (Color)Application.Current.Resources["Primary"];
+                }
+                else
+                {
+                    stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
+                    stockItem.IsEditing = true;
+                    stockItem.ButtonText = "Update";
+                    stockItem.ButtonColor = Color.Parse("green");
+                }
             }
             // If Edit button pressed
             else
@@ -84,14 +90,15 @@ namespace Kitbox_project.ViewModels
         private bool _isEditing;
         private string _buttonText;
         private Color _buttonColor;
-        private int _tempQuantity;
+        private string _inputQuantity;
+        private bool _isValidQuantity;
 
         public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
         {
             IsEditing = false;
             ButtonText = "Edit";
             ButtonColor = Color.Parse("#512BD4");
-            TempQuantity = quantity;
+            InputQuantity = quantity.ToString();
         }
         public bool IsEditing
         {
@@ -123,17 +130,30 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public int TempQuantity
+        public string InputQuantity
         {
-            get => _tempQuantity;
+            get => _inputQuantity;
             set
             {
-                if (!IsEditing)
-                {
-                    _tempQuantity = value;
-                    OnPropertyChanged(nameof(TempQuantity));
-                }
+                _inputQuantity = value;
+                OnPropertyChanged(nameof(InputQuantity));
+                ValidateQuantity();
             }
+        }
+
+        public bool IsValidQuantity
+        {
+            get => _isValidQuantity;
+            set
+            {
+                _isValidQuantity = value;
+                OnPropertyChanged(nameof(IsValidQuantity));
+            }
+        }
+
+        public void ValidateQuantity()
+        {
+            IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
         }
     }
 }
