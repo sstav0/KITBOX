@@ -11,7 +11,7 @@ public partial class CartPage : ContentPage
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
 
-    public CartPage(Order order)
+    public CartPage()
 	{
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
@@ -20,9 +20,18 @@ public partial class CartPage : ContentPage
 		LoadCart();
     }
 
-	private void LoadCart()
+    //public CartPage(Order order)
+    //{
+    //    InitializeComponent();
+    //    Cart = new ObservableCollection<CartViewModel>();
+    //    CartVoid = new ObservableCollection<CartViewModel>();
+
+    //    LoadCart();
+    //}
+
+    private void LoadCart()
 	{
-		if (order.Cart != null) { 
+		//if (order.Cart != null) { 
 			string color1 = "red";
 			Door door1 = new Door(color1, "wood", 50, 50); // 50x50 door (example)
 			Door door1bis = new Door(color1, "wood", 50, 50);
@@ -39,21 +48,21 @@ public partial class CartPage : ContentPage
 			ListCabinets.ItemsSource = Cart;
 
             UpdateTotalPrice();
-        }
+        //}
 
-		else
-		{
-			foreach (Cabinet cabinet in order.Cart)
-			{
-                CartViewModel cabinetview = new CartViewModel(cabinet);
+		//else
+		//{
+		//	foreach (Cabinet cabinet in order.Cart)
+		//	{
+  //              CartViewModel cabinetview = new CartViewModel(cabinet);
 
-				Cart.Add(cabinetview);
-            }
+		//		Cart.Add(cabinetview);
+  //          }
 
-			ListCabinets.ItemsSource = Cart;
+		//	ListCabinets.ItemsSource = Cart;
 
-			UpdateTotalPrice();
-		}
+		//	UpdateTotalPrice();
+		//}
     }
 
 	private void UpdateCart() 

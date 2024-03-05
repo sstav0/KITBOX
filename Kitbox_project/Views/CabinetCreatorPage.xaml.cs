@@ -10,6 +10,14 @@ namespace Kitbox_project.Views
     {
         private CabinetViewModel _viewModel;
 
+        private Order _order;
+        public Order Order
+        { get => _order; set => _order = value; }
+
+        private Cabinet _cabinet;
+        public Cabinet Cabinet
+        { get => _cabinet; set => _cabinet = value; }
+
         public CabinetCreatorPage()
         {
             InitializeComponent();
