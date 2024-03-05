@@ -54,11 +54,11 @@ namespace Kitbox_project.ViewModels
                     // Implement your logic to update the quantity in the database
                     // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
                     stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0');
-                    stockItem.Quantity = Convert.ToInt16(stockItem.InputQuantity);
+                    stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
 
                     stockItem.IsEditing = false;
                     stockItem.ButtonText = "Edit";
-                    stockItem.ButtonColor = (Color)Application.Current.Resources["Primary"];
+                    stockItem.ButtonColor = Color.Parse("#512BD4");
                 }
                 else
                 {
