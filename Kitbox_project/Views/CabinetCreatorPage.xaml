@@ -339,7 +339,7 @@
                                     </Label>
 
                                     <Button Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
-                                            Text="Edit"/>
+                                            Text="Edit" Clicked="OnEditButtonClicked"/>
 
                                 </Grid>
                                 
