@@ -19,12 +19,6 @@ namespace Kitbox_project.Models
     /// <item> <description>To set the color of the locker, use <c>Locker.Color = string color</c>.</description> </item>
     /// </list>
     /// </summary>
-    /// <param name="height"> height of the locker.</param>
-    /// <param name="width"> width of the locker.</param>
-    /// <param name="depth"> depth of the locker.</param>
-    /// <param name="color"> color of the locker.</param>
-    /// <param name="door"> door of the locker.</param>
-    /// <param name="price"> price of the locker</param>
     public class Locker
     {
         private int _height;
@@ -35,6 +29,15 @@ namespace Kitbox_project.Models
         private double _price;
         private int _lockerID;
 
+        /// <summary>
+        /// This constructor creates a locker with specified dimensions, color, door characteristics, and price.
+        /// </summary>
+        /// <param name="height">Height of the locker</param>
+        /// <param name="depth">Depth of the cabinet</param>
+        /// <param name="width">Width of the cabinet</param>
+        /// <param name="color">Color of the panels</param>
+        /// <param name="door">Door object associated with this locker</param>
+        /// <param name="price">Calculated price of the locker</param>
         public Locker(int height, int depth, int width, string color, Door door, double price) 
         {
             this._height = height;
