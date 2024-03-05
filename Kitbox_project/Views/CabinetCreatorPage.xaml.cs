@@ -88,6 +88,14 @@ namespace Kitbox_project.Views
         { 
         }
 
+        private void OnEditButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is CabinetViewModel selectedCabinetView)
+            {
+                
+            }
+        }
+
         private void OnConfimButtonClicked(object sender, EventArgs e)
         {
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
