@@ -3,8 +3,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:panel="clr-namespace:Kitbox_project.Utilities"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui">
 
     <Grid>
 
@@ -213,6 +213,7 @@
                             Grid.Column="0"
                             HorizontalOptions="Start"
                             IsChecked="{Binding IsGlassChecked}"
+                            IsEnabled="{Binding IsGlassEnabled}"
                             IsVisible="{Binding IsGlassVisible}"
                             VerticalOptions="Center"
                             Color="#0066FF" />
@@ -288,43 +289,43 @@
                                 </uranium:ExpanderView.Header>
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
 
                                     </Grid.RowDefinitions>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
 
                                     </Grid.ColumnDefinitions>
 
 
-                                    <Label Grid.Column="0" Grid.Row="0">
+                                    <Label Grid.Row="0" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Height: " />
-                                                <Span Text="{Binding Height}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Height}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label Grid.Column="0" Grid.Row="1">
+                                    <Label Grid.Row="1" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Door Color: " />
-                                                <Span Text="{Binding Door.Color}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Door.Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label Grid.Column="0" Grid.Row="2">
+                                    <Label Grid.Row="2" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Door Material: " />
-                                                <Span Text="{Binding Door.Material}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Door.Material}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -333,16 +334,19 @@
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Panel Color: " />
-                                                <Span Text="{Binding Color}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Button Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
-                                            Text="Edit"/>
+                                    <Button
+                                        Grid.Row="1"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="1"
+                                        Text="Edit" />
 
                                 </Grid>
-                                
+
 
                             </uranium:ExpanderView>
                         </DataTemplate>
@@ -359,14 +363,15 @@
             Grid.Row="3"
             Grid.Column="0"
             BackgroundColor="Red"
+            Command="{Binding OnResetLockerButtonClicked}"
             FontSize="20"
             Text="Reset" />
         <Button
             Grid.Row="3"
             Grid.Column="6"
             BackgroundColor="Green"
-            FontSize="20"
             Clicked="OnConfimButtonClicked"
+            FontSize="20"
             Text="Confirm" />
 
     </Grid>

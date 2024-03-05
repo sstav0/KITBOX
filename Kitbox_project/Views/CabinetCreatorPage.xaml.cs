@@ -84,14 +84,16 @@ namespace Kitbox_project.Views
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
         }
 
+
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
         }
-
-        private void OnConfimButtonClicked(object sender, EventArgs e)
+        
+        private void OnConfimButtonClicked (object sender, EventArgs e)
         {
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
+        
     }
 }
