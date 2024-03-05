@@ -18,6 +18,10 @@ namespace Kitbox_project.Views
         public Cabinet Cabinet
         { get => _cabinet; set => _cabinet = value; }
 
+        private int _IDCabinet;
+        public int IDCabinet
+        { get => _IDCabinet; set => _IDCabinet = value; }
+
         public CabinetCreatorPage()
         {
             InitializeComponent();

@@ -17,6 +17,8 @@ public partial class CartPage : ContentPage
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
 
+		order = new Order("InCreation", new List<Cabinet>());
+
 		LoadCart();
     }
 
@@ -86,7 +88,10 @@ public partial class CartPage : ContentPage
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new CabinetCreatorPage());
+		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+		newCabinetCreatorPage.Order = order;
+
+        await Navigation.PushAsync(newCabinetCreatorPage);
     }
 
 	private void OnConfirmClicked(object sender, EventArgs e)
@@ -99,14 +104,17 @@ public partial class CartPage : ContentPage
 
 	private async void OnEditClicked(object sender, EventArgs e)
 	{
-		Debug.WriteLine("Editing");
-
 		if(sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
 		{
 			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-			//await Navigation.PushAsync(new CabinetCreatorPage(selectedCabinet));
-		}
+            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+            newCabinetCreatorPage.Order = order;
+			newCabinetCreatorPage.Cabinet = selectedCabinet;
+			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;
+
+            await Navigation.PushAsync(newCabinetCreatorPage);
+        }
 	}
 
 	private void OnDeleteClicked(object sender, EventArgs e)
