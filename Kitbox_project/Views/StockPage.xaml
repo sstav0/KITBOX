@@ -51,8 +51,26 @@
                                 <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Entry Grid.Column="3" Text="{Binding TempQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body"/>
-                                <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                                <Entry Grid.Column="3" Text="{Binding InputQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="#fff5f5" />
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                                <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{Binding ButtonColor}" />
+                                            <Setter Property="Text" Value="{Binding ButtonText}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="Red" />
+                                            <Setter Property="Text" Value="Invalid" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
