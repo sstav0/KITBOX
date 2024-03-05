@@ -47,10 +47,14 @@ namespace Kitbox_project.Models
         /// </list>
         /// </summary>
         /// <param name="param">The dictionary containing the values selected by the client. Example : <code>{ { "Width", 52 }, { "Depth", null }, { "Panel_color", "Brown" }, { "Height", 52 }, { "Door", true }, {"Door_color", "Glass"} }</code> </param>
+        /// <param name="columns">The columns that will be selected. Example : <code>{ "Width", "Height"}</code>By default, these columns will be selected : <code>{ "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color" }</code></param>
         /// <returns>A dictionary that can directly be used to display the options in the client interface</returns>
-        public Dictionary<string, List<object>> GetValues(Dictionary<string, object> param)
+        public Dictionary<string, List<object>> GetValues(Dictionary<string, object> param, List<string> columns = null)
         {
-            var columns = new List<string> { "Width", "Height", "Depth", "Panel_color", "Door_color" }; //columns to be selected from the database
+            if (columns == null)
+            {
+                columns = new List<string> { "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color" }; //columns that will be selected by default in the database
+            }
 
             var ans = new List<Dictionary<string, string>>();
 
@@ -63,11 +67,13 @@ namespace Kitbox_project.Models
                 ans = _databaseCatalog.LoadAll(columns);
                 return FormatValues(ans, door, maxs[0], maxs[1], columns);
             }
-
+                        
             ans = _databaseCatalog.GetCatalogData(selectedValues, columns);
 
             return FormatValues(ans, door, maxs[0], maxs[1], columns);
         }
+
+        public Dictionary
 
         /// <summary>
         /// This method removes the null and bool values from the dictionary <paramref name="selectedValues"/> and returns a new dictionary with the correct values.
