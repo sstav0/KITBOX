@@ -14,7 +14,7 @@
         <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
 
         <!-- ListView to display stock data -->
-        <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" WidthRequest="1000" Padding="20">
+        <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" WidthRequest="950" Padding="20">
             <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None">
                 <ListView.HeaderTemplate>
                     <DataTemplate>
@@ -54,7 +54,7 @@
                                 <Entry Grid.Column="3" Text="{Binding InputQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body">
                                     <Entry.Triggers>
                                         <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
-                                            <Setter Property="BackgroundColor" Value="#fff5f5" />
+                                            <Setter Property="BackgroundColor" Value="{StaticResource LightRed}" />
                                             <Setter Property="TextColor" Value="Red" />
                                         </DataTrigger>
                                     </Entry.Triggers>

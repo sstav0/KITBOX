@@ -58,7 +58,7 @@ namespace Kitbox_project.ViewModels
 
                     stockItem.IsEditing = false;
                     stockItem.ButtonText = "Edit";
-                    stockItem.ButtonColor = Color.Parse("#512BD4");
+                    stockItem.ButtonColor = (Color)Application.Current.Resources["Primary"];
                 }
                 else
                 {
