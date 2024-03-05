@@ -73,8 +73,6 @@ namespace Kitbox_project.Models
             return FormatValues(ans, door, maxs[0], maxs[1], columns);
         }
 
-        public Dictionary
-
         /// <summary>
         /// This method removes the null and bool values from the dictionary <paramref name="selectedValues"/> and returns a new dictionary with the correct values.
         /// </summary>
