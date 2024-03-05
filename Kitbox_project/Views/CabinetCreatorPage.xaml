@@ -46,6 +46,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!--  All the text inside the Cabinet Size  -->
@@ -66,10 +67,14 @@
                     Grid.Column="1"
                     HorizontalOptions="Center"
                     Text="Cabinet Depth" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    Text="Angle Iron Color" />
 
                 <!--  All the Pickers inside the Cabinet Size  -->
-                <!--  SelectedIndexChanged="UpdateAvailability"  -->
-                <!--  SelectedIndexChanged="{Binding UpdateAvailability}"  -->
+
                 <Picker
                     x:Name="CabinetWidth"
                     Grid.Row="2"
@@ -89,6 +94,16 @@
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemSourceLockerDepth}"
                     SelectedItem="{Binding SelectedDepthItem}" />
+
+                <Picker
+                    x:Name="AngleIronColor"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding ItemSourceAngleIronColor}"
+                    SelectedItem="{Binding SelectedAngleIronColor}" />
             </Grid>
         </Frame>
 
@@ -229,12 +244,14 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             HorizontalOptions="Start"
+                            IsVisible="{Binding IsGlassVisible}"
                             Text="Glass"
                             VerticalOptions="Center" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             HorizontalOptions="Center"
+                            IsVisible="{Binding IsDoorPickerVisible}"
                             Text="Door Color"
                             VerticalOptions="Center" />
 
@@ -283,7 +300,10 @@
                             <uranium:ExpanderView>
                                 <uranium:ExpanderView.Header>
                                     <Frame>
-                                        <Label Margin="5" Text="{Binding LockerID}" />
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Margin="5" Text="{Binding LockerID}" />
+                                            <Label Margin="5" Text="{Binding NotePartsAvailability}" />
+                                        </StackLayout>
                                     </Frame>
 
                                 </uranium:ExpanderView.Header>

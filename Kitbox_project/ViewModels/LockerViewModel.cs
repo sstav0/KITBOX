@@ -14,7 +14,18 @@ namespace Kitbox_project.ViewModels
             get => _lockerID;
             set => _lockerID = value;
         }
-            
+
+
+        // string to notify the missing parts for a Locker
+        public string NotePartsAvailability;
+        private string _notePartsAvailability
+        {
+            get => _notePartsAvailability;
+            set
+            {
+                _notePartsAvailability = value;
+            }
+        }
 
 
         private float _height;

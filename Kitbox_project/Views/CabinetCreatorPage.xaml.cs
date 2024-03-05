@@ -53,9 +53,9 @@ namespace Kitbox_project.Views
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1},
-                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2 },
-                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3 },
+                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1, NotePartsAvailability="All Right"},
+                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2, NotePartsAvailability = "Everything All Right" },
+                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3, NotePartsAvailability = "NOK" },
                 
 
             };
