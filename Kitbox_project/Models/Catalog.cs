@@ -1,11 +1,17 @@
-﻿using Kitbox_project.Utilities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
+using Kitbox_project.DataBase;
+using Kitbox_project.Utilities;
 
-namespace Kitbox_project.DataBase
+namespace Kitbox_project.Models
 {
     /// <summary> The ONLY method you need to use in this class is <c>GetValues</c>. OTHER METHODS are used INTERNALLY to format the data.
     /// </summary>
-    internal class Catalog
+    public class Catalog
     {
         private readonly DatabaseCatalog _databaseCatalog;
         public Catalog(DatabaseCatalog databaseCatalog)
@@ -71,7 +77,7 @@ namespace Kitbox_project.DataBase
         public Dictionary<string, string> CorrectValues(Dictionary<string, object> selectedValues) //
         {
             return selectedValues // Remove null and bool values from the dictionary
-                .Where(item => !(item.Value is bool && (bool)item.Value) && item.Value != null)
+                .Where(item => !(item.Value is bool) && item.Value != null)
                 .ToDictionary(item => item.Key, item => Utils.ValueToString(item.Value));
         }
 
@@ -173,7 +179,8 @@ namespace Kitbox_project.DataBase
 
             foreach (var elem in values)
             {
-                foreach (var column in columns)
+                foreach (var column
+                    in columns)
                 {
                     // Check if the current element has the column
                     if (elem.TryGetValue(column, out var value) && !string.IsNullOrEmpty(value))
@@ -181,7 +188,7 @@ namespace Kitbox_project.DataBase
                         // Handle numeric values specifically for "Width" and "Height" due to additional checks
                         if (int.TryParse(value, out int intValue))
                         {
-                            if (!door || (column == "Width" && intValue <= widthMax) || (column == "Height" && intValue <= heightMax))
+                            if (!door || (column == "Width" && intValue <= widthMax) || (column == "Height" && intValue <= heightMax) || column == "Depth")
                             {
                                 res[column].Add(intValue);
                             }
