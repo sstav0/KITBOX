@@ -3,18 +3,11 @@
 
 namespace Kitbox_project.DataBase
 {
-    /// <summary>Provides methods for interacting with the KitBoxing database, allowing for the addition, deletion, updating, and retrieval of data
-    /// <list type="bullet">
-    /// <item> <description>To add new data to a table, use <c>Add(Dictionary<string, object> data)</c>. This method inserts new records with the specified column values.</description> </item>
-    /// <item> <description>To delete data from a table, use <c>Delete(Dictionary<string, object> conditions)</c>. This method deletes records that match the specified conditions.</description> </item>
-    /// <item> <description>To update existing data in a table, use <c>Update(Dictionary<string, object> newData, Dictionary<string, object> conditions)</c>. This method updates records that match the specified conditions with new values.</description> </item>
-    /// <item> <description>To retrieve data from a table based on specific conditions, use <c>GetData(Dictionary<string, object> conditions)</c>. This method returns a list of dictionaries, each representing a row of data that matches the conditions.</description> </item>
-    /// </list>
-    /// </summary>
+    
+
     public class Database
     {
         protected string? tablename;
-        public string Tablename { get => tablename; }
 
         public const string connectionString = "Server= pat.infolab.ecam.be ; port=63417;Database=KitBoxing;User ID=kitboxer;Password=kitboxing;";
 
@@ -110,7 +103,7 @@ namespace Kitbox_project.DataBase
                 string whereClause = string.Join(" AND ", conditions.Keys.Select(key => $"{key}=@{key}"));
 
                 // Construct the SQL SELECT query
-                string query = $"SELECT {columns} FROM {Tablename} WHERE {whereClause}";
+                string query = $"SELECT {columns} FROM {tablename} WHERE {whereClause}";
 
                 // Create a MySqlCommand with the constructed query and the database connection
                 MySqlCommand command = new MySqlCommand(query, connection);
@@ -171,7 +164,7 @@ namespace Kitbox_project.DataBase
                 connection.Open();
 
                 // Construct the SQL SELECT query
-                string query = $"SELECT {columns} FROM {Tablename}";
+                string query = $"SELECT {columns} FROM {tablename}";
 
                 // Create a MySqlCommand with the constructed query and the database connection
                 MySqlCommand command = new MySqlCommand(query, connection);

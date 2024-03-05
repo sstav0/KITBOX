@@ -35,7 +35,7 @@ namespace Kitbox_project.DataBase
                 string whereClause = string.Join(" AND ", conditions.Keys.Select(key => $"({key}=@{key} OR {key} IS NULL)"));
 
                 // Construct the SQL SELECT query
-                string query = $"SELECT {columns} FROM {Tablename} WHERE {whereClause}";
+                string query = $"SELECT {columns} FROM {tablename} WHERE {whereClause}";
                 Console.WriteLine(query);
 
                 // Create a MySqlCommand with the constructed query and the database connection
