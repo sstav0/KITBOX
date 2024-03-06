@@ -21,8 +21,26 @@
 
             <!-- ListView to display stock data -->
             <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="950" Padding="20">
-                <ListView ItemsSource="{Binding FilterStockData}" Header="{Binding .}" SelectionMode="None">
-                    <ListView.HeaderTemplate>
+                <CollectionView ItemsSource="{Binding FilterStockData}" SelectionMode="Single">
+                    <CollectionView.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="130" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Text="Id" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="2" Text="Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="3" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                        </Grid>
+                    </CollectionView.Header>
+            
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -33,55 +51,33 @@
                                     <ColumnDefinition Width="130" />
                                 </Grid.ColumnDefinitions>
 
-                                <Label Grid.Column="0" Text="Id" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                                <Label Grid.Column="1" Text="Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                                <Label Grid.Column="2" Text="Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                                <Label Grid.Column="3" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
-                                <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                                <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Entry Grid.Column="3" Text="{Binding InputQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="{StaticResource LightRed}" />
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                                <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{Binding ButtonColor}" />
+                                            <Setter Property="Text" Value="{Binding ButtonText}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="Red" />
+                                            <Setter Property="Text" Value="Invalid" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </Grid>
                         </DataTemplate>
-                    </ListView.HeaderTemplate>
-            
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="3*" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="130" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Entry Grid.Column="3" Text="{Binding InputQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body">
-                                        <Entry.Triggers>
-                                            <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
-                                                <Setter Property="BackgroundColor" Value="{StaticResource LightRed}" />
-                                                <Setter Property="TextColor" Value="Red" />
-                                            </DataTrigger>
-                                        </Entry.Triggers>
-                                    </Entry>
-                                    <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body">
-                                        <Button.Triggers>
-                                            <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="True">
-                                                <Setter Property="BackgroundColor" Value="{Binding ButtonColor}" />
-                                                <Setter Property="Text" Value="{Binding ButtonText}" />
-                                            </DataTrigger>
-                                            <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="False">
-                                                <Setter Property="BackgroundColor" Value="Red" />
-                                                <Setter Property="Text" Value="Invalid" />
-                                            </DataTrigger>
-                                        </Button.Triggers>
-                                    </Button>
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </Border>
         </VerticalStackLayout>
     </ScrollView>
