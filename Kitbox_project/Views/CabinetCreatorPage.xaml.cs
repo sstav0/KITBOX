@@ -10,6 +10,18 @@ namespace Kitbox_project.Views
     {
         private CabinetViewModel _viewModel;
 
+        private Order _order;
+        public Order Order
+        { get => _order; set => _order = value; }
+
+        private Cabinet _cabinet;
+        public Cabinet Cabinet
+        { get => _cabinet; set => _cabinet = value; }
+
+        private int _IDCabinet;
+        public int IDCabinet
+        { get => _IDCabinet; set => _IDCabinet = value; }
+
         public CabinetCreatorPage()
         {
             InitializeComponent();
@@ -87,6 +99,14 @@ namespace Kitbox_project.Views
 
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
+        }
+
+        private void OnEditButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is CabinetViewModel selectedCabinetView)
+            {
+                
+            }
         }
         
         private void OnConfimButtonClicked (object sender, EventArgs e)

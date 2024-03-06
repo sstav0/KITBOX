@@ -13,15 +13,7 @@ namespace Kitbox_project.ViewModels
     internal class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
-        public List<StockItemViewModel> StockData
-        { 
-            get => _stockData;
-            set
-            {
-                _stockData = value;
-                OnPropertyChanged(nameof(StockData));
-            }
-        }
+        private List<StockItemViewModel> _filterStockData;
 
         public StockViewModel()
         {
@@ -34,6 +26,27 @@ namespace Kitbox_project.ViewModels
 
             // Convert StockItem to StockItemViewModel
             StockData = new List<StockItemViewModel>(ConvertToViewModels(stockItems));
+            FilterStockData = StockData;
+        }
+
+        public List<StockItemViewModel> StockData
+        { 
+            get => _stockData;
+            set
+            {
+                _stockData = value;
+                OnPropertyChanged(nameof(StockData));
+            }
+        }
+
+        public List<StockItemViewModel> FilterStockData
+        {
+            get => _filterStockData;
+            set
+            {
+                _filterStockData = value;
+                OnPropertyChanged(nameof(FilterStockData));
+            }
         }
 
         private static IEnumerable<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
@@ -41,26 +54,49 @@ namespace Kitbox_project.ViewModels
             return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity));
         }
 
+        public void ApplyFilter(string searchText)
+        {
+            searchText = searchText.Trim();
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                // If the search text is empty, show all items
+                FilterStockData = StockData;
+            }
+            else
+            {
+                // Filter items based on search text
+                FilterStockData = new List<StockItemViewModel>(StockData.Where(item =>
+                        item.Id.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                        item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                        item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                        item.Quantity.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase)));
+            }
+        }
+
         public void EditUpdateQuantity(StockItemViewModel stockItem)
         {
             // If Update button pressed
             if (stockItem.IsEditing)
             {
-                if (stockItem.TempQuantity < 0)
+                // If the input quantity is a number and non-negative
+                if (stockItem.IsValidQuantity)
                 {
-                    stockItem.TempQuantity = stockItem.Quantity;
-                    // Show error message : Quantity must be a positive number
-                    return;
-                }
-                // Update the quantity in the database using appropriate logic
-                // Example: stockItem.Id is assumed to be a unique identifier for the item in the database
-                // Implement your logic to update the quantity in the database
-                // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
-                stockItem.Quantity = stockItem.TempQuantity;
+                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0');
+                    // Update the quantity in the database using appropriate logic
+                    // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
+                    stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
 
-                stockItem.IsEditing = false;
-                stockItem.ButtonText = "Edit";
-                stockItem.ButtonColor = Color.Parse("#512BD4");
+                    stockItem.IsEditing = false;
+                    stockItem.ButtonText = "Edit";
+                    stockItem.ButtonColor = Color.Parse("#512BD4");
+                }
+                // If the input quantity is not a number or negative, keep the previous quantity
+                else
+                {
+                    stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
+                    stockItem.ButtonText = "Update";
+                    stockItem.ButtonColor = Color.Parse("green");
+                }
             }
             // If Edit button pressed
             else
@@ -84,14 +120,15 @@ namespace Kitbox_project.ViewModels
         private bool _isEditing;
         private string _buttonText;
         private Color _buttonColor;
-        private int _tempQuantity;
+        private string _inputQuantity;
+        private bool _isValidQuantity;
 
         public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
         {
             IsEditing = false;
             ButtonText = "Edit";
             ButtonColor = Color.Parse("#512BD4");
-            TempQuantity = quantity;
+            InputQuantity = quantity.ToString();
         }
         public bool IsEditing
         {
@@ -123,17 +160,30 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public int TempQuantity
+        public string InputQuantity
         {
-            get => _tempQuantity;
+            get => _inputQuantity;
             set
             {
-                if (!IsEditing)
-                {
-                    _tempQuantity = value;
-                    OnPropertyChanged(nameof(TempQuantity));
-                }
+                _inputQuantity = value;
+                OnPropertyChanged(nameof(InputQuantity));
+                ValidateQuantity();
             }
+        }
+
+        public bool IsValidQuantity
+        {
+            get => _isValidQuantity;
+            set
+            {
+                _isValidQuantity = value;
+                OnPropertyChanged(nameof(IsValidQuantity));
+            }
+        }
+
+        public void ValidateQuantity()
+        {
+            IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
         }
     }
 }

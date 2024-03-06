@@ -12,8 +12,8 @@ namespace Kitbox_project.Models
         private List<Cabinet> _cart;
         private int _id;
         public string Status { get => _status; set => _status = value; }
-        private List<Cabinet> Cart { get => _cart; set=> _cart = value; }
-        private int ID { get => _id; set => _id = value; }
+        public List<Cabinet> Cart { get => _cart; set=> _cart = value; }
+        public int ID { get => _id; set => _id = value; }
 
         public Order(string status, List<Cabinet> cart)
         {

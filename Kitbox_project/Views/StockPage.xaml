@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
              x:Class="Kitbox_project.Views.StockPage"
+             BackgroundColor="White"
              Title="StockPage">
 
     <ContentPage.BindingContext>
@@ -13,9 +14,13 @@
         <!-- Title -->
         <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
 
+        <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
+            <SearchBar Placeholder="Search in stock..." TextChanged="OnTextChanged" />
+        </Border>
+
         <!-- ListView to display stock data -->
-        <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" WidthRequest="1000" Padding="20">
-            <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None">
+        <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="950" Padding="20">
+            <ListView ItemsSource="{Binding FilterStockData}" Header="{Binding .}" SelectionMode="None">
                 <ListView.HeaderTemplate>
                     <DataTemplate>
                         <Grid>
@@ -51,8 +56,26 @@
                                 <Label Grid.Column="0" Text="{Binding Id}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Label Grid.Column="1" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Label Grid.Column="2" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Entry Grid.Column="3" Text="{Binding TempQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body"/>
-                                <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                                <Entry Grid.Column="3" Text="{Binding InputQuantity}" IsEnabled="{Binding IsEditing}" VerticalOptions="Center" HeightRequest="30" Margin="10,5" TextColor="Black" FontSize="Body">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="{StaticResource LightRed}" />
+                                            <Setter Property="TextColor" Value="Red" />
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                                <Button Grid.Column="4" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="10,5" Padding="14,5" HeightRequest="35" FontSize="Body">
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="True">
+                                            <Setter Property="BackgroundColor" Value="{Binding ButtonColor}" />
+                                            <Setter Property="Text" Value="{Binding ButtonText}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding IsValidQuantity}" Value="False">
+                                            <Setter Property="BackgroundColor" Value="Red" />
+                                            <Setter Property="Text" Value="Invalid" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                </Button>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

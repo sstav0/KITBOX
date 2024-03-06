@@ -2,6 +2,8 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kitbox_project.Views.ActiveOrdersPage"
+             xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+             BackgroundColor="White"
              Title="ActiveOrdersPage">
 
     <Grid Padding="10" RowSpacing="10">
@@ -29,51 +31,102 @@
                Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
 
             <ScrollView>
-                <ListView x:Name="ListOrders">
-                    <ListView.ItemTemplate>
+                <VerticalStackLayout x:Name="ListOrders">
+                    <BindableLayout.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <Frame BorderColor="Black" BackgroundColor="Gray" CornerRadius="10" Margin="2">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="0.5*"/>
-                                            <ColumnDefinition Width="1.5*"/>
-                                            <ColumnDefinition Width="5*"/>
-                                            <ColumnDefinition Width="0.5*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                            <uranium:ExpanderView>
+                                <uranium:ExpanderView.Header>
 
-                                        <Button x:Name="ExpandButton" Text="\/" Grid.Column="0" 
-                                                BorderColor="Gray" BackgroundColor="Gray"/>
+                                    <Frame BorderColor="Black" BackgroundColor="Gray" Margin="2">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.5*"/>
+                                                <ColumnDefinition Width="1.5*"/>
+                                                <ColumnDefinition Width="5*"/>
+                                                <ColumnDefinition Width="0.5*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Label x:Name="Notifications" Text="" Grid.Column="1" 
-                                               HorizontalTextAlignment="Center"/>
+                                            <Button x:Name="ExpandButton" Text="\/" Grid.Column="0" 
+                                                    BorderColor="Gray" BackgroundColor="Gray"/>
 
-                                        <HorizontalStackLayout Grid.Column="2">
-                                        
-                                            <Label Text="{Binding OrderID}"
+                                            <Label x:Name="Notifications" Text="" Grid.Column="1"
                                                    HorizontalTextAlignment="Center"/>
 
-                                            <Label Text="{Binding OrderStatus}" 
-                                                   HorizontalTextAlignment="Center"/>
+                                            <HorizontalStackLayout Grid.Column="2">
 
-                                        </HorizontalStackLayout>
+                                                <Label Text="{Binding OrderID}"
+                                                       HorizontalTextAlignment="Center"/>
 
-                                        <Button Text="Cancel" BackgroundColor="Red" Grid.Column="3"
-                                                Clicked="CancelClicked"/>
+                                                <Label Text="{Binding OrderStatus}"
+                                                       HorizontalTextAlignment="Center"/>
 
-                                        <Button Text="Ready" BackgroundColor="Green" Grid.Column="3"
-                                                x:Name="ReadyButton" Clicked="ReadyClicked"/>
+                                            </HorizontalStackLayout>
 
-                                    </Grid>
-                                </Frame>
-                            </ViewCell>
+                                            <Button Text="Cancel" BackgroundColor="Red" Grid.Column="3"
+                                                    Clicked="CancelClicked"/>
+
+                                            <Button Text="Ready" BackgroundColor="Green" Grid.Column="3"
+                                                    x:Name="ReadyButton" Clicked="ReadyClicked"/>
+
+                                        </Grid>
+                                    </Frame>
+
+                                </uranium:ExpanderView.Header>
+
+                                <ListView x:Name="ListParts">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="2*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label Grid.Column="0">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Stock: " />
+                                                                <Span Text="{Binding NbrStockPart}" FontAttributes="Bold" />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+
+                                                    <Label Grid.Column="1">
+                                                        <Label.FormattedText>
+                                                            <FormattedString>
+                                                                <Span Text="Quantity: " />
+                                                                <Span Text="{Binding NbrUsedPart}" FontAttributes="Bold" />
+                                                            </FormattedString>
+                                                        </Label.FormattedText>
+                                                    </Label>
+
+                                                    <Label Grid.Column="2" Text="{Binding DetailsPart}"/>
+
+                                                    <Button Text="DISPLAY IN STOCK" BackgroundColor="Blue" TextColor="White"
+                                                            Grid.Column="3" Clicked="DisplayInStockButtonClicked"/>
+
+                                                    <Button Text="Place Order" BackgroundColor="Blue" TextColor="White"
+                                                            Grid.Column="4" Clicked="PlaceOrderButtonClicked"/>
+
+                                                </Grid>
+
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </uranium:ExpanderView>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
             </ScrollView>
 
         </Frame>

@@ -3,8 +3,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:panel="clr-namespace:Kitbox_project.Utilities"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui">
+    BackgroundColor="White">
 
     <Grid>
 
@@ -359,11 +360,8 @@
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Button
-                                        Grid.Row="1"
-                                        Grid.RowSpan="2"
-                                        Grid.Column="1"
-                                        Text="Edit" />
+                                    <Button Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
+                                            Text="Edit" Clicked="OnEditButtonClicked"/>
 
                                 </Grid>
 

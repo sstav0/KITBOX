@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kitbox_project.Views.CartPage"
+             BackgroundColor="White"
              Title="Cart">
 
     <Grid Padding="10">
@@ -38,8 +39,8 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="0.1*"/>
                                         <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.1*"/>
-                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.2*"/>
                                         <ColumnDefinition Width="0.25*"/>
                                         <ColumnDefinition Width="0.25*"/>
                                         <ColumnDefinition Width="0.25*"/>

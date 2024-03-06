@@ -11,6 +11,10 @@ namespace Kitbox_project.ViewModels
 {
     class CartViewModel
     {
+        private Cabinet _cabinet;
+        public Cabinet Cabinet
+        { get => _cabinet; set => _cabinet = value; }
+
         private ObservableCollection<Locker> _lockers;
         public ObservableCollection<Locker> Lockers
         { get => _lockers; set => _lockers = value; }
@@ -45,6 +49,7 @@ namespace Kitbox_project.ViewModels
 
         public CartViewModel(Cabinet cabinet)
         {
+            this._cabinet = cabinet;
             this._lockers = cabinet.GetObservableLockers();
             this._price = cabinet.Price;
             this._depth = cabinet.Depth;

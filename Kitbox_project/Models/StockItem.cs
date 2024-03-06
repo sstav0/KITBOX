@@ -22,10 +22,6 @@ namespace Kitbox_project.Models
     /// <item> <description>To <b>set</b> the quantity of the stock item, use : <c>StockItem.Quantity = int quantity</c>.</description> </item>
     /// </list>
     /// </summary>
-    /// <param name="id"> ID of the stock item.</param>
-    /// <param name="reference"> reference of the stock item.</param>
-    /// <param name="code"> code of the stock item.</param>
-    /// <param name="quantity"> quantity of the stock item.</param>
     public class StockItem : INotifyPropertyChanged
     {
         private int _id;
