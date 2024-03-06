@@ -41,7 +41,7 @@ namespace Kitbox_project.ViewModels
 
         private bool selectColorEnabler = true;
 
-        DatabaseCatalog databaseCatalog = new DatabaseCatalog("customer","customer");
+        DatabaseCatalog databaseCatalog = new DatabaseCatalog();
 
 
         public CabinetViewModel()
