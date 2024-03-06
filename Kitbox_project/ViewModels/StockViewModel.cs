@@ -14,18 +14,21 @@ namespace Kitbox_project.ViewModels
     {
         private List<StockItemViewModel> _stockData;
         private List<StockItemViewModel> _filterStockData;
+        private DatabaseStock DBStock = new DatabaseStock();
 
         public StockViewModel()
         {
-            // Simulating data from the database
-            var stockItems = new List<StockItem>
-            {
-                new StockItem(1, "Item1","123", 10),
-                new StockItem(2, "Item2","456", 20),
-            };
+            var stockItems = DBStock.LoadAll();
+            StockData = new List<StockItemViewModel>(ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems)));
+            //// Simulating data from the database
+            //var stockItems2 = new List<StockItem>
+            //{
+            //    new StockItem(1, "Item1","123", 10),
+            //    new StockItem(2, "Item2","456", 20),
+            //};
 
-            // Convert StockItem to StockItemViewModel
-            StockData = new List<StockItemViewModel>(ConvertToViewModels(stockItems));
+            //// Convert StockItem to StockItemViewModel
+            //StockData = new List<StockItemViewModel>(ConvertToViewModels(stockItems2));
             FilterStockData = StockData;
         }
 
@@ -81,7 +84,7 @@ namespace Kitbox_project.ViewModels
                 // If the input quantity is a number and non-negative
                 if (stockItem.IsValidQuantity)
                 {
-                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0');
+                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0') != "" ? stockItem.InputQuantity.TrimStart('0') : "0";
                     // Update the quantity in the database using appropriate logic
                     // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
                     stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
@@ -112,78 +115,78 @@ namespace Kitbox_project.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-    }
 
-    // ViewModel for stock items
-    public class StockItemViewModel : StockItem
-    {
-        private bool _isEditing;
-        private string _buttonText;
-        private Color _buttonColor;
-        private string _inputQuantity;
-        private bool _isValidQuantity;
+        // ViewModel for stock items
+        public class StockItemViewModel : StockItem
+        {
+            private bool _isEditing;
+            private string _buttonText;
+            private Color _buttonColor;
+            private string _inputQuantity;
+            private bool _isValidQuantity;
 
-        public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
-        {
-            IsEditing = false;
-            ButtonText = "Edit";
-            ButtonColor = Color.Parse("#512BD4");
-            InputQuantity = quantity.ToString();
-        }
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
+            public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
             {
-                _isEditing = value;
-                OnPropertyChanged(nameof(IsEditing));
+                IsEditing = false;
+                ButtonText = "Edit";
+                ButtonColor = Color.Parse("#512BD4");
+                InputQuantity = quantity.ToString();
             }
-        }
-
-        public string ButtonText
-        {
-            get => _buttonText;
-            set
+            public bool IsEditing
             {
-                _buttonText = value;
-                OnPropertyChanged(nameof(ButtonText));
+                get => _isEditing;
+                set
+                {
+                    _isEditing = value;
+                    OnPropertyChanged(nameof(IsEditing));
+                }
             }
-        }
 
-        public Color ButtonColor
-        {
-            get => _buttonColor;
-            set
+            public string ButtonText
             {
-                _buttonColor = value;
-                OnPropertyChanged(nameof(ButtonColor));
+                get => _buttonText;
+                set
+                {
+                    _buttonText = value;
+                    OnPropertyChanged(nameof(ButtonText));
+                }
             }
-        }
 
-        public string InputQuantity
-        {
-            get => _inputQuantity;
-            set
+            public Color ButtonColor
             {
-                _inputQuantity = value;
-                OnPropertyChanged(nameof(InputQuantity));
-                ValidateQuantity();
+                get => _buttonColor;
+                set
+                {
+                    _buttonColor = value;
+                    OnPropertyChanged(nameof(ButtonColor));
+                }
             }
-        }
 
-        public bool IsValidQuantity
-        {
-            get => _isValidQuantity;
-            set
+            public string InputQuantity
             {
-                _isValidQuantity = value;
-                OnPropertyChanged(nameof(IsValidQuantity));
+                get => _inputQuantity;
+                set
+                {
+                    _inputQuantity = value;
+                    OnPropertyChanged(nameof(InputQuantity));
+                    ValidateQuantity();
+                }
             }
-        }
 
-        public void ValidateQuantity()
-        {
-            IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
+            public bool IsValidQuantity
+            {
+                get => _isValidQuantity;
+                set
+                {
+                    _isValidQuantity = value;
+                    OnPropertyChanged(nameof(IsValidQuantity));
+                }
+            }
+
+            public void ValidateQuantity()
+            {
+                IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
+            }
         }
     }
 }
