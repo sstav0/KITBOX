@@ -88,6 +88,9 @@ namespace Kitbox_project.ViewModels
                     // Update the quantity in the database using appropriate logic
                     // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
                     stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
+                    DBStock.Update(
+                        new Dictionary<string, object> { { "Quantity", stockItem.Quantity } },
+                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
 
                     stockItem.IsEditing = false;
                     stockItem.ButtonText = "Edit";
