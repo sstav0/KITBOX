@@ -14,9 +14,13 @@
         <!-- Title -->
         <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
 
+        <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
+            <SearchBar Placeholder="Search in stock..." TextChanged="OnTextChanged" />
+        </Border>
+
         <!-- ListView to display stock data -->
-        <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" StrokeThickness="2" WidthRequest="950" Padding="20">
-            <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None">
+        <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="950" Padding="20">
+            <ListView ItemsSource="{Binding FilterStockData}" Header="{Binding .}" SelectionMode="None">
                 <ListView.HeaderTemplate>
                     <DataTemplate>
                         <Grid>

@@ -18,4 +18,12 @@ public partial class StockPage : ContentPage
         }
     }
 
+    private void OnTextChanged(object sender, EventArgs e)
+    {
+        if (sender is SearchBar searchBar && BindingContext is StockViewModel stockViewModel)
+        {
+            stockViewModel.ApplyFilter(searchBar.Text);
+        }
+    }
+
 }
