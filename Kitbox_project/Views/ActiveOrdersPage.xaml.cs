@@ -15,4 +15,14 @@ public partial class ActiveOrdersPage : ContentPage
 	{
 
 	}
+
+	private void DisplayInStockButtonClicked(object sender, EventArgs e)
+	{
+
+	}
+
+	private void PlaceOrderButtonClicked(object sender, EventArgs e)
+	{
+
+	}
 }
