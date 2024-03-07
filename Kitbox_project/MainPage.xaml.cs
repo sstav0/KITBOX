@@ -1,4 +1,5 @@
 ﻿using Kitbox_project.DataBase;
+using Kitbox_project.Models;
 using MySql.Data.MySqlClient;
 
 namespace Kitbox_project;
@@ -13,8 +14,8 @@ public partial class MainPage : ContentPage
             
             InitializeComponent();
             
-            _dbService2 = new DatabaseCatalog();
-            _dbService = new DatabaseCustomer();
+            _dbService2 = new DatabaseCatalog("storekeeper", "storekeeper");
+            _dbService = new DatabaseCustomer("customer", "customer");
             _dbService3 = new DatabaseLogin();
             //TestDatabaseConnection();
         }
@@ -34,8 +35,9 @@ public partial class MainPage : ContentPage
        
 
         private void OnCounterClicked(object sender, EventArgs e)
-        {              
-            bool test =_dbService3.ValidateUser("storekeepr","storekeeper");
+        {   
+            
+            bool test =_dbService3.ValidateUser("storekeeper","storekeeper");
             Console.WriteLine($"Login Result: {test}");
             count++;
 
@@ -51,9 +53,9 @@ public partial class MainPage : ContentPage
 
 
         
-        private void OnCounterClicked2(object sender, EventArgs e)
+        private async void OnCounterClicked2(object sender, EventArgs e)
         { 
-           List<Dictionary<string, string>> dataList = _dbService2.GetData(new Dictionary<string, string> { { "Reference", "Vertical batten"} });
+           List<Dictionary<string, string>> dataList = await _dbService2.GetData(new Dictionary<string, string> { { "Reference", "Vertical batten"} });
 
             if (dataList != null && dataList.Count > 0)
             {
