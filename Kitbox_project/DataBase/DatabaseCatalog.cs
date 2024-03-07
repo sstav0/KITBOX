@@ -8,16 +8,12 @@ namespace Kitbox_project.DataBase
     public class DatabaseCatalog : Database
 
     {
-<<<<<<< Updated upstream
-        public DatabaseCatalog(string id, string password):base(id, password){
-        tablename = "Catalog";
-    }
-=======
+
         public DatabaseCatalog(string id, string password):base(id, password)
         {
             tablename = "Catalog";
         }
->>>>>>> Stashed changes
+
 
         /// <summary>
         /// This method returns a dictionary of lists of objects, where each key represents a column name and each value is a list of unique values for that column.
