@@ -283,7 +283,11 @@ namespace Kitbox_project.ViewModels
             get => _itemSourceAngleIronColor;
             set
             {
-                _itemSourceAngleIronColor = value;
+                if (_itemSourceAngleIronColor != value)
+                {
+                    _itemSourceAngleIronColor = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -293,7 +297,11 @@ namespace Kitbox_project.ViewModels
             get => _itemSourceDoorPicker;
             set
             {
-                _itemSourceDoorPicker = value;
+                if (_itemSourceDoorPicker != value)
+                {
+                    _itemSourceDoorPicker = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -306,6 +314,7 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerHeight != value)
                 {
                     _itemSourceLockerHeight = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -318,6 +327,7 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerColor != value)
                 {
                     _itemSourceLockerColor = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -330,6 +340,7 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerDepth != value)
                 {
                     _itemSourceLockerDepth = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -343,6 +354,7 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerWidth != value)
                 {
                     _itemSourceLockerWidth = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -472,11 +484,11 @@ namespace Kitbox_project.ViewModels
 
         //Interlink between every parameters
         //Update ItemSourcePicker Lists to make sure they match the possibility of the catalog
-        private void UpdateAvailability()
+        private async void UpdateAvailability()
         {
             Debug.WriteLine("UpdateAvailability Begin");
 
-            Catalog c = new Catalog(new DatabaseCatalog()); 
+            Catalog c = new Catalog(new DatabaseCatalog("storekeeper","storekeeper")); 
             //Catalog is used to manage the high level (with a Dict) access to Database Catalog 
 
             Dictionary<string, object> requestDict = new Dictionary<string, object>()
@@ -495,16 +507,16 @@ namespace Kitbox_project.ViewModels
                                         { "Panel_color", requestDict["Color"] }, { "Height", requestDict["Height"] }, 
                                         { "Door", requestDict["Door"] }, { "Door_color", requestDict["DoorColor"] }, {"Angle_color", requestDict["AngleIronColor"] }}; 
 
-            var data = c.GetValues(selectedValues); // Dictionary<string, List<object>> {{"Width", {32, 42, 52, 62}}, {"Height", {32, 42, 52}},...}
+            var data = await c.GetValues(selectedValues); // Dictionary<string, List<object>> {{"Width", {32, 42, 52, 62}}, {"Height", {32, 42, 52}},...}
 
             data.TryGetValue("Height", out List<object> heightList);
 
-            ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString());
-            ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString());
-            ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString()); 
-            ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString());
-            ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString());
-            ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString());
+            if (SelectedLockerColorItem == null)    { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedDepthItem == null)          { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedHeightItem == null)         { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedWidthItem == null)          { ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedDoorColorItem == null)      { ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedAngleIronColor == null)     { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString()); }
 
             //if door color list empty -> Door checkbox is disabled
             if (ItemSourceDoorPicker.Count < 0)
