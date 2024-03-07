@@ -17,9 +17,10 @@ namespace Kitbox_project.ViewModels
     public class CabinetViewModel : INotifyPropertyChanged 
     {
         public ICommand OnAddLockerButtonClicked { get; }
+        public ICommand OnResetLockerButtonClicked { get; } 
 
-        private static Color color1 = new Color(255, 152, 12);
-        private static Color color2 = new Color(255, 100, 100);
+        //private static Color color1 = new Color(255, 152, 12);
+        //private static Color color2 = new Color(255, 100, 100);
         private static Door door1 = new Door("color1", "wood", 12, 12);
         private static Door door2 = new Door("color2", "wood", 12, 12);
         private static Locker locker1 = new Locker(12, 12, 12, "Lyla", door1, 45.4);
@@ -53,8 +54,6 @@ namespace Kitbox_project.ViewModels
             availableLocker.Add(locker2);
             availableLocker.Add(locker3);
 
-
-
             allDoor = availableDoor;
             allLocker = availableLocker;
 
@@ -62,16 +61,11 @@ namespace Kitbox_project.ViewModels
             Lockers.CollectionChanged += (sender, e) => CalculateTotalPrice();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalSize();
             OnAddLockerButtonClicked = new Command(ExecuteOnAddLockerButtonClicked);
-            
-            IsGlassVisible = false;
-            EnablecheckDoor = true;
-            IsDoorPickerVisible = false;
+            OnResetLockerButtonClicked = new Command(ExecuteOnResetLockerButtonClicked);
 
-            SelectedDepthItem = 0;
-            SelectedDoorColorItem = null;
-            SelectedHeightItem = 0;
-            SelectedWidthItem = 0;
-            SelectedLockerColorItem = null;
+            ResetLocker();
+
+            UpdateAvailability();
         }
 
         private ObservableCollection<LockerViewModel> _lockers;
@@ -116,7 +110,7 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
-
+        //Checkboxes features
         private bool _isDoorChecked;
         public bool IsDoorChecked
         {
@@ -124,8 +118,9 @@ namespace Kitbox_project.ViewModels
             set
             { 
                 _isDoorChecked = value;
-                OnAddDoorClicked();
                 UpdateAvailability();
+                OnAddDoorClicked();
+                OnPropertyChanged();
             }
         }
         private bool _isGlassChecked;
@@ -135,8 +130,9 @@ namespace Kitbox_project.ViewModels
             set
             {
                 _isGlassChecked = value;
-                OnGlassDoorClicked();
                 UpdateAvailability();
+                OnGlassDoorClicked();
+                OnPropertyChanged();
             }
         }
 
@@ -147,6 +143,16 @@ namespace Kitbox_project.ViewModels
             set
             {
                 _enablecheckDoor = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool _isGlassEnabled;
+        public bool IsGlassEnabled
+        {
+            get => _isGlassEnabled;
+            set
+            {
+                _isGlassEnabled = value;
                 OnPropertyChanged();
             }
         }
@@ -183,6 +189,22 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
+        //Selected Item from Picker
+        private string _selectedAngleIronColor;
+        public string SelectedAngleIronColor
+        {
+            get => _selectedAngleIronColor;
+            set
+            {
+                if (_selectedAngleIronColor != value)
+                {
+                    _selectedAngleIronColor = value;
+                    UpdateAvailability();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _selectedLockerColorItem;
         public string SelectedLockerColorItem
         {
@@ -254,6 +276,17 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        //Source Item for picker
+        private List<string> _itemSourceAngleIronColor;
+        public List<string> ItemSourceAngleIronColor
+        {
+            get => _itemSourceAngleIronColor;
+            set
+            {
+                _itemSourceAngleIronColor = value;
+            }
+        }
+
         private List<string> _itemSourceDoorPicker;
         public List<string> ItemSourceDoorPicker
         {
@@ -261,7 +294,6 @@ namespace Kitbox_project.ViewModels
             set
             {
                 _itemSourceDoorPicker = value;
-                OnPropertyChanged();
             }
         }
 
@@ -274,7 +306,6 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerHeight != value)
                 {
                     _itemSourceLockerHeight = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -287,7 +318,6 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceLockerColor != value)
                 {
                     _itemSourceLockerColor = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -300,7 +330,6 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerDepth != value)
                 {
                     _itemSourceLockerDepth = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -314,7 +343,6 @@ namespace Kitbox_project.ViewModels
                 if ( _itemSourceLockerWidth != value)
                 {
                     _itemSourceLockerWidth = value;
-                    OnPropertyChanged();
                 }
             }
         }
@@ -393,6 +421,7 @@ namespace Kitbox_project.ViewModels
             TotalPrice = Lockers.Sum(locker => locker.Price);
         }
 
+        //Setup Visible or Invisible Door selectors when Door Checkbox is checked or unchecked
         private void OnAddDoorClicked()
         {
             if (IsDoorChecked)
@@ -404,11 +433,15 @@ namespace Kitbox_project.ViewModels
             {
                 selectColorEnabler = false;
                 IsGlassVisible = false;
+                IsGlassChecked = false;
+                SelectedDoorColorItem = null;
             }
             ShowColorPicker();
             Debug.WriteLine("OnAddDoorClicked");
         }
 
+        //if Glass checked -> Color picker not visible && unchecked
+        //if Glass not checked -> Color picker is available
         private void OnGlassDoorClicked()
         {
             if (IsGlassChecked)
@@ -422,9 +455,9 @@ namespace Kitbox_project.ViewModels
             }
             ShowColorPicker();
             Debug.WriteLine("OnGlassDoorClicked");
-
         }
 
+        //show or hide door color picker
         private void ShowColorPicker()
         {
             if (selectColorEnabler)
@@ -437,12 +470,17 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        //Interlink between every parameters
+        //Update ItemSourcePicker Lists to make sure they match the possibility of the catalog
         private void UpdateAvailability()
         {
+            Debug.WriteLine("UpdateAvailability Begin");
+
             Dictionary<string, object> requestDict = new Dictionary<string, object>()
             {
-                {"Length", _selectedWidthItem},
+                {"Width", _selectedWidthItem},
                 {"Depth", _selectedDepthItem},
+                {"AngleIronColor", _selectedAngleIronColor },
                 {"Color", _selectedLockerColorItem },
                 {"Height", _selectedHeightItem },
                 {"DoorColor", _selectedDoorColorItem}
@@ -451,37 +489,73 @@ namespace Kitbox_project.ViewModels
             //List<Dictionary<string, object>> data = databaseCatalog.GetData(requestDict);
 
             List<Dictionary<string, object>> data = new List<Dictionary<string, object>>
-            {new Dictionary<string, object>{ { "Color", "Brown" },{ "Depth", 12}, { "Length", 15}, { "Height", 28}, { "DoorColor", "Green"} } };
-
+            {new Dictionary<string, object>{ { "Color", "Brown" },{ "Depth", 12}, { "Width", 15}, { "Height", 28}, { "DoorColor", "Green"}, { "AngleIronColor", "RED" } },
+             new Dictionary<string, object>{ { "Color", "GREY" }, { "Depth", 32 }, { "Width", 32 }, { "Height", 32 }, { "DoorColor", "Glass" },{"AngleIronColor", "BLUE" } } };
+ 
             ItemSourceLockerColor = data.Select(d => d["Color"].ToString()).ToList();
             ItemSourceLockerDepth = data.Select(d => d["Depth"].ToString()).ToList();
-            ItemSourceLockerHeight= data.Select(d => d["Height"].ToString()).ToList();
-            ItemSourceLockerWidth = data.Select(d => d["Length"].ToString()).ToList();
+            ItemSourceLockerHeight = data.Select(d => d["Height"].ToString()).ToList();
+            ItemSourceLockerWidth = data.Select(d => d["Width"].ToString()).ToList();
             ItemSourceDoorPicker = data.Select(d => d["DoorColor"].ToString()).ToList();
-            
+            ItemSourceAngleIronColor = data.Select(d => d["AngleIronColor"].ToString()).ToList();
+
+            //if door color list empty -> Door checkbox is disabled
             if (ItemSourceDoorPicker.Count < 0)
             {
                 EnablecheckDoor = false;
                 Debug.WriteLine("availableDoor.Count < 0");
             }
+            //else -> Remove "Glass" color from the list
+            //setup glass checkboc accordingly
             else
             {
+                EnablecheckDoor = true;
                 if (ItemSourceDoorPicker.Contains("Glass"))
                 {
+                    IsGlassEnabled = true;
                     while (ItemSourceDoorPicker.Contains("Glass"))
                     {
                         ItemSourceDoorPicker.Remove("Glass");
                     }
                 }
-                EnablecheckDoor = true;
-                //IsGlassVisible = true;
+                else
+                {
+                    IsGlassEnabled = false;
+                }
+                Debug.WriteLine("availableDoor.Count > 0");
             }
-            Debug.WriteLine("UpdateAvailability !!");
+            Debug.WriteLine("UpdateAvailability End");
         }
 
+        //Reset all the checkboxes and pickers
+        private void ResetLocker()
+        {
+            Debug.WriteLine("ResetLocker");
+            IsGlassVisible = false;
+            IsGlassChecked = false;
+            IsGlassEnabled = true;
 
+            EnablecheckDoor = true;
+            IsDoorChecked = false;
+            IsDoorPickerVisible = false;
+
+            SelectedDepthItem = 0;
+            SelectedAngleIronColor = null;
+            SelectedDoorColorItem = null;
+            SelectedHeightItem = 0;
+            SelectedWidthItem = 0;
+            SelectedLockerColorItem = null;
+        }
+        private void ExecuteOnResetLockerButtonClicked()
+        {
+            Debug.WriteLine("ExecuteOnResetLockerButtonClicked");
+            ResetLocker();
+        }
+
+        //Not Used, keep till not substitued
         private void ExecuteOnAddLockerButtonClicked()
         {
+            Debug.WriteLine("ExecuteOnAddLockerButtonClicked");
             Door newDoor = null;
 
             if (_selectedWidthItem != 0 && _selectedDepthItem != 0 && _selectedLockerColorItem != null && _selectedHeightItem != 0)

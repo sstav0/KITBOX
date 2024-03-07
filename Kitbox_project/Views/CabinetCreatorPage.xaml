@@ -47,6 +47,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!--  All the text inside the Cabinet Size  -->
@@ -67,10 +68,14 @@
                     Grid.Column="1"
                     HorizontalOptions="Center"
                     Text="Cabinet Depth" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    Text="Angle Iron Color" />
 
                 <!--  All the Pickers inside the Cabinet Size  -->
-                <!--  SelectedIndexChanged="UpdateAvailability"  -->
-                <!--  SelectedIndexChanged="{Binding UpdateAvailability}"  -->
+
                 <Picker
                     x:Name="CabinetWidth"
                     Grid.Row="2"
@@ -90,6 +95,16 @@
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemSourceLockerDepth}"
                     SelectedItem="{Binding SelectedDepthItem}" />
+
+                <Picker
+                    x:Name="AngleIronColor"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding ItemSourceAngleIronColor}"
+                    SelectedItem="{Binding SelectedAngleIronColor}" />
             </Grid>
         </Frame>
 
@@ -214,6 +229,7 @@
                             Grid.Column="0"
                             HorizontalOptions="Start"
                             IsChecked="{Binding IsGlassChecked}"
+                            IsEnabled="{Binding IsGlassEnabled}"
                             IsVisible="{Binding IsGlassVisible}"
                             VerticalOptions="Center"
                             Color="#0066FF" />
@@ -229,12 +245,14 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             HorizontalOptions="Start"
+                            IsVisible="{Binding IsGlassVisible}"
                             Text="Glass"
                             VerticalOptions="Center" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             HorizontalOptions="Center"
+                            IsVisible="{Binding IsDoorPickerVisible}"
                             Text="Door Color"
                             VerticalOptions="Center" />
 
@@ -283,49 +301,52 @@
                             <uranium:ExpanderView>
                                 <uranium:ExpanderView.Header>
                                     <Frame>
-                                        <Label Margin="5" Text="{Binding LockerID}" />
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Margin="5" Text="{Binding LockerID}" />
+                                            <Label Margin="5" Text="{Binding NotePartsAvailability}" />
+                                        </StackLayout>
                                     </Frame>
 
                                 </uranium:ExpanderView.Header>
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
 
                                     </Grid.RowDefinitions>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
 
                                     </Grid.ColumnDefinitions>
 
 
-                                    <Label Grid.Column="0" Grid.Row="0">
+                                    <Label Grid.Row="0" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Height: " />
-                                                <Span Text="{Binding Height}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Height}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label Grid.Column="0" Grid.Row="1">
+                                    <Label Grid.Row="1" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Door Color: " />
-                                                <Span Text="{Binding Door.Color}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Door.Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label Grid.Column="0" Grid.Row="2">
+                                    <Label Grid.Row="2" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Door Material: " />
-                                                <Span Text="{Binding Door.Material}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Door.Material}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -334,7 +355,7 @@
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Panel Color: " />
-                                                <Span Text="{Binding Color}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -343,7 +364,7 @@
                                             Text="Edit" Clicked="OnEditButtonClicked"/>
 
                                 </Grid>
-                                
+
 
                             </uranium:ExpanderView>
                         </DataTemplate>
@@ -360,14 +381,15 @@
             Grid.Row="3"
             Grid.Column="0"
             BackgroundColor="Red"
+            Command="{Binding OnResetLockerButtonClicked}"
             FontSize="20"
             Text="Reset" />
         <Button
             Grid.Row="3"
             Grid.Column="6"
             BackgroundColor="Green"
-            FontSize="20"
             Clicked="OnConfimButtonClicked"
+            FontSize="20"
             Text="Confirm" />
 
     </Grid>
