@@ -219,8 +219,8 @@ namespace Kitbox_project.ViewModels
                 }
             }
         }
-        private int _selectedHeightItem;
-        public int SelectedHeightItem
+        private string _selectedHeightItem;
+        public string SelectedHeightItem
         {
             get => _selectedHeightItem;
             set
@@ -247,8 +247,8 @@ namespace Kitbox_project.ViewModels
                 }
             }
         }
-        private int _selectedDepthItem;
-        public int SelectedDepthItem
+        private string _selectedDepthItem;
+        public string SelectedDepthItem
         {
             get => _selectedDepthItem;
             set
@@ -261,8 +261,8 @@ namespace Kitbox_project.ViewModels
                 }
             }
         }
-        private int _selectedWidthItem;
-        public int SelectedWidthItem
+        private string _selectedWidthItem;
+        public string SelectedWidthItem
         {
             get => _selectedWidthItem;
             set
@@ -476,28 +476,35 @@ namespace Kitbox_project.ViewModels
         {
             Debug.WriteLine("UpdateAvailability Begin");
 
+            Catalog c = new Catalog(new DatabaseCatalog()); 
+            //Catalog is used to manage the high level (with a Dict) access to Database Catalog 
+
             Dictionary<string, object> requestDict = new Dictionary<string, object>()
             {
                 {"Width", _selectedWidthItem},
                 {"Depth", _selectedDepthItem},
                 {"AngleIronColor", _selectedAngleIronColor },
                 {"Color", _selectedLockerColorItem },
-                {"Height", _selectedHeightItem },
+                {"Height", _selectedHeightItem},
+                {"Door", _isDoorChecked },
                 {"DoorColor", _selectedDoorColorItem}
             };
 
-            //List<Dictionary<string, object>> data = databaseCatalog.GetData(requestDict);
+            var selectedValues = new Dictionary<string, object> { 
+                                        { "Width", requestDict["Width"] }, { "Depth", requestDict["Depth"] }, 
+                                        { "Panel_color", requestDict["Color"] }, { "Height", requestDict["Height"] }, 
+                                        { "Door", requestDict["Door"] }, { "Door_color", requestDict["DoorColor"] }, {"Angle_color", requestDict["AngleIronColor"] }}; 
 
-            List<Dictionary<string, object>> data = new List<Dictionary<string, object>>
-            {new Dictionary<string, object>{ { "Color", "Brown" },{ "Depth", 12}, { "Width", 15}, { "Height", 28}, { "DoorColor", "Green"}, { "AngleIronColor", "RED" } },
-             new Dictionary<string, object>{ { "Color", "GREY" }, { "Depth", 32 }, { "Width", 32 }, { "Height", 32 }, { "DoorColor", "Glass" },{"AngleIronColor", "BLUE" } } };
- 
-            ItemSourceLockerColor = data.Select(d => d["Color"].ToString()).ToList();
-            ItemSourceLockerDepth = data.Select(d => d["Depth"].ToString()).ToList();
-            ItemSourceLockerHeight = data.Select(d => d["Height"].ToString()).ToList();
-            ItemSourceLockerWidth = data.Select(d => d["Width"].ToString()).ToList();
-            ItemSourceDoorPicker = data.Select(d => d["DoorColor"].ToString()).ToList();
-            ItemSourceAngleIronColor = data.Select(d => d["AngleIronColor"].ToString()).ToList();
+            var data = c.GetValues(selectedValues); // Dictionary<string, List<object>> {{"Width", {32, 42, 52, 62}}, {"Height", {32, 42, 52}},...}
+
+            data.TryGetValue("Height", out List<object> heightList);
+
+            ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString());
+            ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString());
+            ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString()); 
+            ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString());
+            ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString());
+            ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString());
 
             //if door color list empty -> Door checkbox is disabled
             if (ItemSourceDoorPicker.Count < 0)
@@ -539,11 +546,11 @@ namespace Kitbox_project.ViewModels
             IsDoorChecked = false;
             IsDoorPickerVisible = false;
 
-            SelectedDepthItem = 0;
+            SelectedDepthItem = null;
             SelectedAngleIronColor = null;
             SelectedDoorColorItem = null;
-            SelectedHeightItem = 0;
-            SelectedWidthItem = 0;
+            SelectedHeightItem = null;
+            SelectedWidthItem = null;
             SelectedLockerColorItem = null;
         }
         private void ExecuteOnResetLockerButtonClicked()
@@ -557,7 +564,7 @@ namespace Kitbox_project.ViewModels
         {
             Debug.WriteLine("ExecuteOnAddLockerButtonClicked");
             Door newDoor = null;
-
+            /*
             if (_selectedWidthItem != 0 && _selectedDepthItem != 0 && _selectedLockerColorItem != null && _selectedHeightItem != 0)
             {
                 if (_isDoorChecked)
@@ -576,7 +583,7 @@ namespace Kitbox_project.ViewModels
                     }
                 }
                 Locker newLocker = new Locker(_selectedHeightItem, _selectedDepthItem, _selectedWidthItem, _selectedLockerColorItem, newDoor, _price);
-            }
+            }*/
         }
     }
 }

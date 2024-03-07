@@ -87,7 +87,7 @@ namespace Kitbox_project.Views
             // Create a new LockerViewModel based on the selected parameters
             LockerViewModel newLocker = new LockerViewModel
             {
-                Height = _viewModel.SelectedHeightItem,
+                Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem
             };
 
