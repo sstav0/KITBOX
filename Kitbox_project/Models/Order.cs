@@ -10,10 +10,10 @@ namespace Kitbox_project.Models
     {
         private string _status;
         private List<Cabinet> _cart;
-        private int _id;
+        private int _orderID;
         public string Status { get => _status; set => _status = value; }
         public List<Cabinet> Cart { get => _cart; set=> _cart = value; }
-        public int ID { get => _id; set => _id = value; }
+        public int OrderID { get => _orderID; set => _orderID = value; }
 
         public Order(string status, List<Cabinet> cart)
         {
