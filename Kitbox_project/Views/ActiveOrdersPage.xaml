@@ -6,7 +6,7 @@
              BackgroundColor="White"
              Title="ActiveOrdersPage">
 
-    <Grid Padding="10" RowSpacing="10">
+    <Grid Padding="5" RowSpacing="10">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -24,26 +24,21 @@
                HorizontalOptions="Start" VerticalOptions="Center"
                Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"/>
 
-        <Entry x:Name="OrderIDFilter" Placeholder="Older ID Filter" FontSize="Medium"
+        <Entry x:Name="OrderIDFilter" Placeholder="Order ID Filter" FontSize="Medium"
                Grid.Row="1" Grid.Column="0"/>
 
         <ScrollView Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
-
-            <!--<ListView x:Name="ListViewOrders">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>-->
 
             <ListView x:Name="ListViewOrders">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                        <uranium:ExpanderView>
+                            <uranium:ExpanderView>
 
-                            <uranium:ExpanderView.Header>
+                                <uranium:ExpanderView.Header>
 
-                                <Frame BorderColor="Black" BackgroundColor="LightGrey" Margin="2">
-                                    <Grid>
+                                    <Frame BorderColor="Black" CornerRadius="0" BackgroundColor="LightGrey">
+                                        <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="2*"/>
                                                 <ColumnDefinition Width="2*"/>
@@ -51,108 +46,42 @@
                                                 <ColumnDefinition Width="0.5*"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                            </Grid.ColumnDefinitions>
 
                                             <Label x:Name="Notifications" Text="{Binding Notification}" Grid.Column="0"
                                                    HorizontalTextAlignment="Center" TextColor="DarkOrange" FontSize="Medium" FontAttributes="Bold"/>
 
-                                        <Label Grid.Column="1" HorizontalTextAlignment="Center">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Order ID: " FontSize="Body" />
-                                                    <Span Text="{Binding OrderID}" FontAttributes="Bold" FontSize="Medium" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
+                                            <Label Grid.Column="1" HorizontalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Order ID: " FontSize="Body" />
+                                                        <Span Text="{Binding OrderID}" FontAttributes="Bold" FontSize="Medium" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
 
-                                        <Label Grid.Column="2" HorizontalTextAlignment="Center">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="Order Status: " FontSize="Body" />
-                                                    <Span Text="{Binding OrderStatus}" FontAttributes="Bold" FontSize="Medium" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
+                                            <Label Grid.Column="2" HorizontalTextAlignment="Center">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Order Status: " FontSize="Body" />
+                                                        <Span Text="{Binding OrderStatus}" FontAttributes="Bold" FontSize="Medium" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
 
-                                        <Button Text="Cancel" BackgroundColor="Red" Grid.Column="4"
-                                                    Clicked="CancelClicked"/>
+                                            <Button Text="Cancel" BackgroundColor="Red" Grid.Column="4"
+                                                    Clicked="CancelClicked" Margin="5,0,5,0" MaximumHeightRequest="20"/>
 
-                                        <Button Text="Ready" BackgroundColor="Green" Grid.Column="5"
-                                                    x:Name="ReadyButton" Clicked="ReadyClicked"/>
+                                            <Button Text="Ready" BackgroundColor="Green" Grid.Column="5"
+                                                    Clicked="ReadyClicked" Margin="5,0,5,0" MaximumHeightRequest="20"/>
 
-                                    </Grid>
-                                </Frame>
+                                        </Grid>
+                                    </Frame>
 
-                            </uranium:ExpanderView.Header>
+                                </uranium:ExpanderView.Header>
 
-                            <ListView ItemsSource="{Binding .}"> <!--ItemsSource="{Binding ListParts}"-->
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ViewCell>
-
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="2*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                    <ColumnDefinition Width="*"/>
-                                                </Grid.ColumnDefinitions>
-
-                                                <Label Grid.Column="0">
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span Text="Stock: " />
-                                                            <Span Text="{Binding .}" FontAttributes="Bold" /> <!--Text="{Binding NbrStockPart}"-->
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
-
-                                                <Label Grid.Column="1">
-                                                    <Label.FormattedText>
-                                                        <FormattedString>
-                                                            <Span Text="Quantity: " />
-                                                            <Span Text="{Binding .}" FontAttributes="Bold" /> <!--Text="{Binding NbrUsedPart}"-->
-                                                        </FormattedString>
-                                                    </Label.FormattedText>
-                                                </Label>
-
-                                                <Label Grid.Column="2" Text="{Binding .}"/> <!--Text="{Binding DetailsPart}"-->
-
-                                                <Button Text="DISPLAY IN STOCK" BackgroundColor="Blue" TextColor="White"
-                                                        Grid.Column="3" Clicked="DisplayInStockButtonClicked"/>
-
-                                                <Button Text="Place Order" BackgroundColor="Blue" TextColor="White"
-                                                        Grid.Column="4" Clicked="PlaceOrderButtonClicked"/>
-
-                                            </Grid>
-
-                                        </ViewCell>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-
-                        </uranium:ExpanderView>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </ScrollView>
-
-    </Grid>
-
-</ContentPage>
-
-
-<!--<VerticalStackLayout BindableLayout.ItemsSource="{Binding ListOrders}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate>
-                            <uranium:ExpanderView>
-                                <uranium:ExpanderView.Header>-->
-
-<!--</uranium:ExpanderView.Header>
-
-                                <ListView ItemsSource="{Binding ListParts}">
+                                <ListView ItemsSource="{Binding .}">
+                                    <!--ItemsSource="{Binding ListParts}"-->
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
@@ -170,7 +99,8 @@
                                                         <Label.FormattedText>
                                                             <FormattedString>
                                                                 <Span Text="Stock: " />
-                                                                <Span Text="{Binding NbrStockPart}" FontAttributes="Bold" />
+                                                                <Span Text="{Binding .}" FontAttributes="Bold" />
+                                                                <!--Text="{Binding NbrStockPart}"-->
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>
@@ -179,22 +109,35 @@
                                                         <Label.FormattedText>
                                                             <FormattedString>
                                                                 <Span Text="Quantity: " />
-                                                                <Span Text="{Binding NbrUsedPart}" FontAttributes="Bold" />
+                                                                <Span Text="{Binding .}" FontAttributes="Bold" />
+                                                                <!--Text="{Binding NbrUsedPart}"-->
                                                             </FormattedString>
                                                         </Label.FormattedText>
                                                     </Label>
 
-                                                    <Label Grid.Column="2" Text="{Binding DetailsPart}"/>
+                                                    <Label Grid.Column="2" Text="{Binding .}"/>
+                                                    <!--Text="{Binding DetailsPart}"-->
 
                                                     <Button Text="DISPLAY IN STOCK" BackgroundColor="Blue" TextColor="White"
-                                                            Grid.Column="3" Clicked="DisplayInStockButtonClicked"/>
+                                                        Grid.Column="3" Clicked="DisplayInStockButtonClicked"/>
 
                                                     <Button Text="Place Order" BackgroundColor="Blue" TextColor="White"
-                                                            Grid.Column="4" Clicked="PlaceOrderButtonClicked"/>
+                                                        Grid.Column="4" Clicked="PlaceOrderButtonClicked"/>
 
-                                                </Grid>-->
+                                                </Grid>
 
-<!--</uranium:ExpanderView>
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>-->
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                            </uranium:ExpanderView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>
