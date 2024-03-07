@@ -13,23 +13,17 @@ namespace Kitbox_project.ViewModels
     internal class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
-        private List<StockItemViewModel> _filterStockData;
         private DatabaseStock DBStock = new DatabaseStock();
 
         public StockViewModel()
         {
-            var stockItems = DBStock.LoadAll();
-            StockData = new List<StockItemViewModel>(ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems)));
-            //// Simulating data from the database
-            //var stockItems2 = new List<StockItem>
-            //{
-            //    new StockItem(1, "Item1","123", 10),
-            //    new StockItem(2, "Item2","456", 20),
-            //};
+            LoadDataAsync();
+        }
 
-            //// Convert StockItem to StockItemViewModel
-            //StockData = new List<StockItemViewModel>(ConvertToViewModels(stockItems2));
-            FilterStockData = StockData;
+        public async void LoadDataAsync()
+        {
+            var stockItems = await DBStock.LoadAll();
+            StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
         }
 
         public List<StockItemViewModel> StockData
@@ -42,41 +36,20 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public List<StockItemViewModel> FilterStockData
-        {
-            get => _filterStockData;
-            set
-            {
-                _filterStockData = value;
-                OnPropertyChanged(nameof(FilterStockData));
-            }
-        }
-
-        private static IEnumerable<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
-        {
-            return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity));
-        }
-
         public void ApplyFilter(string searchText)
         {
             searchText = searchText.Trim();
-            if (string.IsNullOrWhiteSpace(searchText))
-            {
-                // If the search text is empty, show all items
-                FilterStockData = StockData;
-            }
-            else
+            foreach (var item in StockData)
             {
                 // Filter items based on search text
-                FilterStockData = new List<StockItemViewModel>(StockData.Where(item =>
-                        item.Id.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        item.Quantity.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase)));
+                item.StockItemVisibility = 
+                    string.IsNullOrWhiteSpace(searchText) || 
+                    item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                    item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
             }
         }
 
-        public void EditUpdateQuantity(StockItemViewModel stockItem)
+        public async Task EditUpdateQuantity(StockItemViewModel stockItem)
         {
             // If Update button pressed
             if (stockItem.IsEditing)
@@ -85,10 +58,9 @@ namespace Kitbox_project.ViewModels
                 if (stockItem.IsValidQuantity)
                 {
                     stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0') != "" ? stockItem.InputQuantity.TrimStart('0') : "0";
-                    // Update the quantity in the database using appropriate logic
-                    // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
+
                     stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
-                    DBStock.Update(
+                    await DBStock.Update(
                         new Dictionary<string, object> { { "Quantity", stockItem.Quantity } },
                         new Dictionary<string, object> { { "idStock", stockItem.Id } });
 
@@ -127,6 +99,7 @@ namespace Kitbox_project.ViewModels
             private Color _buttonColor;
             private string _inputQuantity;
             private bool _isValidQuantity;
+            private bool _stockItemVisibility;
 
             public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
             {
@@ -134,6 +107,7 @@ namespace Kitbox_project.ViewModels
                 ButtonText = "Edit";
                 ButtonColor = Color.Parse("#512BD4");
                 InputQuantity = quantity.ToString();
+                StockItemVisibility = true;
             }
             public bool IsEditing
             {
@@ -184,6 +158,22 @@ namespace Kitbox_project.ViewModels
                     _isValidQuantity = value;
                     OnPropertyChanged(nameof(IsValidQuantity));
                 }
+            }
+
+            public bool StockItemVisibility
+            {
+                get => _stockItemVisibility;
+                set
+                {
+                    _stockItemVisibility = value;
+                    OnPropertyChanged(nameof(StockItemVisibility));
+                }
+            }
+
+            public static List<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
+            {
+                // Return the list of stock items as a list of stock item view models
+                return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity)).ToList();
             }
 
             public void ValidateQuantity()

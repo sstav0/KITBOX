@@ -16,12 +16,12 @@
             <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
 
             <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
-                <SearchBar Placeholder="Search in stock..." TextChanged="OnTextChanged" />
+                <SearchBar Placeholder="Search by reference or code..." TextChanged="OnTextChanged" />
             </Border>
 
             <!-- ListView to display stock data -->
             <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="950" Padding="20">
-                <CollectionView ItemsSource="{Binding FilterStockData}" SelectionMode="Single">
+                <CollectionView ItemsSource="{Binding StockData}" SelectionMode="Single">
                     <CollectionView.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -42,7 +42,7 @@
             
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid IsVisible="{Binding StockItemVisibility}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="3*" />
