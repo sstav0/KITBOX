@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,54 +12,73 @@ namespace Kitbox_project.Models
     /// <summary>
     /// Creates a stock item with specified name, code, quantity, and dimensions.
     /// <list type="bullet">
-    /// <item> <description>To <b>get</b> the name of the stock item use : <c>StockItem.Name</c> </description> </item>
+    /// <item> <description>To <b>get</b> the ID of the stock item use : <c>StockItem.Id</c> </description> </item>
+    /// <item> <description>To <b>get</b> the reference of the stock item use : <c>StockItem.Reference</c> </description> </item>
     /// <item> <description>To <b>get</b> the code of the stock item use : <c>StockItem.Code</c> </description> </item>
     /// <item> <description>To <b>get</b> the quantity of the stock item use : <c>StockItem.Quantity</c> </description> </item>
-    /// <item> <description>To <b>get</b> the dimensions of the stock item use : <c>StockItem.Dimensions</c> </description> </item>
-    /// <item> <description>To <b>set</b> the name of the stock item, use : <c>StockItem.Name = string name</c>.</description> </item>
+    /// <item> <description>To <b>set</b> the ID of the stock item, use : <c>StockItem.Id = int id</c>.</description> </item>
+    /// <item> <description>To <b>set</b> the reference of the stock item, use : <c>StockItem.Reference = string reference</c>.</description> </item>
     /// <item> <description>To <b>set</b> the code of the stock item, use : <c>StockItem.Code = string code</c>.</description> </item>
     /// <item> <description>To <b>set</b> the quantity of the stock item, use : <c>StockItem.Quantity = int quantity</c>.</description> </item>
-    /// <item> <description>To <b>set</b> the dimensions of the stock item, use : <c>StockItem.Dimensions = string dimensions</c>.</description> </item>
     /// </list>
     /// </summary>
-    /// <param name="name"> name of the stock item.</param>
-    /// <param name="code"> code of the stock item.</param>
-    /// <param name="quantity"> quantity of the stock item.</param>
-    /// <param name="dimensions"> dimensions of the stock item.</param>
-    public class StockItem
+    public class StockItem : INotifyPropertyChanged
     {
-        private string _name;
+        private int _id;
+        private string _reference;
         private string _code;
         private int _quantity;
-        private string _dimensions;
 
-        public StockItem(string name, string code, int quantity, string dimensions)
+        public StockItem(int id, string reference, string code, int quantity)
         {
-            this._name = name;
-            this._code = code;
-            this._quantity = quantity;
-            this._dimensions = dimensions;
+            _id = id;
+            _reference = reference;
+            _code = code;
+            _quantity = quantity;
         }
 
-        public string Name
+        public int Id
         {
-            get => _name;
-            set => _name = value;
+            get => _id;
+            set
+            {
+                _id = value;
+                OnPropertyChanged(nameof(Id));
+            }
         }
+        public string Reference
+        {
+            get => _reference;
+            set
+            {
+                _reference = value;
+                OnPropertyChanged(nameof(Reference));
+            }
+        }
+
         public string Code
         {
             get => _code;
-            set => _code = value;
+            set
+            {
+                _code = value;
+                OnPropertyChanged(nameof(Code));
+            }
         }
         public int Quantity
         {
             get => _quantity;
-            set => _quantity = value;
+            set
+            {
+                _quantity = value;
+                OnPropertyChanged(nameof(Quantity));
+            }
         }
-        public string Dimensions
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
-            get => _dimensions;
-            set => _dimensions = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

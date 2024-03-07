@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Kitbox_project.Views.LoginPage"
+             BackgroundColor="White"
              Title="Login Page">
     
     <Grid Padding="10">
@@ -45,8 +46,20 @@
                        FontAttributes="Bold" FontSize="Large"
                        Grid.ColumnSpan="4" Grid.Column="0" Grid.Row="0"/>
 
-                <Entry x:Name="Password" BackgroundColor="White"
-                       Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2"/>
+                <Grid Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="2">
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Entry x:Name="Password" BackgroundColor="White" IsPassword="True"  
+                           Grid.Column="0"/>
+
+                    <ImageButton Source="eye_password.svg"
+                           Grid.Column="1" Clicked="TogglePasswordObscurationClicked"/>
+
+                </Grid>
 
                 <Button Text="Confirm" x:Name="PasswordValidated" BackgroundColor="#0066FF"
                         Grid.Column="3" Grid.Row="2"/>

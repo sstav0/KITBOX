@@ -10,6 +10,18 @@ namespace Kitbox_project.Views
     {
         private CabinetViewModel _viewModel;
 
+        private Order _order;
+        public Order Order
+        { get => _order; set => _order = value; }
+
+        private Cabinet _cabinet;
+        public Cabinet Cabinet
+        { get => _cabinet; set => _cabinet = value; }
+
+        private int _IDCabinet;
+        public int IDCabinet
+        { get => _IDCabinet; set => _IDCabinet = value; }
+
         public CabinetCreatorPage()
         {
             InitializeComponent();
@@ -53,9 +65,9 @@ namespace Kitbox_project.Views
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1},
-                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2 },
-                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3 },
+                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1, NotePartsAvailability="All Right"},
+                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2, NotePartsAvailability = "Everything All Right" },
+                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3, NotePartsAvailability = "NOK" },
                 
 
             };
@@ -84,14 +96,24 @@ namespace Kitbox_project.Views
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
         }
 
+
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
         }
 
-        private void OnConfimButtonClicked(object sender, EventArgs e)
+        private void OnEditButtonClicked(object sender, EventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is CabinetViewModel selectedCabinetView)
+            {
+                
+            }
+        }
+        
+        private void OnConfimButtonClicked (object sender, EventArgs e)
         {
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
+        
     }
 }

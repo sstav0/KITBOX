@@ -14,8 +14,8 @@ public partial class MainPage : ContentPage
             
             InitializeComponent();
             
-            _dbService2 = new DatabaseCatalog("storekeeper", "storekeeper");
-            _dbService = new DatabaseCustomer("customer", "customer");
+            _dbService2 = new DatabaseCatalog();
+            _dbService = new DatabaseCustomer();
             _dbService3 = new DatabaseLogin();
             //TestDatabaseConnection();
         }
@@ -55,7 +55,7 @@ public partial class MainPage : ContentPage
         
         private void OnCounterClicked2(object sender, EventArgs e)
         { 
-           List<Dictionary<string, object>> dataList = _dbService2.GetByReference("Vertical batten");
+           List<Dictionary<string, string>> dataList = _dbService2.GetData(new Dictionary<string, string> { { "Reference", "Vertical batten"} });
 
             if (dataList != null && dataList.Count > 0)
             {

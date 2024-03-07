@@ -11,36 +11,71 @@ namespace Kitbox_project.ViewModels
 {
     class CartViewModel
     {
-        private ObservableCollection<CabinetViewModelV2> cart { get; set; }
+        private Cabinet _cabinet;
+        public Cabinet Cabinet
+        { get => _cabinet; set => _cabinet = value; }
 
-        public CartViewModel() 
+        private ObservableCollection<Locker> _lockers;
+        public ObservableCollection<Locker> Lockers
+        { get => _lockers; set => _lockers = value; }
+
+        private double _price;
+        public double Price
+        { get => _price; set => _price = value; }
+        
+        private int _depth;
+        public int Depth
+        { get => _depth; set => _depth = value; }
+
+        private int _length;
+        public int Length
+        { get => _length; set => _length = value; }
+        
+        private int _quantity;
+        public int Quantity
+        { get => _quantity; set => _quantity = value; }
+        
+        private int _nbrLockers;
+        public int NbrLockers
+        { get => _nbrLockers; set => _nbrLockers = value; }
+
+        private int _height;
+        public int Height
+        { get => _height; set => _height = value; }
+
+        private int _CabinetID;
+        public int CabinetID
+        { get => _CabinetID; set => _CabinetID = value; }
+
+        public CartViewModel(Cabinet cabinet)
         {
-            this.cart = new ObservableCollection<CabinetViewModelV2>();
+            this._cabinet = cabinet;
+            this._lockers = cabinet.GetObservableLockers();
+            this._price = cabinet.Price;
+            this._depth = cabinet.Depth;
+            this._length = cabinet.Length;
+            this._quantity = cabinet.Quantity;
+            this._nbrLockers = cabinet.GetLockerCount();
+            this._height = cabinet.Height;
         }
 
-        public void AddToBasket(CabinetViewModelV2 cabinet)
+        public void AddLocker(Locker locker)
         {
-            this.cart.Add(cabinet);
+            this._lockers.Add(locker);
         }
 
-        public ObservableCollection<string> GetBasket()
+        public string GetCabinetViewModelStringV2()
         {
-            ObservableCollection<string> i = new ObservableCollection<string>();
-            foreach (var item in this.cart)
+            string i = string.Empty;
+            foreach (Locker locker in this._lockers)
             {
-                i.Add(item.ToString());
+                i += $"{locker.ToString()}, ";
             }
+            i += $"{this._price}, ";
+            i += $"{this._depth}, ";
+            i += $"{this._length}, ";
+            i += $"{this._quantity}";
             return i;
-        }
-
-        public string GetTotalPrice()
-        {
-            double i = 0;
-            foreach(var item in this.cart)
-            {
-                i += Convert.ToDouble(item.GetPrice());
-            }
-            return i.ToString();
         }
     }
 }
