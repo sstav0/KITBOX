@@ -49,7 +49,7 @@ namespace Kitbox_project.Models
         /// <param name="param">The dictionary containing the values selected by the client. Example : <code>{ { "Width", 52 }, { "Depth", null }, { "Panel_color", "Brown" }, { "Height", 52 }, { "Door", true }, {"Door_color", "Glass"} }</code> </param>
         /// <param name="columns">The columns that will be selected. Example : <code>{ "Width", "Height"}</code>By default, these columns will be selected : <code>{ "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color" }</code></param>
         /// <returns>A dictionary that can directly be used to display the options in the client interface</returns>
-        public Dictionary<string, List<object>> GetValues(Dictionary<string, object> param, List<string> columns = null)
+        public async Task<Dictionary<string, List<object>>> GetValues(Dictionary<string, object> param, List<string> columns = null)
         {
             if (columns == null)
             {
@@ -60,11 +60,11 @@ namespace Kitbox_project.Models
 
             var selectedValues = CorrectValues(param);
 
-            (bool door, List<int> maxs) = CheckDoor(param);
+            (bool door, List<int> maxs) = await CheckDoor(param);
 
             if (selectedValues.Count == 0)
             {
-                ans = _databaseCatalog.LoadAll(columns);
+                ans = await _databaseCatalog.LoadAll(columns);
                 return FormatValues(ans, door, maxs[0], maxs[1], columns);
             }
                         
@@ -136,7 +136,7 @@ namespace Kitbox_project.Models
         /// <param name="param">The same dictionary as the <c>GetValues</c> method.</param>
         /// <param name="doorRealWidthFactor">The max width possible with two doors</param>
         /// <returns><c>(bool, List(height, width)</c> </returns>
-        public (bool, List<int>) CheckDoor(Dictionary<string, object> param, int doorRealWidthFactor = 2)
+        public async Task<(bool, List<int>)> CheckDoor(Dictionary<string, object> param, int doorRealWidthFactor = 2)
         {
             bool door = false;
 
@@ -152,7 +152,7 @@ namespace Kitbox_project.Models
                 }
             }
 
-            var doors = _databaseCatalog.GetData(new Dictionary<string, string> { { "Reference", "Door" } });
+            var doors = await _databaseCatalog.GetData(new Dictionary<string, string> { { "Reference", "Door" } });
 
             var heights = new List<int>();
             var widths = new List<int>();

@@ -53,9 +53,9 @@ public partial class MainPage : ContentPage
 
 
         
-        private void OnCounterClicked2(object sender, EventArgs e)
+        private async void OnCounterClicked2(object sender, EventArgs e)
         { 
-           List<Dictionary<string, string>> dataList = _dbService2.GetData(new Dictionary<string, string> { { "Reference", "Vertical batten"} });
+           List<Dictionary<string, string>> dataList = await _dbService2.GetData(new Dictionary<string, string> { { "Reference", "Vertical batten"} });
 
             if (dataList != null && dataList.Count > 0)
             {

@@ -13,7 +13,7 @@ namespace Kitbox_project.ViewModels
     internal class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
-        private DatabaseStock DBStock = new DatabaseStock();
+        private DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
 
         public StockViewModel()
         {
