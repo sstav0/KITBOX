@@ -14,8 +14,8 @@ public partial class MainPage : ContentPage
             
             InitializeComponent();
             
-            _dbService2 = new DatabaseCatalog();
-            _dbService = new DatabaseCustomer();
+            _dbService2 = new DatabaseCatalog("storekeeper", "storekeeper");
+            _dbService = new DatabaseCustomer("customer", "customer");
             _dbService3 = new DatabaseLogin();
             //TestDatabaseConnection();
         }

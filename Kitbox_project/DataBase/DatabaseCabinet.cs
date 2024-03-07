@@ -9,5 +9,5 @@ public class DatabaseCabinet : Database
 
     public DatabaseCabinet(string id, string password):base(id, password){
         tablename = "Cabinet";
-
+    }
 }
