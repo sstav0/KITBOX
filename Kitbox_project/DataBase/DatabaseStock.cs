@@ -8,7 +8,6 @@ public class DatabaseStock : Database
 {
     public DatabaseStock()
     {
-        tablename = "Stock";
     }
 
     public static List<StockItem> ConvertToStockItem(List<Dictionary<string, string>> data)
