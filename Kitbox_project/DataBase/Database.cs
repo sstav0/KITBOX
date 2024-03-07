@@ -7,15 +7,29 @@ namespace Kitbox_project.DataBase
 
     public class Database
     {
-        protected string? tablename;
 
-        public const string connectionString = "Server= pat.infolab.ecam.be ; port=63417;Database=KitBoxing;User ID=kitboxer;Password=kitboxing;";
+        public Database(string id, string password){
+        ID = id;
+        Password = password;
+    }
+        
+        protected static string ID;
+        protected  static string Password;
+        protected string tablename;
+        public static string connectionString
+        {
+            get
+            {
+                return $"Server=pat.infolab.ecam.be;port=63417;Database=KitBoxing;User ID={ID};Password={Password};";
+            }
+        }
 
         /// <summary>
         /// Inserts a new row into the table with the specified data.
         /// </summary>
         /// <param name="data">A dictionary representing the data to be inserted. The keys correspond to the column names, and the values are the data to be inserted into those columns. Example: <code>{{"Width", 52}, {"Height", 200}}</code> would insert a row with a width of 52 and a height of 200.</param>
         /// <remarks>This method constructs an INSERT IGNORE INTO query, which means it will ignore the insert operation for rows that would cause a duplicate entry in a unique index or primary key.<code>string query = $"INSERT IGNORE INTO {tablename} ({columns}) VALUES ({values})";</code></remarks>
+
         public void Add(Dictionary<string, object> data)
         {
             using (MySqlConnection connection = new MySqlConnection(connectionString))

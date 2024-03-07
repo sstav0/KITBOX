@@ -6,8 +6,10 @@ using MySql.Data.MySqlClient;
 
 public class DatabaseOrder : Database
 {
-    public DatabaseOrder()
-    {
 
+ public DatabaseOrder(string id, string password):base(id, password){
+
+    tablename = "Order";
     }
+
 }

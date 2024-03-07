@@ -2,12 +2,15 @@
 
 namespace Kitbox_project.DataBase
 {
+
+    
+
     public class DatabaseCatalog : Database
+
     {
-        public DatabaseCatalog()
-        {
-            tablename = "Catalog";
-        }
+        public DatabaseCatalog(string id, string password):base(id, password){
+        tablename = "Catalog";
+    }
 
         /// <summary>
         /// This method returns a dictionary of lists of objects, where each key represents a column name and each value is a list of unique values for that column.

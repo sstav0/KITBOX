@@ -1,4 +1,5 @@
 ﻿using Kitbox_project.DataBase;
+using Kitbox_project.Models;
 using MySql.Data.MySqlClient;
 
 namespace Kitbox_project;
@@ -34,8 +35,9 @@ public partial class MainPage : ContentPage
        
 
         private void OnCounterClicked(object sender, EventArgs e)
-        {              
-            bool test =_dbService3.ValidateUser("storekeepr","storekeeper");
+        {   
+            
+            bool test =_dbService3.ValidateUser("storekeeper","storekeeper");
             Console.WriteLine($"Login Result: {test}");
             count++;
 
