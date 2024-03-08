@@ -58,7 +58,7 @@ namespace Kitbox_project.Views
             // Few randoms lockers I created to test until we get the DB ready. 
             // To delete once we've created the DB 
 
-            Door door1 = new Door ( "Red", "Wood",50, 40);
+            Door door1 = new Door ("Red", "Wood",50, 40);
             Door door2 = new Door("None", "Glass", 50, 30);
             Door door3 = new Door("Blue", "Wood", 50, 30);
 
@@ -68,8 +68,6 @@ namespace Kitbox_project.Views
                 new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1, NotePartsAvailability="All Right"},
                 new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2, NotePartsAvailability = "Everything All Right" },
                 new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3, NotePartsAvailability = "NOK" },
-                
-
             };
         }
 

@@ -550,20 +550,12 @@ namespace Kitbox_project.ViewModels
         private void ResetLocker()
         {
             Debug.WriteLine("ResetLocker");
-            IsGlassVisible = false;
-            IsGlassChecked = false;
-            IsGlassEnabled = true;
+            IsGlassVisible = false; IsGlassChecked = false; IsGlassEnabled = true;
 
-            EnablecheckDoor = true;
-            IsDoorChecked = false;
-            IsDoorPickerVisible = false;
+            EnablecheckDoor = true; IsDoorChecked = false; IsDoorPickerVisible = false;
 
-            SelectedDepthItem = null;
-            SelectedAngleIronColor = null;
-            SelectedDoorColorItem = null;
-            SelectedHeightItem = null;
-            SelectedWidthItem = null;
-            SelectedLockerColorItem = null;
+            SelectedDepthItem = null; SelectedAngleIronColor = null; SelectedDoorColorItem = null;
+            SelectedHeightItem = null; SelectedWidthItem = null; SelectedLockerColorItem = null;
         }
         private void ExecuteOnResetLockerButtonClicked()
         {
@@ -576,26 +568,23 @@ namespace Kitbox_project.ViewModels
         {
             Debug.WriteLine("ExecuteOnAddLockerButtonClicked");
             Door newDoor = null;
-            /*
-            if (_selectedWidthItem != 0 && _selectedDepthItem != 0 && _selectedLockerColorItem != null && _selectedHeightItem != 0)
+            //Verfify every parameters of the locker are set
+            if (_selectedWidthItem != null && _selectedDepthItem != null && _selectedLockerColorItem != null && _selectedHeightItem != null)
             {
-                if (_isDoorChecked)
+                if (_isDoorChecked) //if door asked
                 {
-                    if (_isGlassChecked)
+                    if (_isGlassChecked) //if door material must be "glass"
                     {
-                        newDoor = new Door(null, "glass", _selectedWidthItem, _selectedHeightItem);
+                        newDoor = new Door(null, "glass", Convert.ToInt32(_selectedWidthItem), Convert.ToInt32(_selectedHeightItem));
                     }
-                    else if (_selectedDoorColorItem != null)
+                    else if (_selectedDoorColorItem != null) //if door color is picked -> create a wooden door with selected color
                     {
-                        newDoor = new Door(_selectedDoorColorItem,"wood", _selectedWidthItem, _selectedHeightItem);
-                    }
-                    else
-                    {
-                        return;
+                        newDoor = new Door(_selectedDoorColorItem,"wood", Convert.ToInt32(_selectedWidthItem), Convert.ToInt32(_selectedHeightItem));
                     }
                 }
-                Locker newLocker = new Locker(_selectedHeightItem, _selectedDepthItem, _selectedWidthItem, _selectedLockerColorItem, newDoor, _price);
-            }*/
+                //Locker is created with all selected parameters & newDoor which = null if no door option were selected
+                Locker newLocker = new Locker(Convert.ToInt32(_selectedHeightItem), Convert.ToInt32(_selectedDepthItem), Convert.ToInt32(_selectedWidthItem), _selectedLockerColorItem, newDoor, _price);
+            }
         }
     }
 }
