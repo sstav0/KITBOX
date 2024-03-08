@@ -148,13 +148,14 @@
                     Text="Add" />
 
                 <!--  All the Text inside the Outside Frame  -->
-                <Label
-                    Grid.Row="0"
-                    Grid.ColumnSpan="4"
-                    FontAttributes="Bold"
-                    FontSize="20"
-                    HorizontalOptions="Center"
-                    Text="Locker suivant" />
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalOptions="Center" >
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Locker: " FontSize="20" />
+                            <Span FontAttributes="Bold" Text="{Binding LockerID}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
                 <Label
                     Grid.Row="1"
                     Grid.Column="0"
@@ -350,22 +351,13 @@
                                     <Label Grid.Row="2" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
-                                                <Span Text="Door Material: " />
-                                                <Span FontAttributes="Bold" Text="{Binding Door.Material}" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                                    <Label Grid.Row="3" Grid.Column="0">
-                                        <Label.FormattedText>
-                                            <FormattedString>
                                                 <Span Text="Panel Color: " />
                                                 <Span FontAttributes="Bold" Text="{Binding Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Button Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
+                                    <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
                                             Text="Edit" Clicked="OnEditButtonClicked"/>
 
                                 </Grid>

@@ -359,6 +359,7 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+
         private float _price;
         public float Price
         {
@@ -432,6 +433,9 @@ namespace Kitbox_project.ViewModels
         {
             TotalPrice = Lockers.Sum(locker => locker.Price);
         }
+
+
+
 
         //Setup Visible or Invisible Door selectors when Door Checkbox is checked or unchecked
         private void OnAddDoorClicked()

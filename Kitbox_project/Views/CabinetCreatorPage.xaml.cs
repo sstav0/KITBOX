@@ -66,12 +66,20 @@ namespace Kitbox_project.Views
             }
 
             // Create a new LockerViewModel based on the selected parameters
+            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+
             LockerViewModel newLocker = new LockerViewModel
             {
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
-                Color = _viewModel.SelectedLockerColorItem
+                Color = _viewModel.SelectedLockerColorItem,
+                Door = door
+
             };
 
+            int index = _viewModel.AvailableLockers.Count + 1;
+
+            // Set the locker ID as the generated index
+            newLocker.LockerID = index;
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
