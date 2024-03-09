@@ -23,6 +23,7 @@ namespace Kitbox_project.Views
         public int IDCabinet
         { get => _IDCabinet; set => _IDCabinet = value; }
 
+
         public CabinetCreatorPage()
         {
             InitializeComponent();
@@ -101,15 +102,17 @@ namespace Kitbox_project.Views
                 var locker = button.BindingContext as LockerViewModel;
                 if (locker != null)
                 {
+                    _viewModel.SelectedLockerColorItem = locker.Color;
                     Debug.WriteLine($"Locker ID: {locker.LockerID}");
                     Debug.WriteLine($"Height: {locker.Height}");
                     Debug.WriteLine($"Door Color: {locker.Door.Color}");
                     Debug.WriteLine($"Panel Color: {locker.Color}");
                     Debug.WriteLine($"New Color: {_viewModel.SelectedLockerColorItem}");
+                    
 
-                    Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+                    Door doornew = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Materiel et dimensions au pif right now vu qu'ils sont pas dans des pickers. 
 
-                    locker.Door = door;
+                    locker.Door = doornew;
                     locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
                     locker.Color = _viewModel.SelectedLockerColorItem;
                     // Add more properties as needed
