@@ -43,13 +43,19 @@ public partial class ActiveOrdersPage : ContentPage
 
 	private void CancelClicked(object sender, EventArgs e)
 	{
-
-	}
+        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrder)
+        {
+			selectedOrder.Order.Status = "Canceled";
+        }
+    }
 
 	private void ReadyClicked(object sender, EventArgs e)
 	{
-
-	}
+        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrder)
+        {
+            selectedOrder.Order.Status = "Ready";
+        }
+    }
 
 	private void DisplayInStockButtonClicked(object sender, EventArgs e)
 	{

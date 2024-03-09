@@ -69,10 +69,10 @@
                                                 </Label.FormattedText>
                                             </Label>
 
-                                            <Button Text="Cancel" BackgroundColor="Red" Grid.Column="4"
+                                            <Button Text="Cancel" BackgroundColor="Red" Grid.Column="4" CommandParameter="{Binding .}"
                                                     Clicked="CancelClicked" Margin="5,0,5,0" MaximumHeightRequest="20"/>
 
-                                            <Button Text="Ready" BackgroundColor="Green" Grid.Column="5"
+                                            <Button Text="Ready" BackgroundColor="Green" Grid.Column="5" CommandParameter="{Binding .}"
                                                     Clicked="ReadyClicked" Margin="5,0,5,0" MaximumHeightRequest="20"/>
 
                                         </Grid>
@@ -119,10 +119,10 @@
                                                     <!--Text="{Binding DetailsPart}"-->
 
                                                     <Button Text="DISPLAY IN STOCK" BackgroundColor="Blue" TextColor="White"
-                                                        Grid.Column="3" Clicked="DisplayInStockButtonClicked"/>
+                                                        Grid.Column="3" Clicked="DisplayInStockButtonClicked" CommandParameter="{Binding .}"/>
 
                                                     <Button Text="Place Order" BackgroundColor="Blue" TextColor="White"
-                                                        Grid.Column="4" Clicked="PlaceOrderButtonClicked"/>
+                                                        Grid.Column="4" Clicked="PlaceOrderButtonClicked" CommandParameter="{Binding .}"/>
 
                                                 </Grid>
 
