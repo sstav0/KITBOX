@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
+using System.Diagnostics;
 
 namespace Kitbox_project.Views
 {
@@ -90,14 +91,39 @@ namespace Kitbox_project.Views
         { 
         }
 
+
+
         private void OnEditButtonClicked(object sender, EventArgs e)
         {
-            if (sender is Button button && button.CommandParameter is CabinetViewModel selectedCabinetView)
+            var button = sender as Button;
+            if (button != null)
             {
-                
+                var locker = button.BindingContext as LockerViewModel;
+                if (locker != null)
+                {
+                    Debug.WriteLine($"Locker ID: {locker.LockerID}");
+                    Debug.WriteLine($"Height: {locker.Height}");
+                    Debug.WriteLine($"Door Color: {locker.Door.Color}");
+                    Debug.WriteLine($"Panel Color: {locker.Color}");
+                    Debug.WriteLine($"New Color: {_viewModel.SelectedLockerColorItem}");
+
+                    Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+
+                    locker.Door = door;
+                    locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
+                    locker.Color = _viewModel.SelectedLockerColorItem;
+                    // Add more properties as needed
+                }
+                else
+                {
+                    Debug.WriteLine("Error: No locker selected.");
+                }
             }
         }
-        
+
+
+
+
         private void OnConfimButtonClicked (object sender, EventArgs e)
         {
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
