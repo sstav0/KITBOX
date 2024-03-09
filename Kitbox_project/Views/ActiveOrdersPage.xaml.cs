@@ -8,12 +8,14 @@ namespace Kitbox_project.Views;
 public partial class ActiveOrdersPage : ContentPage
 {
 	private ObservableCollection<OrderViewModel> ListOrders;
+    private ObservableCollection<OrderViewModel> ListOrdersVoid;
 
-	public ActiveOrdersPage()
+    public ActiveOrdersPage()
     {
         InitializeComponent();
 
         ListOrders = new ObservableCollection<OrderViewModel>();
+        ListOrdersVoid = new ObservableCollection<OrderViewModel>();
 
         LoadOrders();
 
@@ -41,19 +43,27 @@ public partial class ActiveOrdersPage : ContentPage
 		ListViewOrders.ItemsSource = ListOrders;
     }
 
-	private void CancelClicked(object sender, EventArgs e)
+    private void UpdateOrders()
+    {
+        ListViewOrders.ItemsSource = ListOrdersVoid;
+        ListViewOrders.ItemsSource = ListOrders;
+    }
+
+    private void CancelClicked(object sender, EventArgs e)
 	{
-        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrder)
+        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrderView)
         {
-			selectedOrder.Order.Status = "Canceled";
+			selectedOrderView.Order.Status = "Canceled";
+            selectedOrderView.OrderStatus = "Canceled";
         }
     }
 
 	private void ReadyClicked(object sender, EventArgs e)
 	{
-        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrder)
+        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrderView)
         {
-            selectedOrder.Order.Status = "Ready";
+            selectedOrderView.Order.Status = "Ready";
+            selectedOrderView.OrderStatus = "Ready";
         }
     }
 
@@ -66,4 +76,12 @@ public partial class ActiveOrdersPage : ContentPage
 	{
 
 	}
+
+    private void OnTextChanged(object sender, EventArgs e)
+    {
+        if (sender is SearchBar searchBar && BindingContext is OrderViewModel orderViewModel)
+        {
+            orderViewModel.ApplyFilter(searchBar.Text);
+        }
+    }
 }
