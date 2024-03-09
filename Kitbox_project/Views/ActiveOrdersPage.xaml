@@ -37,7 +37,7 @@
 
                                 <uranium:ExpanderView.Header>
 
-                                    <Frame BorderColor="Black" CornerRadius="0" BackgroundColor="LightGrey">
+                                    <Border Stroke="Black" BackgroundColor="LightGrey" Padding="5">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="2*"/>
@@ -76,7 +76,7 @@
                                                     Clicked="ReadyClicked" Margin="5,0,5,0" MaximumHeightRequest="20"/>
 
                                         </Grid>
-                                    </Frame>
+                                    </Border>
 
                                 </uranium:ExpanderView.Header>
 
