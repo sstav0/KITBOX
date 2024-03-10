@@ -316,8 +316,14 @@
                                 <uranium:ExpanderView.Header>
                                     <Frame>
                                         <StackLayout Orientation="Horizontal">
-                                            <Label Margin="5" Text="{Binding LockerID}" />
-                                            <Label Margin="5" Text="{Binding NotePartsAvailability}" />
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Locker : " />
+                                                        <Span FontAttributes="Bold" Text="{Binding LockerID}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
                                         </StackLayout>
                                     </Frame>
 
