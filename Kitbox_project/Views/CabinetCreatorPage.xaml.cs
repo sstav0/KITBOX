@@ -24,6 +24,8 @@ namespace Kitbox_project.Views
         { get => _IDCabinet; set => _IDCabinet = value; }
 
 
+        int indexLock = 0;
+
         public CabinetCreatorPage()
         {
             InitializeComponent();
@@ -87,6 +89,16 @@ namespace Kitbox_project.Views
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
         }
 
+        private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
+        {
+            var locker = _viewModel.AvailableLockers[indexLock-1];
+            Debug.WriteLine(locker);
+            locker.Color = _viewModel.SelectedLockerColorItem;
+            locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
+            locker.Door.Color = _viewModel.SelectedDoorColorItem;
+
+        }
+
 
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
@@ -102,20 +114,12 @@ namespace Kitbox_project.Views
                 var locker = button.BindingContext as LockerViewModel;
                 if (locker != null)
                 {
+                    indexLock = locker.LockerID;
                     _viewModel.SelectedLockerColorItem = locker.Color;
-                    Debug.WriteLine($"Locker ID: {locker.LockerID}");
-                    Debug.WriteLine($"Height: {locker.Height}");
-                    Debug.WriteLine($"Door Color: {locker.Door.Color}");
-                    Debug.WriteLine($"Panel Color: {locker.Color}");
-                    Debug.WriteLine($"New Color: {_viewModel.SelectedLockerColorItem}");
-                    
+                    _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
+                    _viewModel.SelectedDoorColorItem = locker.Door.Color;
 
-                    Door doornew = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Materiel et dimensions au pif right now vu qu'ils sont pas dans des pickers. 
-
-                    locker.Door = doornew;
-                    locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-                    locker.Color = _viewModel.SelectedLockerColorItem;
-                    // Add more properties as needed
+    
                 }
                 else
                 {
@@ -129,6 +133,7 @@ namespace Kitbox_project.Views
 
         private void OnConfimButtonClicked (object sender, EventArgs e)
         {
+            Debug.WriteLine(indexLock);
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
