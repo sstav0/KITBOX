@@ -21,11 +21,6 @@
             Route="HomeClientPage"/>
 
         <ShellContent
-            Title="Cart"
-            ContentTemplate="{DataTemplate views:CartPage}"
-            Route="CartPage"/>
-
-        <ShellContent
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
             Route="CabinetCreatorPage"/>
