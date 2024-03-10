@@ -385,7 +385,7 @@
             Grid.Row="3"
             Grid.Column="6"
             BackgroundColor="Green"
-            Clicked="OnConfimButtonClicked"
+            Clicked="OnAddToOrderButtonClicked"
             FontSize="20"
             Text="Confirm" />
 

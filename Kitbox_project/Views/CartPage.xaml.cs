@@ -88,7 +88,7 @@ public partial class CartPage : ContentPage
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
-		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order );
 		newCabinetCreatorPage.Order = order;
 
         await Navigation.PushAsync(newCabinetCreatorPage);
@@ -108,7 +108,7 @@ public partial class CartPage : ContentPage
 		{
 			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
             newCabinetCreatorPage.Order = order;
 			newCabinetCreatorPage.Cabinet = selectedCabinet;
 			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;
