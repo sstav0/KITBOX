@@ -1,7 +1,6 @@
 using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
 using Kitbox_project.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
 
@@ -23,14 +22,19 @@ namespace Kitbox_project.Views
         public int IDCabinet
         { get => _IDCabinet; set => _IDCabinet = value; }
 
+        private Order order;
+
 
         int indexLock = 0;
 
-        public CabinetCreatorPage()
+        public CabinetCreatorPage(Order Order)
         {
+            order = Order;
+
             InitializeComponent();
             _viewModel = new CabinetViewModel();
             BindingContext = _viewModel;
+
 
             // Load available lockers into the view model
             LoadAvailableLockers();
@@ -122,10 +126,17 @@ namespace Kitbox_project.Views
 
 
 
-        private void OnConfimButtonClicked (object sender, EventArgs e)
+        private async void OnConfimButtonClicked (object sender, EventArgs e)
         {
             Debug.WriteLine(indexLock);
-            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
+
+            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1);
+
+            order.AddCabinet(Cabinet);
+
+            CartPage newCartPage = new CartPage(order);
+
+            await Navigation.PushAsync(newCartPage);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
         

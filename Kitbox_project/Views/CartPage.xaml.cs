@@ -24,8 +24,10 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	//	LoadCart();
 	//   }
 
-	public CartPage(Order order)
+	public CartPage(Order Order)
 	{
+		order = Order;
+
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
@@ -35,9 +37,12 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	private void LoadRealCart(Order order)
 	{
-		foreach (var item in order.Cart)
+		foreach (Cabinet cabinet in order.Cart)
 		{
-			Cart.Add(new CartViewModel(item));
+			Debug.WriteLine(order);
+            Debug.WriteLine(order.Cart);
+            Debug.WriteLine(cabinet);
+			Cart.Add(new CartViewModel(cabinet));
 		}
 
         ListCabinets.ItemsSource = Cart;
@@ -87,7 +92,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
-		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
 		newCabinetCreatorPage.Order = order;
 
         await Navigation.PushAsync(newCabinetCreatorPage);
@@ -107,7 +112,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		{
 			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
             newCabinetCreatorPage.Order = order;
 			newCabinetCreatorPage.Cabinet = selectedCabinet;
 			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;
