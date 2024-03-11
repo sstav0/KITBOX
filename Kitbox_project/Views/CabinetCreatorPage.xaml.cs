@@ -26,6 +26,7 @@ namespace Kitbox_project.Views
 
 
         int indexLock = 0;
+        int totalSize = 0;
 
         public CabinetCreatorPage(Order Order)
         {
@@ -86,16 +87,27 @@ namespace Kitbox_project.Views
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
-            var locker = _viewModel.AvailableLockers[indexLock-1];
+            if( indexLock is not 0)
+            {
+
+            
+            var locker = _viewModel.AvailableLockers[indexLock - 1];
             Debug.WriteLine(locker);
             locker.Color = _viewModel.SelectedLockerColorItem;
             locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            locker.Door.Color = _viewModel.SelectedDoorColorItem;
+            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            locker.Door = door;
+            }
+
+            if(indexLock is 0)
+            {
+                Debug.WriteLine("Please Select a locker");
+            }
 
         }
 
 
-        private void OnAddLockerButtonClicked(object sender, EventArgs e) 
+        private void OnAddLockerButtonClicked(object sender, EventArgs e) //Pas utilisé pour le moment.  
         { 
         }
 
@@ -110,9 +122,15 @@ namespace Kitbox_project.Views
                 if (locker != null)
                 {
                     indexLock = locker.LockerID;
+
                     _viewModel.SelectedLockerColorItem = locker.Color;
                     _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
+                    if(locker.Door.Color is not null)
+                    {
                     _viewModel.SelectedDoorColorItem = locker.Door.Color;
+
+                    }
+
 
     
                 }
@@ -130,31 +148,31 @@ namespace Kitbox_project.Views
         {
             // Convert ObservableCollection<LockerViewModel> to List<Locker>
             List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
-                viewModel.LockerID,
                 Convert.ToInt32(viewModel.Height),
-                0,
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, "Wood", 50, 40), // Assuming default material and dimensions for the door
+                new Door(viewModel.Door.Color, "Wood", 50, 40), // Prcq on a tjr pas mis les materiaux pour la porte je mets au pif rn 
                 0 // Price
             )).ToList();
 
-            // Create a new Cabinet object
+            totalSize = lockers.Sum(locker => locker.Height);
+            Debug.WriteLine("La taille totale est");
+            Debug.WriteLine(totalSize);
+
+
+            //On crée un nouveau cabinet
             Cabinet newCabinet = new Cabinet(
                 lockers,
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
-                1 // Height
+                totalSize // Height pour le moment mais faudra remplacer par angle iron
             );
 
             // Add the new Cabinet to the Order's cart
             Debug.WriteLine(newCabinet.ToString());
-            order.Cart.Add(newCabinet);
-
-            // Create the cart page
-            CartPage newCartPage = new CartPage(order);
-
-            // Make the cart page visible
-            await Navigation.PushAsync(newCartPage);
+            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
+            //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
         
     }
