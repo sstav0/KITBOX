@@ -128,16 +128,33 @@ namespace Kitbox_project.Views
 
         private async void OnConfimButtonClicked (object sender, EventArgs e)
         {
-            Debug.WriteLine(indexLock);
+            // Convert ObservableCollection<LockerViewModel> to List<Locker>
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                viewModel.LockerID,
+                Convert.ToInt32(viewModel.Height),
+                0,
+                viewModel.Color,
+                new Door(viewModel.Door.Color, "Wood", 50, 40), // Assuming default material and dimensions for the door
+                0 // Price
+            )).ToList();
 
-            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1);
+            // Create a new Cabinet object
+            Cabinet newCabinet = new Cabinet(
+                lockers,
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                1 // Height
+            );
 
-            order.AddCabinet(Cabinet);
+            // Add the new Cabinet to the Order's cart
+            Debug.WriteLine(newCabinet.ToString());
+            order.Cart.Add(newCabinet);
 
+            // Create the cart page
             CartPage newCartPage = new CartPage(order);
 
+            // Make the cart page visible
             await Navigation.PushAsync(newCartPage);
-            //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
         
     }

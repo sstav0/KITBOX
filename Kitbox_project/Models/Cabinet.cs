@@ -73,7 +73,7 @@ namespace Kitbox_project.Models
 
             string i = string.Join(",", this._lockers);
 
-            return String.Format("{0} {1} {2} {3} {4} {5} {6}", i, this._price.ToString(), this._depth.ToString(), this._price.ToString(), this._length.ToString(), this._quantity.ToString());
+            return String.Format("{0} {1} {2} {3} {4} {5} {6}", i, this._price.ToString(), this._depth.ToString(), this._length.ToString(), this._quantity.ToString(), this._quantity.ToString(), this._cabinetID.ToString());
         }
         public string ToCart()
         {

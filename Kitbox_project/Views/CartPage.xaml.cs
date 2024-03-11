@@ -39,9 +39,6 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
 		foreach (Cabinet cabinet in order.Cart)
 		{
-			Debug.WriteLine(order);
-            Debug.WriteLine(order.Cart);
-            Debug.WriteLine(cabinet);
 			Cart.Add(new CartViewModel(cabinet));
 		}
 
@@ -93,17 +90,20 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
 		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
-		newCabinetCreatorPage.Order = order;
 
         await Navigation.PushAsync(newCabinetCreatorPage);
     }
 
-	private void OnConfirmClicked(object sender, EventArgs e)
+	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
-        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
-		{
-            Debug.WriteLine("Confirm");
-        }
+		order.Status = "Waiting Confirmation";
+
+		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+
+		newActiveOrdersPage.Orders.Add(order);
+		newActiveOrdersPage.UpdateOrders();
+
+        await Navigation.PushAsync(newActiveOrdersPage);     
     }
 
 	private async void OnEditClicked(object sender, EventArgs e)
