@@ -141,7 +141,26 @@ namespace Kitbox_project.Views
 
         private void OnConfimButtonClicked (object sender, EventArgs e)
         {
-            Debug.WriteLine(indexLock);
+            // Convert ObservableCollection<LockerViewModel> to List<Locker>
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                viewModel.LockerID,
+                Convert.ToInt32(viewModel.Height),
+                0,
+                viewModel.Color,
+                new Door(viewModel.Door.Color, "Wood", 50, 40), // Prcq on a tjr pas mis les materiaux pour la porte je mets au pif rn 
+                0 // Price
+            )).ToList();
+
+            //On crée un nouveau cabinet
+            Cabinet newCabinet = new Cabinet(
+                lockers,
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                1 // Height pour le moment mais faudra remplacer par angle iron
+            );
+
+            // Add the new Cabinet to the Order's cart
+            Debug.WriteLine(newCabinet.ToString());
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
