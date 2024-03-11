@@ -9,16 +9,20 @@
     <ContentPage.BindingContext>
         <viewModels:StockViewModel />
     </ContentPage.BindingContext>
+    
+    <ScrollView>
+        <VerticalStackLayout Margin="40">
+            <!-- Title -->
+            <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
 
-    <VerticalStackLayout Margin="40">
-        <!-- Title -->
-        <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
+            <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
+                <SearchBar Placeholder="Search by reference or code..." TextChanged="OnTextChanged" />
+            </Border>
 
-        <!-- ListView to display stock data -->
-        <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" StrokeThickness="2" WidthRequest="950" Padding="20">
-            <ListView ItemsSource="{Binding StockData}" Header="{Binding .}" SelectionMode="None">
-                <ListView.HeaderTemplate>
-                    <DataTemplate>
+            <!-- ListView to display stock data -->
+            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="950" Padding="20">
+                <CollectionView ItemsSource="{Binding StockData}" SelectionMode="Single">
+                    <CollectionView.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -34,13 +38,11 @@
                             <Label Grid.Column="3" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
                             <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
                         </Grid>
-                    </DataTemplate>
-                </ListView.HeaderTemplate>
+                    </CollectionView.Header>
             
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid IsVisible="{Binding StockItemVisibility}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="3*" />
@@ -73,10 +75,10 @@
                                     </Button.Triggers>
                                 </Button>
                             </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Border>
-    </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

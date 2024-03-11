@@ -29,13 +29,14 @@
         </Grid.RowDefinitions>
 
         <!--  Cabinet Size Rounded Rectangle  -->
-        <Frame
+        <Border
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="4"
             Margin="10"
-            BackgroundColor="#A7DAFF"
-            CornerRadius="10">
+            StrokeShape="RoundRectangle 10,10,10,10"
+
+            BackgroundColor="#A7DAFF">
 
             <!--  Grid informations inside the Cabinet Rectangle  -->
             <Grid>
@@ -47,12 +48,13 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!--  All the text inside the Cabinet Size  -->
                 <Label
                     Grid.Row="0"
-                    Grid.ColumnSpan="2"
+                    Grid.ColumnSpan="3"
                     FontAttributes="Bold"
                     FontSize="20"
                     HorizontalOptions="Center"
@@ -67,10 +69,14 @@
                     Grid.Column="1"
                     HorizontalOptions="Center"
                     Text="Cabinet Depth" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    Text="Angle Iron Color" />
 
                 <!--  All the Pickers inside the Cabinet Size  -->
-                <!--  SelectedIndexChanged="UpdateAvailability"  -->
-                <!--  SelectedIndexChanged="{Binding UpdateAvailability}"  -->
+
                 <Picker
                     x:Name="CabinetWidth"
                     Grid.Row="2"
@@ -90,17 +96,28 @@
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemSourceLockerDepth}"
                     SelectedItem="{Binding SelectedDepthItem}" />
+
+                <Picker
+                    x:Name="AngleIronColor"
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="10"
+                    BackgroundColor="White"
+                    HorizontalOptions="Center"
+                    ItemsSource="{Binding ItemSourceAngleIronColor}"
+                    SelectedItem="{Binding SelectedAngleIronColor}" />
             </Grid>
-        </Frame>
+        </Border>
 
         <!--  Middle Locker  -->
-        <Frame
+        <Border
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="4"
             Margin="10"
             BackgroundColor="#A7DAFF"
-            CornerRadius="10">
+            StrokeShape="RoundRectangle 10,10,10,10">
+            
 
             <!--  Grid definition of outer frame (Button, Inside Frame, ..)  -->
             <Grid>
@@ -130,14 +147,23 @@
                     FontSize="20"
                     Text="Add" />
 
-                <!--  All the Text inside the Outside Frame  -->
-                <Label
-                    Grid.Row="0"
-                    Grid.ColumnSpan="4"
-                    FontAttributes="Bold"
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="4"
+                    Margin="30"
+                    BackgroundColor="#0066FF"
+                    Clicked="ModifySelectedLocker_Clicked"
                     FontSize="20"
-                    HorizontalOptions="Center"
-                    Text="Locker suivant" />
+                    Text="Modify" />
+                <!--  All the Text inside the Outside Frame  -->
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalOptions="Center" >
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Locker: " FontSize="20" />
+                            <Span FontAttributes="Bold" Text="{Binding LockerID}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
                 <Label
                     Grid.Row="1"
                     Grid.Column="0"
@@ -182,6 +208,8 @@
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     Margin="10"
+                    CornerRadius="10"
+
                     BackgroundColor="#A7DAFF"
                     BorderColor="Black">
                     <Grid>
@@ -214,6 +242,7 @@
                             Grid.Column="0"
                             HorizontalOptions="Start"
                             IsChecked="{Binding IsGlassChecked}"
+                            IsEnabled="{Binding IsGlassEnabled}"
                             IsVisible="{Binding IsGlassVisible}"
                             VerticalOptions="Center"
                             Color="#0066FF" />
@@ -229,12 +258,14 @@
                             Grid.Row="1"
                             Grid.Column="1"
                             HorizontalOptions="Start"
+                            IsVisible="{Binding IsGlassVisible}"
                             Text="Glass"
                             VerticalOptions="Center" />
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
                             HorizontalOptions="Center"
+                            IsVisible="{Binding IsDoorPickerVisible}"
                             Text="Door Color"
                             VerticalOptions="Center" />
 
@@ -252,7 +283,7 @@
 
                 </Frame>
             </Grid>
-        </Frame>
+        </Border>
 
         <!--  Cabinet Image. Randome Right now but we'll have to code something here  -->
         <Image
@@ -267,14 +298,15 @@
 
         <!--  Right side with all the lockers  -->
         <!--  I haven't done it with grids only yet, but it shouldn't change much so we can keep it as it if needed.  -->
-        <Frame
+        <Border
             Grid.Row="0"
             Grid.RowSpan="3"
             Grid.Column="4"
             Grid.ColumnSpan="2"
             Margin="10"
             BackgroundColor="#FFFFFFFF"
-            CornerRadius="10">
+            StrokeShape="RoundRectangle 10,10,10,10">
+
             <ScrollView>
                 <VerticalStackLayout BindableLayout.ItemsSource="{Binding AvailableLockers}">
 
@@ -283,67 +315,67 @@
                             <uranium:ExpanderView>
                                 <uranium:ExpanderView.Header>
                                     <Frame>
-                                        <Label Margin="5" Text="{Binding LockerID}" />
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="Locker : " />
+                                                        <Span FontAttributes="Bold" Text="{Binding LockerID}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
                                     </Frame>
 
                                 </uranium:ExpanderView.Header>
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="*" />
 
                                     </Grid.RowDefinitions>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
 
                                     </Grid.ColumnDefinitions>
 
 
-                                    <Label Grid.Column="0" Grid.Row="0">
+                                    <Label Grid.Row="0" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Height: " />
-                                                <Span Text="{Binding Height}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Height}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label Grid.Column="0" Grid.Row="1">
+                                    <Label Grid.Row="1" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Door Color: " />
-                                                <Span Text="{Binding Door.Color}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Door.Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
 
-                                    <Label Grid.Column="0" Grid.Row="2">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <Span Text="Door Material: " />
-                                                <Span Text="{Binding Door.Material}" FontAttributes="Bold" />
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-
-                                    <Label Grid.Row="3" Grid.Column="0">
+                                    <Label Grid.Row="2" Grid.Column="0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Panel Color: " />
-                                                <Span Text="{Binding Color}" FontAttributes="Bold" />
+                                                <Span FontAttributes="Bold" Text="{Binding Color}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
-
-                                    <Button Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
+                                    <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" 
                                             Text="Edit" Clicked="OnEditButtonClicked"/>
 
+
                                 </Grid>
-                                
+
 
                             </uranium:ExpanderView>
                         </DataTemplate>
@@ -355,19 +387,20 @@
 
             <!--  Bottom Buttons  -->
             <!--  Don't forget to bind them too  -->
-        </Frame>
+        </Border>
         <Button
             Grid.Row="3"
             Grid.Column="0"
             BackgroundColor="Red"
+            Command="{Binding OnResetLockerButtonClicked}"
             FontSize="20"
             Text="Reset" />
         <Button
             Grid.Row="3"
             Grid.Column="6"
             BackgroundColor="Green"
-            FontSize="20"
             Clicked="OnConfimButtonClicked"
+            FontSize="20"
             Text="Confirm" />
 
     </Grid>

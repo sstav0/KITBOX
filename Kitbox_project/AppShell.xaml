@@ -13,17 +13,17 @@
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
-            Route="HomePage" />
+            Route="HomePage"/>
 
         <ShellContent
-            Title="Cart"
-            ContentTemplate="{DataTemplate views:CartPage}"
-            Route="CartPage" />
+            Title="Home Client"
+            ContentTemplate="{DataTemplate views:HomeClientPage}"
+            Route="HomeClientPage"/>
 
         <ShellContent
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage" />
+            Route="CabinetCreatorPage"/>
 
         <ShellContent
             Title="Login Page"
@@ -33,7 +33,7 @@
         <ShellContent
             Title="Stock"
             ContentTemplate="{DataTemplate views:StockPage}"
-            Route="StockPage" />
+            Route="StockPage"/>
 
         <ShellContent
             Title="Active Orders"

@@ -13,6 +13,19 @@ namespace Kitbox_project.ViewModels
     internal class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
+        private DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+
+        public StockViewModel()
+        {
+            LoadDataAsync();
+        }
+
+        public async void LoadDataAsync()
+        {
+            var stockItems = await DBStock.LoadAll();
+            StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
+        }
+
         public List<StockItemViewModel> StockData
         { 
             get => _stockData;
@@ -23,25 +36,20 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public StockViewModel()
+        public void ApplyFilter(string searchText)
         {
-            // Simulating data from the database
-            var stockItems = new List<StockItem>
+            searchText = searchText.Trim();
+            foreach (var item in StockData)
             {
-                new StockItem(1, "Item1","123", 10),
-                new StockItem(2, "Item2","456", 20),
-            };
-
-            // Convert StockItem to StockItemViewModel
-            StockData = new List<StockItemViewModel>(ConvertToViewModels(stockItems));
+                // Filter items based on search text
+                item.StockItemVisibility = 
+                    string.IsNullOrWhiteSpace(searchText) || 
+                    item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                    item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
-        private static IEnumerable<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
-        {
-            return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity));
-        }
-
-        public void EditUpdateQuantity(StockItemViewModel stockItem)
+        public async Task EditUpdateQuantity(StockItemViewModel stockItem)
         {
             // If Update button pressed
             if (stockItem.IsEditing)
@@ -49,21 +57,21 @@ namespace Kitbox_project.ViewModels
                 // If the input quantity is a number and non-negative
                 if (stockItem.IsValidQuantity)
                 {
-                    // Update the quantity in the database using appropriate logic
-                    // Example: stockItem.Id is assumed to be a unique identifier for the item in the database
-                    // Implement your logic to update the quantity in the database
-                    // database.UpdateQuantity(stockItem.Id, stockItem.Quantity);
-                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0');
+                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0') != "" ? stockItem.InputQuantity.TrimStart('0') : "0";
+
                     stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
+                    await DBStock.Update(
+                        new Dictionary<string, object> { { "Quantity", stockItem.Quantity } },
+                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
 
                     stockItem.IsEditing = false;
                     stockItem.ButtonText = "Edit";
                     stockItem.ButtonColor = Color.Parse("#512BD4");
                 }
+                // If the input quantity is not a number or negative, keep the previous quantity
                 else
                 {
                     stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
-                    stockItem.IsEditing = true;
                     stockItem.ButtonText = "Update";
                     stockItem.ButtonColor = Color.Parse("green");
                 }
@@ -82,78 +90,96 @@ namespace Kitbox_project.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-    }
 
-    // ViewModel for stock items
-    public class StockItemViewModel : StockItem
-    {
-        private bool _isEditing;
-        private string _buttonText;
-        private Color _buttonColor;
-        private string _inputQuantity;
-        private bool _isValidQuantity;
+        // ViewModel for stock items
+        public class StockItemViewModel : StockItem
+        {
+            private bool _isEditing;
+            private string _buttonText;
+            private Color _buttonColor;
+            private string _inputQuantity;
+            private bool _isValidQuantity;
+            private bool _stockItemVisibility;
 
-        public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
-        {
-            IsEditing = false;
-            ButtonText = "Edit";
-            ButtonColor = Color.Parse("#512BD4");
-            InputQuantity = quantity.ToString();
-        }
-        public bool IsEditing
-        {
-            get => _isEditing;
-            set
+            public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
             {
-                _isEditing = value;
-                OnPropertyChanged(nameof(IsEditing));
+                IsEditing = false;
+                ButtonText = "Edit";
+                ButtonColor = Color.Parse("#512BD4");
+                InputQuantity = quantity.ToString();
+                StockItemVisibility = true;
             }
-        }
-
-        public string ButtonText
-        {
-            get => _buttonText;
-            set
+            public bool IsEditing
             {
-                _buttonText = value;
-                OnPropertyChanged(nameof(ButtonText));
+                get => _isEditing;
+                set
+                {
+                    _isEditing = value;
+                    OnPropertyChanged(nameof(IsEditing));
+                }
             }
-        }
 
-        public Color ButtonColor
-        {
-            get => _buttonColor;
-            set
+            public string ButtonText
             {
-                _buttonColor = value;
-                OnPropertyChanged(nameof(ButtonColor));
+                get => _buttonText;
+                set
+                {
+                    _buttonText = value;
+                    OnPropertyChanged(nameof(ButtonText));
+                }
             }
-        }
 
-        public string InputQuantity
-        {
-            get => _inputQuantity;
-            set
+            public Color ButtonColor
             {
-                _inputQuantity = value;
-                OnPropertyChanged(nameof(InputQuantity));
-                ValidateQuantity();
+                get => _buttonColor;
+                set
+                {
+                    _buttonColor = value;
+                    OnPropertyChanged(nameof(ButtonColor));
+                }
             }
-        }
 
-        public bool IsValidQuantity
-        {
-            get => _isValidQuantity;
-            set
+            public string InputQuantity
             {
-                _isValidQuantity = value;
-                OnPropertyChanged(nameof(IsValidQuantity));
+                get => _inputQuantity;
+                set
+                {
+                    _inputQuantity = value;
+                    OnPropertyChanged(nameof(InputQuantity));
+                    ValidateQuantity();
+                }
             }
-        }
 
-        public void ValidateQuantity()
-        {
-            IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
+            public bool IsValidQuantity
+            {
+                get => _isValidQuantity;
+                set
+                {
+                    _isValidQuantity = value;
+                    OnPropertyChanged(nameof(IsValidQuantity));
+                }
+            }
+
+            public bool StockItemVisibility
+            {
+                get => _stockItemVisibility;
+                set
+                {
+                    _stockItemVisibility = value;
+                    OnPropertyChanged(nameof(StockItemVisibility));
+                }
+            }
+
+            public static List<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
+            {
+                // Return the list of stock items as a list of stock item view models
+                return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity)).ToList();
+            }
+
+            public void ValidateQuantity()
+            {
+                IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
+            }
         }
     }
 }

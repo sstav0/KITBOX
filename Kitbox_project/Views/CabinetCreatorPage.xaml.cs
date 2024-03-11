@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
+using System.Diagnostics;
 
 namespace Kitbox_project.Views
 {
@@ -22,6 +23,9 @@ namespace Kitbox_project.Views
         public int IDCabinet
         { get => _IDCabinet; set => _IDCabinet = value; }
 
+
+        int indexLock = 0;
+
         public CabinetCreatorPage()
         {
             InitializeComponent();
@@ -30,45 +34,17 @@ namespace Kitbox_project.Views
 
             // Load available lockers into the view model
             LoadAvailableLockers();
-            ShowExpansionPanels();
         }
 
-        private void ShowExpansionPanels()
-        {
-            // Determine the number of available lockers
-            int numberOfLockers = _viewModel.AvailableLockers.Count;
 
-            // Loop through each ExpansionPanel and set its visibility
-            for (int i = 0; i < numberOfLockers; i++)
-            {
-                // Find the ExpansionPanel control by its name
-                var expansionPanel = FindByName("ExpansionPanel" + (i + 1));
-
-                // Cast the result to ExpansionPanel
-                if (expansionPanel is ExpansionPanel panel)
-                {
-                    // Toggle visibility based on whether the item exists in the list
-                    panel.IsVisible = true; // or false depending on your condition
-                }
-            }
-        }
 
         private void LoadAvailableLockers()
         {
-            // Few randoms lockers I created to test until we get the DB ready. 
-            // To delete once we've created the DB 
 
-            Door door1 = new Door ( "Red", "Wood",50, 40);
-            Door door2 = new Door("None", "Glass", 50, 30);
-            Door door3 = new Door("Blue", "Wood", 50, 30);
 
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-                new LockerViewModel { Height = 50, Color = "Red", Door = door1, Price = 500, LockerID= 1},
-                new LockerViewModel { Height =50,Color= "Blue", Door = door2 , Price = 1000, LockerID=2 },
-                new LockerViewModel { Height = 70, Color = "Green", Door = door3 , Price = 250, LockerID=3 },
-                
 
             };
         }
@@ -85,33 +61,73 @@ namespace Kitbox_project.Views
             }
 
             // Create a new LockerViewModel based on the selected parameters
+            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+
             LockerViewModel newLocker = new LockerViewModel
             {
-                Height = _viewModel.SelectedHeightItem,
-                Color = _viewModel.SelectedLockerColorItem
+                Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
+                Color = _viewModel.SelectedLockerColorItem,
+                Door = door
+
             };
 
+            int index = _viewModel.AvailableLockers.Count + 1;
+
+            // Set the locker ID as the generated index
+            newLocker.LockerID = index;
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
         }
 
+        private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
+        {
+            var locker = _viewModel.AvailableLockers[indexLock-1];
+            Debug.WriteLine(locker);
+            locker.Color = _viewModel.SelectedLockerColorItem;
+            locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
+            locker.Door.Color = _viewModel.SelectedDoorColorItem;
+
+        }
+
+
         private void OnAddLockerButtonClicked(object sender, EventArgs e) 
         { 
         }
 
+
+
         private void OnEditButtonClicked(object sender, EventArgs e)
         {
-            if (sender is Button button && button.CommandParameter is CabinetViewModel selectedCabinetView)
+            var button = sender as Button;
+            if (button != null)
             {
-                
+                var locker = button.BindingContext as LockerViewModel;
+                if (locker != null)
+                {
+                    indexLock = locker.LockerID;
+                    _viewModel.SelectedLockerColorItem = locker.Color;
+                    _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
+                    _viewModel.SelectedDoorColorItem = locker.Door.Color;
+
+    
+                }
+                else
+                {
+                    Debug.WriteLine("Error: No locker selected.");
+                }
             }
         }
 
-        private void OnConfimButtonClicked(object sender, EventArgs e)
+
+
+
+        private void OnConfimButtonClicked (object sender, EventArgs e)
         {
+            Debug.WriteLine(indexLock);
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
         }
+        
     }
 }

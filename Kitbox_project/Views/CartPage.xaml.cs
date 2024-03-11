@@ -1,39 +1,53 @@
 using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Kitbox_project.Views;
 
-public partial class CartPage : ContentPage
+public partial class CartPage : ContentPage, INotifyPropertyChanged
 {
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
 
-    public CartPage()
+	//   public CartPage()
+	//{
+	//	InitializeComponent();
+	//	Cart = new ObservableCollection<CartViewModel>();
+	//	CartVoid = new ObservableCollection<CartViewModel>();
+
+	//	order = new Order("InCreation", new List<Cabinet>());
+
+	//	LoadCart();
+	//   }
+
+	public CartPage(Order order)
 	{
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
 
-		order = new Order("InCreation", new List<Cabinet>());
+		LoadRealCart(order);
+	}
 
-		LoadCart();
+	private void LoadRealCart(Order order)
+	{
+		foreach (var item in order.Cart)
+		{
+			Cart.Add(new CartViewModel(item));
+		}
+
+        ListCabinets.ItemsSource = Cart;
+
+        UpdateTotalPrice();
     }
 
-    //public CartPage(Order order)
-    //{
-    //    InitializeComponent();
-    //    Cart = new ObservableCollection<CartViewModel>();
-    //    CartVoid = new ObservableCollection<CartViewModel>();
-
-    //    LoadCart();
-    //}
 
     private void LoadCart()
 	{
-		//if (order.Cart != null) { 
 			string color1 = "red";
 			Door door1 = new Door(color1, "wood", 50, 50); // 50x50 door (example)
 			Door door1bis = new Door(color1, "wood", 50, 50);
@@ -50,21 +64,6 @@ public partial class CartPage : ContentPage
 			ListCabinets.ItemsSource = Cart;
 
             UpdateTotalPrice();
-        //}
-
-		//else
-		//{
-		//	foreach (Cabinet cabinet in order.Cart)
-		//	{
-  //              CartViewModel cabinetview = new CartViewModel(cabinet);
-
-		//		Cart.Add(cabinetview);
-  //          }
-
-		//	ListCabinets.ItemsSource = Cart;
-
-		//	UpdateTotalPrice();
-		//}
     }
 
 	private void UpdateCart() 
@@ -142,5 +141,12 @@ public partial class CartPage : ContentPage
             selectedCabinet.Quantity -= 1;
             UpdateCart();
         }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged; //utilité ?
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
