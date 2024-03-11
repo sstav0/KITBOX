@@ -82,11 +82,22 @@ namespace Kitbox_project.Views
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
-            var locker = _viewModel.AvailableLockers[indexLock-1];
+            if( indexLock is not 0)
+            {
+
+            
+            var locker = _viewModel.AvailableLockers[indexLock - 1];
             Debug.WriteLine(locker);
             locker.Color = _viewModel.SelectedLockerColorItem;
             locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            locker.Door.Color = _viewModel.SelectedDoorColorItem;
+            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            locker.Door = door;
+            }
+
+            if(indexLock is 0)
+            {
+                Debug.WriteLine("Please Select a locker");
+            }
 
         }
 
@@ -106,9 +117,15 @@ namespace Kitbox_project.Views
                 if (locker != null)
                 {
                     indexLock = locker.LockerID;
+
                     _viewModel.SelectedLockerColorItem = locker.Color;
                     _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
+                    if(locker.Door.Color is not null)
+                    {
                     _viewModel.SelectedDoorColorItem = locker.Door.Color;
+
+                    }
+
 
     
                 }
