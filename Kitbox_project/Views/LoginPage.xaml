@@ -58,8 +58,8 @@
                 <Entry x:Name="Password" BackgroundColor="White" IsPassword="True"  
                        Grid.ColumnSpan="3" Grid.Column="2" Grid.Row="2" MaximumHeightRequest="45"/>
 
-                <ImageButton Source="eye_password.svg" Clicked="TogglePasswordObscurationClicked" 
-                             Grid.Column="5" Grid.Row="2" MaximumHeightRequest="45"/>
+                <ImageButton Source="eye_password.png" Clicked="TogglePasswordObscurationClicked" 
+                             Grid.Column="5" Grid.Row="2" MaximumHeightRequest="45" Padding="10" Margin="5,0,0,0" CornerRadius="5"/>
 
                 <Button Text="LOGIN" x:Name="PasswordValidated" BackgroundColor="#0066FF" Clicked="LoginTryClicked"
                         Grid.ColumnSpan="2" Grid.Column="4" Grid.Row="3"/>
