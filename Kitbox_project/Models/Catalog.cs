@@ -53,7 +53,7 @@ namespace Kitbox_project.Models
         {
             if (columns == null)
             {
-                columns = new List<string> { "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color" }; //columns that will be selected by default in the database
+                columns = new List<string> { "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color", "Door_material" }; //columns that will be selected by default in the database
             }
 
             var ans = new List<Dictionary<string, string>>();
