@@ -22,6 +22,7 @@ namespace Kitbox_project.Models
                 OnPropertyChanged(nameof(Status));
             }
         }
+
         public List<Cabinet> Cart 
         { 
             get => _cart;
@@ -31,6 +32,7 @@ namespace Kitbox_project.Models
                 OnPropertyChanged(nameof(Cart));
             }
         }
+
         public int OrderID
         {
             get => _orderID;
