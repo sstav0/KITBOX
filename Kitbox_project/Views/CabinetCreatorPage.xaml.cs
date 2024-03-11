@@ -173,6 +173,13 @@ namespace Kitbox_project.Views
             Debug.WriteLine(newCabinet.ToString());
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
+            order.Cart.Add(newCabinet);
+
+            // Create the cart page
+            CartPage newCartPage = new CartPage(order);
+
+            // Make the cart page visible
+            await Navigation.PushAsync(newCartPage);
         }
         
     }
