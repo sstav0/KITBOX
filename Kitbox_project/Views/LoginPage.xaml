@@ -61,7 +61,7 @@
                 <ImageButton Source="eye_password.svg" Clicked="TogglePasswordObscurationClicked" 
                              Grid.Column="5" Grid.Row="2" MaximumHeightRequest="45"/>
 
-                <Button Text="LOGIN" x:Name="PasswordValidated" BackgroundColor="#0066FF"
+                <Button Text="LOGIN" x:Name="PasswordValidated" BackgroundColor="#0066FF" Clicked="LoginTryClicked"
                         Grid.ColumnSpan="2" Grid.Column="4" Grid.Row="3"/>
 
                 <Label x:Name="Notifications" Text="" FontSize="Small"
