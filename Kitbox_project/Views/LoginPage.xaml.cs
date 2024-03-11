@@ -1,6 +1,7 @@
 namespace Kitbox_project.Views;
 using Kitbox_project.DataBase;
 using MySql.Data.MySqlClient;
+using Kitbox_project.LoginViews;
 
 
 public partial class LoginPage : ContentPage
@@ -31,12 +32,8 @@ public partial class LoginPage : ContentPage
 		bool ValidLogin = _dbService.ValidateUser(username, password);
 		if(ValidLogin)
 		{
-			if (username=="storekeeper"){
-				Navigation.PushAsync(new StockPage());
-			}
-			else if(username=="customer"){
-				Navigation.PushAsync(new HomeClientPage());
-			}
+				Shell userShell = CreateShellForUser(username);
+                Application.Current.MainPage = userShell;
 		}
 
 		else
@@ -45,4 +42,26 @@ public partial class LoginPage : ContentPage
                 DisplayAlert("Login Failed", "Invalid username or password", "OK");
             }
 	}
+	 private Shell CreateShellForUser(string username)
+        {
+            // Dynamically create different shells based on the user's role
+            switch (username)
+            {
+                case "customer":
+                    return new CustomerLoginView();
+
+				case "director":
+					return new DirectorLoginView();
+				case "storekeeper":
+					return new StorekeeperLoginView();
+				case "seller":
+					return new SellerLoginView();
+				case "secretary":
+					return new SecretaryLoginView();	
+
+                default:
+                    // Handle other roles or default case
+                    return new AppShell();
+            }
+        }
 }
