@@ -39,6 +39,8 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+
+
         private string _color;
         public string Color
         {
@@ -58,8 +60,13 @@ namespace Kitbox_project.ViewModels
             {
                 _door = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(DoorColor)); // Notify that DoorColor property has changed
+
             }
         }
+
+        public string DoorColor => _door?.Color; // Return door color if the door object is not null
+
 
         private float _price;
         public float Price
@@ -71,6 +78,21 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
+
+
+        private int _lockerIndex;
+        public int LockerIndex
+        {
+            get => _lockerIndex;
+            set => _lockerIndex = value;
+        }
+
+        public void CalculateIndex()
+        {
+            LockerIndex = LockerID + 1;
+        }
+
+
 
         //Pour voir les lockers. Il faudra peut-être changer ça une fois la DB faite
         public override string ToString()

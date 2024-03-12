@@ -1,39 +1,55 @@
 using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace Kitbox_project.Views;
 
-public partial class CartPage : ContentPage
+public partial class CartPage : ContentPage, INotifyPropertyChanged
 {
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
 
-    public CartPage()
+	//   public CartPage()
+	//{
+	//	InitializeComponent();
+	//	Cart = new ObservableCollection<CartViewModel>();
+	//	CartVoid = new ObservableCollection<CartViewModel>();
+
+	//	order = new Order("InCreation", new List<Cabinet>());
+
+	//	LoadCart();
+	//   }
+
+	public CartPage(Order Order)
 	{
+		order = Order;
+
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
 
-		order = new Order("InCreation", new List<Cabinet>());
+		LoadRealCart(order);
+	}
 
-		LoadCart();
+	private void LoadRealCart(Order order)
+	{
+		foreach (Cabinet cabinet in order.Cart)
+		{
+			Cart.Add(new CartViewModel(cabinet));
+		}
+
+        ListCabinets.ItemsSource = Cart;
+
+        UpdateTotalPrice();
     }
 
-    //public CartPage(Order order)
-    //{
-    //    InitializeComponent();
-    //    Cart = new ObservableCollection<CartViewModel>();
-    //    CartVoid = new ObservableCollection<CartViewModel>();
-
-    //    LoadCart();
-    //}
 
     private void LoadCart()
 	{
-		//if (order.Cart != null) { 
 			string color1 = "red";
 			Door door1 = new Door(color1, "wood", 50, 50); // 50x50 door (example)
 			Door door1bis = new Door(color1, "wood", 50, 50);
@@ -50,21 +66,6 @@ public partial class CartPage : ContentPage
 			ListCabinets.ItemsSource = Cart;
 
             UpdateTotalPrice();
-        //}
-
-		//else
-		//{
-		//	foreach (Cabinet cabinet in order.Cart)
-		//	{
-  //              CartViewModel cabinetview = new CartViewModel(cabinet);
-
-		//		Cart.Add(cabinetview);
-  //          }
-
-		//	ListCabinets.ItemsSource = Cart;
-
-		//	UpdateTotalPrice();
-		//}
     }
 
 	private void UpdateCart() 
@@ -88,18 +89,21 @@ public partial class CartPage : ContentPage
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
-		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
-		newCabinetCreatorPage.Order = order;
+		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
 
         await Navigation.PushAsync(newCabinetCreatorPage);
     }
 
-	private void OnConfirmClicked(object sender, EventArgs e)
+	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
-        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
-		{
-            Debug.WriteLine("Confirm");
-        }
+		order.Status = "Waiting Confirmation";
+
+		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+
+		newActiveOrdersPage.Orders.Add(order);
+		newActiveOrdersPage.UpdateOrders();
+
+        await Navigation.PushAsync(newActiveOrdersPage);     
     }
 
 	private async void OnEditClicked(object sender, EventArgs e)
@@ -108,7 +112,7 @@ public partial class CartPage : ContentPage
 		{
 			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
             newCabinetCreatorPage.Order = order;
 			newCabinetCreatorPage.Cabinet = selectedCabinet;
 			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;
@@ -142,5 +146,12 @@ public partial class CartPage : ContentPage
             selectedCabinet.Quantity -= 1;
             UpdateCart();
         }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged; //utilité ?
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
