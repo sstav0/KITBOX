@@ -1,7 +1,6 @@
 using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
 using Kitbox_project.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
 
@@ -23,14 +22,20 @@ namespace Kitbox_project.Views
         public int IDCabinet
         { get => _IDCabinet; set => _IDCabinet = value; }
 
+        private Order order;
+
 
         int indexLock = 0;
+        int totalSize = 0;
 
-        public CabinetCreatorPage()
+        public CabinetCreatorPage(Order Order)
         {
+            order = Order;
+
             InitializeComponent();
             _viewModel = new CabinetViewModel();
             BindingContext = _viewModel;
+
 
             // Load available lockers into the view model
             LoadAvailableLockers();
@@ -82,16 +87,27 @@ namespace Kitbox_project.Views
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
-            var locker = _viewModel.AvailableLockers[indexLock-1];
+            if( indexLock is not 0)
+            {
+
+            
+            var locker = _viewModel.AvailableLockers[indexLock - 1];
             Debug.WriteLine(locker);
             locker.Color = _viewModel.SelectedLockerColorItem;
             locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            locker.Door.Color = _viewModel.SelectedDoorColorItem;
+            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            locker.Door = door;
+            }
+
+            if(indexLock is 0)
+            {
+                Debug.WriteLine("Please Select a locker");
+            }
 
         }
 
 
-        private void OnAddLockerButtonClicked(object sender, EventArgs e) 
+        private void OnAddLockerButtonClicked(object sender, EventArgs e) //Pas utilisé pour le moment.  
         { 
         }
 
@@ -106,9 +122,15 @@ namespace Kitbox_project.Views
                 if (locker != null)
                 {
                     indexLock = locker.LockerID;
+
                     _viewModel.SelectedLockerColorItem = locker.Color;
                     _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
+                    if(locker.Door.Color is not null)
+                    {
                     _viewModel.SelectedDoorColorItem = locker.Door.Color;
+
+                    }
+
 
     
                 }
@@ -122,11 +144,42 @@ namespace Kitbox_project.Views
 
 
 
-        private void OnConfimButtonClicked (object sender, EventArgs e)
+        private async void OnConfimButtonClicked (object sender, EventArgs e)
         {
-            Debug.WriteLine(indexLock);
+            // Convert ObservableCollection<LockerViewModel> to List<Locker>
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                Convert.ToInt32(viewModel.Height),
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                viewModel.Color,
+                new Door(viewModel.Door.Color, "Wood", 50, 40), // Prcq on a tjr pas mis les materiaux pour la porte je mets au pif rn 
+                0 // Price
+            )).ToList();
+
+            totalSize = lockers.Sum(locker => locker.Height);
+            Debug.WriteLine("La taille totale est");
+            Debug.WriteLine(totalSize);
+
+
+            //On crée un nouveau cabinet
+            Cabinet newCabinet = new Cabinet(
+                lockers,
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                totalSize // Height pour le moment mais faudra remplacer par angle iron
+            );
+
+            // Add the new Cabinet to the Order's cart
+            Debug.WriteLine(newCabinet.ToString());
             //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
             //System.Diagnostics.Debug.WriteLine(newCabinet);
+            order.Cart.Add(newCabinet);
+
+            // Create the cart page
+            CartPage newCartPage = new CartPage(order);
+
+            // Make the cart page visible
+            await Navigation.PushAsync(newCartPage);
         }
         
     }
