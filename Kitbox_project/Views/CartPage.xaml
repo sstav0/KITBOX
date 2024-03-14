@@ -8,6 +8,7 @@
     <Grid Padding="5" RowSpacing="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="10*"/>
             <RowDefinition Height="1.25*"/>
             <RowDefinition Height="1.25*"/> 
@@ -22,10 +23,46 @@
             <ColumnDefinition Width="0.1*"/>
         </Grid.ColumnDefinitions>
 
-    <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="1"
-           FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
+        <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="1"
+               FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
 
-    <ScrollView Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1">
+        <Border Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1" 
+                StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="0.075*"/>
+                    <ColumnDefinition Width="0.15*"/>
+                    <ColumnDefinition Width="0.075*"/>
+                    <ColumnDefinition Width="0.15*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.35*"/>
+                    <ColumnDefinition Width="0.2*"/>
+                    <ColumnDefinition Width="0.15*"/>
+                    <ColumnDefinition Width="0.1*"/>
+                    <ColumnDefinition Width="0.05*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Quantity" Grid.Column="2"
+                       HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                <Label Text="Length" Grid.Column="5" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                <Label Text="Height" Grid.Column="6" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                <Label Text="Depth" Grid.Column="7" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                <Label Text="Nb. of Lockers" Grid.Column="8" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+                <Label Text="Price" Grid.Column="9" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+
+            </Grid>
+        </Border>
+
+        <ScrollView Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="1">
         
             <ListView x:Name="ListCabinets">
                 <ListView.ItemTemplate>
@@ -35,54 +72,42 @@
                             <Border BackgroundColor="#A7DAFF" StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
                                 
                                 <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="30"/>
-                                        <RowDefinition Height="30"/>
-                                    </Grid.RowDefinitions>
+
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.05*"/>
+                                        <ColumnDefinition Width="0.075*"/>
+                                        <ColumnDefinition Width="0.15*"/>
+                                        <ColumnDefinition Width="0.075*"/>
+                                        <ColumnDefinition Width="0.15*"/>
                                         <ColumnDefinition Width="0.2*"/>
                                         <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.25*"/>
-                                        <ColumnDefinition Width="0.25*"/>
-                                        <ColumnDefinition Width="0.25*"/>
-                                        <ColumnDefinition Width="0.25*"/>
-                                        <ColumnDefinition Width="0.25*"/>
                                         <ColumnDefinition Width="0.2*"/>
                                         <ColumnDefinition Width="0.35*"/>
-                                        <ColumnDefinition Width="0.25*"/>
-                                        <ColumnDefinition Width="0.25*"/>
                                         <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.2*"/>
+                                        <ColumnDefinition Width="0.15*"/>
                                         <ColumnDefinition Width="0.1*"/>
+                                        <ColumnDefinition Width="0.05*"/>
                                     </Grid.ColumnDefinitions>
-
-                                    <Label Text="{Binding Quantity}" FontAttributes="Bold" Grid.Column="1" Grid.RowSpan="2" Grid.Row="0"  VerticalOptions="Center"/>
-
-                                    <Button Text="/\" Grid.Column="2" Grid.Row="0" Clicked="OnMoreClicked" MaximumHeightRequest="10" VerticalOptions="End"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" CommandParameter="{Binding .}"/>
-                                    <Button Text="\/" Grid.Column="2" Grid.Row="1" Clicked="OnLessClicked" MaximumHeightRequest="10"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" CommandParameter="{Binding .}"/>
                                     
-                                    <Label Text="Length :" Grid.Column="4" Grid.RowSpan="2" Grid.Row="0"  VerticalOptions="Center"/>
-                                    <Label Text="{Binding Length}" Grid.Column="5" Grid.RowSpan="2" Grid.Row="0"  VerticalOptions="Center"/> <!-- {Binding cabinet.GetLenght()} -->
-                                    <Label Text="Height :" Grid.Column="6" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/>
-                                    <Label Text="{Binding Height}" Grid.Column="7" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/> <!-- {Binding cabinet.GetHeight()} -->
-                                    <Label Text="Depth :" Grid.Column="8" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/>
-                                    <Label Text="{Binding Depth}" Grid.Column="9" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/> <!-- {Binding cabinet.GetDepth()} -->
-                                    <Label Text="Nb. Lockers :" Grid.Column="10" HorizontalTextAlignment="Center" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/>
-                                    <Label Text="{Binding NbrLockers}" Grid.Column="11" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/> <!-- {Binding lockers.Count()} -->
-                                    <Label Text="Price :" Grid.Column="12" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center"/>
-                                    <Label Text="{Binding Price}" Grid.Column="13" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Center"/> <!-- {Binding cabinet.GetPrice()} -->
-                                    <Label Text="€" Grid.Column="14" Grid.RowSpan="2" Grid.Row="0" VerticalOptions="Center" HorizontalOptions="Start"/>
+                                    <Button Text="+" Grid.Column="1" Clicked="OnMoreClicked" MaximumHeightRequest="10" HorizontalOptions="End"
+                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" CommandParameter="{Binding .}"/>
 
-                                    <Button Text="Edit" Grid.Column="15" FontAttributes="Bold" Grid.RowSpan="2" Grid.Row="0" Clicked="OnEditClicked" CommandParameter="{Binding .}"
-                                           VerticalOptions="Center" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
-                                    <Button Text="X" Grid.Column="16" FontAttributes="Bold" Grid.RowSpan="2" Grid.Row="0" Clicked="OnDeleteClicked" CommandParameter="{Binding .}"
-                                           HorizontalOptions="Start" VerticalOptions="Center" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
+                                    <Label Text="{Binding Quantity}" FontAttributes="Bold" Grid.Column="2" 
+                                           HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                                    <Button Text="-" Grid.Column="3" Clicked="OnLessClicked" MaximumHeightRequest="10" HorizontalOptions="Start"
+                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" CommandParameter="{Binding .}"/>
+
+                                    <Label Text="{Binding Length}" Grid.Column="5" VerticalOptions="Center"/> <!-- {Binding cabinet.GetLenght()} -->
+                                    <Label Text="{Binding Height}" Grid.Column="6" VerticalOptions="Center"/> <!-- {Binding cabinet.GetHeight()} -->
+                                    <Label Text="{Binding Depth}" Grid.Column="7" VerticalOptions="Center"/> <!-- {Binding cabinet.GetDepth()} -->
+                                    <Label Text="{Binding NbrLockers}" Grid.Column="8" VerticalOptions="Center"/> <!-- {Binding lockers.Count()} -->
+                                    <Label Text="{Binding Price}" Grid.Column="9" HorizontalOptions="Start" VerticalOptions="Center"/> <!-- {Binding cabinet.GetPrice()} -->
+
+                                    <Button Text="Edit" Grid.Column="10" FontAttributes="Bold" Clicked="OnEditClicked" CommandParameter="{Binding .}"
+                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
+                                    <Button Text="X" Grid.Column="11" FontAttributes="Bold" Clicked="OnDeleteClicked" CommandParameter="{Binding .}"
+                                            HorizontalOptions="Start" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
                                 
                                 </Grid>
                             </Border>
@@ -93,7 +118,7 @@
         </ScrollView>
 
         <Border BackgroundColor="LightGray" StrokeShape="RoundRectangle 10,10,10,10" Padding="10"
-               Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="1">
+               Grid.Row="3" Grid.ColumnSpan="4" Grid.Column="1">
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -113,7 +138,7 @@
             </Grid>
         </Border>
         
-        <Button Text="ADD NEW CABINET" Grid.Row="3" Grid.Column="1" Margin="2"
+        <Button Text="ADD NEW CABINET" Grid.Row="4" Grid.Column="1" Margin="2"
                 Clicked="OnAddNewClicked"/>
         
         <Button Text="CONFIRM" Grid.Row="3" Grid.Column="4" Margin="2"

@@ -79,7 +79,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private void UpdateTotalPrice()
 	{
         double i = 0;
-        foreach (CartViewModel item in Cart)
+        foreach (Cabinet item in order.Cart)
         {
             i += Convert.ToDouble(item.Price);
         }
