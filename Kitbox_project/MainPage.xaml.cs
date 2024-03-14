@@ -9,13 +9,16 @@ public partial class MainPage : ContentPage
         private readonly DatabaseCustomer _dbService;
         private readonly DatabaseCatalog _dbService2;
         private readonly DatabaseLogin _dbService3;
+        
+        string login = Login.login;
+        string password = Password.password;
         public MainPage()
         {
             
             InitializeComponent();
             
-            _dbService2 = new DatabaseCatalog("storekeeper", "storekeeper");
-            _dbService = new DatabaseCustomer("customer", "customer");
+            _dbService2 = new DatabaseCatalog(login, password);
+            _dbService = new DatabaseCustomer(login, password);
             _dbService3 = new DatabaseLogin();
             //TestDatabaseConnection();
         }
@@ -37,7 +40,7 @@ public partial class MainPage : ContentPage
         private void OnCounterClicked(object sender, EventArgs e)
         {   
             
-            bool test =_dbService3.ValidateUser("storekeeper","storekeeper");
+            bool test =_dbService3.ValidateUser(login,password);
             Console.WriteLine($"Login Result: {test}");
             count++;
 

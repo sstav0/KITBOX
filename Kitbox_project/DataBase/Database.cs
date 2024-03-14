@@ -10,17 +10,18 @@ namespace Kitbox_project.DataBase
 
         public Database(string id, string password){
         ID = id;
-        Password = password;
+        Psswrd = password;
     }
         
-        protected static string ID;
-        protected  static string Password;
+        protected static  string ID =  Login.login ;
+        
+        protected  static string Psswrd =  Password.password;
         protected string tablename;
         public static string connectionString
         {
             get
             {
-                return $"Server=pat.infolab.ecam.be;port=63417;Database=KitBoxing;User ID={ID};Password={Password};";
+                return $"Server=pat.infolab.ecam.be;port=63417;Database=KitBoxing;User ID={ID};Password={Psswrd};";
             }
         }
 
