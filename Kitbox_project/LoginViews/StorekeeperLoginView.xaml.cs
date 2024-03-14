@@ -5,7 +5,7 @@ public partial class StorekeeperLoginView: Shell
 	public StorekeeperLoginView()
 	{
 		InitializeComponent();
-		string login = Login.login = "storekeepe";
+		string login = Login.login = "storekeeper";
          string password = Password.password = "storekeeper";
 	}
 }

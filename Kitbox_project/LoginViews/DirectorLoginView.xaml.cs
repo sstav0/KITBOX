@@ -5,5 +5,7 @@ public partial class DirectorLoginView : Shell
 	public DirectorLoginView()
 	{
 		InitializeComponent();
+		string login = Login.login = "director";
+    	string password = Password.password = "director";
 	}
 }
