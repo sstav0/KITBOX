@@ -2,44 +2,16 @@
 
 using System;
 using Kitbox_project.DataBase;
+using Kitbox_project.Models;
 using MySql.Data.MySqlClient;
 
 public class DatabaseOrder : Database
 {
-
- public DatabaseOrder(string id, string password):base(id, password){
-
-    tablename = "Order";
-    }
-public List<object> LoadAll()
+    DatabaseStock databaseStock = new DatabaseStock("storekeeper", "storekeeper");
+    public DatabaseOrder(string id, string password) : base(id, password)
     {
-        List<object> l = new List<object>();
 
-        using (MySqlConnection connection = new MySqlConnection(connectionString))
-        {
-            connection.Open();
-
-            string query = $"SELECT * FROM {tablename}";
-
-            using (MySqlCommand command = new MySqlCommand(query, connection))
-            {
-
-                // Execute the SELECT query
-                using (MySqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        for (int i = 0; i < reader.FieldCount; i++)
-                        {
-                            //to implement
-                        }
-                    }
-                }
-            }
-            return l;
-
-        }
-
+        tablename = "Order";
     }
 }
 

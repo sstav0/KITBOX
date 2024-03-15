@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Kitbox_project.Views;
 
@@ -12,19 +13,20 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
+    public ICommand OnUpdateButtonClicked { get; }
 
-	//   public CartPage()
-	//{
-	//	InitializeComponent();
-	//	Cart = new ObservableCollection<CartViewModel>();
-	//	CartVoid = new ObservableCollection<CartViewModel>();
+    //   public CartPage()
+    //{
+    //	InitializeComponent();
+    //	Cart = new ObservableCollection<CartViewModel>();
+    //	CartVoid = new ObservableCollection<CartViewModel>();
 
-	//	order = new Order("InCreation", new List<Cabinet>());
+    //	order = new Order("InCreation", new List<Cabinet>());
 
-	//	LoadCart();
-	//   }
+    //	LoadCart();
+    //   }
 
-	public CartPage(Order Order)
+    public CartPage(Order Order)
 	{
 		order = Order;
 
@@ -58,7 +60,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 			List<Locker> lockers1 = new List<Locker>();
             lockers1.Add(locker1);
 			lockers1.Add(locker1bis);
-			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1);
+			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 3);
 			CartViewModel cabinet1view = new CartViewModel(cabinet1);
 
 			Cart.Add(cabinet1view);
@@ -68,12 +70,17 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
             UpdateTotalPrice();
     }
 
-	private void UpdateCart() 
+	public void UpdateCart() 
 	{
         ListCabinets.ItemsSource = CartVoid;
         ListCabinets.ItemsSource = Cart;
 
 		UpdateTotalPrice();
+	}
+
+	public void UpdateCartCLicked(object sender, EventArgs e)
+	{
+		UpdateCart();
 	}
 
 	private void UpdateTotalPrice()
@@ -98,10 +105,10 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
 		order.Status = "Waiting Confirmation";
 
-		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+		OrdersPage newActiveOrdersPage = new OrdersPage();
 
 		newActiveOrdersPage.Orders.Add(order);
-		newActiveOrdersPage.UpdateOrders();
+		newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
         await Navigation.PushAsync(newActiveOrdersPage);     
     }
@@ -125,7 +132,8 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {
-			Cart.Remove(selectedCabinet);
+			order.Cart.RemoveAt(selectedCabinet.CabinetID);
+            Cart.Remove(selectedCabinet);
 			UpdateCart();
         }
     }

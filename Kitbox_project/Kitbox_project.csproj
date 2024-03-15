@@ -62,6 +62,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\OrdersPage.xaml.cs">
+	    <DependentUpon>OrdersPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\CartPage.xaml.cs">
 	    <DependentUpon>CartPage.xaml</DependentUpon>
 	  </Compile>
@@ -71,13 +74,16 @@
 	  <Compile Update="Views\LoginPage.xaml.cs">
 	    <DependentUpon>LoginPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\SoldHistoryPage.xaml.cs">
+	    <DependentUpon>SoldHistoryPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Utilities\ExpansionPanel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\ActiveOrdersPage.xaml">
+	  <MauiXaml Update="Views\OrdersPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\CartPage.xaml">
@@ -94,6 +100,9 @@
 	  </MauiXaml>
 	  <MauiXaml Update="Views\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SoldHistoryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\StockPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>

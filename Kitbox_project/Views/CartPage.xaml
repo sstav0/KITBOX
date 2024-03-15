@@ -23,8 +23,10 @@
             <ColumnDefinition Width="0.1*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="4" Grid.Column="1"
+        <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1"
                FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
+
+        <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Command="{Binding UpdateCartClicked}"/>
 
         <Border Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1" 
                 StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
@@ -32,9 +34,9 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.075*"/>
+                    <ColumnDefinition Width="0.06*"/>
                     <ColumnDefinition Width="0.15*"/>
-                    <ColumnDefinition Width="0.075*"/>
+                    <ColumnDefinition Width="0.06*"/>
                     <ColumnDefinition Width="0.15*"/>
                     <ColumnDefinition Width="0.2*"/>
                     <ColumnDefinition Width="0.2*"/>
@@ -75,9 +77,9 @@
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="0.05*"/>
-                                        <ColumnDefinition Width="0.075*"/>
+                                        <ColumnDefinition Width="0.06*"/>
                                         <ColumnDefinition Width="0.15*"/>
-                                        <ColumnDefinition Width="0.075*"/>
+                                        <ColumnDefinition Width="0.06*"/>
                                         <ColumnDefinition Width="0.15*"/>
                                         <ColumnDefinition Width="0.2*"/>
                                         <ColumnDefinition Width="0.2*"/>
@@ -88,15 +90,17 @@
                                         <ColumnDefinition Width="0.1*"/>
                                         <ColumnDefinition Width="0.05*"/>
                                     </Grid.ColumnDefinitions>
-                                    
+
                                     <Button Text="+" Grid.Column="1" Clicked="OnMoreClicked" MaximumHeightRequest="10" HorizontalOptions="End"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" CommandParameter="{Binding .}"/>
+                                            TextColor="Green" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF"
+                                            FontSize="Medium" FontAttributes="Bold" CommandParameter="{Binding .}"/>
 
                                     <Label Text="{Binding Quantity}" FontAttributes="Bold" Grid.Column="2" 
                                            HorizontalOptions="Center" VerticalOptions="Center"/>
 
                                     <Button Text="-" Grid.Column="3" Clicked="OnLessClicked" MaximumHeightRequest="10" HorizontalOptions="Start"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" CommandParameter="{Binding .}"/>
+                                            TextColor="Red" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" 
+                                            FontSize="Medium" FontAttributes="Bold" CommandParameter="{Binding .}"/>
 
                                     <Label Text="{Binding Length}" Grid.Column="5" VerticalOptions="Center"/> <!-- {Binding cabinet.GetLenght()} -->
                                     <Label Text="{Binding Height}" Grid.Column="6" VerticalOptions="Center"/> <!-- {Binding cabinet.GetHeight()} -->
@@ -105,9 +109,9 @@
                                     <Label Text="{Binding Price}" Grid.Column="9" HorizontalOptions="Start" VerticalOptions="Center"/> <!-- {Binding cabinet.GetPrice()} -->
 
                                     <Button Text="Edit" Grid.Column="10" FontAttributes="Bold" Clicked="OnEditClicked" CommandParameter="{Binding .}"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
+                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="Black" MaximumHeightRequest="11"/>
                                     <Button Text="X" Grid.Column="11" FontAttributes="Bold" Clicked="OnDeleteClicked" CommandParameter="{Binding .}"
-                                            HorizontalOptions="Start" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
+                                            HorizontalOptions="Start" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="Black" MaximumHeightRequest="11"/>
                                 
                                 </Grid>
                             </Border>
@@ -141,7 +145,7 @@
         <Button Text="ADD NEW CABINET" Grid.Row="4" Grid.Column="1" Margin="2"
                 Clicked="OnAddNewClicked"/>
         
-        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="4" Margin="2"
+        <Button Text="CONFIRM" Grid.Row="4" Grid.Column="4" Margin="2"
                 Clicked="OnConfirmClicked"/>
 
     </Grid>

@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-             x:Class="Kitbox_project.Views.ActiveOrdersPage"
+             x:Class="Kitbox_project.Views.OrdersPage"
              BackgroundColor="White"
-             Title="ActiveOrdersPage">
+             Title="OrdersPage">
 
-    <Grid Padding="5" RowSpacing="10">
+    <Grid Padding="5" RowSpacing="10" ColumnSpacing="5">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -18,16 +18,30 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
 
-        <Label Text="Active Orders" FontSize="Header" FontAttributes="Bold"
+        <Label Text="Orders" FontSize="Header" FontAttributes="Bold"
                HorizontalOptions="Start" VerticalOptions="Center"
-               Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"/>
+               Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0"/>
+        
+        <!--Temporary-->
+        <Button Text="Update Page" Clicked="UpdateOrdersClicked"
+                Grid.Row="0" Grid.Column="4"/>
 
         <SearchBar x:Name="OrderIDFilter" Placeholder="Search by ID..." TextChanged="OnTextChanged"
-                   Grid.Row="1" Grid.Column="0"/>
+                   Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"/>
 
-        <ScrollView Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
+        <Button Text="Active Orders" Clicked="OnActiveOrdersClicked" IsEnabled="True"
+                BackgroundColor="Gray" TextColor="Black" x:Name="ActiveOrdersButton" 
+                Grid.Row="1" Grid.Column="3" MaximumWidthRequest="150" HorizontalOptions="End"/>
+
+        <Button x:Name="FinishedOrdersButton" Text="Finished Orders" Clicked="OnFinishedOrdersClicked" IsEnabled="True"
+                BackgroundColor="#512BD4" TextColor="White"
+                Grid.Row="1" Grid.Column="4" MaximumWidthRequest="150" HorizontalOptions="Start"/>
+
+        <ScrollView Grid.Row="2" Grid.ColumnSpan="5" Grid.Column="0">
 
             <ListView x:Name="ListViewOrders">
                 <ListView.ItemTemplate>
@@ -48,6 +62,7 @@
                                         <ColumnDefinition Width="0.5*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="0.5*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label x:Name="Notifications" Text="{Binding Notification}" Grid.Column="0" HorizontalTextAlignment="Center"
@@ -60,7 +75,7 @@
                                             Clicked="ReadyClicked" Margin="5,0,5,0" MaximumHeightRequest="20" Grid.Row="0"/>
 
 
-                                    <uranium:ExpanderView Grid.ColumnSpan="6" Grid.Row="1">
+                                    <uranium:ExpanderView Grid.ColumnSpan="7" Grid.Row="1">
 
                                         <uranium:ExpanderView.Header>
 

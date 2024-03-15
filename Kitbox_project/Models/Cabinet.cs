@@ -18,11 +18,12 @@ namespace Kitbox_project.Models
         private int _height;
         private int _cabinetID;
 
-        public Cabinet(List<Locker> lockers, int depth, int length, int quantity)
+        public Cabinet(List<Locker> lockers, int depth, int length, int height, int quantity)
         {
             this._lockers = lockers;
             this._depth = depth;
             this._length = length;
+            this._height = height;
             this._quantity = quantity;
         }
 
@@ -110,6 +111,7 @@ namespace Kitbox_project.Models
         public int CabinetID
         {
             get => _cabinetID;
+            set => _cabinetID = value;
         }
 
         public void AddLocker(Locker locker)
