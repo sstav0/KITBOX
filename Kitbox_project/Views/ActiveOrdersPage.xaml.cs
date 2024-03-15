@@ -26,13 +26,13 @@ public partial class ActiveOrdersPage : ContentPage
 		Order order1 = new Order("Waiting Confirmation", new List<Cabinet>());
 
 		Random rnd = new Random();
-		order1.OrderID = rnd.Next(1, 101); // Gives a random int between 1 & 100
+		//order1.OrderID = rnd.Next(1, 101); // Gives a random int between 1 & 100
 
 		OrderViewModel orderviewmodel1 = new OrderViewModel(order1);
 
 		Order order2 = new Order("Waiting Confirmation", new List<Cabinet>());
 
-		order2.OrderID = rnd.Next(1, 101);
+		//order2.OrderID = rnd.Next(1, 101);
 
 		OrderViewModel orderviewmodel2 = new OrderViewModel(order2);
 		orderviewmodel2.Notification = "Missing parts";
