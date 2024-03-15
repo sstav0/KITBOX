@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
+             x:Class="Kitbox_project.Views.SupplierOrdersPage"
+             BackgroundColor="White"
+             Title="SupplierOrdersPage">
+
+    <ContentPage.BindingContext>
+        <viewModels:SupplierOrdersViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Margin="40">
+            <!-- Title -->
+            <Label Text="Supplier Orders" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
+
+            <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
+                <SearchBar Placeholder="Search..." TextChanged="OnTextChanged" />
+            </Border>
+
+            <!-- ListView to display stock data -->
+            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1100" Padding="20">
+                <CollectionView ItemsSource="{Binding SupplierOrders}" SelectionMode="Single">
+                    <CollectionView.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="3*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0" Text="Id" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="1" Text="Item Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="2" Text="Item Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="3" Text="Supplier" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="4" Text="Date" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="5" Text="Price" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                            <Label Grid.Column="6" Text="Status" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold" />
+                        </Grid>
+                    </CollectionView.Header>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid IsVisible="{Binding SupplierOrderVisibility}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0" Text="{Binding OrderID}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="1" Text="{Binding Item.Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="2" Text="{Binding Item.Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="3" Text="{Binding Supplier}" VerticalOptions="Center" Margin="10,5" FontSize="Body" />
+                                <Label Grid.Column="4" Text="{Binding Date}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="5" Text="{Binding Price}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Label Grid.Column="6" Text="{Binding Status}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <Button Grid.Column="7" Text="Cancel" BackgroundColor="Red" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                                <Button Grid.Column="8" Text="Received" BackgroundColor="Green" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
