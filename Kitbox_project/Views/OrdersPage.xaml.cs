@@ -48,7 +48,7 @@ public partial class OrdersPage : ContentPage
         {
             int RandomID = rnd.Next(1, 101);
 
-            order.OrderID = RandomID;
+            //order.OrderID = RandomID;
 
             OrderViewModel newOrderViewModel = new OrderViewModel(order);
 

@@ -111,6 +111,7 @@ namespace Kitbox_project.Models
         public int CabinetID
         {
             get => _cabinetID;
+            set => _cabinetID = value;
         }
 
         public void AddLocker(Locker locker)

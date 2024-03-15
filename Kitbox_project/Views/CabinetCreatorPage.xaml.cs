@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Kitbox_project.Views
 {
@@ -171,9 +172,21 @@ namespace Kitbox_project.Views
             ); 
 
             // Add the new Cabinet to the Order's cart
+
+            if (order.Cart.Count() != 0)
+            {
+                int newIndex = order.Cart.Last().CabinetID + 1;
+
+                newCabinet.CabinetID = newIndex;
+            }
+
+            else
+            {
+                newCabinet.CabinetID = 0;
+            }
+
             Debug.WriteLine(newCabinet.ToString());
-            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
-            //System.Diagnostics.Debug.WriteLine(newCabinet);
+
             order.Cart.Add(newCabinet);
 
             // Create the cart page
