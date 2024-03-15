@@ -105,9 +105,9 @@
                                     <Label Text="{Binding Price}" Grid.Column="9" HorizontalOptions="Start" VerticalOptions="Center"/> <!-- {Binding cabinet.GetPrice()} -->
 
                                     <Button Text="Edit" Grid.Column="10" FontAttributes="Bold" Clicked="OnEditClicked" CommandParameter="{Binding .}"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
+                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="Black" MaximumHeightRequest="10"/>
                                     <Button Text="X" Grid.Column="11" FontAttributes="Bold" Clicked="OnDeleteClicked" CommandParameter="{Binding .}"
-                                            HorizontalOptions="Start" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" MaximumHeightRequest="10"/>
+                                            HorizontalOptions="Start" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="Black" MaximumHeightRequest="10"/>
                                 
                                 </Grid>
                             </Border>
@@ -141,7 +141,7 @@
         <Button Text="ADD NEW CABINET" Grid.Row="4" Grid.Column="1" Margin="2"
                 Clicked="OnAddNewClicked"/>
         
-        <Button Text="CONFIRM" Grid.Row="3" Grid.Column="4" Margin="2"
+        <Button Text="CONFIRM" Grid.Row="4" Grid.Column="4" Margin="2"
                 Clicked="OnConfirmClicked"/>
 
     </Grid>
