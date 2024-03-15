@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Kitbox_project.Views;
 
@@ -12,19 +13,20 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
+    public ICommand OnUpdateButtonClicked { get; }
 
-	//   public CartPage()
-	//{
-	//	InitializeComponent();
-	//	Cart = new ObservableCollection<CartViewModel>();
-	//	CartVoid = new ObservableCollection<CartViewModel>();
+    //   public CartPage()
+    //{
+    //	InitializeComponent();
+    //	Cart = new ObservableCollection<CartViewModel>();
+    //	CartVoid = new ObservableCollection<CartViewModel>();
 
-	//	order = new Order("InCreation", new List<Cabinet>());
+    //	order = new Order("InCreation", new List<Cabinet>());
 
-	//	LoadCart();
-	//   }
+    //	LoadCart();
+    //   }
 
-	public CartPage(Order Order)
+    public CartPage(Order Order)
 	{
 		order = Order;
 
@@ -68,7 +70,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
             UpdateTotalPrice();
     }
 
-	private void UpdateCart() 
+	public void UpdateCart() 
 	{
         ListCabinets.ItemsSource = CartVoid;
         ListCabinets.ItemsSource = Cart;
@@ -76,7 +78,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		UpdateTotalPrice();
 	}
 
-	private void UpdateCartCLicked(object sender, EventArgs e)
+	public void UpdateCartCLicked(object sender, EventArgs e)
 	{
 		UpdateCart();
 	}
