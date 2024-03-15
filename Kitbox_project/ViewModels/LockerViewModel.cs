@@ -17,13 +17,14 @@ namespace Kitbox_project.ViewModels
 
 
         // string to notify the missing parts for a Locker
-        public string NotePartsAvailability;
-        private string _notePartsAvailability
+        private string _notePartsAvailability;
+        public string NotePartsAvailability
         {
             get => _notePartsAvailability;
             set
             {
                 _notePartsAvailability = value;
+                OnPropertyChanged();
             }
         }
 

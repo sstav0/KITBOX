@@ -2,6 +2,7 @@
 
 using System;
 using Kitbox_project.DataBase;
+using Kitbox_project.Models;
 using MySql.Data.MySqlClient;
 
 public class DatabaseOrder : Database
@@ -45,26 +46,25 @@ public class DatabaseOrder : Database
 
     public async Task<bool> NotifyUnavailability(string idOrder) // /!\ notify unavailability for a locker and not the complete order
     {
-        Dictionary<string, string> orderIdList = new Dictionary<string, string>
+        Dictionary<string, string> orderIdDict = new Dictionary<string, string> //GetData() parameter
         {
             {"orderId", idOrder}
         };
+        List<string> conditionColumn = new List<string>() { "Reference", "Quantity"}; //GetData() parameter
 
-        var partsOrdered = await GetData(orderIdList);
+        List<Dictionary<string,string>> partsOrdered = await GetData(orderIdDict,conditionColumn); // List<Dict<string, string>> every data from DB for the given idOrder  
 
-        Dictionary<string, string> stockRefList = new Dictionary<string, string>();
-        foreach (var part in partsOrdered)
+        Console.WriteLine(partsOrdered.Count);
+
+        Dictionary<string, string> stockPartsDict = new Dictionary<string, string>(); //GetData() parameter
+        foreach(string columns in partsOrdered[0].Values)
         {
-            if (part.ContainsKey("Reference"))
-            {
-                stockRefList["Reference"] = part["Reference"];
-            }
+            stockPartsDict["Reference"] = columns;
+            List<Dictionary<string, string>> isStocked = await databaseStock.GetData(stockPartsDict, conditionColumn); // List<Dict<string, string>> every data from stock DB for the given idOrder
+
+            Console.WriteLine(isStocked[0]["Reference"]);
         }
-
-        var partsStocked = await databaseStock.GetData(stockRefList);
-
-        // Process partsStocked as needed
-
+        
         return true;
     }
 }

@@ -72,8 +72,8 @@ namespace Kitbox_project.Views
             {
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
-                Door = door
-
+                Door = door,
+                NotePartsAvailability = "NotePartsAvailability(ARTHUR)"
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;
