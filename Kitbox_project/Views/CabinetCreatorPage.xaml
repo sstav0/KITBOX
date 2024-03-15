@@ -144,6 +144,7 @@
                     Margin="30"
                     BackgroundColor="#0066FF"
                     Clicked="AddSelectedLocker_Clicked"
+                    MinimumHeightRequest="45"
                     FontSize="20"
                     Text="Add" />
 
@@ -153,8 +154,10 @@
                     Margin="30"
                     BackgroundColor="#0066FF"
                     Clicked="ModifySelectedLocker_Clicked"
+                    MinimumHeightRequest="45"
                     FontSize="20"
                     Text="Modify" />
+                
                 <!--  All the Text inside the Outside Frame  -->
                 <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalOptions="Center" >
                     <Label.FormattedText>

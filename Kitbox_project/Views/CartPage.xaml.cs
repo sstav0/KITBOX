@@ -125,7 +125,8 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {
-			Cart.Remove(selectedCabinet);
+			order.Cart.RemoveAt(selectedCabinet.CabinetID);
+            Cart.Remove(selectedCabinet);
 			UpdateCart();
         }
     }
