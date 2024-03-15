@@ -98,7 +98,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
 		order.Status = "Waiting Confirmation";
 
-		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+		OrdersPage newActiveOrdersPage = new OrdersPage();
 
 		newActiveOrdersPage.Orders.Add(order);
 		newActiveOrdersPage.UpdateOrders();

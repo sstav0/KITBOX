@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Kitbox_project.Views;
 
-public partial class ActiveOrdersPage : ContentPage
+public partial class OrdersPage : ContentPage
 {
 	private ObservableCollection<OrderViewModel> ListOrders;
     private ObservableCollection<OrderViewModel> ListOrdersVoid;
@@ -23,7 +23,7 @@ public partial class ActiveOrdersPage : ContentPage
 
     private Random rnd;
 
-    public ActiveOrdersPage()
+    public OrdersPage()
     {
         InitializeComponent();
 
@@ -133,6 +133,42 @@ public partial class ActiveOrdersPage : ContentPage
         if (sender is SearchBar searchBar && BindingContext is OrderViewModel orderViewModel)
         {
             orderViewModel.ApplyFilter(searchBar.Text);
+        }
+    }
+
+    private void OnActiveOrdersClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            if (button.TextColor == Colors.Black)
+            {
+                button.TextColor = Colors.White;
+                button.BackgroundColor = Color.Parse("#512BD4");
+            }
+
+            else
+            {
+                button.TextColor = Colors.Black;
+                button.BackgroundColor = Colors.Gray;
+            }
+        }
+    }
+
+    private void OnFinishedOrdersClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            if (button.TextColor == Colors.Black)
+            {
+                button.TextColor = Colors.White;
+                button.BackgroundColor = Color.Parse("#512BD4");
+            }
+
+            else
+            {
+                button.TextColor = Colors.Black;
+                button.BackgroundColor = Colors.Gray;
+            }
         }
     }
 }

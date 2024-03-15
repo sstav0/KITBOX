@@ -36,9 +36,9 @@
             Route="StockPage"/>
 
         <ShellContent
-            Title="Active Orders"
-            ContentTemplate="{DataTemplate views:ActiveOrdersPage}"
-            Route="ActiveOrdersPage"/>
+            Title="Orders"
+            ContentTemplate="{DataTemplate views:OrdersPage}"
+            Route="OrdersPage"/>
 
     </TabBar>
 
