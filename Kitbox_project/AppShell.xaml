@@ -8,6 +8,7 @@
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
 
+
     <TabBar>
 
         <ShellContent
@@ -39,6 +40,14 @@
             Title="Active Orders"
             ContentTemplate="{DataTemplate views:ActiveOrdersPage}"
             Route="ActiveOrdersPage"/>
+        <ShellContent
+            Title="Logout"
+            ContentTemplate="{DataTemplate views:LogoutPage}"
+            Route="Logout"/> 
+        <ShellContent
+            Title="Login Page"
+            ContentTemplate="{DataTemplate views:LoginPage}"
+            Route="LoginPage"/>        
 
     </TabBar>
 

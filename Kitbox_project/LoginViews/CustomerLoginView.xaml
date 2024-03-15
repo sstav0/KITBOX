@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:Kitbox_project.Views"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
+
 <TabBar>
 
         <ShellContent
@@ -21,7 +22,13 @@
         <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
-            Route="HomePage"/>    
+            Route="HomePage"/>   
+        <ShellContent
+            Title="Logout"
+            ContentTemplate="{DataTemplate views:LogoutPage}"
+            Route="Logout"/>  
+                 
     </TabBar>
+   
 
 </Shell>

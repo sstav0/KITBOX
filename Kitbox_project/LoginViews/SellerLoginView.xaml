@@ -21,6 +21,12 @@
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
             Route="CabinetCreatorPage"/>
+        <ShellContent
+            Title="Logout"
+            ContentTemplate="{DataTemplate views:LogoutPage}"
+            Route="Logout"/>     
+
+
     </TabBar>
 
 </Shell>

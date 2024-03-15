@@ -24,7 +24,11 @@
          <ShellContent
             Title="Home"
             ContentTemplate="{DataTemplate local:MainPage}"
-            Route="HomePage"/>     
+            Route="HomePage"/> 
+        <ShellContent
+            Title="Logout"
+            ContentTemplate="{DataTemplate views:LogoutPage}"
+            Route="Logout"/>         
     </TabBar>
 
 </Shell>
