@@ -44,7 +44,7 @@ namespace Kitbox_project.ViewModels
         public OrderViewModel(Order order) 
         {
             this.Order = order;
-            this.OrderID = order.OrderID;
+            //this.OrderID = order.OrderID;
             this.OrderStatus = order.Status;
         }
 

@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Kitbox_project.Views;
 
-public partial class ActiveOrdersPage : ContentPage
+public partial class OrdersPage : ContentPage
 {
 	private ObservableCollection<OrderViewModel> ListOrders;
     private ObservableCollection<OrderViewModel> ListOrdersVoid;
@@ -23,7 +23,7 @@ public partial class ActiveOrdersPage : ContentPage
 
     private Random rnd;
 
-    public ActiveOrdersPage()
+    public OrdersPage()
     {
         InitializeComponent();
 
@@ -48,7 +48,7 @@ public partial class ActiveOrdersPage : ContentPage
         {
             int RandomID = rnd.Next(1, 101);
 
-            order.OrderID = RandomID;
+            //order.OrderID = RandomID;
 
             OrderViewModel newOrderViewModel = new OrderViewModel(order);
 
@@ -75,13 +75,13 @@ public partial class ActiveOrdersPage : ContentPage
 		Order order1 = new Order("Waiting Confirmation", new List<Cabinet>());
 
 		Random rnd = new Random();
-		order1.OrderID = rnd.Next(1, 101); // Gives a random int between 1 & 100
+		//order1.OrderID = rnd.Next(1, 101); // Gives a random int between 1 & 100
 
 		OrderViewModel orderviewmodel1 = new OrderViewModel(order1);
 
 		Order order2 = new Order("Waiting Confirmation", new List<Cabinet>());
 
-		order2.OrderID = rnd.Next(1, 101);
+		//order2.OrderID = rnd.Next(1, 101);
 
 		OrderViewModel orderviewmodel2 = new OrderViewModel(order2);
 		orderviewmodel2.Notification = "Missing parts";
@@ -133,6 +133,42 @@ public partial class ActiveOrdersPage : ContentPage
         if (sender is SearchBar searchBar && BindingContext is OrderViewModel orderViewModel)
         {
             orderViewModel.ApplyFilter(searchBar.Text);
+        }
+    }
+
+    private void OnActiveOrdersClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            if (button.TextColor == Colors.Black)
+            {
+                button.TextColor = Colors.White;
+                button.BackgroundColor = Color.Parse("#512BD4");
+            }
+
+            else
+            {
+                button.TextColor = Colors.Black;
+                button.BackgroundColor = Colors.Gray;
+            }
+        }
+    }
+
+    private void OnFinishedOrdersClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button)
+        {
+            if (button.TextColor == Colors.Black)
+            {
+                button.TextColor = Colors.White;
+                button.BackgroundColor = Color.Parse("#512BD4");
+            }
+
+            else
+            {
+                button.TextColor = Colors.Black;
+                button.BackgroundColor = Colors.Gray;
+            }
         }
     }
 }
