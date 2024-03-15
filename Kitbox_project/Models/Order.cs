@@ -12,39 +12,29 @@ namespace Kitbox_project.Models
     {
         private string _status;
         private List<Cabinet> _cart;
-        private int _orderID;
-        public string Status 
+
+        public Order(string status, List<Cabinet> cart)
+        {
+            this._status = status;
+            this._cart = cart;
+        }
+
+        public string Status //to see if useful 
         { 
             get => _status;
             set
             {
-                _status = value;
-                OnPropertyChanged(nameof(Status));
+                _status = value;            
             }
         }
+
         public List<Cabinet> Cart 
         { 
             get => _cart;
             set
             {
                 _cart = value;
-                OnPropertyChanged(nameof(Cart));
             }
-        }
-        public int OrderID
-        {
-            get => _orderID;
-            set
-            {
-                _orderID = value;
-                OnPropertyChanged(nameof(OrderID));
-            }
-        }
-
-        public Order(string status, List<Cabinet> cart)
-        {
-            this._status = status;
-            this._cart = cart;
         }
 
         public void Confirm()
