@@ -66,13 +66,14 @@ namespace Kitbox_project.Views
             }
 
             // Create a new LockerViewModel based on the selected parameters
-            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
 
             LockerViewModel newLocker = new LockerViewModel
             {
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
                 Door = door
+
 
             };
 
@@ -95,7 +96,7 @@ namespace Kitbox_project.Views
             Debug.WriteLine(locker);
             locker.Color = _viewModel.SelectedLockerColorItem;
             locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
             locker.Door = door;
             }
 
@@ -128,6 +129,7 @@ namespace Kitbox_project.Views
                     if(locker.Door.Color is not null)
                     {
                     _viewModel.SelectedDoorColorItem = locker.Door.Color;
+                        _viewModel.SelectedDoorMaterialItem = locker.Door.Material;
 
                     }
 

@@ -242,11 +242,37 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDoorColorItem != value)
                 {
                     _selectedDoorColorItem = value;
-                    UpdateAvailability();
                     OnPropertyChanged();
                 }
             }
         }
+
+        private string _selectedDoorMaterialItem;
+        public string SelectedDoorMaterialItem
+        {
+            get => _selectedDoorMaterialItem;
+            set
+            {
+                if (_selectedDoorMaterialItem != value)
+                {
+
+                    _selectedDoorMaterialItem = value;
+                    ItemSourceDoorPicker.Clear(); 
+                    SelectedDoorColorItem = null;//On remets le picker color à 0 quand on change de materiel
+
+                    UpdateAvailability();
+
+
+                    OnPropertyChanged();
+
+                    UpdateAvailability();
+
+
+
+                }
+            }
+        }
+
         private string _selectedDepthItem;
         public string SelectedDepthItem
         {
@@ -300,6 +326,20 @@ namespace Kitbox_project.ViewModels
                 if (_itemSourceDoorPicker != value)
                 {
                     _itemSourceDoorPicker = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private List<string> _itemSourceDoorPickerMaterial;
+        public List<string> ItemSourceDoorPickerMaterial
+        {
+            get => _itemSourceDoorPickerMaterial;
+            set
+            {
+                if (_itemSourceDoorPickerMaterial != value)
+                {
+                    _itemSourceDoorPickerMaterial = value;
                     OnPropertyChanged();
                 }
             }
@@ -492,44 +532,43 @@ namespace Kitbox_project.ViewModels
         {
             Debug.WriteLine("UpdateAvailability Begin");
 
-            Catalog c = new Catalog(new DatabaseCatalog("storekeeper","storekeeper")); 
-            //Catalog is used to manage the high level (with a Dict) access to Database Catalog 
+            Catalog c = new Catalog(new DatabaseCatalog("storekeeper", "storekeeper"));
 
             Dictionary<string, object> requestDict = new Dictionary<string, object>()
-            {
-                {"Width", _selectedWidthItem},
-                {"Depth", _selectedDepthItem},
-                {"AngleIronColor", _selectedAngleIronColor },
-                {"Color", _selectedLockerColorItem },
-                {"Height", _selectedHeightItem},
-                {"Door", _isDoorChecked },
-                {"DoorColor", _selectedDoorColorItem}
-            };
+    {
+        {"Width", _selectedWidthItem},
+        {"Depth", _selectedDepthItem},
+        {"AngleIronColor", _selectedAngleIronColor },
+        {"Color", _selectedLockerColorItem },
+        {"Height", _selectedHeightItem},
+        {"Door", _isDoorChecked },
+        {"DoorColor", _selectedDoorColorItem},
+        {"DoorMaterial", _selectedDoorMaterialItem }
+    };
 
-            var selectedValues = new Dictionary<string, object> { 
-                                        { "Width", requestDict["Width"] }, { "Depth", requestDict["Depth"] }, 
-                                        { "Panel_color", requestDict["Color"] }, { "Height", requestDict["Height"] }, 
-                                        { "Door", requestDict["Door"] }, { "Door_color", requestDict["DoorColor"] }, {"Angle_color", requestDict["AngleIronColor"] }}; 
+            var selectedValues = new Dictionary<string, object> {
+                                { "Width", requestDict["Width"] }, { "Depth", requestDict["Depth"] },
+                                { "Panel_color", requestDict["Color"] }, { "Height", requestDict["Height"] },
+                                { "Door", requestDict["Door"] }, { "Door_color", requestDict["DoorColor"] },
+                                {"Angle_color", requestDict["AngleIronColor"] }, {"Door_material", requestDict["DoorMaterial"]}};
 
-            var data = await c.GetValues(selectedValues); // Dictionary<string, List<object>> {{"Width", {32, 42, 52, 62}}, {"Height", {32, 42, 52}},...}
+            var data = await c.GetValues(selectedValues);
 
             data.TryGetValue("Height", out List<object> heightList);
+            if (SelectedLockerColorItem == null) { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedDepthItem == null) { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedHeightItem == null) { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedWidthItem == null) { ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedDoorColorItem == null) { ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedAngleIronColor == null) { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString()); }
+            if (SelectedDoorMaterialItem == null) { ItemSourceDoorPickerMaterial = data["Door_material"].ConvertAll(obj => obj.ToString()); }
 
-            if (SelectedLockerColorItem == null)    { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedDepthItem == null)          { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedHeightItem == null)         { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedWidthItem == null)          { ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedDoorColorItem == null)      { ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedAngleIronColor == null)     { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString()); }
 
-            //if door color list empty -> Door checkbox is disabled
             if (ItemSourceDoorPicker.Count < 0)
             {
                 EnablecheckDoor = false;
                 Debug.WriteLine("availableDoor.Count < 0");
             }
-            //else -> Remove "Glass" color from the list
-            //setup glass checkboc accordingly
             else
             {
                 EnablecheckDoor = true;
@@ -549,6 +588,7 @@ namespace Kitbox_project.ViewModels
             }
             Debug.WriteLine("UpdateAvailability End");
         }
+
 
         //Reset all the checkboxes and pickers
         private void ResetLocker()
