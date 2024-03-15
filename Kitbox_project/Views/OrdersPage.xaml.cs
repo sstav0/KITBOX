@@ -92,13 +92,27 @@ public partial class OrdersPage : ContentPage
 		ListViewOrders.ItemsSource = ListOrders;
     }
 
-    public void UpdateOrders()
+    public void UpdateOrdersFromAfar(Order order)
     {
-        LoadRealOrders();
+        OrderViewModel newOrderViewModel = new OrderViewModel(order);
+        ListOrders.Add(newOrderViewModel);
 
         ListViewOrders.ItemsSource = ListOrdersVoid;
         ListViewOrders.ItemsSource = ListOrders;
     }
+
+    public void UpdateOrders()
+    {
+        ListViewOrders.ItemsSource = ListOrdersVoid;
+        ListViewOrders.ItemsSource = ListOrders;
+    }
+
+    public void UpdateOrdersClicked(object sender, EventArgs e)
+    {
+        ListViewOrders.ItemsSource = ListOrdersVoid;
+        ListViewOrders.ItemsSource = ListOrders;
+    }
+
 
     private void CancelClicked(object sender, EventArgs e)
 	{

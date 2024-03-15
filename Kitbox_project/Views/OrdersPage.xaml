@@ -25,6 +25,10 @@
         <Label Text="Orders" FontSize="Header" FontAttributes="Bold"
                HorizontalOptions="Start" VerticalOptions="Center"
                Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0"/>
+        
+        <!--Temporary-->
+        <Button Text="Update Page" Clicked="UpdateOrdersClicked"
+                Grid.Row="0" Grid.Column="4"/>
 
         <SearchBar x:Name="OrderIDFilter" Placeholder="Search by ID..." TextChanged="OnTextChanged"
                    Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"/>
@@ -58,7 +62,7 @@
                                         <ColumnDefinition Width="0.5*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="0.5*"/>
                                     </Grid.ColumnDefinitions>
 
                                     <Label x:Name="Notifications" Text="{Binding Notification}" Grid.Column="0" HorizontalTextAlignment="Center"

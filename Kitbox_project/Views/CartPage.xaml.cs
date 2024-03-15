@@ -76,6 +76,11 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		UpdateTotalPrice();
 	}
 
+	private void UpdateCartCLicked(object sender, EventArgs e)
+	{
+		UpdateCart();
+	}
+
 	private void UpdateTotalPrice()
 	{
         double i = 0;
@@ -101,7 +106,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		OrdersPage newActiveOrdersPage = new OrdersPage();
 
 		newActiveOrdersPage.Orders.Add(order);
-		newActiveOrdersPage.UpdateOrders();
+		newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
         await Navigation.PushAsync(newActiveOrdersPage);     
     }
