@@ -58,7 +58,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 			List<Locker> lockers1 = new List<Locker>();
             lockers1.Add(locker1);
 			lockers1.Add(locker1bis);
-			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1);
+			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 3);
 			CartViewModel cabinet1view = new CartViewModel(cabinet1);
 
 			Cart.Add(cabinet1view);
@@ -79,7 +79,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private void UpdateTotalPrice()
 	{
         double i = 0;
-        foreach (CartViewModel item in Cart)
+        foreach (Cabinet item in order.Cart)
         {
             i += Convert.ToDouble(item.Price);
         }
@@ -98,7 +98,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
 		order.Status = "Waiting Confirmation";
 
-		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+		OrdersPage newActiveOrdersPage = new OrdersPage();
 
 		newActiveOrdersPage.Orders.Add(order);
 		newActiveOrdersPage.UpdateOrders();

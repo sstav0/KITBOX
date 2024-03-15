@@ -166,8 +166,9 @@ namespace Kitbox_project.Views
                 lockers,
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
-                totalSize // Height pour le moment mais faudra remplacer par angle iron
-            );
+                totalSize, // Height pour le moment mais faudra remplacer par angle iron
+                1
+            ); 
 
             // Add the new Cabinet to the Order's cart
             Debug.WriteLine(newCabinet.ToString());
