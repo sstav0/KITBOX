@@ -71,11 +71,11 @@
                                 </Entry>
                                 <HorizontalStackLayout Grid.Column="4" VerticalOptions="Center" HorizontalOptions="Center" Margin="10,5">
                                     <Label Text="🡻" TextColor="Green"/>
-                                    <Label Text="196" FontSize="Body" TextColor="Green"/>
+                                    <Label Text="{Binding IncomingQuantity}" FontSize="Body" TextColor="Green"/>
                                 </HorizontalStackLayout>
                                 <HorizontalStackLayout Grid.Column="5" VerticalOptions="Center" HorizontalOptions="Center" Margin="10,5">
                                     <Label Text="🡹" TextColor="Red"/>
-                                    <Label Text="4" FontSize="Body" TextColor="Red"/>
+                                    <Label Text="{Binding OutgoingQuantity}" FontSize="Body" TextColor="Red"/>
                                 </HorizontalStackLayout>
                                 <Button Grid.Column="6" Text="{Binding ButtonText}" Clicked="OnEditUpdateClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body">
                                     <Button.Triggers>
@@ -89,7 +89,7 @@
                                         </DataTrigger>
                                     </Button.Triggers>
                                 </Button>
-                                <Button Grid.Column="7" Text="Order" BackgroundColor="{StaticResource Primary}" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                                <Button Grid.Column="7" Text="Order" Clicked="OnOrderButtonClicked" BackgroundColor="{StaticResource Primary}" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

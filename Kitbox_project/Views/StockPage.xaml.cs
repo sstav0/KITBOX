@@ -18,6 +18,14 @@ public partial class StockPage : ContentPage
         }
     }
 
+    private void OnOrderButtonClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)
+        {
+            // Go to the Supplier Orders page with pre-fill data
+        }
+    }
+
     private void OnTextChanged(object sender, EventArgs e)
     {
         if (sender is SearchBar searchBar && BindingContext is StockViewModel stockViewModel)
