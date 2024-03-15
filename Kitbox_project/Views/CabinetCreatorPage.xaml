@@ -143,7 +143,6 @@
                     Margin="30"
                     BackgroundColor="#0066FF"
                     Clicked="AddSelectedLocker_Clicked"
-                    MinimumHeightRequest="45"
                     FontSize="20"
                     MinimumHeightRequest="50"
                     Text="Add" />
@@ -154,7 +153,6 @@
                     Margin="30"
                     BackgroundColor="#0066FF"
                     Clicked="ModifySelectedLocker_Clicked"
-                    MinimumHeightRequest="45"
                     FontSize="20"
                     MinimumHeightRequest="50"
                     Text="Modify" />
