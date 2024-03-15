@@ -24,8 +24,10 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	//	LoadCart();
 	//   }
 
-	public CartPage(Order order)
+	public CartPage(Order Order)
 	{
+		order = Order;
+
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
@@ -35,9 +37,9 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	private void LoadRealCart(Order order)
 	{
-		foreach (var item in order.Cart)
+		foreach (Cabinet cabinet in order.Cart)
 		{
-			Cart.Add(new CartViewModel(item));
+			Cart.Add(new CartViewModel(cabinet));
 		}
 
         ListCabinets.ItemsSource = Cart;
@@ -56,7 +58,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 			List<Locker> lockers1 = new List<Locker>();
             lockers1.Add(locker1);
 			lockers1.Add(locker1bis);
-			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1);
+			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 3);
 			CartViewModel cabinet1view = new CartViewModel(cabinet1);
 
 			Cart.Add(cabinet1view);
@@ -77,7 +79,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private void UpdateTotalPrice()
 	{
         double i = 0;
-        foreach (CartViewModel item in Cart)
+        foreach (Cabinet item in order.Cart)
         {
             i += Convert.ToDouble(item.Price);
         }
@@ -87,18 +89,21 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
-		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
-		newCabinetCreatorPage.Order = order;
+		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
 
         await Navigation.PushAsync(newCabinetCreatorPage);
     }
 
-	private void OnConfirmClicked(object sender, EventArgs e)
+	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
-        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
-		{
-            Debug.WriteLine("Confirm");
-        }
+		order.Status = "Waiting Confirmation";
+
+		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+
+		newActiveOrdersPage.Orders.Add(order);
+		newActiveOrdersPage.UpdateOrders();
+
+        await Navigation.PushAsync(newActiveOrdersPage);     
     }
 
 	private async void OnEditClicked(object sender, EventArgs e)
@@ -107,7 +112,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		{
 			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage();
+            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
             newCabinetCreatorPage.Order = order;
 			newCabinetCreatorPage.Cabinet = selectedCabinet;
 			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;

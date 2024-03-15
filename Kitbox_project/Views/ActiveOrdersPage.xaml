@@ -24,10 +24,8 @@
                HorizontalOptions="Start" VerticalOptions="Center"
                Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"/>
 
-        <SearchBar Placeholder="Search by ID..." TextChanged="OnTextChanged" />
-        
-        <Entry x:Name="OrderIDFilter" Placeholder="Order ID Filter" FontSize="Medium"
-               Grid.Row="1" Grid.Column="0"/>
+        <SearchBar x:Name="OrderIDFilter" Placeholder="Search by ID..." TextChanged="OnTextChanged"
+                   Grid.Row="1" Grid.Column="0"/>
 
         <ScrollView Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0">
 

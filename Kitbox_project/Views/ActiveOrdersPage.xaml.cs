@@ -10,18 +10,67 @@ public partial class ActiveOrdersPage : ContentPage
 	private ObservableCollection<OrderViewModel> ListOrders;
     private ObservableCollection<OrderViewModel> ListOrdersVoid;
 
+    private List<Order> _orders;
+
+    public List<Order> Orders
+    {
+        get => _orders;
+        set
+        {
+            _orders = value;
+        }
+    }
+
+    private Random rnd;
+
     public ActiveOrdersPage()
     {
         InitializeComponent();
 
+        this._orders = new List<Order>();
+        this.Orders = new List<Order>();
+
         ListOrders = new ObservableCollection<OrderViewModel>();
         ListOrdersVoid = new ObservableCollection<OrderViewModel>();
 
-        LoadOrders();
+        rnd = new Random();
+
+
+        Debug.WriteLine(Orders.Count());
+
+        FirstLoadRealOrders();
 
     }
 
-	private void LoadOrders()
+    private void FirstLoadRealOrders()
+    {
+        foreach (Order order in Orders)
+        {
+            int RandomID = rnd.Next(1, 101);
+
+            order.OrderID = RandomID;
+
+            OrderViewModel newOrderViewModel = new OrderViewModel(order);
+
+            ListOrders.Add(newOrderViewModel);
+        }
+
+        ListViewOrders.ItemsSource = ListOrders;
+    }
+
+    private void LoadRealOrders()
+    {
+        foreach (Order order in Orders)
+        {
+            OrderViewModel newOrderViewModel = new OrderViewModel(order);
+
+            ListOrders.Add(newOrderViewModel);
+        }
+
+        ListViewOrders.ItemsSource = ListOrders;
+    }
+
+    private void LoadOrders()
 	{
 		Order order1 = new Order("Waiting Confirmation", new List<Cabinet>());
 
@@ -43,8 +92,10 @@ public partial class ActiveOrdersPage : ContentPage
 		ListViewOrders.ItemsSource = ListOrders;
     }
 
-    private void UpdateOrders()
+    public void UpdateOrders()
     {
+        LoadRealOrders();
+
         ListViewOrders.ItemsSource = ListOrdersVoid;
         ListViewOrders.ItemsSource = ListOrders;
     }

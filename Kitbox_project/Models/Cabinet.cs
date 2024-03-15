@@ -18,11 +18,12 @@ namespace Kitbox_project.Models
         private int _height;
         private int _cabinetID;
 
-        public Cabinet(List<Locker> lockers, int depth, int length, int quantity)
+        public Cabinet(List<Locker> lockers, int depth, int length, int height, int quantity)
         {
             this._lockers = lockers;
             this._depth = depth;
             this._length = length;
+            this._height = height;
             this._quantity = quantity;
         }
 
@@ -73,7 +74,7 @@ namespace Kitbox_project.Models
 
             string i = string.Join(",", this._lockers);
 
-            return String.Format("{0} {1} {2} {3} {4} {5} {6}", i, this._price.ToString(), this._depth.ToString(), this._price.ToString(), this._length.ToString(), this._quantity.ToString());
+            return String.Format("{0} {1} {2} {3} {4} {5} {6}", i, this._price.ToString(), this._depth.ToString(), this._length.ToString(), this._quantity.ToString(), this._height.ToString(), this._cabinetID.ToString());
         }
         public string ToCart()
         {
