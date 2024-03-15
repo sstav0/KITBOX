@@ -40,10 +40,17 @@
             Title="Orders"
             ContentTemplate="{DataTemplate views:OrdersPage}"
             Route="OrdersPage"/>
+
+        <ShellContent
+            Title="Supplier Orders"
+            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
+            Route="SupplierOrdersPage"/>
+
         <ShellContent
             Title="Logout"
             ContentTemplate="{DataTemplate views:LogoutPage}"
             Route="Logout"/> 
+        
         <ShellContent
             Title="Login Page"
             ContentTemplate="{DataTemplate views:LoginPage}"
