@@ -19,8 +19,8 @@ namespace Kitbox_project.ViewModels
         public ObservableCollection<Locker> Lockers
         { get => _lockers; set => _lockers = value; }
 
-        private double _price;
-        public double Price
+        private string _price;
+        public string Price
         { get => _price; set => _price = value; }
         
         private int _depth;
@@ -43,20 +43,21 @@ namespace Kitbox_project.ViewModels
         public int Height
         { get => _height; set => _height = value; }
 
-        private int _CabinetID;
+        private int _cabinetID;
         public int CabinetID
-        { get => _CabinetID; set => _CabinetID = value; }
+        { get => _cabinetID; set => _cabinetID = value; }
 
         public CartViewModel(Cabinet cabinet)
         {
             this._cabinet = cabinet;
             this._lockers = cabinet.GetObservableLockers();
-            this._price = cabinet.Price;
+            this._price = $"{cabinet.Price.ToString()} €";
             this._depth = cabinet.Depth;
             this._length = cabinet.Length;
             this._quantity = cabinet.Quantity;
             this._nbrLockers = cabinet.GetLockerCount();
             this._height = cabinet.Height;
+            this._cabinetID = cabinet.CabinetID;
         }
 
         public void AddLocker(Locker locker)

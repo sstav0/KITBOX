@@ -15,7 +15,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" /> 
             <ColumnDefinition Width="0.4*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.5*" />
@@ -144,6 +144,7 @@
                     BackgroundColor="#0066FF"
                     Clicked="AddSelectedLocker_Clicked"
                     FontSize="20"
+                    MinimumHeightRequest="50"
                     Text="Add" />
 
                 <Button
@@ -153,7 +154,9 @@
                     BackgroundColor="#0066FF"
                     Clicked="ModifySelectedLocker_Clicked"
                     FontSize="20"
+                    MinimumHeightRequest="50"
                     Text="Modify" />
+                
                 <!--  All the Text inside the Outside Frame  -->
                 <Label
                     Grid.Row="0"
@@ -223,9 +226,11 @@
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="0.2*" />
                             <ColumnDefinition Width="0.5*" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+
                         </Grid.ColumnDefinitions>
 
                         <!--  Checkboxes  -->
@@ -238,16 +243,6 @@
                             IsEnabled="{Binding EnablecheckDoor}"
                             VerticalOptions="Center"
                             Color="#0066FF" />
-                        <CheckBox
-                            x:Name="Glass"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            HorizontalOptions="Start"
-                            IsChecked="{Binding IsGlassChecked}"
-                            IsEnabled="{Binding IsGlassEnabled}"
-                            IsVisible="{Binding IsGlassVisible}"
-                            VerticalOptions="Center"
-                            Color="#0066FF" />
 
                         <!--  Texts  -->
                         <Label
@@ -256,16 +251,18 @@
                             HorizontalOptions="Start"
                             Text="Door"
                             VerticalOptions="Center" />
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            HorizontalOptions="Start"
-                            IsVisible="{Binding IsGlassVisible}"
-                            Text="Glass"
-                            VerticalOptions="Center" />
+
                         <Label
                             Grid.Row="0"
                             Grid.Column="2"
+                            HorizontalOptions="Center"
+                            IsVisible="{Binding IsDoorPickerVisible}"
+                            Text="Door Material"
+                            VerticalOptions="Center" />
+
+                        <Label
+                            Grid.Row="0"
+                            Grid.Column="3"
                             HorizontalOptions="Center"
                             IsVisible="{Binding IsDoorPickerVisible}"
                             Text="Door Color"
@@ -279,8 +276,20 @@
                             BackgroundColor="White"
                             HorizontalOptions="CenterAndExpand"
                             IsVisible="{Binding IsDoorPickerVisible}"
+                            ItemsSource="{Binding ItemSourceDoorPickerMaterial}"
+                            SelectedItem="{Binding SelectedDoorMaterialItem, Mode=TwoWay}" 
+                            MinimumWidthRequest="100"/>
+
+                        <Picker
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Margin="10"
+                            BackgroundColor="White"
+                            HorizontalOptions="CenterAndExpand"
+                            IsVisible="{Binding IsDoorPickerVisible}"
                             ItemsSource="{Binding ItemSourceDoorPicker}"
-                            SelectedItem="{Binding SelectedDoorColorItem}" />
+                            SelectedItem="{Binding SelectedDoorColorItem}" 
+                            MinimumWidthRequest="100"/>
                     </Grid>
 
                 </Frame>
@@ -381,6 +390,15 @@
                                             <FormattedString>
                                                 <Span Text="Panel Color: " />
                                                 <Span FontAttributes="Bold" Text="{Binding Color}" />
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+
+                                    <Label Grid.Row="3" Grid.Column="0">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Door Material: " />
+                                                <Span FontAttributes="Bold" Text="{Binding Door.Material}" />
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>

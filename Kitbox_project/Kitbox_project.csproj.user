@@ -27,7 +27,7 @@
     <MauiXaml Update="Utilities\ExpansionPanel.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\ActiveOrdersPage.xaml">
+    <MauiXaml Update="Views\OrdersPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\CartPage.xaml">
@@ -43,6 +43,9 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\LoginPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
+    <MauiXaml Update="Views\SoldHistoryPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\StockPage.xaml">

@@ -1,4 +1,6 @@
-﻿namespace Kitbox_project
+﻿using Kitbox_project.Views;
+
+namespace Kitbox_project
 {
     public partial class App : Application
     {

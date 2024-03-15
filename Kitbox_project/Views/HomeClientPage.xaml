@@ -5,16 +5,27 @@
              Title="HomeClientPage">
 
     <Grid>
+        
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Button Text="Create a new order" Clicked="CreateNewOrderClicked"
-                Grid.Row="0" Grid.Column="0"/>
+        <Label Text="Welcome to the Cabinet Maker App" Grid.Row="1" FontSize="Large" FontAttributes="Bold"
+               Grid.ColumnSpan="2" Grid.Column="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+        <Button Text="Begin Making my Order" Clicked="CreateNewOrderClicked" MaximumWidthRequest="350" MinimumHeightRequest="65"
+                Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1" FontSize="Medium"/>
 
     </Grid>
+    
 </ContentPage>
