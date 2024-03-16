@@ -13,18 +13,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
-    public ICommand OnUpdateButtonClicked { get; }
-
-    //   public CartPage()
-    //{
-    //	InitializeComponent();
-    //	Cart = new ObservableCollection<CartViewModel>();
-    //	CartVoid = new ObservableCollection<CartViewModel>();
-
-    //	order = new Order("InCreation", new List<Cabinet>());
-
-    //	LoadCart();
-    //   }
+    //public ICommand OnUpdateButtonClicked { get; }
 
     public CartPage(Order Order)
 	{
@@ -78,7 +67,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		UpdateTotalPrice();
 	}
 
-	public void UpdateCartCLicked(object sender, EventArgs e)
+	public void OnUpdateCartCLicked(object sender, EventArgs e)
 	{
 		UpdateCart();
 	}

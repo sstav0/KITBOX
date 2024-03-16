@@ -26,7 +26,7 @@
         <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1"
                FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
 
-        <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Command="{Binding UpdateCartClicked}"/>
+        <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Clicked="OnUpdateCartCLicked"/> <!--Command="{Binding UpdateCartClicked}"-->
 
         <Border Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1" 
                 StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
