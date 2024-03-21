@@ -27,7 +27,7 @@
                Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0"/>
         
         <!--Temporary-->
-        <Button Text="Update Page" Clicked="UpdateOrdersClicked"
+        <Button Text="Update Page" Clicked="OnUpdateOrdersClicked"
                 Grid.Row="0" Grid.Column="4"/>
 
         <SearchBar x:Name="OrderIDFilter" Placeholder="Search by ID..." TextChanged="OnTextChanged"

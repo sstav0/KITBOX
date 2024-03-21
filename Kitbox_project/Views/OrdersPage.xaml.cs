@@ -8,6 +8,7 @@ namespace Kitbox_project.Views;
 public partial class OrdersPage : ContentPage
 {
 	private ObservableCollection<OrderViewModel> ListOrders;
+    private ObservableCollection<OrderViewModel> ListShownOrders;
     private ObservableCollection<OrderViewModel> ListOrdersVoid;
 
     private List<Order> _orders;
@@ -21,8 +22,6 @@ public partial class OrdersPage : ContentPage
         }
     }
 
-    private Random rnd;
-
     public OrdersPage()
     {
         InitializeComponent();
@@ -31,10 +30,8 @@ public partial class OrdersPage : ContentPage
         this.Orders = new List<Order>();
 
         ListOrders = new ObservableCollection<OrderViewModel>();
+        ListShownOrders = new ObservableCollection<OrderViewModel>();
         ListOrdersVoid = new ObservableCollection<OrderViewModel>();
-
-        rnd = new Random();
-
 
         Debug.WriteLine(Orders.Count());
 
@@ -46,10 +43,6 @@ public partial class OrdersPage : ContentPage
     {
         foreach (Order order in Orders)
         {
-            int RandomID = rnd.Next(1, 101);
-
-            //order.OrderID = RandomID;
-
             OrderViewModel newOrderViewModel = new OrderViewModel(order);
 
             ListOrders.Add(newOrderViewModel);
@@ -67,50 +60,36 @@ public partial class OrdersPage : ContentPage
             ListOrders.Add(newOrderViewModel);
         }
 
-        ListViewOrders.ItemsSource = ListOrders;
-    }
-
-    private void LoadOrders()
-	{
-		Order order1 = new Order("Waiting Confirmation", new List<Cabinet>());
-
-		Random rnd = new Random();
-		//order1.OrderID = rnd.Next(1, 101); // Gives a random int between 1 & 100
-
-		OrderViewModel orderviewmodel1 = new OrderViewModel(order1);
-
-		Order order2 = new Order("Waiting Confirmation", new List<Cabinet>());
-
-		//order2.OrderID = rnd.Next(1, 101);
-
-		OrderViewModel orderviewmodel2 = new OrderViewModel(order2);
-		orderviewmodel2.Notification = "Missing parts";
-
-		ListOrders.Add(orderviewmodel1);
-		ListOrders.Add(orderviewmodel2);
-
-		ListViewOrders.ItemsSource = ListOrders;
+        UpdateOrders();
     }
 
     public void UpdateOrdersFromAfar(Order order)
     {
         OrderViewModel newOrderViewModel = new OrderViewModel(order);
+        newOrderViewModel.OrderVisibility = true;
         ListOrders.Add(newOrderViewModel);
 
-        ListViewOrders.ItemsSource = ListOrdersVoid;
-        ListViewOrders.ItemsSource = ListOrders;
+        UpdateOrders();
     }
 
     public void UpdateOrders()
     {
+        ListShownOrders.Clear();
+        foreach (var item in ListOrders)
+        {
+            if (item.OrderVisibility == true)
+            {
+                ListShownOrders.Add(item);
+            }
+        }
+
         ListViewOrders.ItemsSource = ListOrdersVoid;
-        ListViewOrders.ItemsSource = ListOrders;
+        ListViewOrders.ItemsSource = ListShownOrders;
     }
 
-    public void UpdateOrdersClicked(object sender, EventArgs e)
+    public void OnUpdateOrdersClicked(object sender, EventArgs e)
     {
-        ListViewOrders.ItemsSource = ListOrdersVoid;
-        ListViewOrders.ItemsSource = ListOrders;
+        UpdateOrders();
     }
 
 
@@ -127,12 +106,25 @@ public partial class OrdersPage : ContentPage
 	{
         if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrderView)
         {
-            selectedOrderView.Order.Status = "Ready";
-            selectedOrderView.OrderStatus = "Ready";
+            if (selectedOrderView.OrderStatus == "Waiting Confirmation")
+            {
+                selectedOrderView.Order.Status = "Waiting Parts";
+                selectedOrderView.OrderStatus = "Waiting Parts";
+
+                //Orders.Find(selectedOrderView.OrderId).Status = "Waiting Parts";
+            }
+
+            if (selectedOrderView.OrderStatus == "Waiting Parts")
+            {
+                selectedOrderView.Order.Status = "Ready to PickUp";
+                selectedOrderView.OrderStatus = "Ready to PickUp";
+
+                //Orders.Find(selectedOrderView.OrderId).Status = "Ready to PickUp";
+            }
         }
     }
 
-	private void DisplayInStockButtonClicked(object sender, EventArgs e)
+    private void DisplayInStockButtonClicked(object sender, EventArgs e)
 	{
 
 	}
@@ -146,8 +138,19 @@ public partial class OrdersPage : ContentPage
     {
         if (sender is SearchBar searchBar && BindingContext is OrderViewModel orderViewModel)
         {
-            orderViewModel.ApplyFilter(searchBar.Text);
+            //orderViewModel.ApplyFilter(searchBar.Text);
         }
+    }
+
+    public void ApplyFilter(string searchText)
+    {
+        //searchText = searchText.Trim();
+        //foreach (OrderViewModel order in ListOrders)
+        //{
+        //    order.OrderVisibility =
+        //        string.IsNullOrWhiteSpace(searchText) ||
+        //        order.OrderID.Contains(searchText, StringComparison.OrdinalIgnoreCase)
+        //}
     }
 
     private void OnActiveOrdersClicked(object sender, EventArgs e)
@@ -158,14 +161,36 @@ public partial class OrdersPage : ContentPage
             {
                 button.TextColor = Colors.White;
                 button.BackgroundColor = Color.Parse("#512BD4");
+
+                foreach(var item in ListOrders)
+                {
+                    if (item.OrderStatus == "Waiting Confirmation" ||
+                        item.OrderStatus == "Waiting Parts" ||
+                        item.OrderStatus == "Ready to PickUp")
+                    {
+                        item.OrderVisibility = false;
+                    }
+                }
             }
 
             else
             {
                 button.TextColor = Colors.Black;
                 button.BackgroundColor = Colors.Gray;
+
+                foreach (var item in ListOrders)
+                {
+                    if (item.OrderStatus == "Waiting Confirmation" ||
+                        item.OrderStatus == "Waiting Parts" ||
+                        item.OrderStatus == "Ready to PickUp")
+                    {
+                        item.OrderVisibility = true;
+                    }
+                }
             }
         }
+
+        UpdateOrders();
     }
 
     private void OnFinishedOrdersClicked(object sender, EventArgs e)
@@ -176,13 +201,33 @@ public partial class OrdersPage : ContentPage
             {
                 button.TextColor = Colors.White;
                 button.BackgroundColor = Color.Parse("#512BD4");
+
+                foreach (var item in ListOrders)
+                {
+                    if (item.OrderStatus == "Canceled" ||
+                        item.OrderStatus == "Picked Up")
+                    {
+                        item.OrderVisibility = false;
+                    }
+                }
             }
 
             else
             {
                 button.TextColor = Colors.Black;
                 button.BackgroundColor = Colors.Gray;
+
+                foreach (var item in ListOrders)
+                {
+                    if (item.OrderStatus == "Canceled" ||
+                        item.OrderStatus == "Picked Up")
+                    {
+                        item.OrderVisibility = true;
+                    }
+                }
             }
         }
+
+        UpdateOrders();
     }
 }

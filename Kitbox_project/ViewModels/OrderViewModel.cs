@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Kitbox_project.Models;
 
+
 namespace Kitbox_project.ViewModels
 {
     internal class OrderViewModel : INotifyPropertyChanged
@@ -27,7 +28,7 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-    private string _notifaction;
+        private string _notifaction;
         public string Notification
         {
             get => _notifaction;
@@ -35,6 +36,17 @@ namespace Kitbox_project.ViewModels
             {
                 _notifaction = value;
                 OnPropertyChanged(nameof(Notification));
+            }
+        }
+
+        private bool _orderVisibility;
+        public bool OrderVisibility
+        {
+            get => _orderVisibility;
+            set
+            {
+                _orderVisibility = value;
+                OnPropertyChanged(nameof(OrderVisibility));
             }
         }
 
@@ -46,11 +58,6 @@ namespace Kitbox_project.ViewModels
             this.Order = order;
             //this.OrderID = order.OrderID;
             this.OrderStatus = order.Status;
-        }
-
-        public void ApplyFilter(string searchText)
-        {
-            searchText = searchText.Trim();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
