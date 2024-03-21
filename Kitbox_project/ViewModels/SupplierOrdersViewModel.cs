@@ -11,10 +11,6 @@ namespace Kitbox_project.ViewModels
 
         public SupplierOrdersViewModel()
         {
-            SupplierOrders = new List<SupplierOrderViewModel>
-            {
-                new SupplierOrderViewModel(2, new StockItem(1, "Panel", "PAN2144", 10, 13, 4), 2, 7, 9, 100, "Ordered")
-            };
             LoadDataAsync();
         }
 
@@ -36,15 +32,18 @@ namespace Kitbox_project.ViewModels
 
         public void ApplyFilter(string searchText)
         {
-            //searchText = searchText.Trim();
-            //foreach (var item in StockData)
-            //{
-            //    // Filter items based on search text
-            //    item.StockItemVisibility =
-            //        string.IsNullOrWhiteSpace(searchText) ||
-            //        item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            //        item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
-            //}
+            searchText = searchText.Trim();
+            foreach (var order in SupplierOrders)
+            {
+                // Filter orders based on search text
+                order.SupplierOrderVisibility =
+                    string.IsNullOrWhiteSpace(searchText) ||
+                    order.OrderID.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.SupplierName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Date.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
