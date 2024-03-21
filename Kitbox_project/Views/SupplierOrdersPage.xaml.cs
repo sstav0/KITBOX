@@ -1,13 +1,15 @@
 using Kitbox_project.ViewModels;
+using Kitbox_project.Views;
+using System.Windows.Input;
 
 namespace Kitbox_project.Views;
 
 public partial class SupplierOrdersPage : ContentPage
 {
-	public SupplierOrdersPage()
+    public SupplierOrdersPage()
 	{
-		InitializeComponent();
-	}
+        InitializeComponent();
+    }
 
     private void OnTextChanged(object sender, EventArgs e)
     {
@@ -16,4 +18,10 @@ public partial class SupplierOrdersPage : ContentPage
             supplierOrdersViewModel.ApplyFilter(searchBar.Text);
         }
     }
+
+    private async void OpenPopupNewSupplierOrder(object sender, EventArgs e)
+    {
+        bool answer = await  DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
+    }
+
 }

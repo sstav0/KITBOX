@@ -6,21 +6,28 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Kitbox_project.Views;
+using System.Windows.Input;
+using Kitbox_project.ViewModels;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using Microsoft.Maui.Controls;
 
 namespace Kitbox_project.ViewModels
 {
     internal class SupplierOrdersViewModel : INotifyPropertyChanged
     {
-        private List<SupplierOrderViewModel> _supplierOrders;
-
+        public ICommand OnReceivedClicked2 { get; }
         public SupplierOrdersViewModel()
         {
             SupplierOrders = new List<SupplierOrderViewModel>
             {
+                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), "Supplier 1", DateTime.Today, 100, "Ordered"),
                 new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), "Supplier 1", DateTime.Today, 100, "Ordered")
             };
         }
 
+        private List<SupplierOrderViewModel> _supplierOrders;
         public List<SupplierOrderViewModel> SupplierOrders
         {
             get => _supplierOrders;
@@ -53,10 +60,25 @@ namespace Kitbox_project.ViewModels
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
         {
             private bool _supplierOrderVisibility;
-
             public SupplierOrderViewModel(int orderID, StockItem item, string supplier, DateTime date, double price, string status) : base(orderID, item, supplier, date, price, status)
             {
                 _supplierOrderVisibility = true;
+            }
+
+            public async void ModifyOrderStatus()
+            {
+                bool orderReceived = await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Order Received ?", "Confirm you received this order ?", "Yes", "No");
+                if(orderReceived)
+                {
+               
+                    this.Status = "Received";
+                    OnPropertyChanged(nameof(Status));
+                }
+                else
+                {
+                    this.Status = "Ordered";
+                    OnPropertyChanged(nameof(Status));
+                }
             }
 
             public bool SupplierOrderVisibility

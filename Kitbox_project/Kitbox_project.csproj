@@ -51,12 +51,14 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Plugin.Maui.Popup" Version="1.0.5" />
 		<PackageReference Include="SQLite" Version="3.13.0" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
 		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.8" />
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.8" />
 		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.8" />
 		<PackageReference Include="SSH.NET" Version="2023.0.1" />
+		<PackageReference Include="Syncfusion.Maui.Popup" Version="25.1.35" />
 		<PackageReference Include="UraniumUI" Version="2.5.6" />
 		<PackageReference Include="UraniumUI.Material" Version="2.5.6" />
 	</ItemGroup>
