@@ -10,19 +10,20 @@ namespace Kitbox_project.Models
     {
         private int _orderID;
         private StockItem _item;
-        private string _supplier;
-        private DateTime _date;
+        private int _supplierId;
+        private int _delay;
         private double _price;
         private string _status;
-        public SupplierOrder(int orderID, StockItem item, string supplier, DateTime date, double price, string status)
+        public SupplierOrder(int orderID, StockItem item, int supplierId, int delay, double price, string status)
         {
             _orderID = orderID;
             _item = item;
-            _supplier = supplier;
-            _date = date;
+            _supplierId = supplierId;
+            _delay = delay;
             _price = price;
             _status = status;
         }
+
         public int OrderID
         {
             get => _orderID;
@@ -35,15 +36,15 @@ namespace Kitbox_project.Models
             set => _item = value;
         }
 
-        public string Supplier
+        public int SupplierId
         {
-            get => _supplier;
-            set => _supplier = value;
+            get => _supplierId;
+            set => _supplierId = value;
         }
-        public DateTime Date
+        public int Delay
         {
-            get => _date;
-            set => _date = value;
+            get => _delay;
+            set => _delay = value;
         }
         public double Price
         {
