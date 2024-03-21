@@ -14,6 +14,7 @@ namespace Kitbox_project.ViewModels
     internal class SupplierOrdersViewModel : INotifyPropertyChanged
     {
         private List<SupplierOrderViewModel> _supplierOrders;
+        private DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
 
         public SupplierOrdersViewModel()
         {
@@ -21,27 +22,13 @@ namespace Kitbox_project.ViewModels
             {
                 new SupplierOrderViewModel(1, new StockItem(1, "Panel", "PAN2144", 10), 1, 7, 100, "Ordered")
             };
-            LoadDataAsync();
+            //LoadDataAsync();
         }
 
         public async void LoadDataAsync()
         {
-            // var supplierOrders = await DBStock.LoadAll();
-            // SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplier.ConvertToSupplierOrder(supplierOrders));
-            //public static List<SupplierOrder> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
-            //{
-            //    List<SupplierOrder> supplierOrders = new List<SupplierOrder>();
-            //    foreach (var item in data)
-            //    {
-            //        supplierOrders.Add(new SupplierOrder(
-            //            int.Parse(item["idStock"]),
-            //            item["Reference"],
-            //            item["Code"],
-            //            int.Parse(item["Quantity"])
-            //        ));
-            //    }
-            //    return supplierOrders;
-            //}
+            var supplierOrders = await DBSupplierOrders.LoadAll();
+            SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
         }
 
         public List<SupplierOrderViewModel> SupplierOrders
@@ -78,16 +65,22 @@ namespace Kitbox_project.ViewModels
             private bool _supplierOrderVisibility;
             private string _date;
             private string _supplierName;
-            // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
+            private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
 
             public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, double price, string status) : base(orderID, item, supplierId, delay, price, status)
             {
                 _supplierOrderVisibility = true;
                 _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
-                Debug.WriteLine(_date);
-                // _supplierName = DBSuppliers.GetData(
-                //     new Dictionary<string, string> { { "idSuppliers", supplierId.ToString() } }, new List<string> { "NameofSuppliers" }
-                // );
+                LoadSupplierName();
+            }
+
+            private async void LoadSupplierName()
+            {
+                var supplierName = await DBSuppliers.GetData(
+                    new Dictionary<string, string> { { "idSuppliers", SupplierId.ToString() } }, 
+                    new List<string> { "NameofSuppliers" }
+                );
+                SupplierName = supplierName[0]["NameofSuppliers"];
             }
 
             public bool SupplierOrderVisibility
