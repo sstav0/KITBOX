@@ -41,7 +41,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
     async Task<string> DisplayEmailPopup()
     {
-        customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@gmail.com");
+        string customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@gmail.com");
         if (!string.IsNullOrWhiteSpace(customerEmailFromPopup) && customerEmailFromPopup.Any(char.IsLetterOrDigit) && customerEmailFromPopup.Contains('@'))
         {
             Debug.WriteLine("Customer email: " + customerEmailFromPopup);
@@ -66,7 +66,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         bool confirmation = await DisplayEnsureConfirmPopup();
         if (confirmation)
         {
-            customerEmailFromPopup = await DisplayEmailPopup();
+            string customerEmailFromPopup = await DisplayEmailPopup();
             return true;
         }
         else
