@@ -1,13 +1,6 @@
 ﻿using Kitbox_project.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using static Kitbox_project.ViewModels.StockViewModel;
 
 namespace Kitbox_project.ViewModels
 {
@@ -20,15 +13,15 @@ namespace Kitbox_project.ViewModels
         {
             SupplierOrders = new List<SupplierOrderViewModel>
             {
-                new SupplierOrderViewModel(1, new StockItem(1, "Panel", "PAN2144", 10), 1, 7, 100, "Ordered")
+                new SupplierOrderViewModel(2, new StockItem(1, "Panel", "PAN2144", 10), 2, 7, 9, 100, "Ordered")
             };
-            //LoadDataAsync();
+            LoadDataAsync();
         }
 
-        public async void LoadDataAsync()
+        private async void LoadDataAsync()
         {
             var supplierOrders = await DBSupplierOrders.LoadAll();
-            SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
+            SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(await DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
         }
 
         public List<SupplierOrderViewModel> SupplierOrders
@@ -67,7 +60,7 @@ namespace Kitbox_project.ViewModels
             private string _supplierName;
             private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
 
-            public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, double price, string status) : base(orderID, item, supplierId, delay, price, status)
+            public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, int quantity, double price, string status) : base(orderID, item, supplierId, delay, quantity, price, status)
             {
                 _supplierOrderVisibility = true;
                 _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
@@ -120,6 +113,7 @@ namespace Kitbox_project.ViewModels
                         order.Item,
                         order.SupplierId,
                         order.Delay,
+                        order.Quantity,
                         order.Price,
                         order.Status
                     )).ToList();

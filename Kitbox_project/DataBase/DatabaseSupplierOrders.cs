@@ -12,20 +12,27 @@ namespace Kitbox_project
     {
         public DatabaseSupplierOrders(string id, string password) : base(id, password)
         {
-            tablename = "SupplierOrders";
+            tablename = "SupplierOrder";
         }
 
-        public static List<SupplierOrder> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
+        public static async Task<List<SupplierOrder>> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
         {
+            DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+
             List<SupplierOrder> supplierOrders = new List<SupplierOrder>();
-            foreach (var item in data)
+            foreach (var order in data)
             {
-                //supplierOrders.Add(new SupplierOrder(
-                //    int.Parse(item["idStock"]),
-                //    item["Reference"],
-                //    item["Code"],
-                //    int.Parse(item["Quantity"])
-                //));
+                var item = await DBStock.GetData(new Dictionary<string, string> { { "Code", order["itemCode"] } });
+
+                supplierOrders.Add(new SupplierOrder(
+                    int.Parse(order["idSupplierOrder"]),
+                    DatabaseStock.ConvertToStockItem(item)[0],
+                    int.Parse(order["idSupplier"]),
+                    int.Parse(order["delay"]),
+                    int.Parse(order["quantity"]),
+                    double.Parse(order["price"]),
+                    order["status"]
+                ));
             }
             return supplierOrders;
         }

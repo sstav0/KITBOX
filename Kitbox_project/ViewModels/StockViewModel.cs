@@ -20,7 +20,7 @@ namespace Kitbox_project.ViewModels
             LoadDataAsync();
         }
 
-        public async void LoadDataAsync()
+        private async void LoadDataAsync()
         {
             var stockItems = await DBStock.LoadAll();
             StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
