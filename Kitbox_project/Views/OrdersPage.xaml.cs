@@ -48,7 +48,24 @@ public partial class OrdersPage : ContentPage
             ListOrders.Add(newOrderViewModel);
         }
 
-        ListViewOrders.ItemsSource = ListOrders;
+        UpdateOrders();
+    }
+
+    private void LoadFalseOrdersClicked(object sender, EventArgs e)
+    {
+        Order order1 = new Order("Waiting Confirmation", new List<Cabinet>());
+        Order order2 = new Order("Picked Up", new List<Cabinet>());
+
+        OrderViewModel orderview1 = new OrderViewModel(order1);
+        OrderViewModel orderview2 = new OrderViewModel(order2);
+
+        orderview1.OrderVisibility = true;
+        orderview2.OrderVisibility = false;
+
+        ListOrders.Add(orderview1);
+        ListOrders.Add(orderview2);
+
+        UpdateOrders();
     }
 
     private void LoadRealOrders()

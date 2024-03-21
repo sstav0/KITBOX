@@ -58,6 +58,16 @@ namespace Kitbox_project.ViewModels
             this.Order = order;
             //this.OrderID = order.OrderID;
             this.OrderStatus = order.Status;
+
+            if (this.OrderStatus == "Picked Up" ||  this.OrderStatus == "Canceled")
+            {
+                this.OrderVisibility = false;
+            }
+
+            else 
+            {
+                this.OrderVisibility = true;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -30,6 +30,9 @@
         <Button Text="Update Page" Clicked="OnUpdateOrdersClicked"
                 Grid.Row="0" Grid.Column="4"/>
 
+        <Button Text="Add Fake Orders" Clicked="LoadFalseOrdersClicked"
+                Grid.Row="0" Grid.Column="3"/>
+
         <SearchBar x:Name="OrderIDFilter" Placeholder="Search by ID..." TextChanged="OnTextChanged"
                    Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0"/>
 
