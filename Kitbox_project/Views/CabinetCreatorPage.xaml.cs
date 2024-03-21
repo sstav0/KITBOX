@@ -154,7 +154,7 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, "Wood", 50, 40), // Prcq on a tjr pas mis les materiaux pour la porte je mets au pif rn 
+                new Door(viewModel.Door.Color, "Wood", Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
                 0 // Price
             )).ToList();
 

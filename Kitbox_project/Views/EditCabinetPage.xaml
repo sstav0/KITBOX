@@ -76,11 +76,26 @@
 
                 <!--  All the Pickers inside the Cabinet Size  -->
 
-                <Label  Grid.Row="2" Grid.Column="0"/>
-            <Entry x:Name="CabinetWidth" Placeholder="Enter locker color" Grid.Row="2" Grid.Column="0"/>
-            
-            <Label  Grid.Row="2" Grid.Column="1"/>
-                <Entry x:Name="CabinetDepth" Placeholder="Enter locker height"  Grid.Row="2" Grid.Column="1"/>
+                <Picker
+                     x:Name="CabinetWidth"
+                     Grid.Row="2"
+                     Grid.Column="0"
+                     Margin="10"
+                     BackgroundColor="White"
+                     HorizontalOptions="Center"
+                     ItemsSource="{Binding ItemSourceLockerWidth}"
+                     SelectedItem="{Binding SelectedWidthItem, Mode=TwoWay}" />
+
+                <Picker
+                     x:Name="CabinetDepth"
+                     Grid.Row="2"
+                     Grid.Column="1"
+                     Margin="10"
+                     BackgroundColor="White"
+                     HorizontalOptions="Center"
+                     ItemsSource="{Binding ItemSourceLockerDepth}"
+                     SelectedItem="{Binding SelectedDepthItem}" />
+
 
                 <Picker
                     x:Name="AngleIronColor"
@@ -130,6 +145,7 @@
                     BackgroundColor="#0066FF"
                     FontSize="20"
                     MinimumHeightRequest="50"
+                    Clicked="AddSelectedLocker_Clicked"
                     Text="Add" />
 
                 <Button
@@ -139,7 +155,8 @@
                     BackgroundColor="#0066FF"
                     FontSize="20"
                     MinimumHeightRequest="50"
-                    Text="Modify" />
+                    Text="Modify" 
+                    Clicked="ModifySelectedLocker_Clicked"/>
 
                 <!--  All the Text inside the Outside Frame  -->
                 <Label
@@ -390,23 +407,18 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="3"
                                         Grid.Column="1"
-                                        Text="Edit" />
-
+                                        Text="Edit" 
+                                        Clicked="OnEditButtonClicked"/>
 
                                 </Grid>
-
-
                             </uranium:ExpanderView>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
-
             </ScrollView>
-
-
-            <!--  Bottom Buttons  -->
-            <!--  Don't forget to bind them too  -->
         </Border>
+        
+        
         <Button
             Grid.Row="3"
             Grid.Column="0"
