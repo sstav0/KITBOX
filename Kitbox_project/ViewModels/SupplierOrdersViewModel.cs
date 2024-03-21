@@ -13,7 +13,7 @@ namespace Kitbox_project.ViewModels
         {
             SupplierOrders = new List<SupplierOrderViewModel>
             {
-                new SupplierOrderViewModel(2, new StockItem(1, "Panel", "PAN2144", 10), 2, 7, 9, 100, "Ordered")
+                new SupplierOrderViewModel(2, new StockItem(1, "Panel", "PAN2144", 10, 13, 4), 2, 7, 9, 100, "Ordered")
             };
             LoadDataAsync();
         }

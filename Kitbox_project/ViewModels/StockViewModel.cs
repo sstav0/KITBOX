@@ -101,7 +101,7 @@ namespace Kitbox_project.ViewModels
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
 
-            public StockItemViewModel(int id, string reference, string code, int quantity) : base(id, reference, code, quantity)
+            public StockItemViewModel(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity)
             {
                 IsEditing = false;
                 ButtonText = "Edit";
@@ -173,7 +173,7 @@ namespace Kitbox_project.ViewModels
             public static List<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
             {
                 // Return the list of stock items as a list of stock item view models
-                return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity)).ToList();
+                return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity, item.IncomingQuantity, item.OutgoingQuantity)).ToList();
             }
 
             public void ValidateQuantity()
