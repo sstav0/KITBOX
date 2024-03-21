@@ -20,7 +20,7 @@
             </Border>
 
             <!-- ListView to display stock data -->
-            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1100" Padding="20">
+            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20">
                 <CollectionView ItemsSource="{Binding SupplierOrders}" SelectionMode="Single">
                     <CollectionView.Header>
                         <Grid>
@@ -64,9 +64,12 @@
                                 <Label Grid.Column="0" Text="{Binding OrderID}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Label Grid.Column="1" Text="{Binding Item.Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Label Grid.Column="2" Text="{Binding Item.Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Label Grid.Column="3" Text="{Binding Supplier}" VerticalOptions="Center" Margin="10,5" FontSize="Body" />
+                                <Label Grid.Column="3" Text="{Binding SupplierName}" VerticalOptions="Center" Margin="10,5" FontSize="Body" />
                                 <Label Grid.Column="4" Text="{Binding Date}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Label Grid.Column="5" Text="{Binding Price}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                <HorizontalStackLayout Grid.Column="5" VerticalOptions="Center" Margin="10,5">
+                                    <Label Text="{Binding Price}" FontSize="Body"/>
+                                    <Label Text="€" FontSize="Body"/>
+                                </HorizontalStackLayout>
                                 <Label Grid.Column="6" Text="{Binding Status}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
                                 <Button Grid.Column="7" Text="Cancel" BackgroundColor="Red" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
                                 <Button Grid.Column="8" Text="Received" BackgroundColor="Green" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>

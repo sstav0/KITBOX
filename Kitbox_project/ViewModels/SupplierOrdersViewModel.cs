@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,7 +18,7 @@ namespace Kitbox_project.ViewModels
         {
             SupplierOrders = new List<SupplierOrderViewModel>
             {
-                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), "Supplier 1", DateTime.Today, 100, "Ordered")
+                new SupplierOrderViewModel(1, new StockItem(1, "Panel", "PAN2144", 10), 1, 7, 100, "Ordered")
             };
         }
 
@@ -53,10 +54,18 @@ namespace Kitbox_project.ViewModels
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
         {
             private bool _supplierOrderVisibility;
+            private string _date;
+            private string _supplierName;
+            // private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
 
-            public SupplierOrderViewModel(int orderID, StockItem item, string supplier, DateTime date, double price, string status) : base(orderID, item, supplier, date, price, status)
+            public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, double price, string status) : base(orderID, item, supplierId, delay, price, status)
             {
                 _supplierOrderVisibility = true;
+                _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
+                Debug.WriteLine(_date);
+                // _supplierName = DBSuppliers.GetData(
+                //     new Dictionary<string, string> { { "idSuppliers", supplierId.ToString() } }, new List<string> { "NameofSuppliers" }
+                // );
             }
 
             public bool SupplierOrderVisibility
@@ -66,6 +75,26 @@ namespace Kitbox_project.ViewModels
                 {
                     _supplierOrderVisibility = value;
                     OnPropertyChanged(nameof(SupplierOrderVisibility));
+                }
+            }
+
+            public string Date
+            {
+                get => _date;
+                set
+                {
+                    _date = value;
+                    OnPropertyChanged(nameof(Date));
+                }
+            }
+
+            public string SupplierName
+            {
+                get => _supplierName;
+                set
+                {
+                    _supplierName = value;
+                    OnPropertyChanged(nameof(SupplierName));
                 }
             }
 
