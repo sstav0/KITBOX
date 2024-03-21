@@ -27,6 +27,9 @@
     <MauiXaml Update="Utilities\ExpansionPanel.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Views\EditCabinetPage.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\OrdersPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
