@@ -13,6 +13,8 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
+    private CabinetViewModel _cabviewModel;
+
     //public ICommand OnUpdateButtonClicked { get; }
 
     public CartPage(Order Order)
@@ -25,6 +27,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 		LoadRealCart(order);
 	}
+
     async Task<bool> DisplayEnsureConfirmPopup()
     {
         bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
@@ -86,7 +89,11 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
         UpdateTotalPrice();
     }
-
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateCart();
+    }
 
     private void LoadCart()
 	{
@@ -110,6 +117,14 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	public void UpdateCart() 
 	{
+        Cart.Clear();
+
+        foreach (var cabinet in order.Cart)
+        {
+            CartViewModel cabinetview = new CartViewModel(cabinet);
+            Cart.Add(cabinetview);
+        }
+
         ListCabinets.ItemsSource = CartVoid;
         ListCabinets.ItemsSource = Cart;
 
@@ -157,22 +172,19 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
     }
 
-	private async void OnEditClicked(object sender, EventArgs e)
-	{
-		if(sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
-		{
-			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
+    private async void OnEditClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
+        {
+            Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
-            newCabinetCreatorPage.Order = order;
-			newCabinetCreatorPage.Cabinet = selectedCabinet;
-			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;
-
-            await Navigation.PushAsync(newCabinetCreatorPage);
+            // Navigate to EditCabinetPage for editing with selected cabinet as parameter
+            await Navigation.PushAsync(new EditCabinetPage(order, selectedCabinet));
         }
-	}
+    }
 
-	private void OnDeleteClicked(object sender, EventArgs e)
+
+    private void OnDeleteClicked(object sender, EventArgs e)
 	{
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {

@@ -64,6 +64,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Views\SecretaryPricePage.xaml.cs">
+	    <DependentUpon>SecretaryPricePage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\OrdersPage.xaml.cs">
 	    <DependentUpon>OrdersPage.xaml</DependentUpon>
 	  </Compile>
@@ -83,6 +86,12 @@
 
 	<ItemGroup>
 	  <MauiXaml Update="Utilities\ExpansionPanel.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EditCabinetPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\SecretaryPricePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\OrdersPage.xaml">

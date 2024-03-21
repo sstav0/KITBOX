@@ -11,6 +11,9 @@ public partial class OrdersPage : ContentPage
     private ObservableCollection<OrderViewModel> ListShownOrders;
     private ObservableCollection<OrderViewModel> ListOrdersVoid;
 
+    private bool ActiveOrdersShown;
+    private bool FinishedOrdersShown;
+
     private List<Order> _orders;
 
     public List<Order> Orders
@@ -33,10 +36,16 @@ public partial class OrdersPage : ContentPage
         ListShownOrders = new ObservableCollection<OrderViewModel>();
         ListOrdersVoid = new ObservableCollection<OrderViewModel>();
 
-        Debug.WriteLine(Orders.Count());
+        ActiveOrdersShown = true;
+        FinishedOrdersShown = false;
 
         FirstLoadRealOrders();
+    }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateOrders();
     }
 
     private void FirstLoadRealOrders()
@@ -48,7 +57,24 @@ public partial class OrdersPage : ContentPage
             ListOrders.Add(newOrderViewModel);
         }
 
-        ListViewOrders.ItemsSource = ListOrders;
+        UpdateOrders();
+    }
+
+    private void LoadFalseOrdersClicked(object sender, EventArgs e)
+    {
+        Order order1 = new Order("Waiting Confirmation", new List<Cabinet>());
+        Order order2 = new Order("Picked Up", new List<Cabinet>());
+
+        OrderViewModel orderview1 = new OrderViewModel(order1);
+        OrderViewModel orderview2 = new OrderViewModel(order2);
+
+        orderview1.OrderVisibility = true;
+        orderview2.OrderVisibility = false;
+
+        ListOrders.Add(orderview1);
+        ListOrders.Add(orderview2);
+
+        UpdateOrders();
     }
 
     private void LoadRealOrders()
@@ -75,11 +101,53 @@ public partial class OrdersPage : ContentPage
     public void UpdateOrders()
     {
         ListShownOrders.Clear();
-        foreach (var item in ListOrders)
+        foreach (var order in ListOrders)
         {
-            if (item.OrderVisibility == true)
+            if (ActiveOrdersShown == true)
             {
-                ListShownOrders.Add(item);
+                if (order.OrderStatus == "Waiting Confirmation" ||
+                   order.OrderStatus == "Waiting Parts" ||
+                   order.OrderStatus == "Ready to PickUp")
+                {
+                    order.OrderVisibility = true;
+                }
+            }
+
+            if (FinishedOrdersShown == true) 
+            {
+                if (order.OrderStatus == "Canceled" ||
+                    order.OrderStatus == "Picked Up")
+                {
+                    order.OrderVisibility = true;
+                }
+
+            }
+
+            if (ActiveOrdersShown == false)
+            {
+                if (order.OrderStatus == "Waiting Confirmation" ||
+                   order.OrderStatus == "Waiting Parts" ||
+                   order.OrderStatus == "Ready to PickUp")
+                {
+                    order.OrderVisibility = false;
+                }
+            }
+
+            if (FinishedOrdersShown == false)
+            {
+                if (order.OrderStatus == "Canceled" ||
+                    order.OrderStatus == "Picked Up")
+                {
+                    order.OrderVisibility = false;
+                }
+            } 
+        }
+
+        foreach(var order in ListOrders)
+        {
+            if (order.OrderVisibility == true)
+            {
+                ListShownOrders.Add(order);
             }
         }
 
@@ -92,19 +160,64 @@ public partial class OrdersPage : ContentPage
         UpdateOrders();
     }
 
-
-    private void CancelClicked(object sender, EventArgs e)
-	{
+    private async void AnyChangeStateButtonClicked(object sender, EventArgs e)
+    {
         if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrderView)
         {
-			selectedOrderView.Order.Status = "Canceled";
-            selectedOrderView.OrderStatus = "Canceled";
+            if(button.BackgroundColor == Colors.Red)
+            {
+                string mode = "Cancel";
+
+                bool confirmation = await DisplayEnsurePopup(mode);
+
+                CancelClicked(confirmation, selectedOrderView);
+            }
+
+            if (button.BackgroundColor == Colors.Green)
+            {
+                string mode = "Ready";
+
+                bool confirmation = await DisplayEnsurePopup(mode);
+
+                ReadyClicked(confirmation, selectedOrderView);
+            }
         }
     }
 
-	private void ReadyClicked(object sender, EventArgs e)
+    async Task<bool> DisplayEnsurePopup(string mode)
+    {
+        if (mode == "Cancel")
+        {
+            bool answer = await DisplayAlert("Confirmation required", "Do you want to cancel this order ?", "Yes", "No");
+            return (answer);
+        }
+
+        if (mode == "Ready")
+        {
+            bool answer = await DisplayAlert("Confirmation required", "Do you want to set this order as ready ?", "Yes", "No");
+            return (answer);
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    private void CancelClicked(bool confirmation, OrderViewModel selectedOrderView)
+    {
+        if (confirmation == true)
+        {
+    		selectedOrderView.Order.Status = "Canceled";
+            selectedOrderView.OrderStatus = "Canceled";
+
+            UpdateOrders();
+        }
+    }
+
+	private void ReadyClicked(bool confirmation, OrderViewModel selectedOrderView)
 	{
-        if (sender is Button button && button.CommandParameter is OrderViewModel selectedOrderView)
+        if (confirmation == true) 
         {
             if (selectedOrderView.OrderStatus == "Waiting Confirmation")
             {
@@ -112,6 +225,8 @@ public partial class OrdersPage : ContentPage
                 selectedOrderView.OrderStatus = "Waiting Parts";
 
                 //Orders.Find(selectedOrderView.OrderId).Status = "Waiting Parts";
+
+                UpdateOrders();
             }
 
             if (selectedOrderView.OrderStatus == "Waiting Parts")
@@ -120,6 +235,8 @@ public partial class OrdersPage : ContentPage
                 selectedOrderView.OrderStatus = "Ready to PickUp";
 
                 //Orders.Find(selectedOrderView.OrderId).Status = "Ready to PickUp";
+
+                UpdateOrders();
             }
         }
     }
@@ -162,15 +279,7 @@ public partial class OrdersPage : ContentPage
                 button.TextColor = Colors.White;
                 button.BackgroundColor = Color.Parse("#512BD4");
 
-                foreach(var item in ListOrders)
-                {
-                    if (item.OrderStatus == "Waiting Confirmation" ||
-                        item.OrderStatus == "Waiting Parts" ||
-                        item.OrderStatus == "Ready to PickUp")
-                    {
-                        item.OrderVisibility = false;
-                    }
-                }
+                ActiveOrdersShown = false;
             }
 
             else
@@ -178,15 +287,7 @@ public partial class OrdersPage : ContentPage
                 button.TextColor = Colors.Black;
                 button.BackgroundColor = Colors.Gray;
 
-                foreach (var item in ListOrders)
-                {
-                    if (item.OrderStatus == "Waiting Confirmation" ||
-                        item.OrderStatus == "Waiting Parts" ||
-                        item.OrderStatus == "Ready to PickUp")
-                    {
-                        item.OrderVisibility = true;
-                    }
-                }
+                ActiveOrdersShown = true;
             }
         }
 
@@ -202,14 +303,7 @@ public partial class OrdersPage : ContentPage
                 button.TextColor = Colors.White;
                 button.BackgroundColor = Color.Parse("#512BD4");
 
-                foreach (var item in ListOrders)
-                {
-                    if (item.OrderStatus == "Canceled" ||
-                        item.OrderStatus == "Picked Up")
-                    {
-                        item.OrderVisibility = false;
-                    }
-                }
+                FinishedOrdersShown = false;
             }
 
             else
@@ -217,14 +311,7 @@ public partial class OrdersPage : ContentPage
                 button.TextColor = Colors.Black;
                 button.BackgroundColor = Colors.Gray;
 
-                foreach (var item in ListOrders)
-                {
-                    if (item.OrderStatus == "Canceled" ||
-                        item.OrderStatus == "Picked Up")
-                    {
-                        item.OrderVisibility = true;
-                    }
-                }
+                FinishedOrdersShown = true;
             }
         }
 
