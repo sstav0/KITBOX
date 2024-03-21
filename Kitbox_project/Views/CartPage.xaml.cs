@@ -27,6 +27,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 		LoadRealCart(order);
 	}
+
     async Task<bool> DisplayEnsureConfirmPopup()
     {
         bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
@@ -88,7 +89,11 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
         UpdateTotalPrice();
     }
-
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateCart();
+    }
 
     private void LoadCart()
 	{
@@ -112,13 +117,16 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	public void UpdateCart() 
 	{
+        Cart.Clear();
+
+        foreach (var cabinet in order.Cart)
+        {
+            CartViewModel cabinetview = new CartViewModel(cabinet);
+            Cart.Add(cabinetview);
+        }
+
         ListCabinets.ItemsSource = CartVoid;
         ListCabinets.ItemsSource = Cart;
-        
-        foreach(var item in order.Cart)
-        {
-           Debug.WriteLine(item.ToString());
-        }
 
 		UpdateTotalPrice();
 	}

@@ -40,7 +40,12 @@ public partial class OrdersPage : ContentPage
         FinishedOrdersShown = false;
 
         FirstLoadRealOrders();
+    }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateOrders();
     }
 
     private void FirstLoadRealOrders()
