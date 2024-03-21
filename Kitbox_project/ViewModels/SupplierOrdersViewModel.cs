@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Kitbox_project.ViewModels.StockViewModel;
 
 namespace Kitbox_project.ViewModels
 {
@@ -20,6 +21,27 @@ namespace Kitbox_project.ViewModels
             {
                 new SupplierOrderViewModel(1, new StockItem(1, "Panel", "PAN2144", 10), 1, 7, 100, "Ordered")
             };
+            LoadDataAsync();
+        }
+
+        public async void LoadDataAsync()
+        {
+            // var supplierOrders = await DBStock.LoadAll();
+            // SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplier.ConvertToSupplierOrder(supplierOrders));
+            //public static List<SupplierOrder> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
+            //{
+            //    List<SupplierOrder> supplierOrders = new List<SupplierOrder>();
+            //    foreach (var item in data)
+            //    {
+            //        supplierOrders.Add(new SupplierOrder(
+            //            int.Parse(item["idStock"]),
+            //            item["Reference"],
+            //            item["Code"],
+            //            int.Parse(item["Quantity"])
+            //        ));
+            //    }
+            //    return supplierOrders;
+            //}
         }
 
         public List<SupplierOrderViewModel> SupplierOrders
@@ -56,7 +78,7 @@ namespace Kitbox_project.ViewModels
             private bool _supplierOrderVisibility;
             private string _date;
             private string _supplierName;
-            // private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
+            // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
 
             public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, double price, string status) : base(orderID, item, supplierId, delay, price, status)
             {
@@ -96,6 +118,18 @@ namespace Kitbox_project.ViewModels
                     _supplierName = value;
                     OnPropertyChanged(nameof(SupplierName));
                 }
+            }
+
+            public static List<SupplierOrderViewModel> ConvertToViewModels(IEnumerable<SupplierOrder> supplierOrders)
+            {
+                return supplierOrders.Select(order => new SupplierOrderViewModel(
+                        order.OrderID,
+                        order.Item,
+                        order.SupplierId,
+                        order.Delay,
+                        order.Price,
+                        order.Status
+                    )).ToList();
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
