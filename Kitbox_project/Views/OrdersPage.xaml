@@ -72,10 +72,10 @@
                                            TextColor="DarkOrange" FontSize="Medium" FontAttributes="Bold" Grid.Row="0"/>
 
                                     <Button Text="Cancel" BackgroundColor="Red" Grid.Column="4" CommandParameter="{Binding .}"
-                                            Clicked="CancelClicked" Margin="5,0,5,0" MaximumHeightRequest="20" Grid.Row="0"/>
+                                            Clicked="AnyChangeStateButtonClicked" Margin="5,0,5,0" MaximumHeightRequest="20" Grid.Row="0"/>
 
                                     <Button Text="Ready" BackgroundColor="Green" Grid.Column="5" CommandParameter="{Binding .}"
-                                            Clicked="ReadyClicked" Margin="5,0,5,0" MaximumHeightRequest="20" Grid.Row="0"/>
+                                            Clicked="AnyChangeStateButtonClicked" Margin="5,0,5,0" MaximumHeightRequest="20" Grid.Row="0"/>
 
 
                                     <uranium:ExpanderView Grid.ColumnSpan="7" Grid.Row="1">

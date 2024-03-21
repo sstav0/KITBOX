@@ -21,10 +21,10 @@
             ContentTemplate="{DataTemplate views:HomeClientPage}"
             Route="HomeClientPage"/>
 
-        <ShellContent
+        <!--<ShellContent
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage"/>
+            Route="CabinetCreatorPage"/>-->
 
         <ShellContent
             Title="Login Page"
