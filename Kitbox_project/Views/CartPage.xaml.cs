@@ -14,6 +14,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
     public ICommand OnUpdateButtonClicked { get; }
+    private string customerEmailFromPopup = null;
 
     //   public CartPage()
     //{
@@ -36,8 +37,57 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 		LoadRealCart(order);
 	}
+    async Task<bool> DisplayEnsureConfirmPopup()
+    {
+        bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
+        Debug.WriteLine("Answer: " + answer);
+        return answer;
+    }
 
-	private void LoadRealCart(Order order)
+    async Task<bool> DisplayEnsureEmailPopup()
+    {
+        bool answer = await DisplayAlert("Invalid Input", "Do you want to retry ?", "Yes", "No");
+        Debug.WriteLine("Answer: " + answer);
+        return answer;
+    }
+
+    async Task<string> DisplayEmailPopup()
+    {
+        customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@gmail.com");
+        if (!string.IsNullOrWhiteSpace(customerEmailFromPopup) && customerEmailFromPopup.Any(char.IsLetterOrDigit) && customerEmailFromPopup.Contains('@'))
+        {
+            Debug.WriteLine("Customer email: " + customerEmailFromPopup);
+        }
+        else
+        {
+            bool emailRetrial = await DisplayEnsureEmailPopup();
+            if (emailRetrial)
+            {
+                customerEmailFromPopup = await DisplayEmailPopup();
+            }
+            else
+            {
+                customerEmailFromPopup = null;
+            }
+        }
+        return customerEmailFromPopup;
+    }
+
+    async Task<bool> DisplayConfirmPopup()
+    {
+        bool confirmation = await DisplayEnsureConfirmPopup();
+        if (confirmation)
+        {
+            customerEmailFromPopup = await DisplayEmailPopup();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void LoadRealCart(Order order)
 	{
 		foreach (Cabinet cabinet in order.Cart)
 		{
@@ -104,13 +154,19 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
 		order.Status = "Waiting Confirmation";
+        bool goToNextPage = await DisplayConfirmPopup();
+        
+        if (goToNextPage)
+        {
+            OrdersPage newActiveOrdersPage = new OrdersPage();
 
-		OrdersPage newActiveOrdersPage = new OrdersPage();
+            newActiveOrdersPage.Orders.Add(order);
+            newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
-		newActiveOrdersPage.Orders.Add(order);
-		newActiveOrdersPage.UpdateOrdersFromAfar(order);
+            await Navigation.PushAsync(newActiveOrdersPage);
+        }
 
-        await Navigation.PushAsync(newActiveOrdersPage);     
+
     }
 
 	private async void OnEditClicked(object sender, EventArgs e)
