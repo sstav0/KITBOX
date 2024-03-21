@@ -148,7 +148,8 @@ namespace Kitbox_project.Views
             //_cabinet.Length = Convert.ToInt32(CabinetWidth);
             Debug.WriteLine(Convert.ToInt32(CabinetWidth.SelectedItem));
             Debug.WriteLine(Convert.ToInt32(CabinetDepth.SelectedItem));
-            _cabinet.Length = Convert.ToInt32(CabinetWidth.SelectedItem);
+            _cabinet.Depth = Convert.ToInt32(_viewModel.SelectedDepthItem);
+            _cabinet.Length = Convert.ToInt32(_viewModel.SelectedWidthItem);
             foreach (var locker in _cabinet.GetObservableLockers())
             {
                 _cabinet.TestRemoveLocker(locker);  
