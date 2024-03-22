@@ -3,8 +3,27 @@
 
 namespace Kitbox_project.DataBase
 {
-    
 
+    /// <summary>
+    /// Functions available with this class : 
+    /// <list type="bullet">
+    /// <item>
+    /// <description><c>Add</c> - Inserts a new row into a database table. If a duplicate key is found, the insert is ignored. Use this method to add new entries to your table.</description>
+    /// </item>
+    /// <item>
+    /// <description><c>Delete</c> - Removes rows from a database table based on specified conditions. This method forms a WHERE clause from the conditions to identify the rows to be deleted.</description>
+    /// </item>
+    /// <item>
+    /// <description><c>Update</c> - Modifies data in existing rows of a database table. The method takes new data and conditions to update rows that match the conditions with the new data.</description>
+    /// </item>
+    /// <item>
+    /// <description><c>GetData</c> - Fetches rows from a database table that match specified conditions. It allows for selecting specific columns. Returns a list of dictionaries, where each dictionary represents a row.</description>
+    /// </item>
+    /// <item>
+    /// <description><c>LoadAll</c> - Retrieves all rows from a database table, optionally filtering the columns to return. It is useful for loading entire tables or large data sets.</description>
+    /// </item>
+    /// </list>
+    /// </summary>
     public class Database
     {
 
