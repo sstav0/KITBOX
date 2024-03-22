@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Kitbox_project.Models;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Kitbox_project.Views
 {
@@ -66,14 +67,14 @@ namespace Kitbox_project.Views
             }
 
             // Create a new LockerViewModel based on the selected parameters
-            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
 
             LockerViewModel newLocker = new LockerViewModel
             {
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
-                Door = door
-
+                Door = door,
+                NotePartsAvailability = "NotePartsAvailability(ARTHUR)"
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;
@@ -95,7 +96,7 @@ namespace Kitbox_project.Views
             Debug.WriteLine(locker);
             locker.Color = _viewModel.SelectedLockerColorItem;
             locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            Door door = new Door(_viewModel.SelectedDoorColorItem, "Wood", 50, 40); // Assuming default material and dimensions
+            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
             locker.Door = door;
             }
 
@@ -128,6 +129,7 @@ namespace Kitbox_project.Views
                     if(locker.Door.Color is not null)
                     {
                     _viewModel.SelectedDoorColorItem = locker.Door.Color;
+                        _viewModel.SelectedDoorMaterialItem = locker.Door.Material;
 
                     }
 
@@ -171,9 +173,21 @@ namespace Kitbox_project.Views
             ); 
 
             // Add the new Cabinet to the Order's cart
+
+            if (order.Cart.Count() != 0)
+            {
+                int newIndex = order.Cart.Last().CabinetID + 1;
+
+                newCabinet.CabinetID = newIndex;
+            }
+
+            else
+            {
+                newCabinet.CabinetID = 0;
+            }
+
             Debug.WriteLine(newCabinet.ToString());
-            //Cabinet newCabinet = new Cabinet(_viewModel.AvailableLockers, _viewModel.SelectedDepthItem, _viewModel.SelectedWidthItem, 1, 1);
-            //System.Diagnostics.Debug.WriteLine(newCabinet);
+
             order.Cart.Add(newCabinet);
 
             // Create the cart page

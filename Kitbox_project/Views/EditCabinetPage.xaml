@@ -1,8 +1,8 @@
-<ContentPage
-    x:Class="Kitbox_project.Views.CabinetCreatorPage"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:panel="clr-namespace:Kitbox_project.Utilities"
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Kitbox_project.Views.EditCabinetPage"
+     xmlns:panel="clr-namespace:Kitbox_project.Utilities"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
     BackgroundColor="White">
@@ -15,7 +15,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" /> 
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.4*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.5*" />
@@ -76,25 +76,11 @@
 
                 <!--  All the Pickers inside the Cabinet Size  -->
 
-                <Picker
-                    x:Name="CabinetWidth"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Margin="10"
-                    BackgroundColor="White"
-                    HorizontalOptions="Center"
-                    ItemsSource="{Binding ItemSourceLockerWidth}"
-                    SelectedItem="{Binding SelectedWidthItem}" />
-
-                <Picker
-                    x:Name="CabinetDepth"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    Margin="10"
-                    BackgroundColor="White"
-                    HorizontalOptions="Center"
-                    ItemsSource="{Binding ItemSourceLockerDepth}"
-                    SelectedItem="{Binding SelectedDepthItem}" />
+                <Label  Grid.Row="2" Grid.Column="0"/>
+            <Entry x:Name="CabinetWidth" Placeholder="Enter locker color" Grid.Row="2" Grid.Column="0"/>
+            
+            <Label  Grid.Row="2" Grid.Column="1"/>
+                <Entry x:Name="CabinetDepth" Placeholder="Enter locker height"  Grid.Row="2" Grid.Column="1"/>
 
                 <Picker
                     x:Name="AngleIronColor"
@@ -142,7 +128,6 @@
                     Grid.Column="4"
                     Margin="30"
                     BackgroundColor="#0066FF"
-                    Clicked="AddSelectedLocker_Clicked"
                     FontSize="20"
                     MinimumHeightRequest="50"
                     Text="Add" />
@@ -152,11 +137,10 @@
                     Grid.Column="4"
                     Margin="30"
                     BackgroundColor="#0066FF"
-                    Clicked="ModifySelectedLocker_Clicked"
                     FontSize="20"
                     MinimumHeightRequest="50"
                     Text="Modify" />
-                
+
                 <!--  All the Text inside the Outside Frame  -->
                 <Label
                     Grid.Row="0"
@@ -406,7 +390,6 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="3"
                                         Grid.Column="1"
-                                        Clicked="OnEditButtonClicked"
                                         Text="Edit" />
 
 
@@ -437,8 +420,8 @@
             Grid.Column="6"
             Margin="10"
             BackgroundColor="Green"
-            Clicked="OnConfimButtonClicked"
             FontSize="20"
+            Clicked="OnUpdateButtonClicked"
             Text="Confirm" />
 
     </Grid>

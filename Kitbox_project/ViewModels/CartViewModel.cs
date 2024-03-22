@@ -43,9 +43,9 @@ namespace Kitbox_project.ViewModels
         public int Height
         { get => _height; set => _height = value; }
 
-        private int _CabinetID;
+        private int _cabinetID;
         public int CabinetID
-        { get => _CabinetID; set => _CabinetID = value; }
+        { get => _cabinetID; set => _cabinetID = value; }
 
         public CartViewModel(Cabinet cabinet)
         {
@@ -57,6 +57,7 @@ namespace Kitbox_project.ViewModels
             this._quantity = cabinet.Quantity;
             this._nbrLockers = cabinet.GetLockerCount();
             this._height = cabinet.Height;
+            this._cabinetID = cabinet.CabinetID;
         }
 
         public void AddLocker(Locker locker)

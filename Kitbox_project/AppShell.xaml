@@ -8,6 +8,7 @@
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
 
+
     <TabBar>
 
         <ShellContent
@@ -20,10 +21,10 @@
             ContentTemplate="{DataTemplate views:HomeClientPage}"
             Route="HomeClientPage"/>
 
-        <ShellContent
+        <!--<ShellContent
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage"/>
+            Route="CabinetCreatorPage"/>-->
 
         <ShellContent
             Title="Login Page"
@@ -36,9 +37,24 @@
             Route="StockPage"/>
 
         <ShellContent
-            Title="Active Orders"
-            ContentTemplate="{DataTemplate views:ActiveOrdersPage}"
-            Route="ActiveOrdersPage"/>
+            Title="Orders"
+            ContentTemplate="{DataTemplate views:OrdersPage}"
+            Route="OrdersPage"/>
+
+        <ShellContent
+            Title="Supplier Orders"
+            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
+            Route="SupplierOrdersPage"/>
+
+        <ShellContent
+            Title="Logout"
+            ContentTemplate="{DataTemplate views:LogoutPage}"
+            Route="Logout"/> 
+        
+        <ShellContent
+            Title="Login Page"
+            ContentTemplate="{DataTemplate views:LoginPage}"
+            Route="LoginPage"/>        
 
     </TabBar>
 

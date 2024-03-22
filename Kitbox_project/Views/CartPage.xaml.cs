@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace Kitbox_project.Views;
 
@@ -12,19 +13,11 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private ObservableCollection<CartViewModel> Cart;
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
+    private CabinetViewModel _cabviewModel;
 
-	//   public CartPage()
-	//{
-	//	InitializeComponent();
-	//	Cart = new ObservableCollection<CartViewModel>();
-	//	CartVoid = new ObservableCollection<CartViewModel>();
+    //public ICommand OnUpdateButtonClicked { get; }
 
-	//	order = new Order("InCreation", new List<Cabinet>());
-
-	//	LoadCart();
-	//   }
-
-	public CartPage(Order Order)
+    public CartPage(Order Order)
 	{
 		order = Order;
 
@@ -35,7 +28,57 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		LoadRealCart(order);
 	}
 
-	private void LoadRealCart(Order order)
+    async Task<bool> DisplayEnsureConfirmPopup()
+    {
+        bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
+        Debug.WriteLine("Answer: " + answer);
+        return answer;
+    }
+
+    async Task<bool> DisplayEnsureEmailPopup()
+    {
+        bool answer = await DisplayAlert("Invalid Input", "Do you want to retry ?", "Yes", "No");
+        Debug.WriteLine("Answer: " + answer);
+        return answer;
+    }
+
+    async Task<string> DisplayEmailPopup()
+    {
+        string customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@gmail.com");
+        if (!string.IsNullOrWhiteSpace(customerEmailFromPopup) && customerEmailFromPopup.Any(char.IsLetterOrDigit) && customerEmailFromPopup.Contains('@'))
+        {
+            Debug.WriteLine("Customer email: " + customerEmailFromPopup);
+        }
+        else
+        {
+            bool emailRetrial = await DisplayEnsureEmailPopup();
+            if (emailRetrial)
+            {
+                customerEmailFromPopup = await DisplayEmailPopup();
+            }
+            else
+            {
+                customerEmailFromPopup = null;
+            }
+        }
+        return customerEmailFromPopup;
+    }
+
+    async Task<bool> DisplayConfirmPopup()
+    {
+        bool confirmation = await DisplayEnsureConfirmPopup();
+        if (confirmation)
+        {
+            string customerEmailFromPopup = await DisplayEmailPopup();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void LoadRealCart(Order order)
 	{
 		foreach (Cabinet cabinet in order.Cart)
 		{
@@ -46,7 +89,11 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
         UpdateTotalPrice();
     }
-
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        UpdateCart();
+    }
 
     private void LoadCart()
 	{
@@ -68,12 +115,25 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
             UpdateTotalPrice();
     }
 
-	private void UpdateCart() 
+	public void UpdateCart() 
 	{
+        Cart.Clear();
+
+        foreach (var cabinet in order.Cart)
+        {
+            CartViewModel cabinetview = new CartViewModel(cabinet);
+            Cart.Add(cabinetview);
+        }
+
         ListCabinets.ItemsSource = CartVoid;
         ListCabinets.ItemsSource = Cart;
 
 		UpdateTotalPrice();
+	}
+
+	public void OnUpdateCartCLicked(object sender, EventArgs e)
+	{
+		UpdateCart();
 	}
 
 	private void UpdateTotalPrice()
@@ -97,35 +157,39 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
 		order.Status = "Waiting Confirmation";
+        bool goToNextPage = await DisplayConfirmPopup();
+        
+        if (goToNextPage)
+        {
+            OrdersPage newActiveOrdersPage = new OrdersPage();
 
-		ActiveOrdersPage newActiveOrdersPage = new ActiveOrdersPage();
+            newActiveOrdersPage.Orders.Add(order);
+            newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
-		newActiveOrdersPage.Orders.Add(order);
-		newActiveOrdersPage.UpdateOrders();
+            await Navigation.PushAsync(newActiveOrdersPage);
+        }
 
-        await Navigation.PushAsync(newActiveOrdersPage);     
+
     }
 
-	private async void OnEditClicked(object sender, EventArgs e)
-	{
-		if(sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
-		{
-			Cabinet selectedCabinet = selectedCabinetView.Cabinet;
+    private async void OnEditClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinetView)
+        {
+            Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
-            CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
-            newCabinetCreatorPage.Order = order;
-			newCabinetCreatorPage.Cabinet = selectedCabinet;
-			newCabinetCreatorPage.IDCabinet = selectedCabinet.CabinetID;
-
-            await Navigation.PushAsync(newCabinetCreatorPage);
+            // Navigate to EditCabinetPage for editing with selected cabinet as parameter
+            await Navigation.PushAsync(new EditCabinetPage(order, selectedCabinet));
         }
-	}
+    }
 
-	private void OnDeleteClicked(object sender, EventArgs e)
+
+    private void OnDeleteClicked(object sender, EventArgs e)
 	{
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {
-			Cart.Remove(selectedCabinet);
+			order.Cart.RemoveAt(selectedCabinet.CabinetID);
+            Cart.Remove(selectedCabinet);
 			UpdateCart();
         }
     }
