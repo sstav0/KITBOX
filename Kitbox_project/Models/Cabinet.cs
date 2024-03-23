@@ -128,5 +128,10 @@ namespace Kitbox_project.Models
         {
             this._lockers.RemoveAt(index);
         }
+
+        public void TestRemoveLocker(Locker locker)
+        {
+            this._lockers.Remove(locker);
+        }
     }
 }

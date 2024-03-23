@@ -1,9 +1,5 @@
 ﻿using Kitbox_project.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,36 +16,25 @@ namespace Kitbox_project.ViewModels
     {
         public ICommand OnReceivedClicked2 { get; }
         
+        private List<SupplierOrderViewModel> _supplierOrders;
+        private DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
+
         public SupplierOrdersViewModel()
         {
             SupplierOrders = new List<SupplierOrderViewModel>
             {
-                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1235, 12, 100, "Ordered"),
-                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1245 , 12, 100, "Ordered")
+                //new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1235, 12, 100, "Ordered"),
+                //new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1245 , 12, 100, "Ordered")
             };
             LoadDataAsync();
         }
 
-        public async void LoadDataAsync()
+        private async void LoadDataAsync()
         {
-            // var supplierOrders = await DBStock.LoadAll();
-            // SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplier.ConvertToSupplierOrder(supplierOrders));
-            //public static List<SupplierOrder> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
-            //{
-            //    List<SupplierOrder> supplierOrders = new List<SupplierOrder>();
-            //    foreach (var item in data)
-            //    {
-            //        supplierOrders.Add(new SupplierOrder(
-            //            int.Parse(item["idStock"]),
-            //            item["Reference"],
-            //            item["Code"],
-            //            int.Parse(item["Quantity"])
-            //        ));
-            //    }
-            //    return supplierOrders;
-            //}
+            var supplierOrders = await DBSupplierOrders.LoadAll();
+            SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(await DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
         }
-        private List<SupplierOrderViewModel> _supplierOrders;
+
         public List<SupplierOrderViewModel> SupplierOrders
         {
             get => _supplierOrders;
@@ -62,15 +47,18 @@ namespace Kitbox_project.ViewModels
 
         public void ApplyFilter(string searchText)
         {
-            //searchText = searchText.Trim();
-            //foreach (var item in StockData)
-            //{
-            //    // Filter items based on search text
-            //    item.StockItemVisibility =
-            //        string.IsNullOrWhiteSpace(searchText) ||
-            //        item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-            //        item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
-            //}
+            searchText = searchText.Trim();
+            foreach (var order in SupplierOrders)
+            {
+                // Filter orders based on search text
+                order.SupplierOrderVisibility =
+                    string.IsNullOrWhiteSpace(searchText) ||
+                    order.OrderID.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.SupplierName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Date.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -87,8 +75,9 @@ namespace Kitbox_project.ViewModels
             private string _supplierName;
             public ICommand OnReceivedClicked { get; }
             // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
+            private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
 
-            public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, double price, string status) : base(orderID, item, supplierId, delay, price, status)
+            public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, int quantity, double price, string status) : base(orderID, item, supplierId, delay, quantity, price, status)
             {
                 _supplierOrderVisibility = true;
                 _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
@@ -112,6 +101,16 @@ namespace Kitbox_project.ViewModels
                     this.Status = "Ordered";
                     OnPropertyChanged(nameof(Status));
                 }
+                LoadSupplierName();
+            }
+
+            private async void LoadSupplierName()
+            {
+                var supplierName = await DBSuppliers.GetData(
+                    new Dictionary<string, string> { { "idSuppliers", SupplierId.ToString() } }, 
+                    new List<string> { "NameofSuppliers" }
+                );
+                SupplierName = supplierName[0]["NameofSuppliers"];
             }
 
             public bool SupplierOrderVisibility
@@ -151,6 +150,7 @@ namespace Kitbox_project.ViewModels
                         order.Item,
                         order.SupplierId,
                         order.Delay,
+                        order.Quantity,
                         order.Price,
                         order.Status
                     )).ToList();

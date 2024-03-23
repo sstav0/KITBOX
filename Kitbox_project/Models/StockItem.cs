@@ -31,14 +31,14 @@ namespace Kitbox_project.Models
         private int _incomingQuantity;
         private int _outgoingQuantity;
 
-        public StockItem(int id, string reference, string code, int quantity)
+        public StockItem(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity)
         {
             _id = id;
             _reference = reference;
             _code = code;
             _quantity = quantity;
-            _incomingQuantity = 0;
-            _outgoingQuantity = 0;
+            _incomingQuantity = incomingQuantity;
+            _outgoingQuantity = outgoingQuantity;
         }
 
         public int Id

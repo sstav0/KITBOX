@@ -47,6 +47,11 @@
             Route="SupplierOrdersPage"/>
 
         <ShellContent
+            Title="Supplier's Prices"
+            ContentTemplate="{DataTemplate views:SecretaryPricePage}"
+            Route="SecretaryPricePage"/>
+
+        <ShellContent
             Title="Logout"
             ContentTemplate="{DataTemplate views:LogoutPage}"
             Route="Logout"/> 

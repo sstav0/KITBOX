@@ -21,7 +21,9 @@ public class DatabaseStock : Database
                 int.Parse(item["idStock"]),
                 item["Reference"],
                 item["Code"],
-                int.Parse(item["Quantity"])
+                int.Parse(item["Quantity"]),
+                int.Parse(item["IncomingQuantity"]),
+                int.Parse(item["OutgoingQuantity"])
             ));
         }
         return stockItems;
