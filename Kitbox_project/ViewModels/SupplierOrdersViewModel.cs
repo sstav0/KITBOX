@@ -19,12 +19,13 @@ namespace Kitbox_project.ViewModels
     internal class SupplierOrdersViewModel : INotifyPropertyChanged
     {
         public ICommand OnReceivedClicked2 { get; }
+        
         public SupplierOrdersViewModel()
         {
             SupplierOrders = new List<SupplierOrderViewModel>
             {
-                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), "Supplier 1", DateTime.Today, 100, "Ordered"),
-                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), "Supplier 1", DateTime.Today, 100, "Ordered")
+                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1235, 12, 100, "Ordered"),
+                new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1245 , 12, 100, "Ordered")
             };
             LoadDataAsync();
         }
@@ -48,7 +49,7 @@ namespace Kitbox_project.ViewModels
             //    return supplierOrders;
             //}
         }
-
+        private List<SupplierOrderViewModel> _supplierOrders;
         public List<SupplierOrderViewModel> SupplierOrders
         {
             get => _supplierOrders;
@@ -81,8 +82,10 @@ namespace Kitbox_project.ViewModels
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
         {
             private bool _supplierOrderVisibility;
+            private List<SupplierOrderViewModel> _supplierOrders;
             private string _date;
             private string _supplierName;
+            public ICommand OnReceivedClicked { get; }
             // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
 
             public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, double price, string status) : base(orderID, item, supplierId, delay, price, status)
@@ -93,6 +96,7 @@ namespace Kitbox_project.ViewModels
                 // _supplierName = DBSuppliers.GetData(
                 //     new Dictionary<string, string> { { "idSuppliers", supplierId.ToString() } }, new List<string> { "NameofSuppliers" }
                 // );
+                OnReceivedClicked = new Command(ModifyOrderStatus);
             }
 
             public async void ModifyOrderStatus()
@@ -100,7 +104,6 @@ namespace Kitbox_project.ViewModels
                 bool orderReceived = await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Order Received ?", "Confirm you received this order ?", "Yes", "No");
                 if(orderReceived)
                 {
-               
                     this.Status = "Received";
                     OnPropertyChanged(nameof(Status));
                 }

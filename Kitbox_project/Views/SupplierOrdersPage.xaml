@@ -44,8 +44,14 @@
                     VerticalOptions="CenterAndExpand" />
             </StackLayout>
 
-            <!-- ListView to display stock data -->
-            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20">
+            <!--  ListView to display stock data  -->
+            <Border
+                Padding="20"
+                BackgroundColor="#fdfdfd"
+                Stroke="{StaticResource Secondary}"
+                StrokeShape="RoundRectangle 20"
+                StrokeThickness="2"
+                WidthRequest="1200">
                 <CollectionView ItemsSource="{Binding SupplierOrders}" SelectionMode="Single">
                     <CollectionView.Header>
                         <Grid>
@@ -121,18 +127,68 @@
                                     <ColumnDefinition Width="100" />
                                 </Grid.ColumnDefinitions>
 
-                                <Label Grid.Column="0" Text="{Binding OrderID}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Label Grid.Column="1" Text="{Binding Item.Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Label Grid.Column="2" Text="{Binding Item.Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Label Grid.Column="3" Text="{Binding SupplierName}" VerticalOptions="Center" Margin="10,5" FontSize="Body" />
-                                <Label Grid.Column="4" Text="{Binding Date}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <HorizontalStackLayout Grid.Column="5" VerticalOptions="Center" Margin="10,5">
-                                    <Label Text="{Binding Price}" FontSize="Body"/>
-                                    <Label Text="€" FontSize="Body"/>
+                                <Label
+                                    Grid.Column="0"
+                                    Margin="10,5"
+                                    FontSize="Body"
+                                    Text="{Binding OrderID}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="1"
+                                    Margin="10,5"
+                                    FontSize="Body"
+                                    Text="{Binding Item.Reference}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="2"
+                                    Margin="10,5"
+                                    FontSize="Body"
+                                    Text="{Binding Item.Code}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="3"
+                                    Margin="10,5"
+                                    FontSize="Body"
+                                    Text="{Binding SupplierName}"
+                                    VerticalOptions="Center" />
+                                <Label
+                                    Grid.Column="4"
+                                    Margin="10,5"
+                                    FontSize="Body"
+                                    Text="{Binding Date}"
+                                    VerticalOptions="Center" />
+                                <HorizontalStackLayout
+                                    Grid.Column="5"
+                                    Margin="10,5"
+                                    VerticalOptions="Center">
+                                    <Label FontSize="Body" Text="{Binding Price}" />
+                                    <Label FontSize="Body" Text="€" />
                                 </HorizontalStackLayout>
-                                <Label Grid.Column="6" Text="{Binding Status}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                <Button Grid.Column="7" Text="Cancel" BackgroundColor="Red" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
-                                <Button Grid.Column="8" Text="Received" BackgroundColor="Green" VerticalOptions="Center" Margin="5,5" Padding="14,5" HeightRequest="35" FontSize="Body"/>
+                                <Label
+                                    Grid.Column="6"
+                                    Margin="10,5"
+                                    FontSize="Body"
+                                    Text="{Binding Status}"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    Grid.Column="7"
+                                    Margin="5,5"
+                                    Padding="14,5"
+                                    BackgroundColor="Red"
+                                    FontSize="Body"
+                                    HeightRequest="35"
+                                    Text="Cancel"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    Grid.Column="8"
+                                    Margin="5,5"
+                                    Padding="14,5"
+                                    BackgroundColor="Green"
+                                    Command="{Binding OnReceivedClicked}"
+                                    FontSize="Body"
+                                    HeightRequest="35"
+                                    Text="Received"
+                                    VerticalOptions="Center" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
