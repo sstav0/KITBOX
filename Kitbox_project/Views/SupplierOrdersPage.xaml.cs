@@ -16,4 +16,16 @@ public partial class SupplierOrdersPage : ContentPage
             supplierOrdersViewModel.ApplyFilter(searchBar.Text);
         }
     }
+
+    private void OnCheckBoxCheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (sender is CheckBox checkBox && BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
+        {
+            if (checkBox == orderedCheckBox)
+            {
+                // Should be based on all checkboxes values to filter accrodingly
+                supplierOrdersViewModel.ApplyStatusFilter(orderedCheckBox.IsChecked);
+            }
+        }
+    }
 }

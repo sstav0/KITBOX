@@ -46,6 +46,15 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public void ApplyStatusFilter(bool isChecked)
+        {
+            foreach (var order in SupplierOrders)
+            {
+                // Filter orders based on status
+                order.SupplierOrderVisibility = !isChecked || order.Status == "Received";
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
