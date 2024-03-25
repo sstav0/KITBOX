@@ -28,6 +28,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		LoadRealCart(order);
 	}
 
+    //Display Popup window to ask if customer wants to confirm his order (return bool)
     async Task<bool> DisplayEnsureConfirmPopup()
     {
         bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
@@ -35,6 +36,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         return answer;
     }
 
+    //Display popup window when invalid email input received
     async Task<bool> DisplayEnsureEmailPopup()
     {
         bool answer = await DisplayAlert("Invalid Input", "Do you want to retry ?", "Yes", "No");
@@ -42,35 +44,43 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         return answer;
     }
 
-    async Task<string> DisplayEmailPopup()
+    //display popup windows to ask for customer's email if email not valid -> call DisplayEnsureEmailPopup() else -> return true
+    async Task<bool> DisplayEmailPopup()
     {
-        string customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@gmail.com");
+        string customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@mail.com");
+        bool goToNextPage = false;
         if (!string.IsNullOrWhiteSpace(customerEmailFromPopup) && customerEmailFromPopup.Any(char.IsLetterOrDigit) && customerEmailFromPopup.Contains('@'))
         {
             Debug.WriteLine("Customer email: " + customerEmailFromPopup);
+            goToNextPage = true;
+
         }
         else
         {
             bool emailRetrial = await DisplayEnsureEmailPopup();
             if (emailRetrial)
             {
-                customerEmailFromPopup = await DisplayEmailPopup();
+                goToNextPage = await DisplayEmailPopup();
             }
             else
             {
                 customerEmailFromPopup = null;
+                goToNextPage = false;
             }
+            
         }
-        return customerEmailFromPopup;
+        return goToNextPage;
+        
     }
 
+    //Main Method that includes 3 others to display Popup windows and ask for customer's email
     async Task<bool> DisplayConfirmPopup()
     {
         bool confirmation = await DisplayEnsureConfirmPopup();
         if (confirmation)
         {
-            string customerEmailFromPopup = await DisplayEmailPopup();
-            return true;
+            bool goToNextPage = await DisplayEmailPopup();
+            return goToNextPage;
         }
         else
         {
