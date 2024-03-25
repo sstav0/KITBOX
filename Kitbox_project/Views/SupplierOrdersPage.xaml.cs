@@ -24,4 +24,16 @@ public partial class SupplierOrdersPage : ContentPage
         bool answer = await  DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
     }
 
+
+    private void OnCheckBoxCheckedChanged(object sender, CheckedChangedEventArgs e)
+    {
+        if (sender is CheckBox checkBox && BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
+        {
+            if (checkBox == orderedCheckBox)
+            {
+                // Should be based on all checkboxes values to filter accrodingly
+                supplierOrdersViewModel.ApplyStatusFilter(orderedCheckBox.IsChecked);
+            }
+        }
+    }
 }

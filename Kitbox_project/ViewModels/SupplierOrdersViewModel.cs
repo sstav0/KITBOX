@@ -21,11 +21,6 @@ namespace Kitbox_project.ViewModels
 
         public SupplierOrdersViewModel()
         {
-            SupplierOrders = new List<SupplierOrderViewModel>
-            {
-                //new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1235, 12, 100, "Ordered"),
-                //new SupplierOrderViewModel(1, new StockItem(1, "Pannel", "PAN2144", 10), 1245 , 12, 100, "Ordered")
-            };
             LoadDataAsync();
         }
 
@@ -61,6 +56,15 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public void ApplyStatusFilter(bool isChecked)
+        {
+            foreach (var order in SupplierOrders)
+            {
+                // Filter orders based on status
+                order.SupplierOrderVisibility = !isChecked || order.Status == "Received";
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -81,10 +85,7 @@ namespace Kitbox_project.ViewModels
             {
                 _supplierOrderVisibility = true;
                 _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
-                Debug.WriteLine(_date);
-                // _supplierName = DBSuppliers.GetData(
-                //     new Dictionary<string, string> { { "idSuppliers", supplierId.ToString() } }, new List<string> { "NameofSuppliers" }
-                // );
+                LoadSupplierName();
                 OnReceivedClicked = new Command(ModifyOrderStatus);
             }
 

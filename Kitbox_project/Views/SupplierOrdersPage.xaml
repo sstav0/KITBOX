@@ -44,14 +44,13 @@
                     VerticalOptions="CenterAndExpand" />
             </StackLayout>
 
-            <!--  ListView to display stock data  -->
-            <Border
-                Padding="20"
-                BackgroundColor="#fdfdfd"
-                Stroke="{StaticResource Secondary}"
-                StrokeShape="RoundRectangle 20"
-                StrokeThickness="2"
-                WidthRequest="1200">
+            <HorizontalStackLayout HorizontalOptions="End">
+                <CheckBox x:Name="orderedCheckBox" CheckedChanged="OnCheckBoxCheckedChanged" VerticalOptions="Center"/>
+                <Label Text="Received" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+
+            <!-- ListView to display stock data -->
+            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20">
                 <CollectionView ItemsSource="{Binding SupplierOrders}" SelectionMode="Single">
                     <CollectionView.Header>
                         <Grid>
