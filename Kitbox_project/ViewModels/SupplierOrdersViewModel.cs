@@ -80,6 +80,7 @@ namespace Kitbox_project.ViewModels
             public ICommand OnReceivedClicked { get; }
             // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
             private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
+            private DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
 
             public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, int quantity, double price, string status) : base(orderID, item, supplierId, delay, quantity, price, status)
             {
@@ -89,6 +90,7 @@ namespace Kitbox_project.ViewModels
                 OnReceivedClicked = new Command(ModifyOrderStatus);
             }
 
+            //Launch a popup window to odify the status of the Supplier Order on the frontEnd and in the DB.dbo.SupplierOrder
             public async void ModifyOrderStatus()
             {
                 bool orderReceived = await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Order Received ?", "Confirm you received this order ?", "Yes", "No");
@@ -102,6 +104,7 @@ namespace Kitbox_project.ViewModels
                     this.Status = "Ordered";
                     OnPropertyChanged(nameof(Status));
                 }
+                UpdateDBOrderStatus();
                 LoadSupplierName();
             }
 
@@ -112,6 +115,14 @@ namespace Kitbox_project.ViewModels
                     new List<string> { "NameofSuppliers" }
                 );
                 SupplierName = supplierName[0]["NameofSuppliers"];
+            }
+
+            //Update the status of an order in the DB.dbo.SupplierOrder
+            private async void UpdateDBOrderStatus()
+            {
+                Dictionary<string, object> newData = new Dictionary<string, object> { { "status", this.Status } };
+                Dictionary<string, object> whereQuery = new Dictionary<string, object> { { "idSupplierOrder", this.OrderID} };
+                await DBSupplierOrder.Update(newData, whereQuery);
             }
 
             public bool SupplierOrderVisibility
