@@ -4,6 +4,7 @@ using Kitbox_project.Models;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Maui.Controls.Compatibility;
 
 namespace Kitbox_project.Views
 {
@@ -44,6 +45,7 @@ namespace Kitbox_project.Views
 
             // Load available lockers into the view model
             LoadAvailableLockers();
+            DisablePickers();
         }
 
 
@@ -55,7 +57,6 @@ namespace Kitbox_project.Views
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-
             };
         }
 
@@ -76,9 +77,12 @@ namespace Kitbox_project.Views
                 locke.LockerID = index;
                 index += 1;
             }
+            DisablePickers();
+
         }
 
-            private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+
+        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
             if (_viewModel.AvailableLockers.Count >= 7)
@@ -105,6 +109,7 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            DisablePickers();
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -128,10 +133,24 @@ namespace Kitbox_project.Views
 
         }
 
-
-        private void OnAddLockerButtonClicked(object sender, EventArgs e) //Pas utilisé pour le moment.  
-        { 
+        private void DisablePickers()
+        {
+            if (_viewModel.AvailableLockers.Count() == 0)
+            {
+                CabinetWidth.IsEnabled = true;
+                CabinetDepth.IsEnabled = true;
+                AngleIronColor.IsEnabled = true;
+            }
+            else
+            {
+                CabinetWidth.IsEnabled = false;
+                CabinetDepth.IsEnabled = false;
+                AngleIronColor.IsEnabled = false;
+            }
         }
+
+
+
 
 
 
@@ -161,7 +180,9 @@ namespace Kitbox_project.Views
                 {
                     Debug.WriteLine("Error: No locker selected.");
                 }
+
             }
+
         }
 
 
@@ -175,7 +196,7 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, "Wood", Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
+                new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
                 0 // Price
             )).ToList();
 

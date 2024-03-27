@@ -330,8 +330,8 @@
             BackgroundColor="#FFFFFFFF"
             StrokeShape="RoundRectangle 10,10,10,10">
 
-            <ScrollView>
-                <VerticalStackLayout BindableLayout.ItemsSource="{Binding AvailableLockers}">
+            <ScrollView >
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding AvailableLockers}" x:Name="lockersStackLayout">
 
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>
