@@ -11,6 +11,7 @@ namespace Kitbox_project.Views
     {
         private Cabinet _cabinet;
         private CabinetViewModel _viewModel;
+        private LogOutViewModel _logOutViewModel;
         int indexLock = 0;
         int index = 1;
 
@@ -21,7 +22,9 @@ namespace Kitbox_project.Views
             InitializeComponent();
             _cabinet = cabinet;
             _viewModel = new CabinetViewModel();
+            _logOutViewModel = new LogOutViewModel();
             BindingContext = _viewModel;
+            LogOutButton.BindingContext = _logOutViewModel;
             LoadAvailableLockers();
             DefaultPickers();
             

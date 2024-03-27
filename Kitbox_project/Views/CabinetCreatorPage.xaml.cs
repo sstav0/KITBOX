@@ -10,6 +10,7 @@ namespace Kitbox_project.Views
     public partial class CabinetCreatorPage : ContentPage
     {
         private CabinetViewModel _viewModel;
+        private LogOutViewModel _logOutViewModel;
 
         private Order _order;
         public Order Order
@@ -35,7 +36,10 @@ namespace Kitbox_project.Views
 
             InitializeComponent();
             _viewModel = new CabinetViewModel();
+            _logOutViewModel = new LogOutViewModel();
+
             BindingContext = _viewModel;
+            LogOutButton.BindingContext = _logOutViewModel;
 
 
             // Load available lockers into the view model

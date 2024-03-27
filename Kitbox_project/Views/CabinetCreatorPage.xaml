@@ -5,7 +5,19 @@
     xmlns:panel="clr-namespace:Kitbox_project.Utilities"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
-    BackgroundColor="White">
+    Title="Cabinet Creator Page"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="True"
+    Shell.TabBarIsVisible="False">
+
+
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
+    </ContentPage.ToolbarItems>
 
     <Grid Margin="10">
 
@@ -15,7 +27,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" /> 
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.4*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="0.5*" />
@@ -156,7 +168,7 @@
                     FontSize="20"
                     MinimumHeightRequest="50"
                     Text="Modify" />
-                
+
                 <!--  All the Text inside the Outside Frame  -->
                 <Label
                     Grid.Row="0"
@@ -277,8 +289,8 @@
                             HorizontalOptions="CenterAndExpand"
                             IsVisible="{Binding IsDoorPickerVisible}"
                             ItemsSource="{Binding ItemSourceDoorPickerMaterial}"
-                            SelectedItem="{Binding SelectedDoorMaterialItem, Mode=TwoWay}" 
-                            MinimumWidthRequest="100"/>
+                            MinimumWidthRequest="100"
+                            SelectedItem="{Binding SelectedDoorMaterialItem, Mode=TwoWay}" />
 
                         <Picker
                             Grid.Row="1"
@@ -288,8 +300,8 @@
                             HorizontalOptions="CenterAndExpand"
                             IsVisible="{Binding IsDoorPickerVisible}"
                             ItemsSource="{Binding ItemSourceDoorPicker}"
-                            SelectedItem="{Binding SelectedDoorColorItem}" 
-                            MinimumWidthRequest="100"/>
+                            MinimumWidthRequest="100"
+                            SelectedItem="{Binding SelectedDoorColorItem}" />
                     </Grid>
 
                 </Frame>
@@ -303,7 +315,7 @@
             Grid.ColumnSpan="4"
             Margin="10"
             Aspect="AspectFit"
-            Source="dotnet_bot.png" />
+            Source="kitbox_1_v.png" />
 
 
 
@@ -406,15 +418,15 @@
                                         Grid.Row="0"
                                         Grid.RowSpan="2"
                                         Grid.Column="1"
-                                        Text="Edit" 
-                                        Clicked="OnEditButtonClicked"/>
+                                        Clicked="OnEditButtonClicked"
+                                        Text="Edit" />
                                     <Button
                                         Grid.Row="2"
                                         Grid.RowSpan="2"
                                         Grid.Column="1"
-                                        Text="Delete"
                                         BackgroundColor="Red"
-                                        Clicked="OnDeleteLockerClicked"/>
+                                        Clicked="OnDeleteLockerClicked"
+                                        Text="Delete" />
 
 
                                 </Grid>

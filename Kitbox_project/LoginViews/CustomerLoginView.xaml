@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:Kitbox_project"
     xmlns:views="clr-namespace:Kitbox_project.Views"
     Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="True">
 
     <TabBar>
 
