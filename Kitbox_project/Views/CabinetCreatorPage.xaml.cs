@@ -4,6 +4,7 @@ using Kitbox_project.Models;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Maui.Controls.Compatibility;
 
 namespace Kitbox_project.Views
 {
@@ -73,6 +74,7 @@ namespace Kitbox_project.Views
                 index += 1;
             }
         }
+
 
             private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
@@ -157,7 +159,9 @@ namespace Kitbox_project.Views
                 {
                     Debug.WriteLine("Error: No locker selected.");
                 }
+
             }
+
         }
 
 
@@ -171,7 +175,7 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, "Wood", Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
+                new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
                 0 // Price
             )).ToList();
 
