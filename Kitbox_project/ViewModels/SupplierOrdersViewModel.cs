@@ -56,12 +56,12 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public void ApplyStatusFilter(bool isChecked)
+        public void ApplyStatusFilter(bool isReceivedChecked, bool isOrderedChecked)
         {
             foreach (var order in SupplierOrders)
             {
                 // Filter orders based on status
-                order.SupplierOrderVisibility = !isChecked || order.Status == "Received";
+                order.SupplierOrderVisibility = (isReceivedChecked && order.Status == "Received") || (isOrderedChecked && order.Status == "Ordered");
             }
         }
 
