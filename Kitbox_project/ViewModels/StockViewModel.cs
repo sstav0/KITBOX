@@ -1,4 +1,5 @@
-﻿using Kitbox_project.Models;
+﻿using Kitbox_project.DataBase;
+using Kitbox_project.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,7 +28,7 @@ namespace Kitbox_project.ViewModels
         }
 
         public List<StockItemViewModel> StockData
-        { 
+        {
             get => _stockData;
             set
             {
@@ -42,9 +43,9 @@ namespace Kitbox_project.ViewModels
             foreach (var item in StockData)
             {
                 // Filter items based on search text
-                item.StockItemVisibility = 
-                    string.IsNullOrWhiteSpace(searchText) || 
-                    item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                item.StockItemVisibility =
+                    string.IsNullOrWhiteSpace(searchText) ||
+                    item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
             }
         }
@@ -100,6 +101,16 @@ namespace Kitbox_project.ViewModels
             private string _inputQuantity;
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
+            private List<PriceItem> _priceItems;
+            private double _catalogPrice;
+            private bool _isInCatalog;
+            private bool _isEditingPrice;
+            private bool _isValidPrice;
+            private string _InputPrice;
+
+            private DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
+            private DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
+            private DatabaseCatalogPrices DBCatalogPrices = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
             public StockItemViewModel(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity)
             {
@@ -108,6 +119,8 @@ namespace Kitbox_project.ViewModels
                 ButtonColor = Color.Parse("#512BD4");
                 InputQuantity = quantity.ToString();
                 StockItemVisibility = true;
+                IsInCatalog = true;
+
             }
             public bool IsEditing
             {
@@ -170,6 +183,66 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
+            public List<PriceItem> PriceItems
+            {
+                get => _priceItems;
+                set
+                {
+                    _priceItems = value;
+                    OnPropertyChanged(nameof(PriceItems));
+                }
+            }
+
+            public double CatalogPrice
+            {
+                get => _catalogPrice;
+                set
+                {
+                    _catalogPrice = value;
+                    OnPropertyChanged(nameof(CatalogPrice));
+                }
+            }
+
+            public bool IsInCatalog
+            {
+                get => _isInCatalog;
+                set
+                {
+                    _isInCatalog = value;
+                    OnPropertyChanged(nameof(IsInCatalog));
+                }
+            }
+
+            public bool IsEditingPrice
+            {
+                get => _isEditingPrice;
+                set
+                {
+                    _isEditingPrice = value;
+                    OnPropertyChanged(nameof(IsEditingPrice));
+                }
+            }
+
+            public bool IsValidPrice
+            {
+                get => _isValidPrice;
+                set
+                {
+                    _isValidPrice = value;
+                    OnPropertyChanged(nameof(IsValidPrice));
+                }
+            }
+
+            public string InputPrice
+            {
+                get => _InputPrice;
+                set
+                {
+                    _InputPrice = value;
+                    OnPropertyChanged(nameof(InputPrice));
+                }
+            }
+
             public static List<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
             {
                 // Return the list of stock items as a list of stock item view models
@@ -180,6 +253,82 @@ namespace Kitbox_project.ViewModels
             {
                 IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
             }
+
+            public void ValidatePrice()
+            {
+                IsValidPrice = double.TryParse(InputPrice, out double parsedPrice) && parsedPrice >= 0;
+            }
+
+
+            public async void LoadPricesData()
+            {
+                var catalogDict = await DBSupplierPrices.GetData(
+                    new Dictionary<string, string> { { "Code", Code } },
+                    new List<string> { "Price", "idSupplier" });
+
+                var i = 0;
+                foreach (var catalogitem in catalogDict)
+                {
+
+                    var fakesupplierName = await DBSupplierNames.GetData(
+                    new Dictionary<string, string> { { "idSuppliers", catalogitem["idSupplier"] } },
+                    new List<string> { "NameofSuppliers" });
+
+                    var supplierPrice = Convert.ToDouble(catalogDict[i]["Price"]);
+                    var supplierName = fakesupplierName[0]["NameofSuppliers"];
+
+                    PriceItems.Add(new PriceItem(supplierName, supplierPrice));
+
+                    i++;
+                }
+
+                var catalogPrice = await DBCatalogPrices.GetData(
+                    new Dictionary<string, string> { { "Code", Code } },
+                    new List<string> { "Price" });
+
+                CatalogPrice = Convert.ToDouble(catalogPrice[0]["Price"]);
+            }
+        }
+
+        public class PriceItem
+        {
+            private string _supplierName;
+            private double _supplierPrice;
+
+            public PriceItem(string supplierName, double supplierPrice)
+            {
+                SupplierName = supplierName;
+                SupplierPrice = supplierPrice;
+            }
+
+            public string SupplierName
+            {
+                get => _supplierName;
+                set
+                {
+                    _supplierName = value;
+                    OnPropertyChanged(nameof(SupplierName));
+                }
+            }
+
+            public double SupplierPrice
+            {
+                get => _supplierPrice;
+                set
+                {
+                    _supplierPrice = value;
+                    OnPropertyChanged(nameof(SupplierPrice));
+                }
+            }
+
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected void OnPropertyChanged([CallerMemberName] string name = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            }
         }
     }
+
+
 }
