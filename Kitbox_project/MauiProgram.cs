@@ -2,6 +2,7 @@
 using Syncfusion.Maui.Core.Hosting;
 using UraniumUI;
 using Microsoft.Maui.LifecycleEvents;
+using CommunityToolkit.Maui;
 
 namespace Kitbox_project
 {
@@ -10,17 +11,12 @@ namespace Kitbox_project
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .UseUraniumUI()
-                .UseUraniumUIMaterial()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
-
-            #if WINDOWS
+            builder.UseMauiApp<App>().UseUraniumUI().UseUraniumUIMaterial().ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            }).UseMauiCommunityToolkit();
+#if WINDOWS
                     builder.ConfigureLifecycleEvents(events =>
                     {
                         events.AddWindows(windowsLifecycleBuilder =>
@@ -41,13 +37,10 @@ namespace Kitbox_project
                             });
                         });
                     });
-            #endif
-
+#endif
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
-
-
             return builder.Build();
         }
     }
