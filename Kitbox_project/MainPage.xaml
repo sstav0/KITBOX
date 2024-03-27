@@ -16,19 +16,6 @@
                 HorizontalOptions="Center"
                 Source="kitbox_1_v.png" />
 
-            <Button
-                x:Name="CounterBtn"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Text="Click me" />
-            <Button
-                x:Name="CounterBtn2"
-                Clicked="OnCounterClicked2"
-                HorizontalOptions="Center"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Text="Click me" />
-
         </VerticalStackLayout>
     </ScrollView>
 
