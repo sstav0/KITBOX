@@ -59,9 +59,6 @@
     <MauiXaml Update="Views\HomeClientPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\HomePage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="Views\LoginPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
