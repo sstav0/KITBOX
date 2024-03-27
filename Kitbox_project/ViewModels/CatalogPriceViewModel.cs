@@ -12,7 +12,6 @@ using static Kitbox_project.ViewModels.StockViewModel;
 
 namespace Kitbox_project.ViewModels
 
-    //Besoin d'être sûre de la forme des prix utilisés dans la DB avant de faire fonctionner ce code
 {
     internal class CatalogPriceViewModel : INotifyPropertyChanged
     {
