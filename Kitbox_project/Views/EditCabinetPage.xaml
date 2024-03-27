@@ -76,25 +76,22 @@
 
                 <!--  All the Pickers inside the Cabinet Size  -->
 
-                <Picker
+                <Label
                      x:Name="CabinetWidth"
                      Grid.Row="2"
                      Grid.Column="0"
                      Margin="10"
-                     BackgroundColor="White"
                      HorizontalOptions="Center"
-                     ItemsSource="{Binding ItemSourceLockerWidth}"
-                     SelectedItem="{Binding SelectedWidthItem, Mode=TwoWay}" />
+                     Text="{Binding SelectedWidthItem}" />
 
-                <Picker
+                <Label
                      x:Name="CabinetDepth"
                      Grid.Row="2"
                      Grid.Column="1"
                      Margin="10"
-                     BackgroundColor="White"
                      HorizontalOptions="Center"
-                     ItemsSource="{Binding ItemSourceLockerDepth}"
-                     SelectedItem="{Binding SelectedDepthItem}" />
+                    FontAttributes="Bold"
+                     Text="{Binding SelectedDepthItem}" />
 
 
                 <Picker
@@ -405,10 +402,17 @@
                                     </Label>
                                     <Button
                                         Grid.Row="0"
-                                        Grid.RowSpan="3"
+                                        Grid.RowSpan="2"
                                         Grid.Column="1"
                                         Text="Edit" 
                                         Clicked="OnEditButtonClicked"/>
+                                    <Button
+                                        Grid.Row="2"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="1"
+                                        Text="Delete"
+                                        BackgroundColor="Red"
+                                        Clicked="OnDeleteLockerClicked"/>
 
                                 </Grid>
                             </uranium:ExpanderView>

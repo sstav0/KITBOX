@@ -282,6 +282,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDepthItem != value)
                 {
                     _selectedDepthItem = value;
+                    OnPropertyChanged();
                     UpdateAvailability();
                     OnPropertyChanged();
                 }

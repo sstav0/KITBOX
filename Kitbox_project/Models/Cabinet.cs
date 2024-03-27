@@ -17,6 +17,7 @@ namespace Kitbox_project.Models
         private int _quantity; //necessary ? 
         private int _height;
         private int _cabinetID;
+        private string _angleIronColor;
 
         public Cabinet(List<Locker> lockers, int depth, int length, int height, int quantity)
         {

@@ -404,10 +404,17 @@
                                     </Label>
                                     <Button
                                         Grid.Row="0"
-                                        Grid.RowSpan="3"
+                                        Grid.RowSpan="2"
                                         Grid.Column="1"
-                                        Clicked="OnEditButtonClicked"
-                                        Text="Edit" />
+                                        Text="Edit" 
+                                        Clicked="OnEditButtonClicked"/>
+                                    <Button
+                                        Grid.Row="2"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="1"
+                                        Text="Delete"
+                                        BackgroundColor="Red"
+                                        Clicked="OnDeleteLockerClicked"/>
 
 
                                 </Grid>

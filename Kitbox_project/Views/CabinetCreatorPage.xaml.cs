@@ -56,8 +56,25 @@ namespace Kitbox_project.Views
         }
 
 
+        private void OnDeleteLockerClicked(object sender, EventArgs e)
+        {
+            int index = 1;
+            var button = sender as Button;
+            var locker = button?.BindingContext as LockerViewModel;
+            if (locker != null)
+            {
+                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel
+            }
 
-        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+            foreach (var locke in _viewModel.AvailableLockers)
+            {
+                //On redonne un bon index à chacun 
+                locke.LockerID = index;
+                index += 1;
+            }
+        }
+
+            private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
             if (_viewModel.AvailableLockers.Count >= 7)
