@@ -22,18 +22,10 @@
                 HorizontalOptions="Center"
                 Text="Supplier Orders" />
 
-
             <StackLayout
                 Margin="0,0,0,20"
                 HorizontalOptions="Center"
                 Orientation="Horizontal">
-                <Border
-                    Margin="5,0,0,0"
-                    Stroke="{StaticResource Tertiary}"
-                    StrokeShape="RoundRectangle 10"
-                    WidthRequest="300">
-                    <SearchBar Placeholder="Search..." TextChanged="OnTextChanged" />
-                </Border>
                 <Button
                     Margin="5,0,0,0"
                     BackgroundColor="{StaticResource Tertiary}"
@@ -43,10 +35,24 @@
                     Text="New Supplier Order"
                     VerticalOptions="CenterAndExpand" />
             </StackLayout>
+            
+            <Border
+                Margin="5,0,0,0"
+                Stroke="{StaticResource Tertiary}"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="300">
+                <SearchBar Placeholder="Search..." TextChanged="OnTextChanged" />
+            </Border>
 
-            <HorizontalStackLayout HorizontalOptions="End">
-                <CheckBox x:Name="orderedCheckBox" CheckedChanged="OnCheckBoxCheckedChanged" VerticalOptions="Center"/>
-                <Label Text="Received" VerticalOptions="Center"/>
+            <HorizontalStackLayout Spacing="30" HorizontalOptions="Center">
+                <HorizontalStackLayout>
+                    <CheckBox x:Name="receivedCheckBox" IsChecked="True" CheckedChanged="OnCheckBoxCheckedChanged" VerticalOptions="Center"/>
+                    <Label Text="Received" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <CheckBox x:Name="orderedCheckBox" IsChecked="True" CheckedChanged="OnCheckBoxCheckedChanged" VerticalOptions="Center"/>
+                    <Label Text="Ordered" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
             </HorizontalStackLayout>
 
             <!-- ListView to display stock data -->
