@@ -47,11 +47,6 @@
             Route="SecretaryPricePage" />
 
         <ShellContent
-            Title="Logout"
-            ContentTemplate="{DataTemplate views:LogoutPage}"
-            Route="Logout" />
-
-        <ShellContent
             Title="Login Page"
             ContentTemplate="{DataTemplate views:LoginPage}"
             Route="LoginPage" />

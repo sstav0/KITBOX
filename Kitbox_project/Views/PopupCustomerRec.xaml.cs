@@ -11,21 +11,12 @@ namespace Kitbox_project.Views
 {
     public partial class PopupCustomerRec : Popup 
     {
-
-        Entry entry = new Entry { Placeholder = "Enter text" };
-
         public PopupCustomerRec()
         {
             InitializeComponent();
-        }
-        void OnOKButtonClicked(object? sender, EventArgs e) => Close();
-        void OnEntryTextChanged(object sender, TextChangedEventArgs e)
-        {
-            string oldText = e.OldTextValue;
-            string newText = e.NewTextValue;
-            string myText = entry.Text;
-        }
-
+            PopupCustomerRecViewModel viewModel = new PopupCustomerRecViewModel();
+            this.BindingContext = viewModel;
+        }   
     }
 }
 

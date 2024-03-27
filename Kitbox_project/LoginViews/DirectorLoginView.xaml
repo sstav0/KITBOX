@@ -7,24 +7,20 @@
     xmlns:views="clr-namespace:Kitbox_project.Views"
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
-<TabBar>
+    <TabBar>
 
-         <ShellContent
+        <ShellContent
             Title="Stock"
             ContentTemplate="{DataTemplate views:StockPage}"
-            Route="StockPage"/>
+            Route="StockPage" />
         <ShellContent
             Title="Orders"
             ContentTemplate="{DataTemplate views:OrdersPage}"
-            Route="OrdersPage"/>
+            Route="OrdersPage" />
         <ShellContent
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage"/>
-        <ShellContent
-            Title="Logout"
-            ContentTemplate="{DataTemplate views:LogoutPage}"
-            Route="Logout"/>     
+            Route="CabinetCreatorPage" />
     </TabBar>
 
 </Shell>

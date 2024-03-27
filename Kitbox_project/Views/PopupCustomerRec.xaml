@@ -4,7 +4,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:viewModel="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
     xmlns:views="clr-namespace:Kitbox_project.Views">
+
 
     <toolkit:Popup.Resources>
         <Style TargetType="views:PopupCustomerRec">
@@ -33,25 +35,34 @@
                 Grid.Row="0"
                 Padding="0,10"
                 FontSize="30"
-                Text="Save your profile" />
+                Text="Save your order" />
 
             <Label
                 Grid.Row="1"
                 Padding="0,10"
                 Text="Enter your First Name" />
-            <Entry Grid.Row="2" Placeholder="James" />
+            <Entry
+                Grid.Row="2"
+                Placeholder="James"
+                Text="{Binding EntryFirstName}" />
 
             <Label
                 Grid.Row="3"
                 Padding="0,10"
                 Text="Enter your Last Name" />
-            <Entry Grid.Row="4" Placeholder="McGill" />
+            <Entry
+                Grid.Row="4"
+                Placeholder="McGill"
+                Text="{Binding EntryLastName}" />
 
             <Label
                 Grid.Row="5"
                 Padding="0,10"
                 Text="Enter your Email" />
-            <Entry Grid.Row="6" Placeholder="@mail.com" />
+            <Entry
+                Grid.Row="6"
+                Placeholder="@mail.com"
+                Text="{Binding EntryEmail}" />
             <BoxView
                 Grid.Row="7"
                 HeightRequest="10"
@@ -60,7 +71,7 @@
             <Button
                 Grid.Row="8"
                 Padding="10"
-                Clicked="OnOKButtonClicked"
+                Command="{Binding OnOkButtonClicked}"
                 Text="Validate" />
         </Grid>
     </Frame>
