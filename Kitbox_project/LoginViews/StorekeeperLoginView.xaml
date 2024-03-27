@@ -21,10 +21,6 @@
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
             Route="CabinetCreatorPage"/>
-         <ShellContent
-            Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="HomePage"/> 
         <ShellContent
             Title="Logout"
             ContentTemplate="{DataTemplate views:LogoutPage}"

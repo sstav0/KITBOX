@@ -8,27 +8,23 @@
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
 
-<TabBar>
+    <TabBar>
 
         <ShellContent
             Title="Home Client"
             ContentTemplate="{DataTemplate views:HomeClientPage}"
-            Route="HomeClientPage"/>
+            Route="HomeClientPage" />
 
         <ShellContent
             Title="Cabinet Creator"
             ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage"/>
-        <ShellContent
-            Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="HomePage"/>   
+            Route="CabinetCreatorPage" />
         <ShellContent
             Title="Logout"
             ContentTemplate="{DataTemplate views:LogoutPage}"
-            Route="Logout"/>  
-                 
+            Route="Logout" />
+
     </TabBar>
-   
+
 
 </Shell>
