@@ -1,4 +1,6 @@
+using CommunityToolkit.Maui.Views;
 using Kitbox_project.ViewModels;
+using System.Diagnostics;
 
 namespace Kitbox_project.Views;
 
@@ -20,7 +22,10 @@ public partial class StockPage : ContentPage
 
     private void OpenPopupStockPrices(object sender, EventArgs e)
     {
+        Debug.WriteLine("OpenPopupStockPrices");
         // Open popup with the stock prices
+        var popup = new PopupStockPrices();
+        this.ShowPopup(popup);
     }
 
     private void OnEditPriceClicked(object sender, EventArgs e)
@@ -48,4 +53,8 @@ public partial class StockPage : ContentPage
         }
     }
 
+    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+    {
+
+    }
 }

@@ -99,6 +99,9 @@
 		<MauiXaml Update="Views\EditCabinetPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\PopupStockPrices.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\SecretaryPricePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
