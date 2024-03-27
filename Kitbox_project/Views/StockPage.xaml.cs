@@ -18,6 +18,20 @@ public partial class StockPage : ContentPage
         }
     }
 
+    private void OpenPopupStockPrices(object sender, EventArgs e)
+    {
+        // Open popup with the stock prices
+    }
+
+    private void OnEditPriceClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)
+        {
+            // Call the method in the ViewModel
+            (BindingContext as StockViewModel)?.EditUpdatePrice(stockItem);
+        }
+    }
+
     private void OnOrderButtonClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)

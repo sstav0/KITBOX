@@ -15,6 +15,7 @@ namespace Kitbox_project.ViewModels
     {
         private List<StockItemViewModel> _stockData;
         private DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+        private DatabaseCatalogPrices DBCatalog_save = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
         public StockViewModel()
         {
@@ -86,6 +87,42 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public async Task EditUpdatePrice(StockItemViewModel stockItem)
+        {
+            // If Update button pressed
+            if (stockItem.IsEditingPrice)
+            {
+                // If the input price is a number and non-negative
+                if (stockItem.IsValidPrice)
+                {
+                    stockItem.InputPrice = stockItem.InputPrice.TrimStart('0') != "" ? stockItem.InputPrice.TrimStart('0') : "0";
+
+                    stockItem.CatalogPrice = Convert.ToInt32(stockItem.InputPrice);
+                    await DBCatalog_save.Update(
+                        new Dictionary<string, object> { { "Price", stockItem.CatalogPrice } },
+                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
+
+                    stockItem.IsEditingPrice = false;
+                    stockItem.PriceButtonText = "Edit";
+                    stockItem.PriceButtonColor = Color.Parse("#512BD4");
+                }
+                // If the input price is not a number or negative, keep the previous price
+                else
+                {
+                    stockItem.InputPrice = Convert.ToString(stockItem.CatalogPrice);
+                    stockItem.PriceButtonText = "Update";
+                    stockItem.PriceButtonColor = Color.Parse("green");
+                }
+            }
+            // If Edit button pressed
+            else
+            {
+                stockItem.IsEditingPrice = true;
+                stockItem.PriceButtonText = "Update";
+                stockItem.PriceButtonColor = Color.Parse("green");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -101,10 +138,13 @@ namespace Kitbox_project.ViewModels
             private string _inputQuantity;
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
+
             private List<PriceItem> _priceItems;
             private double _catalogPrice;
             private bool _isInCatalog;
             private bool _isEditingPrice;
+            private string _priceButtonText;
+            private Color _priceButtonColor;
             private bool _isValidPrice;
             private string _InputPrice;
 
@@ -223,6 +263,26 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
+            public string PriceButtonText
+            {
+                get => _priceButtonText;
+                set
+                {
+                    _priceButtonText = value;
+                    OnPropertyChanged(nameof(PriceButtonText));
+                }
+            }
+
+            public Color PriceButtonColor
+            {
+                get => _priceButtonColor;
+                set
+                {
+                    _priceButtonColor = value;
+                    OnPropertyChanged(nameof(PriceButtonColor));
+                }
+            }
+
             public bool IsValidPrice
             {
                 get => _isValidPrice;
@@ -258,7 +318,6 @@ namespace Kitbox_project.ViewModels
             {
                 IsValidPrice = double.TryParse(InputPrice, out double parsedPrice) && parsedPrice >= 0;
             }
-
 
             public async void LoadPricesData()
             {
