@@ -14,45 +14,44 @@ namespace Kitbox_project.ViewModels
 
     //Besoin d'être sûre de la forme des prix utilisés dans la DB avant de faire fonctionner ce code
 {
-    internal class PriceViewModel : INotifyPropertyChanged
+    internal class CatalogPriceViewModel : INotifyPropertyChanged
     {
-        private List<PriceItemViewModel> _pricesData;
-        private DatabasePrices DBPrices = new DatabasePrices("kitboxer", "kitboxing");
+        private List<CatalogPriceItemViewModel> _catalogPricesData;
+        private DatabaseCatalogPrices DBCatalogPrices = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
-        public PriceViewModel()
+        public CatalogPriceViewModel()
         {
-
+            LoadDataAsync();
         }
         private async void LoadDataAsync()
         {
-            var stockItems = await DBPrices.LoadAll();
-            PricesData = PriceItemViewModel.ConvertToViewModels(DatabasePrices.ConvertToPriceItem(stockItems));
+            var CatalogItems = await DBCatalogPrices.LoadAll();
+            CatalogPricesData = CatalogPriceItemViewModel.ConvertToViewModels(DatabaseCatalogPrices.ConvertToPriceItem(CatalogItems));
         }
 
-        public List<PriceItemViewModel> PricesData
+        public List<CatalogPriceItemViewModel> CatalogPricesData
         {
-            get => _pricesData;
+            get => _catalogPricesData;
             set
             {
-                _pricesData = value;
-                OnPropertyChanged(nameof(PricesData));
+                _catalogPricesData = value;
+                OnPropertyChanged(nameof(CatalogPricesData));
             }
         }
 
         public void ApplyFilter(string searchText)
         {
             searchText = searchText.Trim();
-            foreach (var item in PricesData)
+            foreach (var item in CatalogPricesData)
             {
                 // Filter items based on search text
                 item.PriceItemVisibility =
                     string.IsNullOrWhiteSpace(searchText) ||
-                    item.Supplier.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     item.ItemCode.Contains(searchText, StringComparison.OrdinalIgnoreCase);
             }
         }
 
-        public async Task EditUpdatePrice(PriceItemViewModel priceItem)
+        public async Task EditUpdatePrice(CatalogPriceItemViewModel priceItem)
         {
             // If Update button pressed
             if (priceItem.IsEditing)
@@ -62,10 +61,10 @@ namespace Kitbox_project.ViewModels
                 {
                     priceItem.InputPrice = priceItem.InputPrice.TrimStart('0') != "" ? priceItem.InputPrice.TrimStart('0') : "0";
 
-                    //priceItem.Price = Convert.ToDouble(priceItem.InputPrice);
-                    //await DBPrices.Update(
-                    //    new Dictionary<string, object> { { "Price", priceItem.Price } },
-                    //    new Dictionary<string, object> { { "Supplier", priceItem.Supplier } });
+                    priceItem.Price = Convert.ToDouble(priceItem.InputPrice);
+                    await DBCatalogPrices.Update(
+                        new Dictionary<string, object> { { "Price", priceItem.Price } },
+                        new Dictionary<string, object> { { "Code", priceItem.ItemCode } });
 
                     priceItem.IsEditing = false;
                     priceItem.ButtonText = "Edit";
@@ -94,7 +93,7 @@ namespace Kitbox_project.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public class PriceItemViewModel : PriceItem
+        public class CatalogPriceItemViewModel : CatalogPriceItem
         {
             private bool _isEditing;
             private string _buttonText;
@@ -103,7 +102,7 @@ namespace Kitbox_project.ViewModels
             private bool _isValidPrice;
             private bool _priceItemVisibility;
 
-            public PriceItemViewModel(string supplier, string itemCode, double price) : base(supplier, itemCode, price)
+            public CatalogPriceItemViewModel(string itemCode, double price) : base(itemCode, price)
             {
                 IsEditing = false;
                 ButtonText = "Edit";
@@ -172,10 +171,10 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-            public static List<PriceItemViewModel> ConvertToViewModels(IEnumerable<PriceItem> priceItems)
+            public static List<CatalogPriceItemViewModel> ConvertToViewModels(IEnumerable<CatalogPriceItem> catalogPriceItems)
             {
                 // Return the list of stock items as a list of stock item view models
-                return priceItems.Select(item => new PriceItemViewModel(item.Supplier, item.ItemCode, item.Price)).ToList();
+                return catalogPriceItems.Select(item => new CatalogPriceItemViewModel(item.ItemCode, item.Price)).ToList();
             }
 
             public void ValidatePrice()

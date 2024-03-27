@@ -4,17 +4,9 @@ namespace Kitbox_project.Views;
 
 public partial class SecretaryPricePage : ContentPage
 {
-	private List<PriceViewModel> Prices;
-    private List<PriceViewModel> PricesVoid;
-
     public SecretaryPricePage()
 	{
 		InitializeComponent();
-
-		Prices = new List<PriceViewModel>();
-        PricesVoid = new List<PriceViewModel>();
-
-        LoadPrices();
     }
 
 	private async void LoadPrices()

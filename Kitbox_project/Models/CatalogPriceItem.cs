@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.Models
 {
-    public class PriceItem : INotifyPropertyChanged
+    public class CatalogPriceItem : INotifyPropertyChanged
     {
         // Write documentation for the class PriceItem with description of constructor's parameters 
         /// <summary>
@@ -20,26 +20,15 @@ namespace Kitbox_project.Models
         /// </list>
         /// </summary>
 
-        private string _supplier;
         private string _itemCode;
         private double _price;
 
-        public PriceItem(string supplier, string itemCode, double price)
+        public CatalogPriceItem(string itemCode, double price)
         {
-            _supplier = supplier;
             _itemCode = itemCode;
             _price = price;
         }
 
-        public string Supplier
-        {
-            get => _supplier;
-            set
-            {
-                _supplier = value;
-                OnPropertyChanged(nameof(Supplier));
-            }
-        }
         public string ItemCode
         {
             get => _itemCode;
