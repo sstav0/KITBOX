@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Views;
+using Kitbox_project.Views;
 
 namespace Kitbox_project.Views;
 
@@ -27,6 +29,13 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 		LoadRealCart(order);
 	}
+
+    public void DisplayPopup()
+    {
+        var popup = new PopupCustomerRec();
+
+        this.ShowPopup(popup);
+    }
 
     //Display Popup window to ask if customer wants to confirm his order (return bool)
     async Task<bool> DisplayEnsureConfirmPopup()
@@ -167,8 +176,11 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
 		order.Status = "Waiting Confirmation";
-        bool goToNextPage = await DisplayConfirmPopup();
-        
+        //bool goToNextPage = await DisplayConfirmPopup();
+
+        bool goToNextPage = false;
+        DisplayPopup();
+
         if (goToNextPage)
         {
             OrdersPage newActiveOrdersPage = new OrdersPage();

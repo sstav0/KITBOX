@@ -2,6 +2,7 @@
 using Syncfusion.Maui.Core.Hosting;
 using UraniumUI;
 using Microsoft.Maui.LifecycleEvents;
+using CommunityToolkit.Maui;
 
 namespace Kitbox_project
 {
@@ -12,6 +13,7 @@ namespace Kitbox_project
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .UseUraniumUI()
                 .UseUraniumUIMaterial()
                 .ConfigureFonts(fonts =>
