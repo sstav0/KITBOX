@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using static System.Net.Mime.MediaTypeNames;
 using Kitbox_project.Views;
+using Microsoft.Maui.Controls;
 
 namespace Kitbox_project.ViewModels
 {
@@ -19,14 +20,7 @@ namespace Kitbox_project.ViewModels
 
         public async void LogoutButton_Clicked()
         {
-            if (Microsoft.Maui.Controls.Application.Current.MainPage is NavigationPage navigationPage)
-            {
-                await navigationPage.PopToRootAsync();
-            }
-            else if (Microsoft.Maui.Controls.Application.Current.MainPage is Shell shell)
-            {
-                await shell.GoToAsync($"//{nameof(HomeClientPage)}");
-            }
+            Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
         }
     }
 }
