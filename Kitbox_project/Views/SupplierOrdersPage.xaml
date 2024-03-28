@@ -6,8 +6,18 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
     Title="SupplierOrdersPage"
-    BackgroundColor="White">
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="True"
+    Shell.TabBarIsVisible="True">
 
+
+    <ContentPage.ToolbarItems FontSize="10">
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.BindingContext>
         <viewModels:SupplierOrdersViewModel />
     </ContentPage.BindingContext>

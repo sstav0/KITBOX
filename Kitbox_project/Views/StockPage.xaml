@@ -5,7 +5,7 @@
              x:Class="Kitbox_project.Views.StockPage"
              BackgroundColor="White"
              Title="StockPage">
-
+            
     <ContentPage.BindingContext>
         <viewModels:StockViewModel />
     </ContentPage.BindingContext>
