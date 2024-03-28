@@ -3,7 +3,8 @@
                xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                x:Class="Kitbox_project.Views.PopupStockPrices"
                xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-               xmlns:views="clr-namespace:Kitbox_project.Views">
+               xmlns:views="clr-namespace:Kitbox_project.Views"
+               xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project">
     <toolkit:Popup.Resources>
         <Style TargetType="views:PopupStockPrices">
             <Setter Property="HorizontalOptions" Value="Center" />
@@ -13,10 +14,53 @@
         </Style>
     </toolkit:Popup.Resources>
 
-    <Border BackgroundColor="White" Stroke="Black" StrokeShape="RoundRectangle 10">
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <Border BackgroundColor="White" Stroke="Black" StrokeShape="RoundRectangle 10" WidthRequest="300" HeightRequest="300" Padding="10">
+        <VerticalStackLayout>
+            <Label Text="{Binding Code}" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+
+            <CollectionView ItemsSource="{Binding PriceItems}" SelectionMode="None" HorizontalOptions="Center" Margin="10">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <Label Grid.Column="0" Text="{Binding SupplierName}" FontSize="Body" VerticalOptions="Center" />
+                            <HorizontalStackLayout Grid.Column="1">
+                                <Label Text="{Binding SupplierPrice}" FontSize="Body" VerticalOptions="Center" />
+                                <Label Text="€" FontSize="Body" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <HorizontalStackLayout Margin="10" Spacing="10">
+                <Label Text="Price in catalog :" VerticalOptions="Center" FontSize="Body"/>
+                <Entry Text="{Binding InputPrice}" IsEnabled="{Binding IsEditingPrice}" VerticalOptions="Center" HeightRequest="30" WidthRequest="50" Margin="0,5" TextColor="Black" FontSize="Body">
+                    <Entry.Triggers>
+                        <DataTrigger TargetType="Entry" Binding="{Binding IsValidPrice}" Value="False">
+                            <Setter Property="BackgroundColor" Value="{StaticResource LightRed}" />
+                            <Setter Property="TextColor" Value="Red" />
+                        </DataTrigger>
+                    </Entry.Triggers>
+                </Entry>
+                <Label Text="€" FontSize="Body" VerticalOptions="Center"/>
+                <Button Text="{Binding PriceButtonText}" Clicked="OnEditPriceClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="5,5,0,5" Padding="14,5" HeightRequest="35" FontSize="Body">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding IsValidPrice}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{Binding PriceButtonColor}" />
+                            <Setter Property="Text" Value="{Binding PriceButtonText}" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding IsValidPrice}" Value="False">
+                            <Setter Property="BackgroundColor" Value="Red" />
+                            <Setter Property="Text" Value="Invalid" />
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
     </Border>
 </toolkit:Popup>

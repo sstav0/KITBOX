@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.ViewModels
 {
-    internal class StockViewModel : INotifyPropertyChanged
+    public class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
         private DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
@@ -139,14 +140,14 @@ namespace Kitbox_project.ViewModels
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
 
-            private List<PriceItem> _priceItems;
+            private List<PriceItem> _priceItems = new List<PriceItem>();
             private double _catalogPrice;
             private bool _isInCatalog;
             private bool _isEditingPrice;
             private string _priceButtonText;
             private Color _priceButtonColor;
             private bool _isValidPrice;
-            private string _InputPrice;
+            private string _inputPrice;
 
             private DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
             private DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
@@ -159,6 +160,10 @@ namespace Kitbox_project.ViewModels
                 ButtonColor = Color.Parse("#512BD4");
                 InputQuantity = quantity.ToString();
                 StockItemVisibility = true;
+
+                IsEditingPrice = false;
+                PriceButtonText = "Edit";
+                PriceButtonColor = Color.Parse("#512BD4");
                 IsInCatalog = true;
 
             }
@@ -295,11 +300,12 @@ namespace Kitbox_project.ViewModels
 
             public string InputPrice
             {
-                get => _InputPrice;
+                get => _inputPrice;
                 set
                 {
-                    _InputPrice = value;
+                    _inputPrice = value;
                     OnPropertyChanged(nameof(InputPrice));
+                    ValidatePrice();
                 }
             }
 
@@ -321,31 +327,35 @@ namespace Kitbox_project.ViewModels
 
             public async void LoadPricesData()
             {
+                List<PriceItem> TempPriceItems = new List<PriceItem>();
                 var catalogDict = await DBSupplierPrices.GetData(
                     new Dictionary<string, string> { { "Code", Code } },
                     new List<string> { "Price", "idSupplier" });
 
-                var i = 0;
                 foreach (var catalogitem in catalogDict)
                 {
-
                     var fakesupplierName = await DBSupplierNames.GetData(
-                    new Dictionary<string, string> { { "idSuppliers", catalogitem["idSupplier"] } },
-                    new List<string> { "NameofSuppliers" });
+                        new Dictionary<string, string> { { "idSuppliers", catalogitem["idSupplier"] } },
+                        new List<string> { "NameofSuppliers" });
 
-                    var supplierPrice = Convert.ToDouble(catalogDict[i]["Price"]);
-                    var supplierName = fakesupplierName[0]["NameofSuppliers"];
+                    var supplierPrice = Convert.ToDouble(catalogitem["Price"]);
+                    var supplierName = fakesupplierName.FirstOrDefault()["NameofSuppliers"];
 
-                    PriceItems.Add(new PriceItem(supplierName, supplierPrice));
-
-                    i++;
+                    if (supplierName != null)
+                    {
+                        TempPriceItems.Add(new PriceItem(supplierName, supplierPrice));
+                    }
                 }
 
                 var catalogPrice = await DBCatalogPrices.GetData(
                     new Dictionary<string, string> { { "Code", Code } },
                     new List<string> { "Price" });
 
-                CatalogPrice = Convert.ToDouble(catalogPrice[0]["Price"]);
+                CatalogPrice = catalogPrice.FirstOrDefault() != null ? Convert.ToDouble(catalogPrice[0]["Price"]) : 0.0;
+                InputPrice = Convert.ToString(CatalogPrice);
+                
+                PriceItems = TempPriceItems;
+                OnPropertyChanged(nameof(PriceItems));
             }
         }
 

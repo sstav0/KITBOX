@@ -20,20 +20,15 @@ public partial class StockPage : ContentPage
         }
     }
 
-    private void OpenPopupStockPrices(object sender, EventArgs e)
+    private void OpenPopupStockPrices(object sender, TappedEventArgs e)
     {
-        Debug.WriteLine("OpenPopupStockPrices");
-        // Open popup with the stock prices
-        var popup = new PopupStockPrices();
-        this.ShowPopup(popup);
-    }
-
-    private void OnEditPriceClicked(object sender, EventArgs e)
-    {
-        if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)
+        if (sender is Grid grid && grid.BindingContext is StockViewModel.StockItemViewModel selectedItem)
         {
-            // Call the method in the ViewModel
-            (BindingContext as StockViewModel)?.EditUpdatePrice(stockItem);
+            Debug.WriteLine("OpenPopupStockPrices");
+            selectedItem.LoadPricesData();
+            // Open popup with the stock prices
+            var popup = new PopupStockPrices(selectedItem);
+            this.ShowPopup(popup);
         }
     }
 
@@ -51,10 +46,5 @@ public partial class StockPage : ContentPage
         {
             stockViewModel.ApplyFilter(searchBar.Text);
         }
-    }
-
-    private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
-    {
-
     }
 }
