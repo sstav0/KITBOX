@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -11,10 +12,11 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.ViewModels
 {
-    internal class StockViewModel : INotifyPropertyChanged
+    public class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
         private DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+        private DatabaseCatalogPrices DBCatalog_save = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
         public StockViewModel()
         {
@@ -86,6 +88,42 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public async Task EditUpdatePrice(StockItemViewModel stockItem)
+        {
+            // If Update button pressed
+            if (stockItem.IsEditingPrice)
+            {
+                // If the input price is a number and non-negative
+                if (stockItem.IsValidPrice)
+                {
+                    stockItem.InputPrice = stockItem.InputPrice.TrimStart('0') != "" ? stockItem.InputPrice.TrimStart('0') : "0";
+
+                    stockItem.CatalogPrice = Convert.ToInt32(stockItem.InputPrice);
+                    await DBCatalog_save.Update(
+                        new Dictionary<string, object> { { "Price", stockItem.CatalogPrice } },
+                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
+
+                    stockItem.IsEditingPrice = false;
+                    stockItem.PriceButtonText = "Edit";
+                    stockItem.PriceButtonColor = Color.Parse("#512BD4");
+                }
+                // If the input price is not a number or negative, keep the previous price
+                else
+                {
+                    stockItem.InputPrice = Convert.ToString(stockItem.CatalogPrice);
+                    stockItem.PriceButtonText = "Update";
+                    stockItem.PriceButtonColor = Color.Parse("green");
+                }
+            }
+            // If Edit button pressed
+            else
+            {
+                stockItem.IsEditingPrice = true;
+                stockItem.PriceButtonText = "Update";
+                stockItem.PriceButtonColor = Color.Parse("green");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -101,12 +139,15 @@ namespace Kitbox_project.ViewModels
             private string _inputQuantity;
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
-            private List<PriceItem> _priceItems;
+
+            private List<PriceItem> _priceItems = new List<PriceItem>();
             private double _catalogPrice;
             private bool _isInCatalog;
             private bool _isEditingPrice;
+            private string _priceButtonText;
+            private Color _priceButtonColor;
             private bool _isValidPrice;
-            private string _InputPrice;
+            private string _inputPrice;
 
             private DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
             private DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
@@ -119,6 +160,10 @@ namespace Kitbox_project.ViewModels
                 ButtonColor = Color.Parse("#512BD4");
                 InputQuantity = quantity.ToString();
                 StockItemVisibility = true;
+
+                IsEditingPrice = false;
+                PriceButtonText = "Edit";
+                PriceButtonColor = Color.Parse("#512BD4");
                 IsInCatalog = true;
 
             }
@@ -223,6 +268,26 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
+            public string PriceButtonText
+            {
+                get => _priceButtonText;
+                set
+                {
+                    _priceButtonText = value;
+                    OnPropertyChanged(nameof(PriceButtonText));
+                }
+            }
+
+            public Color PriceButtonColor
+            {
+                get => _priceButtonColor;
+                set
+                {
+                    _priceButtonColor = value;
+                    OnPropertyChanged(nameof(PriceButtonColor));
+                }
+            }
+
             public bool IsValidPrice
             {
                 get => _isValidPrice;
@@ -235,11 +300,12 @@ namespace Kitbox_project.ViewModels
 
             public string InputPrice
             {
-                get => _InputPrice;
+                get => _inputPrice;
                 set
                 {
-                    _InputPrice = value;
+                    _inputPrice = value;
                     OnPropertyChanged(nameof(InputPrice));
+                    ValidatePrice();
                 }
             }
 
@@ -259,34 +325,37 @@ namespace Kitbox_project.ViewModels
                 IsValidPrice = double.TryParse(InputPrice, out double parsedPrice) && parsedPrice >= 0;
             }
 
-
             public async void LoadPricesData()
             {
+                List<PriceItem> TempPriceItems = new List<PriceItem>();
                 var catalogDict = await DBSupplierPrices.GetData(
                     new Dictionary<string, string> { { "Code", Code } },
                     new List<string> { "Price", "idSupplier" });
 
-                var i = 0;
                 foreach (var catalogitem in catalogDict)
                 {
-
                     var fakesupplierName = await DBSupplierNames.GetData(
-                    new Dictionary<string, string> { { "idSuppliers", catalogitem["idSupplier"] } },
-                    new List<string> { "NameofSuppliers" });
+                        new Dictionary<string, string> { { "idSuppliers", catalogitem["idSupplier"] } },
+                        new List<string> { "NameofSuppliers" });
 
-                    var supplierPrice = Convert.ToDouble(catalogDict[i]["Price"]);
-                    var supplierName = fakesupplierName[0]["NameofSuppliers"];
+                    var supplierPrice = Convert.ToDouble(catalogitem["Price"]);
+                    var supplierName = fakesupplierName.FirstOrDefault()["NameofSuppliers"];
 
-                    PriceItems.Add(new PriceItem(supplierName, supplierPrice));
-
-                    i++;
+                    if (supplierName != null)
+                    {
+                        TempPriceItems.Add(new PriceItem(supplierName, supplierPrice));
+                    }
                 }
 
                 var catalogPrice = await DBCatalogPrices.GetData(
                     new Dictionary<string, string> { { "Code", Code } },
                     new List<string> { "Price" });
 
-                CatalogPrice = Convert.ToDouble(catalogPrice[0]["Price"]);
+                CatalogPrice = catalogPrice.FirstOrDefault() != null ? Convert.ToDouble(catalogPrice[0]["Price"]) : 0.0;
+                InputPrice = Convert.ToString(CatalogPrice);
+                
+                PriceItems = TempPriceItems;
+                OnPropertyChanged(nameof(PriceItems));
             }
         }
 

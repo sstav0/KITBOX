@@ -47,6 +47,9 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid IsVisible="{Binding StockItemVisibility}">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OpenPopupStockPrices"/>
+                                </Grid.GestureRecognizers>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="3*" />
