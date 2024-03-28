@@ -9,13 +9,14 @@ using System.Windows.Input;
 
 namespace Kitbox_project.Views
 {
-    public partial class PopupCustomerRec : Popup 
+    public partial class PopupCustomerRec : Popup, INotifyPropertyChanged
     {
-        public PopupCustomerRec()
+        public PopupCustomerRec(ObservableCollection<CartViewModel> cart)
         {
             InitializeComponent();
-            PopupCustomerRecViewModel viewModel = new PopupCustomerRecViewModel();
-            this.BindingContext = viewModel;
+
+            PopupCustomerRecViewModel _pupopCustomerViewModel = new PopupCustomerRecViewModel(cart);
+            this.BindingContext = _pupopCustomerViewModel;
         }   
     }
 }

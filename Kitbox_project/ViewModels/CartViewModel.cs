@@ -6,12 +6,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Kitbox_project.Views;
+using CommunityToolkit.Maui.Views;
 
 namespace Kitbox_project.ViewModels
 {
-    class CartViewModel
+
+    public class CartViewModel
     {
         private Cabinet _cabinet;
+        private readonly Page _page;
         public Cabinet Cabinet
         { get => _cabinet; set => _cabinet = value; }
 
@@ -47,7 +51,7 @@ namespace Kitbox_project.ViewModels
         public int CabinetID
         { get => _cabinetID; set => _cabinetID = value; }
 
-        public CartViewModel(Cabinet cabinet)
+        public CartViewModel(Cabinet cabinet, Page page)
         {
             this._cabinet = cabinet;
             this._lockers = cabinet.GetObservableLockers();
@@ -58,6 +62,7 @@ namespace Kitbox_project.ViewModels
             this._nbrLockers = cabinet.GetLockerCount();
             this._height = cabinet.Height;
             this._cabinetID = cabinet.CabinetID;
+            _page = page;
         }
 
         public void AddLocker(Locker locker)

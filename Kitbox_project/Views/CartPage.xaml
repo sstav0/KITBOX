@@ -9,12 +9,15 @@
     Shell.NavBarIsVisible="True"
     Shell.TabBarIsVisible="False">
 
-    <ContentPage.BindingContext>
-        <local:LogOutViewModel />
-    </ContentPage.BindingContext>
+    <!--  ContentPage.BindingContext  -->
+    <!--  local:CartViewModel/  -->
+    <!--  /ContentPage.BindingContext  -->
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding LogoutCommand}" Text="Log off" />
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
     </ContentPage.ToolbarItems>
 
     <Grid Padding="5" RowSpacing="5">

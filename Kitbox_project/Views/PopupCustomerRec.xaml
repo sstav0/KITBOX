@@ -27,15 +27,14 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <Label
                 Grid.Row="0"
                 Padding="0,10"
                 FontSize="30"
-                Text="Save your order" />
+                IsVisible="{Binding warningVisibility}"
+                Text="{Binding PopupText}" />
 
             <Label
                 Grid.Row="1"

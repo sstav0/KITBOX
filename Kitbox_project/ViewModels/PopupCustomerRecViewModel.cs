@@ -9,16 +9,20 @@ using System.Windows.Input;
 using Kitbox_project.Views;
 using Microsoft.Maui.Controls;
 using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace Kitbox_project.ViewModels
 {
     public class PopupCustomerRecViewModel
     {
-        public Command OnOkButtonClicked { get; private set; }
+        private ObservableCollection<CartViewModel> Cart;
+        public Command OnOkButtonClicked { get; }
 
-        public PopupCustomerRecViewModel()
+        public PopupCustomerRecViewModel(ObservableCollection<CartViewModel> cart)
         {
-            OnOkButtonClicked = new Command(VerifyEntry);
+            OnOkButtonClicked = new Command(RegisterEntry);
+            Cart = cart;
+            PopupText = "Complete Order";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -27,6 +31,19 @@ namespace Kitbox_project.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private string _popupText;
+        public string PopupText
+        {
+            get { return _popupText; }
+            set
+            {
+                if (_popupText != value)
+                {
+                    _popupText = value;
+                    OnPropertyChanged(nameof(PopupText));
+                }
+            }
+        }
         private string _entryFirstName;
         public string EntryFirstName
         {
@@ -70,10 +87,47 @@ namespace Kitbox_project.ViewModels
         }
 
 
-        public void VerifyEntry()
+        public bool IsDataInvalid()
         {
             Debug.WriteLine("VerifyEntry()");
+            bool invalidData = false;
+
+            if (!string.IsNullOrWhiteSpace(_entryEmail) && _entryEmail.Any(char.IsLetterOrDigit) && _entryEmail.Contains('@'))
+            {
+                if (!string.IsNullOrWhiteSpace(_entryFirstName) && _entryFirstName.All(char.IsLetter))
+                {
+                    if (!string.IsNullOrWhiteSpace(_entryLastName) && _entryLastName.All(char.IsLetter))
+                    {
+                        invalidData = false;
+                    }
+                    else { invalidData = true; }
+                }
+                else { invalidData = true; }
+            }
+            else{ invalidData = true; }
+
+            Debug.WriteLine(invalidData.ToString());
+            return invalidData;
         }
 
+        public bool IsOrderEmpty()
+        {
+            if (Cart.Count() <= 0)
+            {
+                return true;
+            }
+            else { return false; }
+            
+        }
+        private void ClosePopup()
+        {
+        }
+        public void RegisterEntry()
+        {
+            if (IsOrderEmpty() && IsDataInvalid())
+            {
+                Debug.WriteLine(PopupText);
+            }
+        }
     }
 }
