@@ -26,7 +26,8 @@
         <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1"
                FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
 
-        <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Clicked="OnUpdateCartCLicked"/> <!--Command="{Binding UpdateCartClicked}"-->
+        <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Clicked="OnUpdateCartCLicked"
+                BackgroundColor="{StaticResource Primary}"/>
 
         <Border Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1" 
                 StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
@@ -109,9 +110,11 @@
                                     <Label Text="{Binding Price}" Grid.Column="9" HorizontalOptions="Start" VerticalOptions="Center"/> <!-- {Binding cabinet.GetPrice()} -->
 
                                     <Button Text="Edit" Grid.Column="10" FontAttributes="Bold" Clicked="OnEditClicked" CommandParameter="{Binding .}"
-                                            TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="Black" MaximumHeightRequest="11"/>
+                                            TextColor="White" BackgroundColor="{StaticResource Primary}" BorderColor="Black" 
+                                            MaximumHeightRequest="9"/>
                                     <Button Text="X" Grid.Column="11" FontAttributes="Bold" Clicked="OnDeleteClicked" CommandParameter="{Binding .}"
-                                            HorizontalOptions="Start" TextColor="Black" BackgroundColor="#A7DAFF" BorderColor="Black" MaximumHeightRequest="11"/>
+                                            HorizontalOptions="Start" TextColor="White" BackgroundColor="{StaticResource Primary}" 
+                                            BorderColor="Black" MaximumHeightRequest="9"/>
                                 
                                 </Grid>
                             </Border>
