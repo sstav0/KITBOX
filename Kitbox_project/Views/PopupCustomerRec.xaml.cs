@@ -9,23 +9,15 @@ using System.Windows.Input;
 
 namespace Kitbox_project.Views
 {
-    public partial class PopupCustomerRec : Popup 
+    public partial class PopupCustomerRec : Popup, INotifyPropertyChanged
     {
-
-        Entry entry = new Entry { Placeholder = "Enter text" };
-
-        public PopupCustomerRec()
+        public PopupCustomerRec(ObservableCollection<CartViewModel> cart)
         {
             InitializeComponent();
-        }
-        void OnOKButtonClicked(object? sender, EventArgs e) => Close();
-        void OnEntryTextChanged(object sender, TextChangedEventArgs e)
-        {
-            string oldText = e.OldTextValue;
-            string newText = e.NewTextValue;
-            string myText = entry.Text;
-        }
 
+            PopupCustomerRecViewModel _pupopCustomerViewModel = new PopupCustomerRecViewModel(cart);
+            this.BindingContext = _pupopCustomerViewModel;
+        }   
     }
 }
 

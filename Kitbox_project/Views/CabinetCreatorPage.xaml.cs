@@ -11,6 +11,7 @@ namespace Kitbox_project.Views
     public partial class CabinetCreatorPage : ContentPage
     {
         private CabinetViewModel _viewModel;
+        private LogOutViewModel _logOutViewModel;
 
         private Order _order;
         public Order Order
@@ -36,11 +37,15 @@ namespace Kitbox_project.Views
 
             InitializeComponent();
             _viewModel = new CabinetViewModel();
+            _logOutViewModel = new LogOutViewModel();
+
             BindingContext = _viewModel;
+            LogOutButton.BindingContext = _logOutViewModel;
 
 
             // Load available lockers into the view model
             LoadAvailableLockers();
+            DisablePickers();
         }
 
 
@@ -52,7 +57,6 @@ namespace Kitbox_project.Views
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-
             };
         }
 
@@ -73,10 +77,12 @@ namespace Kitbox_project.Views
                 locke.LockerID = index;
                 index += 1;
             }
+            DisablePickers();
+
         }
 
 
-            private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
             if (_viewModel.AvailableLockers.Count >= 7)
@@ -103,6 +109,7 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            DisablePickers();
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -126,10 +133,24 @@ namespace Kitbox_project.Views
 
         }
 
-
-        private void OnAddLockerButtonClicked(object sender, EventArgs e) //Pas utilisé pour le moment.  
-        { 
+        private void DisablePickers()
+        {
+            if (_viewModel.AvailableLockers.Count() == 0)
+            {
+                CabinetWidth.IsEnabled = true;
+                CabinetDepth.IsEnabled = true;
+                AngleIronColor.IsEnabled = true;
+            }
+            else
+            {
+                CabinetWidth.IsEnabled = false;
+                CabinetDepth.IsEnabled = false;
+                AngleIronColor.IsEnabled = false;
+            }
         }
+
+
+
 
 
 

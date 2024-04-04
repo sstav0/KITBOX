@@ -1,113 +1,211 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kitbox_project.Views.CartPage"
-             BackgroundColor="White"
-             Title="Cart">
+<ContentPage
+    x:Class="Kitbox_project.Views.CartPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Kitbox_project.ViewModels"
+    Title="Cart"
+    BackgroundColor="White"
+    Shell.NavBarIsVisible="True"
+    Shell.TabBarIsVisible="False">
+
+    <!--  ContentPage.BindingContext  -->
+    <!--  local:CartViewModel/  -->
+    <!--  /ContentPage.BindingContext  -->
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
+    </ContentPage.ToolbarItems>
 
     <Grid Padding="5" RowSpacing="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1.5*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="1.25*"/>
-            <RowDefinition Height="1.25*"/> 
+            <RowDefinition Height="1.5*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="1.25*" />
+            <RowDefinition Height="1.25*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.1*"/>
-            <ColumnDefinition Width="1.5*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="7*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.1*" />
+            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.1*" />
         </Grid.ColumnDefinitions>
 
-        <Label Text="CART" Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="1"
-               FontSize="Header" FontAttributes="Bold" HorizontalOptions="Start"/>
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.ColumnSpan="3"
+            FontAttributes="Bold"
+            FontSize="Header"
+            HorizontalOptions="Start"
+            Text="CART" />
 
         <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Clicked="OnUpdateCartCLicked"
                 BackgroundColor="{StaticResource Primary}"/>
+        <!--  Command="{Binding UpdateCartClicked}"  -->
 
-        <Border Grid.Row="1" Grid.ColumnSpan="4" Grid.Column="1" 
-                StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
+        <Border
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="4"
+            Margin="2"
+            StrokeShape="RoundRectangle 10,10,10,10">
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.05*"/>
-                    <ColumnDefinition Width="0.06*"/>
-                    <ColumnDefinition Width="0.15*"/>
-                    <ColumnDefinition Width="0.06*"/>
-                    <ColumnDefinition Width="0.15*"/>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.35*"/>
-                    <ColumnDefinition Width="0.2*"/>
-                    <ColumnDefinition Width="0.15*"/>
-                    <ColumnDefinition Width="0.1*"/>
-                    <ColumnDefinition Width="0.05*"/>
+                    <ColumnDefinition Width="0.05*" />
+                    <ColumnDefinition Width="0.06*" />
+                    <ColumnDefinition Width="0.15*" />
+                    <ColumnDefinition Width="0.06*" />
+                    <ColumnDefinition Width="0.15*" />
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.35*" />
+                    <ColumnDefinition Width="0.2*" />
+                    <ColumnDefinition Width="0.15*" />
+                    <ColumnDefinition Width="0.1*" />
+                    <ColumnDefinition Width="0.05*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Text="Quantity" Grid.Column="2"
-                       HorizontalOptions="Center" VerticalOptions="Center"/>
+                <Label
+                    Grid.Column="2"
+                    HorizontalOptions="Center"
+                    Text="Quantity"
+                    VerticalOptions="Center" />
 
-                <Label Text="Length" Grid.Column="5" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                <Label
+                    Grid.Column="5"
+                    HorizontalTextAlignment="Start"
+                    Text="Length"
+                    VerticalOptions="Center" />
 
-                <Label Text="Height" Grid.Column="6" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                <Label
+                    Grid.Column="6"
+                    HorizontalTextAlignment="Start"
+                    Text="Height"
+                    VerticalOptions="Center" />
 
-                <Label Text="Depth" Grid.Column="7" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                <Label
+                    Grid.Column="7"
+                    HorizontalTextAlignment="Start"
+                    Text="Depth"
+                    VerticalOptions="Center" />
 
-                <Label Text="Nb. of Lockers" Grid.Column="8" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                <Label
+                    Grid.Column="8"
+                    HorizontalTextAlignment="Start"
+                    Text="Nb. of Lockers"
+                    VerticalOptions="Center" />
 
-                <Label Text="Price" Grid.Column="9" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
+                <Label
+                    Grid.Column="9"
+                    HorizontalTextAlignment="Start"
+                    Text="Price"
+                    VerticalOptions="Center" />
 
             </Grid>
         </Border>
 
-        <ScrollView Grid.Row="2" Grid.ColumnSpan="4" Grid.Column="1">
-        
+        <ScrollView
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="4">
+
             <ListView x:Name="ListCabinets">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            
-                            <Border BackgroundColor="#A7DAFF" StrokeShape="RoundRectangle 10,10,10,10" Margin="2">
-                                
+
+                            <Border
+                                Margin="2"
+                                BackgroundColor="#A7DAFF"
+                                StrokeShape="RoundRectangle 10,10,10,10">
+
                                 <Grid>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.05*"/>
-                                        <ColumnDefinition Width="0.06*"/>
-                                        <ColumnDefinition Width="0.15*"/>
-                                        <ColumnDefinition Width="0.06*"/>
-                                        <ColumnDefinition Width="0.15*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.35*"/>
-                                        <ColumnDefinition Width="0.2*"/>
-                                        <ColumnDefinition Width="0.15*"/>
-                                        <ColumnDefinition Width="0.1*"/>
-                                        <ColumnDefinition Width="0.05*"/>
+                                        <ColumnDefinition Width="0.05*" />
+                                        <ColumnDefinition Width="0.06*" />
+                                        <ColumnDefinition Width="0.15*" />
+                                        <ColumnDefinition Width="0.06*" />
+                                        <ColumnDefinition Width="0.15*" />
+                                        <ColumnDefinition Width="0.2*" />
+                                        <ColumnDefinition Width="0.2*" />
+                                        <ColumnDefinition Width="0.2*" />
+                                        <ColumnDefinition Width="0.35*" />
+                                        <ColumnDefinition Width="0.2*" />
+                                        <ColumnDefinition Width="0.15*" />
+                                        <ColumnDefinition Width="0.1*" />
+                                        <ColumnDefinition Width="0.05*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <Button Text="+" Grid.Column="1" Clicked="OnMoreClicked" MaximumHeightRequest="10" HorizontalOptions="End"
-                                            TextColor="Green" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF"
-                                            FontSize="Medium" FontAttributes="Bold" CommandParameter="{Binding .}"/>
+                                    <Button
+                                        Grid.Column="1"
+                                        BackgroundColor="#A7DAFF"
+                                        BorderColor="#A7DAFF"
+                                        Clicked="OnMoreClicked"
+                                        CommandParameter="{Binding .}"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"
+                                        HorizontalOptions="End"
+                                        MaximumHeightRequest="10"
+                                        Text="+"
+                                        TextColor="Green" />
 
-                                    <Label Text="{Binding Quantity}" FontAttributes="Bold" Grid.Column="2" 
-                                           HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Label
+                                        Grid.Column="2"
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Quantity}"
+                                        VerticalOptions="Center" />
 
-                                    <Button Text="-" Grid.Column="3" Clicked="OnLessClicked" MaximumHeightRequest="10" HorizontalOptions="Start"
-                                            TextColor="Red" BackgroundColor="#A7DAFF" BorderColor="#A7DAFF" 
-                                            FontSize="Medium" FontAttributes="Bold" CommandParameter="{Binding .}"/>
+                                    <Button
+                                        Grid.Column="3"
+                                        BackgroundColor="#A7DAFF"
+                                        BorderColor="#A7DAFF"
+                                        Clicked="OnLessClicked"
+                                        CommandParameter="{Binding .}"
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"
+                                        HorizontalOptions="Start"
+                                        MaximumHeightRequest="10"
+                                        Text="-"
+                                        TextColor="Red" />
 
-                                    <Label Text="{Binding Length}" Grid.Column="5" VerticalOptions="Center"/> <!-- {Binding cabinet.GetLenght()} -->
-                                    <Label Text="{Binding Height}" Grid.Column="6" VerticalOptions="Center"/> <!-- {Binding cabinet.GetHeight()} -->
-                                    <Label Text="{Binding Depth}" Grid.Column="7" VerticalOptions="Center"/> <!-- {Binding cabinet.GetDepth()} -->
-                                    <Label Text="{Binding NbrLockers}" Grid.Column="8" VerticalOptions="Center"/> <!-- {Binding lockers.Count()} -->
-                                    <Label Text="{Binding Price}" Grid.Column="9" HorizontalOptions="Start" VerticalOptions="Center"/> <!-- {Binding cabinet.GetPrice()} -->
+                                    <Label
+                                        Grid.Column="5"
+                                        Text="{Binding Length}"
+                                        VerticalOptions="Center" />
+                                    <!--  {Binding cabinet.GetLenght()}  -->
+                                    <Label
+                                        Grid.Column="6"
+                                        Text="{Binding Height}"
+                                        VerticalOptions="Center" />
+                                    <!--  {Binding cabinet.GetHeight()}  -->
+                                    <Label
+                                        Grid.Column="7"
+                                        Text="{Binding Depth}"
+                                        VerticalOptions="Center" />
+                                    <!--  {Binding cabinet.GetDepth()}  -->
+                                    <Label
+                                        Grid.Column="8"
+                                        Text="{Binding NbrLockers}"
+                                        VerticalOptions="Center" />
+                                    <!--  {Binding lockers.Count()}  -->
+                                    <Label
+                                        Grid.Column="9"
+                                        HorizontalOptions="Start"
+                                        Text="{Binding Price}"
+                                        VerticalOptions="Center" />
+                                    <!--  {Binding cabinet.GetPrice()}  -->
 
                                     <Button Text="Edit" Grid.Column="10" FontAttributes="Bold" Clicked="OnEditClicked" CommandParameter="{Binding .}"
                                             TextColor="White" BackgroundColor="{StaticResource Primary}" BorderColor="Black" 
@@ -124,32 +222,59 @@
             </ListView>
         </ScrollView>
 
-        <Border BackgroundColor="LightGray" StrokeShape="RoundRectangle 10,10,10,10" Padding="10"
-               Grid.Row="3" Grid.ColumnSpan="4" Grid.Column="1">
+        <Border
+            Grid.Row="3"
+            Grid.Column="1"
+            Grid.ColumnSpan="4"
+            Padding="10"
+            BackgroundColor="LightGray"
+            StrokeShape="RoundRectangle 10,10,10,10">
 
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Label Text="TOTAL" Grid.ColumnSpan="2" Grid.Column="0" FontSize="Medium" FontAttributes="Bold" 
-                       VerticalOptions="Center" HorizontalOptions="Start" FontAutoScalingEnabled="True"/>
+                <Label
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    FontAttributes="Bold"
+                    FontAutoScalingEnabled="True"
+                    FontSize="Medium"
+                    HorizontalOptions="Start"
+                    Text="TOTAL"
+                    VerticalOptions="Center" />
 
-                <Label x:Name="TotalPrice" Grid.ColumnSpan="2" Grid.Column="3" FontSize="Medium" FontAttributes="Bold"
-                       VerticalOptions="Center" HorizontalOptions="End" FontAutoScalingEnabled="True"/>
+                <Label
+                    x:Name="TotalPrice"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="2"
+                    FontAttributes="Bold"
+                    FontAutoScalingEnabled="True"
+                    FontSize="Medium"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center" />
 
             </Grid>
         </Border>
-        
-        <Button Text="ADD NEW CABINET" Grid.Row="4" Grid.Column="1" Margin="2"
-                Clicked="OnAddNewClicked"/>
-        
-        <Button Text="CONFIRM" Grid.Row="4" Grid.Column="4" Margin="2"
-                Clicked="OnConfirmClicked"/>
+
+        <Button
+            Grid.Row="4"
+            Grid.Column="1"
+            Margin="2"
+            Clicked="OnAddNewClicked"
+            Text="ADD NEW CABINET" />
+
+        <Button
+            Grid.Row="4"
+            Grid.Column="4"
+            Margin="2"
+            Clicked="OnConfirmClicked"
+            Text="CONFIRM" />
 
     </Grid>
-    </ContentPage>
+</ContentPage>

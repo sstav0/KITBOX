@@ -6,7 +6,8 @@
     xmlns:local="clr-namespace:Kitbox_project"
     xmlns:views="clr-namespace:Kitbox_project.Views"
     Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="False">
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="True">
 
     <TabBar>
 
@@ -14,15 +15,6 @@
             Title="Home Client"
             ContentTemplate="{DataTemplate views:HomeClientPage}"
             Route="HomeClientPage" />
-
-        <ShellContent
-            Title="Cabinet Creator"
-            ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage" />
-        <ShellContent
-            Title="Logout"
-            ContentTemplate="{DataTemplate views:LogoutPage}"
-            Route="Logout" />
 
     </TabBar>
 

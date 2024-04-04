@@ -11,6 +11,7 @@ namespace Kitbox_project.Views
     {
         private Cabinet _cabinet;
         private CabinetViewModel _viewModel;
+        private LogOutViewModel _logOutViewModel;
         int indexLock = 0;
         int index = 1;
 
@@ -21,15 +22,34 @@ namespace Kitbox_project.Views
             InitializeComponent();
             _cabinet = cabinet;
             _viewModel = new CabinetViewModel();
+            _logOutViewModel = new LogOutViewModel();
             BindingContext = _viewModel;
+            LogOutButton.BindingContext = _logOutViewModel;
             LoadAvailableLockers();
             DefaultPickers();
-            
+            DisablePickers();
+
+
+        }
+
+        private void DisablePickers()
+        {
+            if (_viewModel.AvailableLockers.Count() == 0)
+            {
+                CabinetWidth.IsEnabled = true;
+                CabinetDepth.IsEnabled = true;
+                AngleIronColor.IsEnabled = true;
+            }
+            else
+            {
+                CabinetWidth.IsEnabled = false;
+                CabinetDepth.IsEnabled = false;
+                AngleIronColor.IsEnabled = false;
+            }
         }
 
         private void LoadAvailableLockers()
         {
-
 
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
@@ -93,6 +113,8 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            DisablePickers();
+
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -137,6 +159,8 @@ namespace Kitbox_project.Views
                     Debug.WriteLine("Error: No locker selected.");
                 }
             }
+            DisablePickers();
+
         }
 
         private void OnDeleteLockerClicked(object sender, EventArgs e)

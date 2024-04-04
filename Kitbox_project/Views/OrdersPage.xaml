@@ -5,6 +5,7 @@
              x:Class="Kitbox_project.Views.OrdersPage"
              BackgroundColor="White"
              Title="OrdersPage">
+            
 
     <Grid Padding="5" RowSpacing="10" ColumnSpacing="5">
 
