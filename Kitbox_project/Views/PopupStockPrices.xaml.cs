@@ -25,4 +25,10 @@ public partial class PopupStockPrices : Popup
         // Call the method in the ViewModel
         (BindingContext as StockViewModel)?.EditUpdatePrice(SelectedItem);
     }
+
+    private void DirectorButtonCLicked(object sender, EventArgs e)
+    {
+        // Call the method in the ViewModel
+        (BindingContext as StockViewModel)?.EditIsInCatalog(SelectedItem);
+    }
 }

@@ -14,28 +14,34 @@
         </Style>
     </toolkit:Popup.Resources>
 
-    <Border BackgroundColor="White" Stroke="Black" StrokeShape="RoundRectangle 10" WidthRequest="300" HeightRequest="300" Padding="10">
+    <Border BackgroundColor="White" Stroke="Black" StrokeShape="RoundRectangle 10" WidthRequest="500" HeightRequest="300" Padding="10">
         <VerticalStackLayout>
-            <Label Text="{Binding Code}" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
 
-            <CollectionView ItemsSource="{Binding PriceItems}" SelectionMode="None" HorizontalOptions="Center" Margin="10">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            
-                            <Label Grid.Column="0" Text="{Binding SupplierName}" FontSize="Body" VerticalOptions="Center" />
-                            <HorizontalStackLayout Grid.Column="1">
-                                <Label Text="{Binding SupplierPrice}" FontSize="Body" VerticalOptions="Center" />
-                                <Label Text="€" FontSize="Body" VerticalOptions="Center"/>
-                            </HorizontalStackLayout>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <HorizontalStackLayout Margin="10" Spacing="10">
+                <Label Text="{Binding Code}" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
+
+                <Button Text="{Binding DirectorButtonText}" Clicked="DirectorButtonCLicked"  HorizontalOptions="End"/>
+            </HorizontalStackLayout>
+            <ScrollView>
+                <CollectionView ItemsSource="{Binding PriceItems}" SelectionMode="None" HorizontalOptions="Center" Margin="10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Grid.Column="0" Text="{Binding SupplierName}" FontSize="Body" VerticalOptions="Center" />
+                                <HorizontalStackLayout Grid.Column="1">
+                                    <Label Text="{Binding SupplierPrice}" FontSize="Body" VerticalOptions="Center" />
+                                    <Label Text="€" FontSize="Body" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </ScrollView>
             
             <HorizontalStackLayout Margin="10" Spacing="10">
                 <Label Text="Price in catalog :" VerticalOptions="Center" FontSize="Body"/>

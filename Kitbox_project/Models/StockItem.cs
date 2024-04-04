@@ -30,8 +30,9 @@ namespace Kitbox_project.Models
         private int _quantity;
         private int _incomingQuantity;
         private int _outgoingQuantity;
+        private bool _inCatalog;
 
-        public StockItem(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity)
+        public StockItem(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog)
         {
             _id = id;
             _reference = reference;
@@ -39,6 +40,7 @@ namespace Kitbox_project.Models
             _quantity = quantity;
             _incomingQuantity = incomingQuantity;
             _outgoingQuantity = outgoingQuantity;
+            _inCatalog = inCatalog;
         }
 
         public int Id
@@ -96,6 +98,16 @@ namespace Kitbox_project.Models
             {
                 _outgoingQuantity = value;
                 OnPropertyChanged(nameof(OutgoingQuantity));
+            }
+        }
+
+        public bool InCatalog
+        {
+            get => _inCatalog;
+            set
+            {
+                _inCatalog = value;
+                OnPropertyChanged(nameof(InCatalog));
             }
         }
 
