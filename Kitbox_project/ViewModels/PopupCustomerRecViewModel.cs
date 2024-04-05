@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Kitbox_project.Views;
 using Microsoft.Maui.Controls;
+using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 
@@ -16,7 +17,9 @@ namespace Kitbox_project.ViewModels
     public class PopupCustomerRecViewModel
     {
         private ObservableCollection<CartViewModel> Cart;
+        public event EventHandler PopupClosed;
         public Command OnOkButtonClicked { get; }
+        DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
 
         public PopupCustomerRecViewModel(ObservableCollection<CartViewModel> cart)
         {
@@ -31,6 +34,19 @@ namespace Kitbox_project.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private bool _popupVisibility;
+        public bool PopupVisibility
+        {
+            get { return _popupVisibility; }
+            set
+            {
+                if (_popupVisibility != value)
+                {
+                    _popupVisibility = value;
+                    OnPropertyChanged(nameof(PopupVisibility));
+                }
+            }
+        }
         private string _popupText;
         public string PopupText
         {
@@ -89,7 +105,6 @@ namespace Kitbox_project.ViewModels
 
         public bool IsDataInvalid()
         {
-            Debug.WriteLine("VerifyEntry()");
             bool invalidData = false;
 
             if (!string.IsNullOrWhiteSpace(_entryEmail) && _entryEmail.Any(char.IsLetterOrDigit) && _entryEmail.Contains('@'))
@@ -105,28 +120,33 @@ namespace Kitbox_project.ViewModels
                 else { invalidData = true; }
             }
             else{ invalidData = true; }
-
-            Debug.WriteLine(invalidData.ToString());
             return invalidData;
         }
 
         public bool IsOrderEmpty()
         {
-            if (Cart.Count() <= 0)
-            {
-                return true;
-            }
-            else { return false; }
-            
+            if (Cart.Count() <= 0) { return true;}
+            else { return false; }  
         }
-        private void ClosePopup()
-        {
-        }
-        public void RegisterEntry()
+        public async void RegisterEntry()
         {
             if (IsOrderEmpty() && IsDataInvalid())
             {
                 Debug.WriteLine(PopupText);
+                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Retry ?","OK");
+                await Shell.Current.Navigation.PopAsync();
+
+                PopupCustomerRec newPopup = new PopupCustomerRec(Cart);
+                Application.Current.MainPage.ShowPopup(newPopup);
+            }
+            else
+            {
+                Dictionary<string,object> dataCustomer = new Dictionary<string, object> { 
+                    { "email", _entryEmail }, 
+                    { "name", _entryLastName }, 
+                    { "firstname", _entryFirstName } };
+                await databaseCustomer.Add(dataCustomer);
+
             }
         }
     }
