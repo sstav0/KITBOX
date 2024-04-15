@@ -12,11 +12,11 @@ namespace Kitbox_project.Views
     public partial class PopupCustomerRec : Popup, INotifyPropertyChanged
     {
         ContentPage _parentPage;
-        public PopupCustomerRec(ObservableCollection<CartViewModel> cart, ContentPage parentPage)
+        public PopupCustomerRec(ObservableCollection<CartViewModel> cart, CartPage parentPage)
         {
             InitializeComponent();
 
-            PopupCustomerRecViewModel viewModel = new PopupCustomerRecViewModel(cart);
+            PopupCustomerRecViewModel viewModel = new PopupCustomerRecViewModel(cart, parentPage);
             this.BindingContext = viewModel;
             ContentPage _parentPage = parentPage;
         }

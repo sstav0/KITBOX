@@ -22,12 +22,14 @@ namespace Kitbox_project.ViewModels
         public Command OnOkButtonClicked { get; }
         DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
         DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
+        private CartPage _parentPage;
 
-        public PopupCustomerRecViewModel(ObservableCollection<CartViewModel> cart)
+        public PopupCustomerRecViewModel(ObservableCollection<CartViewModel> cart, CartPage parentPage)
         {
             OnOkButtonClicked = new Command(RegisterEntry);
             Cart = cart;
             PopupText = "Complete Order";
+            _parentPage = parentPage;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -186,11 +188,14 @@ namespace Kitbox_project.ViewModels
                     else
                     {
                         string idOrder = orderDataList[orderDataList.Count - 1]["idOrder"].ToString();
-
+                        //Clsoe Popup
+                        _parentPage.ClosePopup();
+                        //Back to Main Page (Customer)
                         Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
-
+                        //Display message on a new popup (with ID order & customer)
                         string orderIdMessage = $"Validate your Order with one of our sellers \nCustomer ID : {idCustomer} \nOrder ID : {idOrder}";
                         await Application.Current.MainPage.DisplayAlert("Successfully Registered your Order", orderIdMessage, "OK");
+                        
                     }
                 }
             }
