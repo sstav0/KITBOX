@@ -11,6 +11,7 @@ using Microsoft.Maui.Controls;
 using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace Kitbox_project.ViewModels
 {
@@ -20,6 +21,7 @@ namespace Kitbox_project.ViewModels
         public event EventHandler PopupClosed;
         public Command OnOkButtonClicked { get; }
         DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
+        DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
 
         public PopupCustomerRecViewModel(ObservableCollection<CartViewModel> cart)
         {
@@ -134,10 +136,6 @@ namespace Kitbox_project.ViewModels
             {
                 Debug.WriteLine(PopupText);
                 await Application.Current.MainPage.DisplayAlert("Invalid Input", "Retry ?","OK");
-                await Shell.Current.Navigation.PopAsync();
-
-                PopupCustomerRec newPopup = new PopupCustomerRec(Cart);
-                Application.Current.MainPage.ShowPopup(newPopup);
             }
             else
             {
@@ -147,6 +145,54 @@ namespace Kitbox_project.ViewModels
                     { "firstname", _entryFirstName } };
                 await databaseCustomer.Add(dataCustomer);
 
+                //system to get Customer ID
+                Dictionary<string, string> dataCustomerString = new Dictionary<string, string>();
+
+                foreach (var kvp in dataCustomer)
+                {
+                    dataCustomerString.Add(kvp.Key, kvp.Value.ToString());
+                }
+                List<Dictionary<string, string>> customerDataList = await databaseCustomer.GetData(dataCustomerString);
+
+                if (dataCustomerString.Count <= 0 || customerDataList == null) {
+                    customerDataList = await databaseCustomer.GetData(dataCustomerString);
+                    await Application.Current.MainPage.DisplayAlert("ERROR 1", "We encounter problems trying to get your order registered", "OK");
+                }
+
+                else
+                {
+                    string idCustomer = customerDataList[customerDataList.Count - 1]["idCustomer"].ToString();
+                    //system to add the order in the DB
+                    Dictionary<string, object> dataOrder = new Dictionary<string, object> {
+                    { "idCustomer", Int32.Parse(idCustomer) },
+                    { "status", "Ordered" },
+                    { "DateTimeColumn", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}
+                    };
+                    await databaseOrder.Add(dataOrder);
+
+                    // system to get Order ID
+                    Dictionary<string, string> dataOrderString = new Dictionary<string, string>();
+                    foreach (var kvp in dataOrder)
+                    {
+                        dataOrderString.Add(kvp.Key, kvp.Value.ToString());
+                    }
+
+                    List<Dictionary<string, string>> orderDataList = await databaseOrder.GetData(dataOrderString);
+                    if (dataOrderString.Count <= 0 || orderDataList == null)
+                    {
+                        orderDataList = await databaseOrder.GetData(dataOrderString);
+                        await Application.Current.MainPage.DisplayAlert("ERROR 2", "We encounter problems trying to get your order registered", "OK");
+                    }
+                    else
+                    {
+                        string idOrder = orderDataList[orderDataList.Count - 1]["idOrder"].ToString();
+
+                        Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
+
+                        string orderIdMessage = $"Validate your Order with one of our sellers \nCustomer ID : {idCustomer} \nOrder ID : {idOrder}";
+                        await Application.Current.MainPage.DisplayAlert("Successfully Registered your Order", orderIdMessage, "OK");
+                    }
+                }
             }
         }
     }

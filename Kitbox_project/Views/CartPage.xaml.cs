@@ -29,7 +29,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
         LoadRealCart(order);
-        popup = new PopupCustomerRec(Cart);
+        popup = new PopupCustomerRec(Cart,this);
 
     LogOutButton.Command = new Command(() =>
         {
