@@ -42,9 +42,9 @@
             Route="SupplierOrdersPage" />
 
         <ShellContent
-            Title="Supplier's Prices"
-            ContentTemplate="{DataTemplate views:SecretaryPricePage}"
-            Route="SecretaryPricePage" />
+            Title="History of sold products Example"
+            ContentTemplate="{DataTemplate views:SoldHistory}"
+            Route="SoldHistory" />
 
         <ShellContent
             Title="Login Page"
