@@ -22,7 +22,12 @@ namespace Kitbox_project.ViewModels
         public Command OnOkButtonClicked { get; }
         DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
         DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
+        DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
+        DatabaseLocker databaseLocker = new DatabaseLocker("customer", "customer");
         private CartPage _parentPage;
+        private string idOrder;
+        private string idCustomer;
+        private string idCabinet;
 
         public PopupCustomerRecViewModel(ObservableCollection<CartViewModel> cart, CartPage parentPage)
         {
@@ -123,27 +128,43 @@ namespace Kitbox_project.ViewModels
                 }
                 else { invalidData = true; }
             }
-            else{ invalidData = true; }
+            else { invalidData = true; }
             return invalidData;
         }
 
         public bool IsOrderEmpty()
         {
-            if (Cart.Count() <= 0) { return true;}
-            else { return false; }  
+            if (Cart.Count() <= 0) { return true; }
+            else { return false; }
         }
         public async void RegisterEntry()
         {
-            if (IsOrderEmpty() && IsDataInvalid())
+            bool goToCartStep =await RegisterCustomer();
+            bool endRegistery =await RegisterCart(goToCartStep);
+            if (endRegistery)
+            {
+                //Clsoe Popup
+                _parentPage.ClosePopup();
+                //Back to Main Page (Customer)
+                Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
+                //Display message on a new popup (with ID order & customer)
+                string orderIdMessage = $"Validate your Order with one of our sellers \nCustomer ID : {idCustomer} \nOrder ID : {idOrder}";
+                await Application.Current.MainPage.DisplayAlert("Successfully Registered your Order", orderIdMessage, "OK");
+            }
+        }
+        public async Task<bool> RegisterCustomer()
+        {
+            bool goNextStep = false;
+            if (IsOrderEmpty() || IsDataInvalid())
             {
                 Debug.WriteLine(PopupText);
-                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Retry ?","OK");
+                await Application.Current.MainPage.DisplayAlert("Invalid Input", "Retry ?", "OK");
             }
             else
             {
-                Dictionary<string,object> dataCustomer = new Dictionary<string, object> { 
-                    { "email", _entryEmail }, 
-                    { "name", _entryLastName }, 
+                Dictionary<string, object> dataCustomer = new Dictionary<string, object> {
+                    { "email", _entryEmail },
+                    { "name", _entryLastName },
                     { "firstname", _entryFirstName } };
                 await databaseCustomer.Add(dataCustomer);
 
@@ -163,7 +184,7 @@ namespace Kitbox_project.ViewModels
 
                 else
                 {
-                    string idCustomer = customerDataList[customerDataList.Count - 1]["idCustomer"].ToString();
+                    idCustomer = customerDataList[customerDataList.Count - 1]["idCustomer"].ToString();
                     //system to add the order in the DB
                     Dictionary<string, object> dataOrder = new Dictionary<string, object> {
                     { "idCustomer", Int32.Parse(idCustomer) },
@@ -178,7 +199,7 @@ namespace Kitbox_project.ViewModels
                     {
                         dataOrderString.Add(kvp.Key, kvp.Value.ToString());
                     }
-
+                    //Fail to retrieve data from DB
                     List<Dictionary<string, string>> orderDataList = await databaseOrder.GetData(dataOrderString);
                     if (dataOrderString.Count <= 0 || orderDataList == null)
                     {
@@ -187,18 +208,31 @@ namespace Kitbox_project.ViewModels
                     }
                     else
                     {
-                        string idOrder = orderDataList[orderDataList.Count - 1]["idOrder"].ToString();
-                        //Clsoe Popup
-                        _parentPage.ClosePopup();
-                        //Back to Main Page (Customer)
-                        Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
-                        //Display message on a new popup (with ID order & customer)
-                        string orderIdMessage = $"Validate your Order with one of our sellers \nCustomer ID : {idCustomer} \nOrder ID : {idOrder}";
-                        await Application.Current.MainPage.DisplayAlert("Successfully Registered your Order", orderIdMessage, "OK");
-                        
+                        idOrder = orderDataList[orderDataList.Count - 1]["idOrder"].ToString();
+                        goNextStep = true;
                     }
                 }
             }
+            return goNextStep;
         }
+        private async Task<bool> RegisterCart(bool goToCartStep)
+        {
+            bool cartRegistered = false;
+            for(int i = 0; i < Cart.Count(); i++)
+            {
+                Dictionary<string, object> cabinetToBeRegistered = new Dictionary<string, object>
+                { {"idCabinet",Cart[i].CabinetID },
+                { "price",Cart[i].Price},
+                { "width",Cart[i].Length},
+                { "height",Cart[i].Height},
+                {"quantity",Cart[i].Quantity},
+                {"idOrder",idOrder},
+                {"IronAngleRef","RegisterCart()"} };
+
+                await databaseCabinet.Add(cabinetToBeRegistered);
+                cartRegistered = true;
+            }
+            return cartRegistered;
+        } 
     }
 }
