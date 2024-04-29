@@ -40,7 +40,7 @@ namespace Kitbox_project.Models
         /// <summary>
         /// This method checks if the query contains a door. If it does, it sets the <c>RequiresDoor</c> property to <c>true</c>. Otherwise, it sets it to <c>false</c>.
         /// </summary>
-        public void CheckDoor()
+        private void CheckDoor()
         {
             if (this.param.ContainsKey("Door"))
             {
@@ -58,7 +58,7 @@ namespace Kitbox_project.Models
         /// <summary>
         /// This method calculates the maximum cabinet height among the items in the catalog table.
         /// </summary>
-        public void GetMaxHeight(List<Dictionary<string, string>> res)
+        private void GetMaxHeight(List<Dictionary<string, string>> res)
         {
             MaxHeight = 0;
             foreach (var item in res)
@@ -76,7 +76,7 @@ namespace Kitbox_project.Models
         /// <summary>
         /// This method checks if the query contains a total height. If it does, it sets the <c>TotalHeight</c> property to the value of the total height. Otherwise, it sets it to <c>0</c>.
         /// </summary>
-        public void CheckTotalHeight()
+        private void CheckTotalHeight()
         {
             if (this.param.ContainsKey("TotalHeight"))
             {
@@ -99,7 +99,7 @@ namespace Kitbox_project.Models
         /// <summary>
         /// This method checks if the query contains a color or material filter. If it does, it assigns the color or material to the corresponding element.
         /// </summary>
-        public void CheckColorMaterialFilter()
+        private void CheckColorMaterialFilter()
         {
             foreach (var item in this.param)
             {
@@ -192,7 +192,7 @@ namespace Kitbox_project.Models
         }
 
 
-        public List<Dictionary<string, string>> FilterItems(List<Dictionary<string, string>> items)
+        private List<Dictionary<string, string>> FilterItems(List<Dictionary<string, string>> items)
         {
             GetMaxHeight(items);
 
@@ -277,7 +277,7 @@ namespace Kitbox_project.Models
         /// <param name="param">The dictionary to sort (it typically is the result of the database query).</param>
         /// <param name="ignoredColumns">The columns (=keys) to don't sort.</param>
         /// <returns>The sorted dictionary.</returns>
-        public Dictionary<string, List<string>> SortList(Dictionary<string, List<string>> param, List<string> ignoredColumns = null)
+        private Dictionary<string, List<string>> SortList(Dictionary<string, List<string>> param, List<string> ignoredColumns = null)
         {
             ignoredColumns ??= new List<string> { "Quantity", "Price", "Color", "Material" };
 
@@ -317,7 +317,7 @@ namespace Kitbox_project.Models
         /// </param>
         /// <returns> The formatted dictionary.
         /// </returns>
-        public Dictionary<string, int> FormatValues(List<Dictionary<string, string>> res)
+        private Dictionary<string, int> FormatValues(List<Dictionary<string, string>> res)
         {
             string columnKey = "Code";
             string columnValue = "Quantity";
@@ -355,7 +355,7 @@ namespace Kitbox_project.Models
         /// </param>
         /// <returns> The formatted dictionary.
         /// </returns>
-        public Dictionary<string, List<string>> PickerValues(List<Dictionary<string, string>> res, List<string> dims)
+        private Dictionary<string, List<string>> PickerValues(List<Dictionary<string, string>> res, List<string> dims)
         {
             var retVal = new Dictionary<string, List<string>>();
 
