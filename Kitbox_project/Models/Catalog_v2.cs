@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
-using Kitbox_project.DataBase;
-using Kitbox_project.Utilities;
-
-namespace Kitbox_project.Models
+namespace TEST_ORM
 {
     /// <summary> THE ONLY METHOD YOU NEED IN THIS CLASS IS <c>GetValues</c>. OTHER METHODS are used INTERNALLY to format the data.
     /// TO USE THIS CLASS, YOU NEED TO INSTANTIATE IT WITH A <c>DatabaseCatalog</c> OBJECT AND A DICTIONARY OF PARAMETERS. THE PARAMETERS ARE THE FILTERS THAT THE CLIENT HAS SELECTED.
@@ -22,8 +23,15 @@ namespace Kitbox_project.Models
         private Dictionary<string, string> _colorDetails = new Dictionary<string, string>();
         private Dictionary<string, string> _materialDetails = new Dictionary<string, string>();
         private Dictionary<string, object> param;
+        //private readonly DatabaseCatalog _databaseCatalog;
         private readonly DatabaseCatalog _databaseCatalog;
 
+
+        //public Catalog_v3(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
+        //{
+        //    _databaseCatalog = databaseCatalog;
+        //    this.param = param;
+        //}
 
         public Catalog_v3(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
         {
@@ -157,7 +165,7 @@ namespace Kitbox_project.Models
         /// <param name="dims">The columns that set the dimensions of the cabinet (you don't need to touch it). By default : <code>{ "Width", "Height", "Depth" }</code> </param>
         /// <param name="columns">The columns that the query to the database will use. Example : <code>{ "Width", "Height"}</code>By default, these columns will be selected : <code>{ "Reference", "Code", "Width", "Height", "Depth", "Color", "Material", "Cabinet_Height", "Price", "Quantity" }</code></param>
         /// <returns>tuple[0] informations for the order and to check part number; tuple[1] informations for the pickers</returns>
-        public (Dictionary<string, int>, Dictionary<string, List<string>>) GetValues(List<string> columns = null, List<string> dims = null)
+        public async Task<(Dictionary<string, int>, Dictionary<string, List<string>>)> GetValues(List<string> columns = null, List<string> dims = null)
         {
             var request = new Dictionary<string, string>();
 
@@ -183,8 +191,10 @@ namespace Kitbox_project.Models
             CheckTotalHeight();
             CheckColorMaterialFilter();
 
-            var res = _databaseCatalog.GetCatalogData(request, columnsParameter: columns);
-            var filtered = FilterItems(res);
+            //var res = _databaseCatalog.GetCatalogData(request, columnsParameter: columns);
+            var taskRequestDB = _databaseCatalog.GetCatalogData(request, columnsParameter: columns);
+            var result = await taskRequestDB;
+            var filtered = FilterItems(result);
             var orderAns = FormatValues(filtered);
             var pickerAns = PickerValues(filtered, dims);
 
