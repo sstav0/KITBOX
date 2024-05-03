@@ -19,46 +19,121 @@ namespace Kitbox_project.ViewModels
         public ICommand OnAddLockerButtonClicked { get; }
         public ICommand OnResetLockerButtonClicked { get; } 
 
-        //private static Color color1 = new Color(255, 152, 12);
-        //private static Color color2 = new Color(255, 100, 100);
-        private static Door door1 = new Door("color1", "wood", 12, 12);
-        private static Door door2 = new Door("color2", "wood", 12, 12);
-        private static Locker locker1 = new Locker(12, 12, 12, "Lyla", door1, 45.4);
-        private static Locker locker2 = new Locker(12, 12, 10, "Purple", door1, 45.4);
-        private static Locker locker3 = new Locker(12, 12, 15, "Purple", door1, 45.4);
-
-
-
-
-        private List<Door> doors = new List<Door>();
-        private List<Locker> lockers = new List<Locker>();
-
-        private List<Door> availableDoor = new List<Door>();
-        private List<Locker> availableLocker = new List<Locker>();
-
-        private List<Door> allDoor = new List<Door>();
-        private List<Locker> allLocker = new List<Locker>();
-
         private bool selectColorEnabler = true;
-
-        private string oldSelectedDepth = null;
 
         DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
 
+        private List<string> oldItemSourceLockerColor = ["empty"];
+        private List<string> oldItemSourceLockerHeight = ["empty"];
+        private List<string> oldItemSourceLockerDepth = ["empty"];
+        private List<string> oldItemSourceLockerWidth= ["empty"];
+        private List<string> oldItemSourceAngleIronColor = ["empty"];
+        private List<string> oldItemSourceDoorPickerMaterial = ["empty"];
+        private List<string> oldItemSourceDoorPicker = ["empty"];
+
+        private List<Locker> availableLocker = new List<Locker>();
+
+
+        //Source Item for picker
+        private List<string> _itemSourceAngleIronColor;
+        public List<string> ItemSourceAngleIronColor
+        {
+            get => _itemSourceAngleIronColor;
+            set
+            {
+                if (_itemSourceAngleIronColor != value)
+                {
+                    _itemSourceAngleIronColor = value;
+                    OnPropertyChanged();
+                    Debug.WriteLine("AngleIron Change");
+                }
+            }
+        }
+
+        private List<string> _itemSourceDoorPicker;
+        public List<string> ItemSourceDoorPicker
+        {
+            get => _itemSourceDoorPicker;
+            set
+            {
+                if (_itemSourceDoorPicker != value)
+                {
+                    _itemSourceDoorPicker = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private List<string> _itemSourceDoorPickerMaterial;
+        public List<string> ItemSourceDoorPickerMaterial
+        {
+            get => _itemSourceDoorPickerMaterial;
+            set
+            {
+                if (_itemSourceDoorPickerMaterial != value)
+                {
+                    _itemSourceDoorPickerMaterial = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private List<string> _itemSourceLockerHeight;
+        public List<string> ItemSourceLockerHeight
+        {
+            get => _itemSourceLockerHeight;
+            set
+            {
+                if (_itemSourceLockerHeight != value)
+                {
+                    _itemSourceLockerHeight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private List<string> _itemSourceLockerColor;
+        public List<string> ItemSourceLockerColor
+        {
+            get => _itemSourceLockerColor;
+            set
+            {
+                if (_itemSourceLockerColor != value)
+                {
+                    _itemSourceLockerColor = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        private List<string> _itemSourceLockerDepth;
+        public List<string> ItemSourceLockerDepth
+        {
+            get => _itemSourceLockerDepth;
+            set
+            {
+                if (_itemSourceLockerDepth != value)
+                {
+                    _itemSourceLockerDepth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private List<string> _itemSourceLockerWidth;
+        public List<string> ItemSourceLockerWidth
+        {
+            get => _itemSourceLockerWidth;
+            set
+            {
+                if (_itemSourceLockerWidth != value)
+                {
+                    _itemSourceLockerWidth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public CabinetViewModel()
         {
-
-            availableDoor.Add(door1);
-            availableDoor.Add(door2);
-
-            availableLocker.Add(locker1);
-            availableLocker.Add(locker2);
-            availableLocker.Add(locker3);
-
-            allDoor = availableDoor;
-            allLocker = availableLocker;
-
             Lockers = new ObservableCollection<LockerViewModel>();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalPrice();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalSize();
@@ -179,7 +254,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedAngleIronColor != value)
                 {
                     _selectedAngleIronColor = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("2");
                 }
@@ -195,7 +270,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedLockerColorItem != value)
                 {
                     _selectedLockerColorItem = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("3");
                 }
@@ -210,7 +285,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedHeightItem != value)
                 {
                     _selectedHeightItem = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("4");
                 }
@@ -225,7 +300,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDoorColorItem != value)
                 {
                     _selectedDoorColorItem = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("5");
                 }
@@ -241,7 +316,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDoorMaterialItem != value)
                 {
                     _selectedDoorMaterialItem = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("6");
                 }
@@ -257,7 +332,7 @@ namespace Kitbox_project.ViewModels
                 if (_selectedDepthItem != value)
                 {
                     _selectedDepthItem = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("7");
                 }
@@ -272,109 +347,13 @@ namespace Kitbox_project.ViewModels
                 if (_selectedWidthItem != value)
                 {
                     _selectedWidthItem = value;
-                    UpdateAvailability();
+                    //UpdateAvailability();
                     OnPropertyChanged();
                     Debug.WriteLine("8");
                 }
             }
         }
 
-        //Source Item for picker
-        private List<string> _itemSourceAngleIronColor;
-        public List<string> ItemSourceAngleIronColor
-        {
-            get => _itemSourceAngleIronColor;
-            set
-            {
-                if (_itemSourceAngleIronColor != value)
-                {
-                    _itemSourceAngleIronColor = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private List<string> _itemSourceDoorPicker;
-        public List<string> ItemSourceDoorPicker
-        {
-            get => _itemSourceDoorPicker;
-            set
-            {
-                if (_itemSourceDoorPicker != value)
-                {
-                    _itemSourceDoorPicker = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private List<string> _itemSourceDoorPickerMaterial;
-        public List<string> ItemSourceDoorPickerMaterial
-        {
-            get => _itemSourceDoorPickerMaterial;
-            set
-            {
-                if (_itemSourceDoorPickerMaterial != value)
-                {
-                    _itemSourceDoorPickerMaterial = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private List<string> _itemSourceLockerHeight;
-        public List<string> ItemSourceLockerHeight
-        {
-            get => _itemSourceLockerHeight;
-            set
-            {
-                if (_itemSourceLockerHeight != value)
-                {
-                    _itemSourceLockerHeight = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private List<string> _itemSourceLockerColor;
-        public List<string> ItemSourceLockerColor
-        {
-            get => _itemSourceLockerColor;
-            set
-            {   
-                if (_itemSourceLockerColor != value)
-                {
-                    _itemSourceLockerColor = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        private List<string> _itemSourceLockerDepth;
-        public List<string> ItemSourceLockerDepth
-        {
-            get => _itemSourceLockerDepth;
-            set
-            {
-                if ( _itemSourceLockerDepth != value)
-                {
-                    _itemSourceLockerDepth = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private List<string> _itemSourceLockerWidth;
-        public List<string> ItemSourceLockerWidth
-        {
-            get => _itemSourceLockerWidth;
-            set
-            {
-                if ( _itemSourceLockerWidth != value)
-                {
-                    _itemSourceLockerWidth = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
 
         private float _price;
@@ -462,8 +441,8 @@ namespace Kitbox_project.ViewModels
             else
             {
                 selectColorEnabler = false;
-                SelectedDoorColorItem = null;
-                SelectedDoorMaterialItem = null;
+                //SelectedDoorColorItem = null;
+                //SelectedDoorMaterialItem = null;
             }
             ShowColorPicker();
         }
@@ -474,12 +453,9 @@ namespace Kitbox_project.ViewModels
             IsDoorPickerVisible = selectColorEnabler;
         }
 
-        //Interlink between every parameters
-        //Update ItemSourcePicker Lists to make sure they match the possibility of the catalog
-        private async void UpdateAvailability()
+        public async void UpdatePickerList(string param)//, string selectedItem)
         {
-            Debug.WriteLine("UpdateAvailability Begin");
-
+            Debug.WriteLine("UpdatePickerList -- -- --");
             Catalog c = new Catalog(new DatabaseCatalog("storekeeper", "storekeeper"));
 
             var selectedValues = new Dictionary<string, object> {
@@ -487,37 +463,49 @@ namespace Kitbox_project.ViewModels
                                 { "Panel_color", _selectedLockerColorItem }, { "Height", _selectedHeightItem },
                                 { "Door", _isDoorChecked }, { "Door_color", _selectedDoorColorItem },
                                 {"Angle_color", _selectedAngleIronColor }, {"Door_material", _selectedDoorMaterialItem}};
+            //The method is called when the picker is open so we can ignore the picker for the catalog search and set it to 'null'
+            selectedValues[param] = null;
 
             var data = await c.GetValues(selectedValues);
 
             data.TryGetValue("Height", out List<object> heightList);
-            if (SelectedLockerColorItem == null) { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedDepthItem == null) { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedHeightItem == null) { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedWidthItem == null) { ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedDoorColorItem == null) { ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedAngleIronColor == null) { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString()); }
-            if (SelectedDoorMaterialItem == null) { ItemSourceDoorPickerMaterial = data["Door_material"].ConvertAll(obj => obj.ToString()); }
-            
 
-            if (ItemSourceDoorPicker.Count < 0)
+            List<string> newValue = data[param].ConvertAll(obj => obj.ToString());
+
+            //Check the aimed picker and get the possible items for the picker  
+            if (param == "Panel_color" && !newValue.SequenceEqual(oldItemSourceLockerColor))             { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString());            oldItemSourceLockerColor = ItemSourceLockerColor; Debug.WriteLine("H1"); }
+            if (param == "Depth" && !newValue.SequenceEqual(oldItemSourceLockerDepth))                   { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString());                  oldItemSourceLockerDepth = ItemSourceLockerDepth; Debug.WriteLine("H2"); }
+            if (param == "Height" && !newValue.SequenceEqual(oldItemSourceLockerHeight))                 { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString());                oldItemSourceLockerHeight = ItemSourceLockerHeight; Debug.WriteLine("H3"); }
+            if (param == "Width" && !newValue.SequenceEqual(oldItemSourceLockerWidth))                   { ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString());                  oldItemSourceLockerWidth = ItemSourceLockerWidth;                           }
+            if (param == "Door_color" && !newValue.SequenceEqual(oldItemSourceDoorPicker))               { ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString());              oldItemSourceDoorPicker = ItemSourceDoorPicker;                             }
+            if (param == "Angle_color" && !newValue.SequenceEqual(oldItemSourceAngleIronColor))          { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString());         oldItemSourceAngleIronColor = ItemSourceAngleIronColor;                     }
+            if (param == "Door_material" && !newValue.SequenceEqual(oldItemSourceDoorPickerMaterial))    { ItemSourceDoorPickerMaterial = data["Door_material"].ConvertAll(obj => obj.ToString());   oldItemSourceDoorPickerMaterial = ItemSourceDoorPickerMaterial;             }
+
+
+            if (ItemSourceDoorPicker == null || ItemSourceDoorPicker.Count < 0)
             {
                 EnablecheckDoor = false;
-                Debug.WriteLine("availableDoor.Count < 0");
             }
             else
             {
                 EnablecheckDoor = true;
-                if (ItemSourceDoorPicker.Contains("Glass"))
-                {
-                    while (ItemSourceDoorPicker.Contains("Glass"))
-                    {
-                        ItemSourceDoorPicker.Remove("Glass");
-                    }
-                }
-
-                Debug.WriteLine("availableDoor.Count > 0");
             }
+        }
+
+        //Interlink between every parameters
+        //Update ItemSourcePicker Lists to make sure they match the possibility of the catalog
+        private void UpdateAvailability()
+        {
+            Debug.WriteLine("UpdateAvailability ---");
+
+            UpdatePickerList("Depth");
+            UpdatePickerList("Panel_color");
+            UpdatePickerList("Height");
+            UpdatePickerList("Width");
+            UpdatePickerList("Door_color");
+            UpdatePickerList("Angle_color");
+            UpdatePickerList("Door_material");
+
             Debug.WriteLine("UpdateAvailability End");
         }
 
@@ -526,7 +514,6 @@ namespace Kitbox_project.ViewModels
         private void ResetLocker()
         {
             Debug.WriteLine("ResetLocker");
-            //IsGlassVisible = false; //IsGlassChecked = false; //IsGlassEnabled = true;
 
             EnablecheckDoor = true; IsDoorChecked = false; IsDoorPickerVisible = false;
 
