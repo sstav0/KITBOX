@@ -111,14 +111,34 @@ namespace Kitbox_project.Views
 
         }
 
-
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
-            if (_viewModel.AvailableLockers.Count >= 7)
+            if (_viewModel.AvailableLockers.Count >= 7 )
             {
                 // Display an alert or perform any other action
                 return;
+            }
+            //Check if pickers are correctly completed
+            if (_viewModel.selectedValues.ContainsValue(null))
+            {
+                if (!_viewModel.IsDoorChecked)
+                {
+                    Dictionary<string, object> data = _viewModel.selectedValues;
+                    data.Remove("Door_color");
+                    data.Remove("Door_material");
+                    if (data.ContainsValue(null))
+                    {
+                        Debug.WriteLine(" -- Empty Pickers !! -- ");
+                        return;
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine(" -- Empty Pickers !! -- ");
+                    return;
+                }
+
             }
 
             // Create a new LockerViewModel based on the selected parameters
@@ -129,7 +149,7 @@ namespace Kitbox_project.Views
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
                 Door = door,
-                NotePartsAvailability = "NotePartsAvailability(ARTHUR)"
+                NotePartsAvailability = _viewModel.NotePartsAvailability()
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;

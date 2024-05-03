@@ -32,7 +32,7 @@ namespace Kitbox_project.ViewModels
         private List<string> oldItemSourceDoorPicker = ["empty"];
 
         private List<Locker> availableLocker = new List<Locker>();
-
+        public Dictionary<string,object> selectedValues = new Dictionary<string,object>();
 
         //Source Item for picker
         private List<string> _itemSourceAngleIronColor;
@@ -458,12 +458,14 @@ namespace Kitbox_project.ViewModels
             Debug.WriteLine("UpdatePickerList -- -- --");
             Catalog c = new Catalog(new DatabaseCatalog("storekeeper", "storekeeper"));
 
-            var selectedValues = new Dictionary<string, object> {
+            selectedValues = new Dictionary<string, object> {
                                 { "Width", _selectedWidthItem }, { "Depth", _selectedDepthItem },
                                 { "Panel_color", _selectedLockerColorItem }, { "Height", _selectedHeightItem },
                                 { "Door", _isDoorChecked }, { "Door_color", _selectedDoorColorItem },
                                 {"Angle_color", _selectedAngleIronColor }, {"Door_material", _selectedDoorMaterialItem}};
+
             //The method is called when the picker is open so we can ignore the picker for the catalog search and set it to 'null'
+            var savedSelectedValue = selectedValues[param];
             selectedValues[param] = null;
 
             var data = await c.GetValues(selectedValues);
@@ -473,14 +475,16 @@ namespace Kitbox_project.ViewModels
             List<string> newValue = data[param].ConvertAll(obj => obj.ToString());
 
             //Check the aimed picker and get the possible items for the picker  
-            if (param == "Panel_color" && !newValue.SequenceEqual(oldItemSourceLockerColor))             { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString());            oldItemSourceLockerColor = ItemSourceLockerColor; Debug.WriteLine("H1"); }
-            if (param == "Depth" && !newValue.SequenceEqual(oldItemSourceLockerDepth))                   { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString());                  oldItemSourceLockerDepth = ItemSourceLockerDepth; Debug.WriteLine("H2"); }
-            if (param == "Height" && !newValue.SequenceEqual(oldItemSourceLockerHeight))                 { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString());                oldItemSourceLockerHeight = ItemSourceLockerHeight; Debug.WriteLine("H3"); }
+            if (param == "Panel_color" && !newValue.SequenceEqual(oldItemSourceLockerColor))             { ItemSourceLockerColor = data["Panel_color"].ConvertAll(obj => obj.ToString());            oldItemSourceLockerColor = ItemSourceLockerColor;                           }
+            if (param == "Depth" && !newValue.SequenceEqual(oldItemSourceLockerDepth))                   { ItemSourceLockerDepth = data["Depth"].ConvertAll(obj => obj.ToString());                  oldItemSourceLockerDepth = ItemSourceLockerDepth;                           }
+            if (param == "Height" && !newValue.SequenceEqual(oldItemSourceLockerHeight))                 { ItemSourceLockerHeight = data["Height"].ConvertAll(obj => obj.ToString());                oldItemSourceLockerHeight = ItemSourceLockerHeight;                         }
             if (param == "Width" && !newValue.SequenceEqual(oldItemSourceLockerWidth))                   { ItemSourceLockerWidth = data["Width"].ConvertAll(obj => obj.ToString());                  oldItemSourceLockerWidth = ItemSourceLockerWidth;                           }
             if (param == "Door_color" && !newValue.SequenceEqual(oldItemSourceDoorPicker))               { ItemSourceDoorPicker = data["Door_color"].ConvertAll(obj => obj.ToString());              oldItemSourceDoorPicker = ItemSourceDoorPicker;                             }
             if (param == "Angle_color" && !newValue.SequenceEqual(oldItemSourceAngleIronColor))          { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString());         oldItemSourceAngleIronColor = ItemSourceAngleIronColor;                     }
             if (param == "Door_material" && !newValue.SequenceEqual(oldItemSourceDoorPickerMaterial))    { ItemSourceDoorPickerMaterial = data["Door_material"].ConvertAll(obj => obj.ToString());   oldItemSourceDoorPickerMaterial = ItemSourceDoorPickerMaterial;             }
 
+            //Re-give the ignored value of the selectedPickerItem to selectedValues Dict (for other applications)
+            selectedValues[param] = savedSelectedValue;
 
             if (ItemSourceDoorPicker == null || ItemSourceDoorPicker.Count < 0)
             {
@@ -509,6 +513,29 @@ namespace Kitbox_project.ViewModels
             Debug.WriteLine("UpdateAvailability End");
         }
 
+        public string NotePartsAvailability()
+        {
+            Debug.WriteLine("NotePartsAvailability ---");
+            string message = "Somme parts are currently not in our stock";
+
+            Catalog_v3 c = new Catalog_v3(new DatabaseCatalog("storekeeper", "storekeeper"), selectedValues);
+
+            var data = c.GetValues();
+
+            Dictionary<string, int> refDict = data.Item1;
+            
+            foreach(string i in refDict.Keys)
+            {
+                Debug.WriteLine(i + " :" + refDict[i]);
+                /*
+                if (refDict[i] <= 0)
+                {
+                }
+                */
+            }
+
+            return "";
+        }
 
         //Reset all the checkboxes and pickers
         private void ResetLocker()
