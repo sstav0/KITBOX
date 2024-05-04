@@ -124,6 +124,30 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public async Task EditIsInCatalog(StockItemViewModel stockItem)
+        {
+            if(stockItem.InCatalog == true)
+            {
+                stockItem.InCatalog = false;
+
+                stockItem.DirectorButtonText = "Add to Catalog";
+
+                //await DBCatalog_save.Update(
+                //        new Dictionary<string, object> { { "BoolInCatalog", stockItem.IsInCatalog } },
+                //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
+            }
+            else
+            {
+                stockItem.InCatalog = true;
+
+                stockItem.DirectorButtonText = "Remove from Catalog";
+
+                //await DBCatalog_save.Update(
+                //        new Dictionary<string, object> { { "Price", stockItem.IsInCatalog } },
+                //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -139,10 +163,10 @@ namespace Kitbox_project.ViewModels
             private string _inputQuantity;
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
+            private string _directorButtonText;
 
             private List<PriceItem> _priceItems = new List<PriceItem>();
             private double _catalogPrice;
-            private bool _isInCatalog;
             private bool _isEditingPrice;
             private string _priceButtonText;
             private Color _priceButtonColor;
@@ -153,7 +177,7 @@ namespace Kitbox_project.ViewModels
             private DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
             private DatabaseCatalogPrices DBCatalogPrices = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
-            public StockItemViewModel(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity)
+            public StockItemViewModel(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
             {
                 IsEditing = false;
                 ButtonText = "Edit";
@@ -164,7 +188,14 @@ namespace Kitbox_project.ViewModels
                 IsEditingPrice = false;
                 PriceButtonText = "Edit";
                 PriceButtonColor = Color.Parse("#512BD4");
-                IsInCatalog = true;
+                if (inCatalog) 
+                { 
+                    DirectorButtonText = "Remove from Catalog";
+                }
+                else
+                {
+                    DirectorButtonText = "Add to Catalog";
+                }
 
             }
             public bool IsEditing
@@ -228,6 +259,16 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
+            public string DirectorButtonText
+            {
+                get => _directorButtonText;
+                set
+                {
+                    _directorButtonText = value;
+                    OnPropertyChanged(nameof(DirectorButtonText));
+                }
+            }
+
             public List<PriceItem> PriceItems
             {
                 get => _priceItems;
@@ -245,16 +286,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _catalogPrice = value;
                     OnPropertyChanged(nameof(CatalogPrice));
-                }
-            }
-
-            public bool IsInCatalog
-            {
-                get => _isInCatalog;
-                set
-                {
-                    _isInCatalog = value;
-                    OnPropertyChanged(nameof(IsInCatalog));
                 }
             }
 
@@ -312,7 +343,7 @@ namespace Kitbox_project.ViewModels
             public static List<StockItemViewModel> ConvertToViewModels(IEnumerable<StockItem> stockItems)
             {
                 // Return the list of stock items as a list of stock item view models
-                return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity, item.IncomingQuantity, item.OutgoingQuantity)).ToList();
+                return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity, item.IncomingQuantity, item.OutgoingQuantity, item.InCatalog)).ToList();
             }
 
             public void ValidateQuantity()

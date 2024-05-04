@@ -94,6 +94,7 @@
                     Grid.Column="0"
                     Margin="10"
                     BackgroundColor="White"
+                    Focused="LockerWidthPickerFocused"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemSourceLockerWidth}"
                     SelectedItem="{Binding SelectedWidthItem}" />
@@ -104,6 +105,7 @@
                     Grid.Column="1"
                     Margin="10"
                     BackgroundColor="White"
+                    Focused="LockerDepthPickerFocused"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemSourceLockerDepth}"
                     SelectedItem="{Binding SelectedDepthItem}" />
@@ -114,6 +116,7 @@
                     Grid.Column="2"
                     Margin="10"
                     BackgroundColor="White"
+                    Focused="AngleIronColorPickerFocused"
                     HorizontalOptions="Center"
                     ItemsSource="{Binding ItemSourceAngleIronColor}"
                     SelectedItem="{Binding SelectedAngleIronColor}" />
@@ -203,6 +206,7 @@
                     Grid.ColumnSpan="2"
                     Margin="10"
                     BackgroundColor="White"
+                    Focused="LockerColorPickerFocused"
                     HorizontalOptions="CenterAndExpand"
                     ItemsSource="{Binding ItemSourceLockerColor}"
                     SelectedItem="{Binding SelectedLockerColorItem}" />
@@ -213,6 +217,7 @@
                     Grid.ColumnSpan="2"
                     Margin="10"
                     BackgroundColor="White"
+                    Focused="LockerHeightPickerFocused"
                     HorizontalOptions="CenterAndExpand"
                     ItemsSource="{Binding ItemSourceLockerHeight}"
                     SelectedItem="{Binding SelectedHeightItem}" />
@@ -286,6 +291,7 @@
                             Grid.Column="2"
                             Margin="10"
                             BackgroundColor="White"
+                            Focused="DoorMaterialPickerFocused"
                             HorizontalOptions="CenterAndExpand"
                             IsVisible="{Binding IsDoorPickerVisible}"
                             ItemsSource="{Binding ItemSourceDoorPickerMaterial}"
@@ -297,6 +303,7 @@
                             Grid.Column="3"
                             Margin="10"
                             BackgroundColor="White"
+                            Focused="DoorColorPickerFocused"
                             HorizontalOptions="CenterAndExpand"
                             IsVisible="{Binding IsDoorPickerVisible}"
                             ItemsSource="{Binding ItemSourceDoorPicker}"
@@ -330,8 +337,8 @@
             BackgroundColor="#FFFFFFFF"
             StrokeShape="RoundRectangle 10,10,10,10">
 
-            <ScrollView >
-                <VerticalStackLayout BindableLayout.ItemsSource="{Binding AvailableLockers}" x:Name="lockersStackLayout">
+            <ScrollView>
+                <VerticalStackLayout x:Name="lockersStackLayout" BindableLayout.ItemsSource="{Binding AvailableLockers}">
 
                     <BindableLayout.ItemTemplate>
                         <DataTemplate>

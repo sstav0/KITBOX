@@ -17,6 +17,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
     private CabinetViewModel _cabviewModel;
+    private PopupCustomerRec popup;
 
     //public ICommand OnUpdateButtonClicked { get; }
 
@@ -28,19 +29,23 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
         LoadRealCart(order);
+        popup = new PopupCustomerRec(Cart,this);
 
-        LogOutButton.Command = new Command(() =>
+    LogOutButton.Command = new Command(() =>
         {
             var otherViewModel = new LogOutViewModel();
             otherViewModel.LogoutCommand.Execute(null);
         });
-
     }
 
     public void DisplayPopup()
     {
-        PopupCustomerRec popup = new PopupCustomerRec(Cart);
+
         this.ShowPopup(popup);
+    }
+    public void ClosePopup()
+    {
+        popup.Close();
     }
 
     private void LoadRealCart(Order order)

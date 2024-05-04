@@ -11,7 +11,7 @@ namespace Kitbox_project.DataBase
 
         public DatabaseCatalog(string id, string password):base(id, password)
         {
-            tablename = "Catalog";
+            tablename = "Catalog_save";
         }
 
 
@@ -21,7 +21,7 @@ namespace Kitbox_project.DataBase
         /// <param name="conditions">The <c>WHERE ...</c> part of the query. Example : <code>{{"Width", 100}, {"Height", 52}}</code> Which means that it'll select the rows where the columns width and height are respectively equal to 100 and 52.</param>
         /// <param name="columnsParameter">Columns that will be selected. Example : <code>{ "Width", "Height", "Depth", "Panel_color", "Door_color" }</code>, by default, it's null which means that every column will be selected.</param>
         /// <returns>A list containing each row that corresponds to the SQL query. You can select the rows you want to get with the parameter <paramref name="columnsParameter"/> Example : <code>{{{"Reference", "Panel horizontal"}, {"Code", "PAH32120BL"}{"Dimensions", "32(p)x120(L)"}, {"Width", "120"}, {"Height", ""}, {"Depth", "32"}, {"Price_sup1", "13.3"}, {"Delay_sup1", 5}, {"Price_sup2", "7.09"}, {"Delay_sup2", "10"}, {"Panel_color", "White"}, {"Door_color", ""} }}, {{"Reference", "Panel back"}, {"Code", "PAR32100BR"}, {"Dimensions", "32(h)x100(L)"},{"Width", "100"}, {"Height", "32"}, {"Depth", ""}, {"Price_sup1", "11.31"}, {"Delay_sup1", "11"}, {"Price_sup2", "8.93"}, {"Delay_sup2", "11"}, {"Panel_color", "Brown"}, {"Door_color", ""}}}</code></returns>
-        public List<Dictionary<string, string>> GetCatalogData(Dictionary<string, string> conditions, List<string> columnsParameter = null)
+        public async Task<List<Dictionary<string, string>>> GetCatalogData(Dictionary<string, string> conditions, List<string> columnsParameter = null)
         {
             List<Dictionary<string, string>> dataList = new List<Dictionary<string, string>>();
 
@@ -35,12 +35,22 @@ namespace Kitbox_project.DataBase
             MySqlConnection connection = new MySqlConnection(connectionString);
             try
             {
-                connection.Open();
+                await connection.OpenAsync();
 
-                // Create WHERE clause for specifying conditions for the SELECT query
-                string whereClause = string.Join(" AND ", conditions.Keys.Select(key => $"({key}=@{key} OR {key} IS NULL)"));
+                var whereClauses = new List<string>();
 
-                // Construct the SQL SELECT query
+                foreach (var pair in conditions)
+                {
+                    string key = pair.Key;
+                    string value = pair.Value.ToString().Replace("'", "''"); // Assurez-vous de gérer les apostrophes pour éviter les injections SQL
+                    whereClauses.Add($"({key}=@{key} OR  {key} IS NULL)");
+                }
+
+                string whereClause = string.Join(" AND ", whereClauses);
+                if (whereClause == "")
+                {
+                    whereClause = "1=1"; // If there are no conditions, select all rows
+                }
                 string query = $"SELECT {columns} FROM {tablename} WHERE {whereClause}";
                 Console.WriteLine(query);
 
@@ -56,10 +66,10 @@ namespace Kitbox_project.DataBase
                 // Create a dictionary to store the result
                 Dictionary<string, string> resultData = new Dictionary<string, string>();
 
-                MySqlDataReader reader = command.ExecuteReader();
+                MySqlDataReader reader = (MySqlDataReader)await command.ExecuteReaderAsync();
 
                 // Execute the SELECT query
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
                     {

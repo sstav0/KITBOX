@@ -33,7 +33,6 @@
                 Grid.Row="0"
                 Padding="0,10"
                 FontSize="30"
-                IsVisible="{Binding warningVisibility}"
                 Text="{Binding PopupText}" />
 
             <Label

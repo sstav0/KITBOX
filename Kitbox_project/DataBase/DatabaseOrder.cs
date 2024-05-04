@@ -11,7 +11,7 @@ public class DatabaseOrder : Database
     public DatabaseOrder(string id, string password) : base(id, password)
     {
 
-        tablename = "Order";
+        tablename = "OrderTable";
     }
 
      public static List<OrderItem> ConvertToOrderItem(List<Dictionary<string, string>> data)

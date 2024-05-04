@@ -42,6 +42,11 @@
             Route="SupplierOrdersPage" />
 
         <ShellContent
+            Title="History of sold products Example"
+            ContentTemplate="{DataTemplate views:SoldHistory}"
+            Route="SoldHistory" />
+
+        <ShellContent
             Title="Login Page"
             ContentTemplate="{DataTemplate views:LoginPage}"
             Route="LoginPage" />
