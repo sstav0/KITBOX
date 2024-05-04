@@ -106,7 +106,7 @@ namespace Kitbox_project.Views
 
         }
 
-        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+        private async void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
             if (_viewModel.AvailableLockers.Count >= 7 )
@@ -144,7 +144,7 @@ namespace Kitbox_project.Views
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
                 Door = door,
-                NotePartsAvailability = _viewModel.NotePartsAvailability()
+                NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync()
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;

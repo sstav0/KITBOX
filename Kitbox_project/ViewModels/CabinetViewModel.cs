@@ -425,19 +425,30 @@ namespace Kitbox_project.ViewModels
             else
             {
                 selectColorEnabler = false;
+                SelectedDoorColorItem = null;
+                SelectedDoorMaterialItem = null;
             }
             ShowColorPicker();
         }
 
-        //show or hide door color picker
+        ///show or hide door color picker
         private void ShowColorPicker()
         {    
             IsDoorPickerVisible = selectColorEnabler;
         }
 
+        /// <summary>
+        /// Updates the list of selectable items for a given picker based on currently selected values in other pickers.
+        /// </summary>
+        /// <param name="param">The key of the picker to update.</param>
+        /// <remarks>
+        /// This method is called when the dropdown menu of a picker is opened. It retrieves the currently selected values in other pickers,
+        /// then updates the list of selectable items for the specified picker based on these values. It also ensures that the currently
+        /// selected item in the picker is preserved when updating the list of selectable items.
+        /// </remarks>
         public async void UpdatePickerList(string param)//, string selectedItem)
         {
-            Debug.WriteLine("UpdatePickerList -- -- --");
+            Debug.WriteLine("--- UpdatePickerList ---");
 
             List<string> newValue = new List<string>(); 
             selectedValues = new Dictionary<string, object> {
@@ -450,9 +461,14 @@ namespace Kitbox_project.ViewModels
             var savedSelectedValue = selectedValues[param];
             selectedValues[param] = null;
 
-            Catalog_v3 c = new Catalog_v3(new DatabaseCatalog("storekeeper", "storekeeper"), selectedValues);
+            Catalog_v3 c = new Catalog_v3(databaseCatalog, selectedValues);
 
             var data = await c.GetPickerValues();
+
+            //Re-give the ignored value of the selectedPickerItem to selectedValues Dict (for other applications)
+            selectedValues[param] = savedSelectedValue;
+
+            Debug.WriteLine(NotePartsAvailabilityAsync());
 
             if (data.Keys.Contains(param))
             {
@@ -469,8 +485,6 @@ namespace Kitbox_project.ViewModels
                 if (param == "Angle_color" && !newValue.SequenceEqual(oldItemSourceAngleIronColor))         { ItemSourceAngleIronColor = data["Angle_color"].ConvertAll(obj => obj.ToString());         oldItemSourceAngleIronColor = ItemSourceAngleIronColor; }
                 if (param == "Door_material" && !newValue.SequenceEqual(oldItemSourceDoorPickerMaterial))   { ItemSourceDoorPickerMaterial = data["Door_material"].ConvertAll(obj => obj.ToString());   oldItemSourceDoorPickerMaterial = ItemSourceDoorPickerMaterial; }
             }
-            //Re-give the ignored value of the selectedPickerItem to selectedValues Dict (for other applications)
-            selectedValues[param] = savedSelectedValue;
 
             if (ItemSourceDoorPicker == null || ItemSourceDoorPicker.Count < 0)
             {
@@ -482,8 +496,16 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        //Interlink between every parameters
-        //Update ItemSourcePicker Lists to make sure they match the possibility of the catalog
+
+
+        /// <summary>
+        /// Updates the availability of selectable items for all pickers based on currently selected values.
+        /// </summary>
+        /// <remarks>
+        /// This method is called to update the availability of selectable items for all pickers. It internally invokes
+        /// the <see cref="UpdatePickerList"/> method for each picker to ensure that the list of selectable items
+        /// corresponds to the currently selected values in other pickers.
+        /// </remarks>
         private void UpdateAvailability()
         {
             Debug.WriteLine("UpdateAvailability ---");
@@ -495,35 +517,22 @@ namespace Kitbox_project.ViewModels
             UpdatePickerList("Door_color");
             UpdatePickerList("Angle_color");
             UpdatePickerList("Door_material");
-
-            Debug.WriteLine("UpdateAvailability End");
         }
 
-        public string NotePartsAvailability()
-        {
-            Task<string> task = NotePartsAvailabilityAsync();
-            task.Wait();
-            return task.Result;
-        }
-        private async Task<string> NotePartsAvailabilityAsync()
+        public async Task<string> NotePartsAvailabilityAsync()
         {
             Debug.WriteLine("NotePartsAvailability ---");
             string message = "Somme parts are currently not in our stock";
 
-            Catalog_v3 c = new Catalog_v3(new DatabaseCatalog("storekeeper", "storekeeper"), selectedValues);
+            Catalog_v3 c = new Catalog_v3(databaseCatalog, selectedValues);
 
             var data = await c.GetValues();
 
             Dictionary<string, int> refDict = data.Item1;
-            
-            foreach(string i in refDict.Keys)
+
+            foreach (string i in refDict.Keys)
             {
                 Debug.WriteLine(i + " :" + refDict[i]);
-                /*
-                if (refDict[i] <= 0)
-                {
-                }
-                */
             }
 
             return "";
