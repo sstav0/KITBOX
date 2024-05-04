@@ -24,9 +24,18 @@ public class DatabaseStock : Database
                 int.Parse(item["Quantity"]),
                 int.Parse(item["IncomingQuantity"]),
                 int.Parse(item["OutgoingQuantity"]),
-                bool.Parse(item["InCatalog"])
+                ParseStockBool(item["InCatalog"])
             ));
         }
         return stockItems;
+    }
+
+    private static bool ParseStockBool(string str)
+    {
+        if (string.IsNullOrEmpty(str) || str is "0")
+        {
+            return false;
+        }
+        return true;
     }
 }
