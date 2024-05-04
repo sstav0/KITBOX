@@ -36,7 +36,6 @@ namespace Kitbox_project.ViewModels
         public Dictionary<string,object> selectedValues = new Dictionary<string,object>();
 
         public DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
-        //Catalog_v3 catalog_V3 = new Catalog_v3(databaseCatalog, selectedValues);
 
         //Source Item for picker
         private List<string> _itemSourceAngleIronColor;
@@ -460,7 +459,7 @@ namespace Kitbox_project.ViewModels
         public async void UpdatePickerList(string param)//, string selectedItem)
         {
             Debug.WriteLine("UpdatePickerList -- -- --");
-            Catalog c = new Catalog(new DatabaseCatalog("storekeeper", "storekeeper"));
+            
 
             selectedValues = new Dictionary<string, object> {
                                 { "Width", _selectedWidthItem }, { "Depth", _selectedDepthItem },
@@ -472,9 +471,13 @@ namespace Kitbox_project.ViewModels
             var savedSelectedValue = selectedValues[param];
             selectedValues[param] = null;
 
-            var data = await c.GetValues(selectedValues);
+            Catalog_v3 c = new Catalog_v3(new DatabaseCatalog("storekeeper", "storekeeper"), selectedValues);
 
-            data.TryGetValue("Height", out List<object> heightList);
+            var newData = await c.GetValues();
+
+            var data = newData.Item2;
+
+            data.TryGetValue("Height", out List<string> heightList);
 
             List<string> newValue = data[param].ConvertAll(obj => obj.ToString());
 
