@@ -68,7 +68,7 @@ namespace Kitbox_project.Models
                 return FormatValues(ans, door, maxs[0], maxs[1], columns);
             }
                         
-            ans = _databaseCatalog.GetCatalogData(selectedValues, columns);
+            ans = await _databaseCatalog.GetCatalogData(selectedValues, columns);
 
             return FormatValues(ans, door, maxs[0], maxs[1], columns);
         }

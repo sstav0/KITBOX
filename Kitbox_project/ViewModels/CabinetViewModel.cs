@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Linq;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Cryptography.X509Certificates;
+using TEST_ORM;
 //using static CoreFoundation.DispatchSource;
 //using Microsoft.UI.Xaml.Controls;
 
@@ -21,7 +22,7 @@ namespace Kitbox_project.ViewModels
 
         private bool selectColorEnabler = true;
 
-        DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+
 
         private List<string> oldItemSourceLockerColor = ["empty"];
         private List<string> oldItemSourceLockerHeight = ["empty"];
@@ -33,6 +34,9 @@ namespace Kitbox_project.ViewModels
 
         private List<Locker> availableLocker = new List<Locker>();
         public Dictionary<string,object> selectedValues = new Dictionary<string,object>();
+
+        public DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+        //Catalog_v3 catalog_V3 = new Catalog_v3(databaseCatalog, selectedValues);
 
         //Source Item for picker
         private List<string> _itemSourceAngleIronColor;
@@ -515,12 +519,18 @@ namespace Kitbox_project.ViewModels
 
         public string NotePartsAvailability()
         {
+            Task<string> task = NotePartsAvailabilityAsync();
+            task.Wait();
+            return task.Result;
+        }
+        private async Task<string> NotePartsAvailabilityAsync()
+        {
             Debug.WriteLine("NotePartsAvailability ---");
             string message = "Somme parts are currently not in our stock";
 
             Catalog_v3 c = new Catalog_v3(new DatabaseCatalog("storekeeper", "storekeeper"), selectedValues);
 
-            var data = c.GetValues();
+            var data = await c.GetValues();
 
             Dictionary<string, int> refDict = data.Item1;
             
