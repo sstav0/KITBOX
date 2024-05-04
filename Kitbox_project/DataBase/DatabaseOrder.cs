@@ -13,5 +13,23 @@ public class DatabaseOrder : Database
 
         tablename = "Order";
     }
+
+     public static List<OrderItem> ConvertToOrderItem(List<Dictionary<string, string>> data)
+    {
+        List<OrderItem> orderItems = new List<OrderItem>();
+        foreach (var item in data)
+        {
+            orderItems.Add(new OrderItem(
+                int.Parse(item["idOrder"]),
+                int.Parse(item["idCustomer"]),
+,               int.Parse(item["Quantity"]),
+                item["Code"],
+                item["Date"]
+                
+                
+            ));
+        }
+        return orderItems;
+    }
 }
 
