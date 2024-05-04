@@ -445,11 +445,13 @@ namespace TEST_ORM
                     }
                 }
             }
-            availableHeight = partDict["Height"];
-            availableDepth = partDict["Depth"];
-            availableWidth = partDict["Width"];
 
-            //List<string> commonValues = list1.Intersect(list2).Intersect(list3).Intersect(list4).ToList();
+            if (partDict.ContainsKey("Height") && partDict["Height"] != null)         { availableHeight = partDict["Height"]; }
+            if (partDict.ContainsKey("Depth") && partDict["Depth"] != null)          { availableDepth = partDict["Depth"]; }
+            if (partDict.ContainsKey("Width") && partDict["Width"] != null)          { availableWidth = partDict["Width"]; }
+            if (partDict.ContainsKey("Door Color") && partDict["Door Color"] != null)     { availableDoorColor = partDict["Door Color"]; }
+            if (partDict.ContainsKey("Door Material") && partDict["Door Material"] != null)  { availableDoorMaterial = partDict["Door Material"]; }
+            if (partDict.ContainsKey("Angle Color") && partDict["Angle Color"]!= null)     {availableAngleColor = partDict["Angle Color"]; }
 
             Dictionary<string,List<string>> returnValues = new Dictionary<string, List<string>> {
                                 { "Width", availableWidth }, { "Depth", availableDepth },
