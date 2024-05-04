@@ -67,27 +67,22 @@ namespace Kitbox_project.Views
         void DoorColorPickerFocused (object sender, FocusEventArgs e)
         {
             _viewModel.UpdatePickerList("Door_color");
-
         }
         void LockerHeightPickerFocused (object sender, FocusEventArgs e)
         {
             _viewModel.UpdatePickerList("Height");
-
         }
         void LockerWidthPickerFocused (object sender, FocusEventArgs e)
         {
             _viewModel.UpdatePickerList("Width");
-
         }
         void LockerColorPickerFocused (object sender, FocusEventArgs e)
         {
             _viewModel.UpdatePickerList("Panel_color");
-
         }
         void AngleIronColorPickerFocused (object sender, FocusEventArgs e)
         {
             _viewModel.UpdatePickerList("Angle_color");
-
         }
 
 

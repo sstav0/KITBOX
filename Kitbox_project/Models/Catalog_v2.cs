@@ -112,21 +112,24 @@ namespace TEST_ORM
         {
             foreach (var item in this.param)
             {
-                var key = item.Key;
-                var value = item.Value.ToString();
+                if (item.Value != null) {
+                    var key = item.Key;
+                    var value = item.Value.ToString();
 
-                if (key.EndsWith("_color"))
-                {
-                    // Extract element name and assign the color to it
-                    var element = key.Substring(0, key.IndexOf("_color"));
-                    ColorDetails[element] = value;
+                    if (key.EndsWith("_color"))
+                    {
+                        // Extract element name and assign the color to it
+                        var element = key.Substring(0, key.IndexOf("_color"));
+                        ColorDetails[element] = value;
+                    }
+                    else if (key.EndsWith("_material"))
+                    {
+                        // Extract element name and assign the material to it
+                        var element = key.Substring(0, key.IndexOf("_material"));
+                        MaterialDetails[element] = value;
+                    }
                 }
-                else if (key.EndsWith("_material"))
-                {
-                    // Extract element name and assign the material to it
-                    var element = key.Substring(0, key.IndexOf("_material"));
-                    MaterialDetails[element] = value;
-                }
+
             }
         }
 
@@ -182,7 +185,7 @@ namespace TEST_ORM
 
             foreach (var item in dims)
             {
-                if (param.ContainsKey(item))
+                if (param.ContainsKey(item) && param[item] != null)
                 {
                     request.Add(item, param[item].ToString());
                 }
@@ -408,5 +411,53 @@ namespace TEST_ORM
             }
             return SortList(retVal, ignoredColumns: new List<string> { });
         }
+
+        public async Task<Dictionary<string, List<string>>> GetPickerValues()
+        {
+            List<string> availableWidth = new List<string>();
+            List<string> availableHeight = new List<string>();  
+            List<string> availableDepth = new List<string>();
+            List<string> availablePanelColor = new List<string>();
+            List<string> availableAngleColor = new List<string>();  
+            List<string> availableDoorColor = new List<string>();
+            List<string> availableDoorMaterial = new List<string>();
+
+            var newData = await GetValues();
+            Dictionary<string, List<string>> partDict = newData.Item2;
+
+            bool panelColorflag = false;
+
+            foreach (var part in partDict)
+            {
+                if (part.Value != null)
+                {
+                    if (part.Key.Contains("Panel", StringComparison.OrdinalIgnoreCase) && part.Key.Contains("color", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!panelColorflag)
+                        {
+                            availablePanelColor = part.Value;
+                            panelColorflag = true;
+                        }
+                        else
+                        {
+                            availablePanelColor = availablePanelColor.Intersect(part.Value).ToList();
+                        }
+                    }
+                }
+            }
+            availableHeight = partDict["Height"];
+            availableDepth = partDict["Depth"];
+            availableWidth = partDict["Width"];
+
+            //List<string> commonValues = list1.Intersect(list2).Intersect(list3).Intersect(list4).ToList();
+
+            Dictionary<string,List<string>> returnValues = new Dictionary<string, List<string>> {
+                                { "Width", availableWidth }, { "Depth", availableDepth },
+                                { "Panel_color", availablePanelColor }, { "Height", availableHeight },
+                                { "Door_color", availableDoorColor }, {"Angle_color", availableAngleColor }, 
+                                {"Door_material", availableDoorMaterial}};
+
+            return returnValues;
+        }     
     }
 }
