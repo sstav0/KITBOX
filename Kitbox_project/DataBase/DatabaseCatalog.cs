@@ -11,7 +11,7 @@ namespace Kitbox_project.DataBase
 
         public DatabaseCatalog(string id, string password):base(id, password)
         {
-            tablename = "Catalog_save";
+            tablename = "Catalog";
         }
 
 
