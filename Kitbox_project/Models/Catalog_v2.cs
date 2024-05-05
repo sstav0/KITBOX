@@ -398,14 +398,18 @@ namespace TEST_ORM
 
                     if (dims.Contains(key))
                     {
-                        if (retVal.ContainsKey(key))
+                        if (item[key] != null && item[key] != "")
                         {
-                            retVal[key].Add(item[key]);
+                            if (retVal.ContainsKey(key))
+                            {
+                                retVal[key].Add(item[key]);
+                            }
+                            else
+                            {
+                                retVal[key] = new List<string> { item[key] };
+                            }
                         }
-                        else
-                        {
-                            retVal[key] = new List<string> { item[key] };
-                        }
+
                     }
                 }
             }
