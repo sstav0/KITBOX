@@ -15,7 +15,7 @@ namespace TEST_ORM
     /// TO USE THIS CLASS, YOU NEED TO INSTANTIATE IT WITH A <c>DatabaseCatalog</c> OBJECT AND A DICTIONARY OF PARAMETERS. THE PARAMETERS ARE THE FILTERS THAT THE CLIENT HAS SELECTED.
     /// THEN YOU CALL THE <c>GetValues</c> METHOD. THIS METHOD RETURNS A TUPLE WHERE THE FIRST ELEMENT IS A DICTIONARY WHERE EACH KEY IS THE REFERENCE OF A PRODUCT AND THE VALUE IS THE QUANTITY OF THIS PRODUCT IN THE CATALOG TABLE. THE SECOND ELEMENT IS A DICTIONARY WHERE EACH KEY
     /// </summary>
-    internal class Catalog_v3
+    internal class Catalog
     {
         private Dictionary<string, string> _regexes = new Dictionary<string, string> { { "Color", @"^(.*?)_color$" }, { "Material", @"^(.*?)_material" } };
         private bool _requiresDoor;
@@ -24,17 +24,9 @@ namespace TEST_ORM
         private Dictionary<string, string> _colorDetails = new Dictionary<string, string>();
         private Dictionary<string, string> _materialDetails = new Dictionary<string, string>();
         private Dictionary<string, object> param;
-        //private readonly DatabaseCatalog _databaseCatalog;
         private readonly DatabaseCatalog _databaseCatalog;
 
-
-        //public Catalog_v3(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
-        //{
-        //    _databaseCatalog = databaseCatalog;
-        //    this.param = param;
-        //}
-
-        public Catalog_v3(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
+        public Catalog(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
         {
             _databaseCatalog = databaseCatalog;
             this.param = param;

@@ -461,7 +461,7 @@ namespace Kitbox_project.ViewModels
             var savedSelectedValue = selectedValues[param];
             selectedValues[param] = null;
 
-            Catalog_v3 c = new Catalog_v3(databaseCatalog, selectedValues);
+            Catalog c = new Catalog(databaseCatalog, selectedValues);
 
             var data = await c.GetPickerValues();
 
@@ -524,7 +524,7 @@ namespace Kitbox_project.ViewModels
             Debug.WriteLine("NotePartsAvailability ---");
             string message = "Somme parts are currently not in our stock";
 
-            Catalog_v3 c = new Catalog_v3(databaseCatalog, selectedValues);
+            Catalog c = new Catalog(databaseCatalog, selectedValues);
 
             var data = await c.GetValues();
 
