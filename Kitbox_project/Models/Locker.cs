@@ -1,9 +1,13 @@
 ﻿using Kitbox_project.Models;
+using Kitbox_project.DataBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TEST_ORM;
+using System.Diagnostics;
+
 
 namespace Kitbox_project.Models
 {
@@ -28,6 +32,7 @@ namespace Kitbox_project.Models
         private Door _door;
         private double _price;
         private int _lockerID;
+        private DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
 
         /// <summary>
         /// This constructor creates a locker with specified dimensions, color, door characteristics, and price.
@@ -91,6 +96,42 @@ namespace Kitbox_project.Models
         {
             get => _lockerID;
             set => _lockerID = value;
+        }
+
+        public async Task<string> GetCatalogRef(string twoletterRef)
+        {
+            bool isDoor = false;
+            if (this.Door != null) { isDoor = true; }
+            Dictionary<string, object> selectedValues = new Dictionary<string, object>
+            {
+                { "Height"              ,this.Height },
+                { "Depth"               ,this.Depth },
+                { "Width"               ,this.Width },
+                { "Door Color"          ,this.Door.Color },
+                { "Door Material"       ,this.Door.Material },
+                { "Door"                ,isDoor },
+                //{ "Angle Color"         ,this.Depth },
+                { "Panel Color"         ,this.Color }
+            };
+
+            Catalog catalog = new Catalog(databaseCatalog, selectedValues);
+            string returnString = "";
+
+            var data = await catalog.GetValues();
+            Dictionary<string, int> references = data.Item1;
+
+            foreach (string item in references.Keys)
+            {
+                if (item.Contains(twoletterRef, StringComparison.OrdinalIgnoreCase)) 
+                {
+                    returnString = item;
+                }  
+                else if (twoletterRef == "DOORBOOL" && this.Door != null)
+                {
+                    returnString = "1";
+                }
+            }
+            return returnString;
         }
     } 
 }

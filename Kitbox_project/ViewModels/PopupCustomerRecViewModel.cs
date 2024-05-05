@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Kitbox_project.Views;
+using Kitbox_project.Models;
 using Microsoft.Maui.Controls;
 using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using TEST_ORM;
+using Kitbox_project.DataBase;
 
 namespace Kitbox_project.ViewModels
 {
@@ -24,6 +27,7 @@ namespace Kitbox_project.ViewModels
         DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
         DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
         DatabaseLocker databaseLocker = new DatabaseLocker("customer", "customer");
+        DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
         private CartPage _parentPage;
         private string idOrder;
         private string idCustomer;
@@ -235,12 +239,11 @@ namespace Kitbox_project.ViewModels
                 { "height",Cart[i].Height},
                 {"quantity",Cart[i].Quantity},
                 {"idOrder",idOrder},
-                {"IronAngleRef","RegisterCart()"} };
+                {"IronAngleRef", await Cart[i].Cabinet.GetObservableLockers()[Cart[i].Cabinet.GetObservableLockers().Count()-1].GetCatalogRef("COR")} };
 
                 await databaseCabinet.Add(cabinetToBeRegistered);
 
                 //Get CabinetID from DB
-
                 Dictionary<string, string> dataCabinetString = new Dictionary<string, string>();
 
                 foreach (var kvp in cabinetToBeRegistered)
@@ -258,24 +261,27 @@ namespace Kitbox_project.ViewModels
                 {
                     idCabinet = cabinetDataList[cabinetDataList.Count- 1]["idCabinet"].ToString();
                     Debug.WriteLine(Cart[i].Cabinet.GetObservableLockers().Count());
+
                     // Register every Locker of the Cabinet in the DB
                     for(int j = 0; j < Cart[i].Cabinet.GetObservableLockers().Count(); j++)
                     {
                         Debug.WriteLine("***** Loop Lockers Regestery *****");
+
                         Dictionary<string, object> lockerToBeRegistered = new Dictionary<string, object>
-                        { { "height",Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
+                        { 
+                        { "height", Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
                         { "color",Cart[i].Cabinet.GetObservableLockers()[j].Color.ToString()},
-                        { "door","RegisterCart()"},
+                        { "door",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("DOORBOOL")},
                         { "price",Cart[i].Cabinet.GetObservableLockers()[j].Price.ToString()},
                         { "idCabinet",idCabinet},
-                        { "sidePanelRef","RegisterCart()"},
-                        { "verticalBattenRef","RegisterCart()"},
-                        { "backPanelRef","RegisterCart()"},
-                        { "horizontalPanelRef","RegisterCart()"},
-                        { "doorRef","RegisterCart()"},
-                        { "sideCrossbarRef","RegisterCart()"},
-                        { "frontCrossbarRef","RegisterCart()"},
-                        { "backCrossbarRef","RegisterCart()"}
+                        { "sidePanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAG")},
+                        { "verticalBattenRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TAS")},
+                        { "backPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAR")},
+                        { "horizontalPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAH")},
+                        { "doorRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("POR")},
+                        { "sideCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRG")},
+                        { "frontCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRF")},
+                        { "backCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRR")}
                         };
 
                         //Debug
