@@ -23,6 +23,7 @@ namespace Kitbox_project.ViewModels
         private ObservableCollection<CartViewModel> Cart;
         public event EventHandler PopupClosed;
         public Command OnOkButtonClicked { get; }
+
         DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
         DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
         DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
@@ -120,11 +121,11 @@ namespace Kitbox_project.ViewModels
         {
             bool invalidData = false;
 
-            if (!string.IsNullOrWhiteSpace(_entryEmail) && _entryEmail.Any(char.IsLetterOrDigit) && _entryEmail.Contains('@'))
+            if (_entryEmail.Any(char.IsLetterOrDigit)  && !string.IsNullOrWhiteSpace(_entryEmail) &&  _entryEmail.Contains('@'))
             {
-                if (!string.IsNullOrWhiteSpace(_entryFirstName) && _entryFirstName.All(char.IsLetter))
+                if (!string.IsNullOrWhiteSpace(_entryFirstName) && (_entryFirstName.All(char.IsLetter) || _entryLastName.Any(char.IsWhiteSpace)))
                 {
-                    if (!string.IsNullOrWhiteSpace(_entryLastName) && _entryLastName.All(char.IsLetter))
+                    if (!string.IsNullOrWhiteSpace(_entryLastName) && (_entryLastName.All(char.IsLetter) || _entryLastName.Any(char.IsWhiteSpace)))
                     {
                         invalidData = false;
                     }

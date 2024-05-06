@@ -78,8 +78,8 @@ namespace Kitbox_project.ViewModels
             private string _supplierName;
             private List<StockItem> _supplierOrderItems = new List<StockItem>()
             {
-                new StockItem(1, "Panel", "PAN", 5, 2, 0),
-                new StockItem(2, "Door", "DOR", 4, 1, 6)
+                new StockItem(1, "Panel", "PAN", 5, 2, 0, true),
+                new StockItem(2, "Door", "DOR", 4, 1, 6, false),
             };
             public List<StockItem> SupplierOrderItems => _supplierOrderItems;
             public ICommand OnReceivedClicked { get; }

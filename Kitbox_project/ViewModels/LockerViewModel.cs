@@ -18,6 +18,18 @@ namespace Kitbox_project.ViewModels
                  }
         }
 
+        //Locker contained in the LockerViewModel
+        private Locker _locker;
+        public Locker Locker
+        {
+            get => _locker;
+            set
+            {
+                _locker = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         // string to notify the missing parts for a Locker
         private string _notePartsAvailability;

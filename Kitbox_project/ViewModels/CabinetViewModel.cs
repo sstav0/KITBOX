@@ -32,6 +32,8 @@ namespace Kitbox_project.ViewModels
         private List<string> oldItemSourceDoorPickerMaterial = ["empty"];
         private List<string> oldItemSourceDoorPicker = ["empty"];
 
+        private Dictionary<string,int> registeredPartsRefQuantity = new Dictionary<string,int>();
+
         private List<Locker> availableLocker = new List<Locker>();
         public Dictionary<string,object> selectedValues = new Dictionary<string,object>();
 
@@ -468,8 +470,6 @@ namespace Kitbox_project.ViewModels
             //Re-give the ignored value of the selectedPickerItem to selectedValues Dict (for other applications)
             selectedValues[param] = savedSelectedValue;
 
-            Debug.WriteLine(NotePartsAvailabilityAsync());
-
             if (data.Keys.Contains(param))
             {
                 newValue = data[param].ConvertAll(obj => obj.ToString());
@@ -519,23 +519,20 @@ namespace Kitbox_project.ViewModels
             UpdatePickerList("Door_material");
         }
 
-        public async Task<string> NotePartsAvailabilityAsync()
+        public async Task<string> NotePartsAvailabilityAsync(Locker lockerToAdd)
         {
             Debug.WriteLine("NotePartsAvailability ---");
             string message = "Somme parts are currently not in our stock";
 
-            Catalog c = new Catalog(databaseCatalog, selectedValues);
-
-            var data = await c.GetValues();
-
-            Dictionary<string, int> refDict = data.Item1;
-
-            foreach (string i in refDict.Keys)
+            var partAvailabilityResult = await lockerToAdd.ArePartsAvailable(registeredPartsRefQuantity);
+            registeredPartsRefQuantity = partAvailabilityResult.Item2;
+            
+            if(partAvailabilityResult.Item1 == true)
             {
-                Debug.WriteLine(i + " :" + refDict[i]);
+                message = "";
             }
 
-            return "";
+            return message;
         }
 
         //Reset all the checkboxes and pickers
