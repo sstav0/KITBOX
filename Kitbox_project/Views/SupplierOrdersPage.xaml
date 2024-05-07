@@ -71,7 +71,7 @@
             <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20">
                 <CollectionView ItemsSource="{Binding SupplierOrders}" SelectionMode="Single">
                     <CollectionView.Header>
-                        <Grid WidthRequest="950" HorizontalOptions="Start">
+                        <Grid WidthRequest="940" HorizontalOptions="Start">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="3*" />
@@ -80,11 +80,11 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Column="0" Margin="10,0,10,10" FontAttributes="Bold" Text="Id" VerticalOptions="Center" />
-                            <Label Grid.Column="1" Margin="10,0,10,10" FontAttributes="Bold" Text="Supplier" VerticalOptions="Center" />
-                            <Label Grid.Column="2" Margin="10,0,10,10" FontAttributes="Bold" Text="Date" VerticalOptions="Center" />
-                            <Label Grid.Column="3" Margin="10,0,10,10" FontAttributes="Bold" Text="Price" VerticalOptions="Center" />
-                            <Label Grid.Column="4" Margin="10,0,10,10" FontAttributes="Bold" Text="Status" VerticalOptions="Center" />
+                            <Label Grid.Column="0" Margin="15,0,10,10" FontAttributes="Bold" Text="Id" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Margin="15,0,10,10" FontAttributes="Bold" Text="Supplier" VerticalOptions="Center" />
+                            <Label Grid.Column="2" Margin="15,0,10,10" FontAttributes="Bold" Text="Date" VerticalOptions="Center" />
+                            <Label Grid.Column="3" Margin="15,0,10,10" FontAttributes="Bold" Text="Price" VerticalOptions="Center" />
+                            <Label Grid.Column="4" Margin="15,0,10,10" FontAttributes="Bold" Text="Status" VerticalOptions="Center" />
                         </Grid>
                     </CollectionView.Header>
 
@@ -123,11 +123,11 @@
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Grid.Column="0" Margin="10" FontAttributes="Bold" Text="Item Reference" VerticalOptions="Center" />
-                                                <Label Grid.Column="1" Margin="10" FontAttributes="Bold" Text="Item Code" VerticalOptions="Center" />
-                                                <Label Grid.Column="2" Margin="10" FontAttributes="Bold" Text="Quantity" VerticalOptions="Center" />
-                                                <Label Grid.Column="3" Margin="10" FontAttributes="Bold" Text="Unit Price" VerticalOptions="Center" />
-                                                <Label Grid.Column="4" Margin="10" FontAttributes="Bold" Text="Total Price" VerticalOptions="Center" />
+                                                <Label Grid.Column="0" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Item Reference" VerticalOptions="Center" />
+                                                <Label Grid.Column="1" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Item Code" VerticalOptions="Center" />
+                                                <Label Grid.Column="2" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Quantity" VerticalOptions="Center" />
+                                                <Label Grid.Column="3" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Unit Price" VerticalOptions="Center" />
+                                                <Label Grid.Column="4" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Total Price" VerticalOptions="Center" />
                                             </Grid>
                                         </CollectionView.Header>
                                         
@@ -159,7 +159,7 @@
                                     </CollectionView>
                                 </uranium:ExpanderView>
                                 <Button Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
-                                <Button Margin="5,5" Padding="14,5" BackgroundColor="Green" Command="{Binding OnReceivedClicked}" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
+                                <Button Command="{Binding OnReceivedClicked}" Margin="5,5" Padding="14,5" BackgroundColor="Green" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
                             </HorizontalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
