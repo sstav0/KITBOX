@@ -74,9 +74,14 @@ namespace Kitbox_project.ViewModels
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
         {
             private bool _supplierOrderVisibility;
-            private List<SupplierOrderViewModel> _supplierOrders;
             private string _date;
             private string _supplierName;
+            private List<StockItem> _supplierOrderItems = new List<StockItem>()
+            {
+                new StockItem(1, "Panel", "PAN", 5, 2, 0, true),
+                new StockItem(2, "Door", "DOR", 4, 1, 6, false),
+            };
+            public List<StockItem> SupplierOrderItems => _supplierOrderItems;
             public ICommand OnReceivedClicked { get; }
             // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
             private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");

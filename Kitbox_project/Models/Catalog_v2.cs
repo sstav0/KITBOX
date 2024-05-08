@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace TEST_ORM
 {
@@ -15,7 +16,7 @@ namespace TEST_ORM
     /// TO USE THIS CLASS, YOU NEED TO INSTANTIATE IT WITH A <c>DatabaseCatalog</c> OBJECT AND A DICTIONARY OF PARAMETERS. THE PARAMETERS ARE THE FILTERS THAT THE CLIENT HAS SELECTED.
     /// THEN YOU CALL THE <c>GetValues</c> METHOD. THIS METHOD RETURNS A TUPLE WHERE THE FIRST ELEMENT IS A DICTIONARY WHERE EACH KEY IS THE REFERENCE OF A PRODUCT AND THE VALUE IS THE QUANTITY OF THIS PRODUCT IN THE CATALOG TABLE. THE SECOND ELEMENT IS A DICTIONARY WHERE EACH KEY
     /// </summary>
-    internal class Catalog_v3
+    internal class Catalog
     {
         private Dictionary<string, string> _regexes = new Dictionary<string, string> { { "Color", @"^(.*?)_color$" }, { "Material", @"^(.*?)_material" } };
         private bool _requiresDoor;
@@ -24,17 +25,9 @@ namespace TEST_ORM
         private Dictionary<string, string> _colorDetails = new Dictionary<string, string>();
         private Dictionary<string, string> _materialDetails = new Dictionary<string, string>();
         private Dictionary<string, object> param;
-        //private readonly DatabaseCatalog _databaseCatalog;
         private readonly DatabaseCatalog _databaseCatalog;
 
-
-        //public Catalog_v3(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
-        //{
-        //    _databaseCatalog = databaseCatalog;
-        //    this.param = param;
-        //}
-
-        public Catalog_v3(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
+        public Catalog(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
         {
             _databaseCatalog = databaseCatalog;
             this.param = param;
@@ -398,14 +391,18 @@ namespace TEST_ORM
 
                     if (dims.Contains(key))
                     {
-                        if (retVal.ContainsKey(key))
+                        if (item[key] != null && item[key] != "")
                         {
-                            retVal[key].Add(item[key]);
+                            if (retVal.ContainsKey(key))
+                            {
+                                retVal[key].Add(item[key]);
+                            }
+                            else
+                            {
+                                retVal[key] = new List<string> { item[key] };
+                            }
                         }
-                        else
-                        {
-                            retVal[key] = new List<string> { item[key] };
-                        }
+
                     }
                 }
             }
@@ -445,11 +442,13 @@ namespace TEST_ORM
                     }
                 }
             }
-            availableHeight = partDict["Height"];
-            availableDepth = partDict["Depth"];
-            availableWidth = partDict["Width"];
 
-            //List<string> commonValues = list1.Intersect(list2).Intersect(list3).Intersect(list4).ToList();
+            if (partDict.ContainsKey("Height") && partDict["Height"] != null)         { availableHeight = partDict["Height"]; }
+            if (partDict.ContainsKey("Depth") && partDict["Depth"] != null)          { availableDepth = partDict["Depth"]; }
+            if (partDict.ContainsKey("Width") && partDict["Width"] != null)          { availableWidth = partDict["Width"]; }
+            if (partDict.ContainsKey("Door Color") && partDict["Door Color"] != null)     { availableDoorColor = partDict["Door Color"]; }
+            if (partDict.ContainsKey("Door Material") && partDict["Door Material"] != null)  { availableDoorMaterial = partDict["Door Material"]; }
+            if (partDict.ContainsKey("Angle Color") && partDict["Angle Color"]!= null)     {availableAngleColor = partDict["Angle Color"]; }
 
             Dictionary<string,List<string>> returnValues = new Dictionary<string, List<string>> {
                                 { "Width", availableWidth }, { "Depth", availableDepth },

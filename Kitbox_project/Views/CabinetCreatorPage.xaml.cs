@@ -106,7 +106,7 @@ namespace Kitbox_project.Views
 
         }
 
-        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+        private async void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
             if (_viewModel.AvailableLockers.Count >= 7 )
@@ -138,13 +138,20 @@ namespace Kitbox_project.Views
 
             // Create a new LockerViewModel based on the selected parameters
             Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            Locker lockerToAdd = new Locker(Convert.ToInt32(_viewModel.SelectedHeightItem),
+                                            Convert.ToInt32(_viewModel.SelectedDepthItem),
+                                            Convert.ToInt32(_viewModel.SelectedWidthItem),
+                                            _viewModel.SelectedLockerColorItem,
+                                            door,
+                                            99999);
 
             LockerViewModel newLocker = new LockerViewModel
             {
+                Locker = lockerToAdd,
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
                 Door = door,
-                NotePartsAvailability = _viewModel.NotePartsAvailability()
+                NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(lockerToAdd)
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;

@@ -4,6 +4,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:models="clr-namespace:Kitbox_project.Models;assembly=Kitbox_project"
     xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
     Title="SupplierOrdersPage"
     BackgroundColor="White"
@@ -45,7 +47,7 @@
                     Text="New Supplier Order"
                     VerticalOptions="CenterAndExpand" />
             </StackLayout>
-            
+
             <Border
                 Margin="5,0,0,0"
                 Stroke="{StaticResource Tertiary}"
@@ -65,146 +67,100 @@
                 </HorizontalStackLayout>
             </HorizontalStackLayout>
 
-            <!-- ListView to display stock data -->
+            <!-- CollectionView to display each supplier order composed of several stock items -->
             <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20">
                 <CollectionView ItemsSource="{Binding SupplierOrders}" SelectionMode="Single">
                     <CollectionView.Header>
-                        <Grid>
+                        <Grid WidthRequest="940" HorizontalOptions="Start">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="3*" />
-                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="100" />
-                                <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
 
-                            <Label
-                                Grid.Column="0"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Id"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="1"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Item Reference"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="2"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Item Code"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="3"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Supplier"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="4"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Date"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="5"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Price"
-                                VerticalOptions="Center" />
-                            <Label
-                                Grid.Column="6"
-                                Margin="10,0,10,10"
-                                FontAttributes="Bold"
-                                Text="Status"
-                                VerticalOptions="Center" />
+                            <Label Grid.Column="0" Margin="15,0,10,10" FontAttributes="Bold" Text="Id" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Margin="15,0,10,10" FontAttributes="Bold" Text="Supplier" VerticalOptions="Center" />
+                            <Label Grid.Column="2" Margin="15,0,10,10" FontAttributes="Bold" Text="Date" VerticalOptions="Center" />
+                            <Label Grid.Column="3" Margin="15,0,10,10" FontAttributes="Bold" Text="Price" VerticalOptions="Center" />
+                            <Label Grid.Column="4" Margin="15,0,10,10" FontAttributes="Bold" Text="Status" VerticalOptions="Center" />
                         </Grid>
                     </CollectionView.Header>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid IsVisible="{Binding SupplierOrderVisibility}">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="3*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="100" />
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
+                            <HorizontalStackLayout IsVisible="{Binding SupplierOrderVisibility}">
+                                <uranium:ExpanderView WidthRequest="970">
+                                    <uranium:ExpanderView.Header>
+                                        <Grid HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="940">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="3*" />
+                                                <ColumnDefinition Width="2*" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
 
-                                <Label
-                                    Grid.Column="0"
-                                    Margin="10,5"
-                                    FontSize="Body"
-                                    Text="{Binding OrderID}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="1"
-                                    Margin="10,5"
-                                    FontSize="Body"
-                                    Text="{Binding Item.Reference}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="2"
-                                    Margin="10,5"
-                                    FontSize="Body"
-                                    Text="{Binding Item.Code}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="3"
-                                    Margin="10,5"
-                                    FontSize="Body"
-                                    Text="{Binding SupplierName}"
-                                    VerticalOptions="Center" />
-                                <Label
-                                    Grid.Column="4"
-                                    Margin="10,5"
-                                    FontSize="Body"
-                                    Text="{Binding Date}"
-                                    VerticalOptions="Center" />
-                                <HorizontalStackLayout
-                                    Grid.Column="5"
-                                    Margin="10,5"
-                                    VerticalOptions="Center">
-                                    <Label FontSize="Body" Text="{Binding Price}" />
-                                    <Label FontSize="Body" Text="€" />
-                                </HorizontalStackLayout>
-                                <Label
-                                    Grid.Column="6"
-                                    Margin="10,5"
-                                    FontSize="Body"
-                                    Text="{Binding Status}"
-                                    VerticalOptions="Center" />
-                                <Button
-                                    Grid.Column="7"
-                                    Margin="5,5"
-                                    Padding="14,5"
-                                    BackgroundColor="Red"
-                                    FontSize="Body"
-                                    HeightRequest="35"
-                                    Text="Cancel"
-                                    VerticalOptions="Center" />
-                                <Button
-                                    Grid.Column="8"
-                                    Margin="5,5"
-                                    Padding="14,5"
-                                    BackgroundColor="Green"
-                                    Command="{Binding OnReceivedClicked}"
-                                    FontSize="Body"
-                                    HeightRequest="35"
-                                    Text="Received"
-                                    VerticalOptions="Center" />
-                            </Grid>
+                                            <Label Grid.Column="0" Margin="10,5" FontSize="Body" Text="{Binding OrderID}" VerticalOptions="Center" />
+                                            <Label Grid.Column="1" Margin="10,5" FontSize="Body" Text="{Binding SupplierName}" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Margin="10,5" FontSize="Body" Text="{Binding Date}" VerticalOptions="Center" />
+                                            <HorizontalStackLayout Grid.Column="3" Margin="10,5" VerticalOptions="Center">
+                                                <Label FontSize="Body" Text="{Binding Price}" />
+                                                <Label FontSize="Body" Text="€" />
+                                            </HorizontalStackLayout>
+                                            <Label Grid.Column="4" Margin="10,5" FontSize="Body" Text="{Binding Status}" VerticalOptions="Center" />
+                                        </Grid>
+                                    </uranium:ExpanderView.Header>
+                                    <CollectionView ItemsSource="{Binding SupplierOrderItems}" Margin="0,0,0,5">
+                                        <CollectionView.Header>
+                                            <Grid >
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <Label Grid.Column="0" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Item Reference" VerticalOptions="Center" />
+                                                <Label Grid.Column="1" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Item Code" VerticalOptions="Center" />
+                                                <Label Grid.Column="2" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Quantity" VerticalOptions="Center" />
+                                                <Label Grid.Column="3" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Unit Price" VerticalOptions="Center" />
+                                                <Label Grid.Column="4" Margin="10" FontAttributes="Bold" TextColor="{DynamicResource Tertiary}" Text="Total Price" VerticalOptions="Center" />
+                                            </Grid>
+                                        </CollectionView.Header>
+                                        
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="2*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label Grid.Column="0" Margin="10,5" FontSize="Body" Text="{Binding Reference}" VerticalOptions="Center" />
+                                                    <Label Grid.Column="1" Margin="10,5" FontSize="Body" Text="{Binding Code}" VerticalOptions="Center" />
+                                                    <Label Grid.Column="2" Margin="10,5" FontSize="Body" Text="{Binding Quantity}" VerticalOptions="Center" />
+                                                    <HorizontalStackLayout Grid.Column="3" Margin="10,5" VerticalOptions="Center">
+                                                        <Label FontSize="Body" Text="Bind to Unit Price" />
+                                                        <Label FontSize="Body" Text="€" />
+                                                    </HorizontalStackLayout>
+                                                    <HorizontalStackLayout Grid.Column="4" Margin="10,5" VerticalOptions="Center">
+                                                        <Label FontSize="Body" Text="Bind to Total Price" />
+                                                        <Label FontSize="Body" Text="€" />
+                                                    </HorizontalStackLayout>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </uranium:ExpanderView>
+                                <Button Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
+                                <Button Command="{Binding OnReceivedClicked}" Margin="5,5" Padding="14,5" BackgroundColor="Green" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
+                            </HorizontalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

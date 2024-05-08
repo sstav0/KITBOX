@@ -60,38 +60,57 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!--  All the text inside the Cabinet Size  -->
                 <Label
                     Grid.Row="0"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="9"
                     FontAttributes="Bold"
                     FontSize="20"
                     HorizontalOptions="Center"
-                    Text="Cabinet Size" />
-                <Label
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    HorizontalOptions="Center"
-                    Text="Cabinet Width" />
+                    Text="Cabinet" />
                 <Label
                     Grid.Row="1"
                     Grid.Column="1"
                     HorizontalOptions="Center"
+                    Text="Cabinet Width" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    HorizontalOptions="Center"
                     Text="Cabinet Depth" />
                 <Label
                     Grid.Row="1"
-                    Grid.Column="2"
+                    Grid.Column="7"
                     HorizontalOptions="Center"
                     Text="Angle Iron Color" />
-
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    Text="cm"
+                    VerticalOptions="Center" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="5"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    Text="cm"
+                    VerticalOptions="Center" />
                 <!--  All the Pickers inside the Cabinet Size  -->
 
                 <Picker
                     x:Name="CabinetWidth"
                     Grid.Row="2"
-                    Grid.Column="0"
+                    Grid.Column="1"
                     Margin="10"
                     BackgroundColor="White"
                     Focused="LockerWidthPickerFocused"
@@ -102,7 +121,7 @@
                 <Picker
                     x:Name="CabinetDepth"
                     Grid.Row="2"
-                    Grid.Column="1"
+                    Grid.Column="4"
                     Margin="10"
                     BackgroundColor="White"
                     Focused="LockerDepthPickerFocused"
@@ -113,7 +132,7 @@
                 <Picker
                     x:Name="AngleIronColor"
                     Grid.Row="2"
-                    Grid.Column="2"
+                    Grid.Column="7"
                     Margin="10"
                     BackgroundColor="White"
                     Focused="AngleIronColorPickerFocused"
@@ -180,7 +199,10 @@
                     HorizontalOptions="Center">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span FontSize="20" Text="Locker: " />
+                            <Span
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                Text="Locker" />
                             <Span FontAttributes="Bold" Text="{Binding LockerID}" />
                         </FormattedString>
                     </Label.FormattedText>
@@ -197,6 +219,13 @@
                     Grid.ColumnSpan="2"
                     HorizontalOptions="Center"
                     Text="Height" />
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="2"
+                    HorizontalOptions="Start"
+                    Text="                 cm"
+                    VerticalOptions="Center" />
 
                 <!--  All the Pickers inside the Outside Frame  -->
                 <Picker
