@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using Kitbox_project.ViewModels;
 using Kitbox_project.Views;
 using System.Windows.Input;
@@ -31,6 +32,16 @@ public partial class SupplierOrdersPage : ContentPage
         {
             // Should be based on all checkboxes values to filter accrodingly
             supplierOrdersViewModel.ApplyStatusFilter(receivedCheckBox.IsChecked, orderedCheckBox.IsChecked);
+        }
+    }
+
+    private void OnExpanderClicked(object sender, EventArgs e)
+    {
+        if (sender is Expander expander && expander.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
+        {
+            expander.IsExpanded = !expander.IsExpanded;
+
+            supplierOrderViewModel.GetAllItems(); // Load all items for the supplier order
         }
     }
 }
