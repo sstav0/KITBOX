@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Diagnostics;
 
-namespace TEST_ORM
+namespace Kitbox_project.Models
 {
     /// <summary> THE ONLY METHOD YOU NEED IN THIS CLASS IS <c>GetValues</c>. OTHER METHODS are used INTERNALLY to format the data.
     /// TO USE THIS CLASS, YOU NEED TO INSTANTIATE IT WITH A <c>DatabaseCatalog</c> OBJECT AND A DICTIONARY OF PARAMETERS. THE PARAMETERS ARE THE FILTERS THAT THE CLIENT HAS SELECTED.

@@ -9,6 +9,8 @@ using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Microsoft.Maui.Controls;
+using Kitbox_project.DataBase;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Kitbox_project.ViewModels
 {
@@ -111,6 +113,45 @@ namespace Kitbox_project.ViewModels
                 }
                 UpdateDBOrderStatus();
                 LoadSupplierName();
+            }
+
+            public async void GetAllItems()
+            {
+                //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
+
+                DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
+                var items = await databaseSupplierOrderItem.GetData(new Dictionary<string, string> { { "idSupplierOrder", OrderID.ToString() } }, new List<string> {"codeItem", "quantity"});
+
+                //Step 2 Get the infos to construct each SupplierOrderItem
+                DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
+                DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
+
+                double price = 0; 
+                string code = "";
+                string reference = "";
+                int quantity = 0;
+                double unitPrice = 0;
+
+                foreach (var item in items)
+                {
+                    code = item["codeItem"];
+                    quantity = int.Parse(item["quantity"]);
+
+                    // Get "Price" from PnD where "Code" = codeItem (from step 1 below) and "idSupplier" = SupplierId (property from SupplierOrder class) 
+                    var resPnD = await databasePnD.GetData(new Dictionary<string, string> { { "Code", code }, { "idSupplier", SupplierId.ToString() } }, new List<string> { "Price"} );
+                    
+                    if (int.TryParse(resPnD[0]["Price"], out int result))
+                    {
+                        unitPrice = result;
+                    }
+
+                    // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
+                    var resCatalog = await databaseCatalog.GetData(new Dictionary<string, string> { { "Code", code } }, new List<string> { "Reference" });
+                    reference = resCatalog[0]["Reference"];
+
+                    // Step 3 => Construct a new SupplierOrderItem with the infos from step 2 and add it to the list of SupplierOrderItems
+                    //_supplierOrderItems.Add(new );
+                }
             }
 
             private async void LoadSupplierName()
