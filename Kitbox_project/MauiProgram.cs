@@ -11,12 +11,18 @@ namespace Kitbox_project
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
-            builder.UseMauiApp<App>().UseUraniumUI().UseUraniumUIMaterial().ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            }).UseMauiCommunityToolkit();
-#if WINDOWS
+            builder
+                .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
+                .UseUraniumUI()
+                .UseUraniumUIMaterial()
+                .ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                });
+
+            #if WINDOWS
                     builder.ConfigureLifecycleEvents(events =>
                     {
                         events.AddWindows(windowsLifecycleBuilder =>

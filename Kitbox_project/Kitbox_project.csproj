@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net7.0-maccatalyst;net8.0-ios;net8.0-android</TargetFrameworks>
+		<TargetFrameworks>net8.0-ios;net8.0-android</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net7.0-tizen</TargetFrameworks> -->
@@ -59,6 +59,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.Maui.Popup" Version="1.0.5" />
 		<PackageReference Include="SQLite" Version="3.13.0" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
@@ -99,6 +100,9 @@
 		<MauiXaml Update="Views\EditCabinetPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\PopupStockPrices.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\SecretaryPricePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
@@ -112,9 +116,6 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\HomeClientPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\HomePage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\LoginPage.xaml">
@@ -135,16 +136,25 @@
 	  <PackageReference Include="CommunityToolkit.Maui">
 	    <Version>7.0.1</Version>
 	  </PackageReference>
+	  <PackageReference Include="CommunityToolkit.Maui.Core">
+	    <Version>7.0.1</Version>
+	  </PackageReference>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
 	  <PackageReference Include="CommunityToolkit.Maui">
 	    <Version>7.0.1</Version>
 	  </PackageReference>
+	  <PackageReference Include="CommunityToolkit.Maui.Core">
+	    <Version>7.0.1</Version>
+	  </PackageReference>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows10.0.19041.0'">
 	  <PackageReference Include="CommunityToolkit.Maui">
+	    <Version>7.0.1</Version>
+	  </PackageReference>
+	  <PackageReference Include="CommunityToolkit.Maui.Core">
 	    <Version>7.0.1</Version>
 	  </PackageReference>
 	</ItemGroup>

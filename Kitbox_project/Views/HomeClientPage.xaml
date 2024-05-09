@@ -1,31 +1,55 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Kitbox_project.Views.HomeClientPage"
-             Title="HomeClientPage">
+<ContentPage
+    x:Class="Kitbox_project.Views.HomeClientPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="HomeClientPage">
 
     <Grid>
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label Text="Welcome to the Cabinet Maker App" Grid.Row="1" FontSize="Large" FontAttributes="Bold"
-               Grid.ColumnSpan="2" Grid.Column="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+        <Label
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            FontAttributes="Bold"
+            FontSize="Large"
+            HorizontalTextAlignment="Center"
+            Text="Welcome to the Cabinet Maker App"
+            VerticalTextAlignment="Center" />
+        <Image
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            HeightRequest="400"
+            HorizontalOptions="Center"
+            Source="kitbox_1_v.png"
+            VerticalOptions="Center" />
 
-        <Button Text="Begin Making my Order" Clicked="CreateNewOrderClicked" MaximumWidthRequest="350" MinimumHeightRequest="65"
-                Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="1" FontSize="Medium"/>
+        <Button
+            Grid.Row="4"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            Clicked="CreateNewOrderClicked"
+            FontSize="Medium"
+            MaximumWidthRequest="350"
+            MinimumHeightRequest="65"
+            Text="Begin Making my Order" />
 
     </Grid>
-    
+
 </ContentPage>

@@ -12,14 +12,9 @@
     <TabBar>
 
         <ShellContent
-            Title="Home"
-            ContentTemplate="{DataTemplate local:MainPage}"
-            Route="HomePage"/>
-
-        <ShellContent
             Title="Home Client"
             ContentTemplate="{DataTemplate views:HomeClientPage}"
-            Route="HomeClientPage"/>
+            Route="HomeClientPage" />
 
         <!--<ShellContent
             Title="Cabinet Creator"
@@ -29,37 +24,32 @@
         <ShellContent
             Title="Login Page"
             ContentTemplate="{DataTemplate views:LoginPage}"
-            Route="Login Page"/>
+            Route="Login Page" />
 
         <ShellContent
             Title="Stock"
             ContentTemplate="{DataTemplate views:StockPage}"
-            Route="StockPage"/>
+            Route="StockPage" />
 
         <ShellContent
             Title="Orders"
             ContentTemplate="{DataTemplate views:OrdersPage}"
-            Route="OrdersPage"/>
+            Route="OrdersPage" />
 
         <ShellContent
             Title="Supplier Orders"
             ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
-            Route="SupplierOrdersPage"/>
+            Route="SupplierOrdersPage" />
 
         <ShellContent
-            Title="Supplier's Prices"
-            ContentTemplate="{DataTemplate views:SecretaryPricePage}"
-            Route="SecretaryPricePage"/>
+            Title="History of sold products Example"
+            ContentTemplate="{DataTemplate views:SoldHistory}"
+            Route="SoldHistory" />
 
-        <ShellContent
-            Title="Logout"
-            ContentTemplate="{DataTemplate views:LogoutPage}"
-            Route="Logout"/> 
-        
         <ShellContent
             Title="Login Page"
             ContentTemplate="{DataTemplate views:LoginPage}"
-            Route="LoginPage"/>        
+            Route="LoginPage" />
 
     </TabBar>
 

@@ -1,15 +1,20 @@
 using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
 using Kitbox_project.Models;
+using Kitbox_project.DataBase;
 using Kitbox_project.Utilities;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Maui.Controls.Compatibility;
+using System.Windows.Input;
+//using Java.Lang;
 
 namespace Kitbox_project.Views
 {
     public partial class CabinetCreatorPage : ContentPage
     {
         private CabinetViewModel _viewModel;
+        private LogOutViewModel _logOutViewModel;
 
         private Order _order;
         public Order Order
@@ -35,46 +40,118 @@ namespace Kitbox_project.Views
 
             InitializeComponent();
             _viewModel = new CabinetViewModel();
+            _logOutViewModel = new LogOutViewModel();
+
             BindingContext = _viewModel;
+            LogOutButton.BindingContext = _logOutViewModel;
 
 
             // Load available lockers into the view model
             LoadAvailableLockers();
         }
 
-
-
         private void LoadAvailableLockers()
         {
-
-
-
-            _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
-            {
-
-            };
+            _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel> {};
         }
 
 
+        public void LockerDepthPickerFocused(object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Depth");
+        }
+        void DoorMaterialPickerFocused (object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Door_material");
+        }
+        void DoorColorPickerFocused (object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Door_color");
+        }
+        void LockerHeightPickerFocused (object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Height");
+        }
+        void LockerWidthPickerFocused (object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Width");
+        }
+        void LockerColorPickerFocused (object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Panel_color");
+        }
+        void AngleIronColorPickerFocused (object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Angle_color");
+        }
 
-        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+
+        private void OnDeleteLockerClicked(object sender, EventArgs e)
+        {
+            int index = 1;
+            var button = sender as Button;
+            var locker = button?.BindingContext as LockerViewModel;
+            if (locker != null)
+            {
+                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel
+            }
+
+            foreach (var locke in _viewModel.AvailableLockers)
+            {
+                //On redonne un bon index à chacun 
+                locke.LockerID = index;
+                index += 1;
+            }
+            //DisablePickers();
+
+        }
+
+        private async void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
-            if (_viewModel.AvailableLockers.Count >= 7)
+            if (_viewModel.AvailableLockers.Count >= 7 )
             {
                 // Display an alert or perform any other action
                 return;
             }
+            //Check if pickers are correctly completed
+            if (_viewModel.selectedValues.ContainsValue(null))
+            {
+                if (!_viewModel.IsDoorChecked)
+                {
+                    Dictionary<string, object> data = _viewModel.selectedValues;
+                    data.Remove("Door_color");
+                    data.Remove("Door_material");
+                    if (data.ContainsValue(null))
+                    {
+                        Debug.WriteLine(" -- Empty Pickers !! -- ");
+                        return;
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine(" -- Empty Pickers !! -- ");
+                    return;
+                }
+
+            }
 
             // Create a new LockerViewModel based on the selected parameters
             Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            Locker lockerToAdd = new Locker(Convert.ToInt32(_viewModel.SelectedHeightItem),
+                                            Convert.ToInt32(_viewModel.SelectedDepthItem),
+                                            Convert.ToInt32(_viewModel.SelectedWidthItem),
+                                            _viewModel.SelectedLockerColorItem,
+                                            door,
+                                            99999);
 
             LockerViewModel newLocker = new LockerViewModel
             {
+                Locker = lockerToAdd,
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
                 Door = door,
-                NotePartsAvailability = "NotePartsAvailability(ARTHUR)"
+                NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(lockerToAdd)
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;
@@ -84,6 +161,7 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            //DisablePickers();
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -106,13 +184,24 @@ namespace Kitbox_project.Views
             }
 
         }
-
-
-        private void OnAddLockerButtonClicked(object sender, EventArgs e) //Pas utilisé pour le moment.  
-        { 
+/*
+        private void DisablePickers()
+        {
+            if (_viewModel.AvailableLockers.Count() == 0)
+            {
+                CabinetWidth.IsEnabled = true;
+                CabinetDepth.IsEnabled = true;
+                AngleIronColor.IsEnabled = true;
+            }
+            else
+            {
+                CabinetWidth.IsEnabled = false;
+                CabinetDepth.IsEnabled = false;
+                AngleIronColor.IsEnabled = false;
+            }
         }
 
-
+*/
 
         private void OnEditButtonClicked(object sender, EventArgs e)
         {
@@ -132,15 +221,14 @@ namespace Kitbox_project.Views
                         _viewModel.SelectedDoorMaterialItem = locker.Door.Material;
 
                     }
-
-
-    
                 }
                 else
                 {
                     Debug.WriteLine("Error: No locker selected.");
                 }
+
             }
+
         }
 
 
@@ -154,7 +242,7 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, "Wood", Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
+                new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
                 0 // Price
             )).ToList();
 

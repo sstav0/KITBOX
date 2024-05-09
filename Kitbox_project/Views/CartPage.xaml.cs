@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using CommunityToolkit.Maui.Views;
+using Kitbox_project.Views;
+using Syncfusion.Maui.Core.Carousel;
 
 namespace Kitbox_project.Views;
 
@@ -14,6 +17,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
     private ObservableCollection<CartViewModel> CartVoid;
 	private Order order;
     private CabinetViewModel _cabviewModel;
+    private PopupCustomerRec popup;
 
     //public ICommand OnUpdateButtonClicked { get; }
 
@@ -24,75 +28,31 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
 		CartVoid = new ObservableCollection<CartViewModel>();
+        LoadRealCart(order);
+        popup = new PopupCustomerRec(Cart,this);
 
-		LoadRealCart(order);
-	}
-
-    //Display Popup window to ask if customer wants to confirm his order (return bool)
-    async Task<bool> DisplayEnsureConfirmPopup()
-    {
-        bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
-        Debug.WriteLine("Answer: " + answer);
-        return answer;
+    LogOutButton.Command = new Command(() =>
+        {
+            var otherViewModel = new LogOutViewModel();
+            otherViewModel.LogoutCommand.Execute(null);
+        });
     }
 
-    //Display popup window when invalid email input received
-    async Task<bool> DisplayEnsureEmailPopup()
+    public void DisplayPopup()
     {
-        bool answer = await DisplayAlert("Invalid Input", "Do you want to retry ?", "Yes", "No");
-        Debug.WriteLine("Answer: " + answer);
-        return answer;
+
+        this.ShowPopup(popup);
     }
-
-    //display popup windows to ask for customer's email if email not valid -> call DisplayEnsureEmailPopup() else -> return true
-    async Task<bool> DisplayEmailPopup()
+    public void ClosePopup()
     {
-        string customerEmailFromPopup = await DisplayPromptAsync("Enter your email address", "Email", "OK", "Cancel", "@mail.com");
-        bool goToNextPage = false;
-        if (!string.IsNullOrWhiteSpace(customerEmailFromPopup) && customerEmailFromPopup.Any(char.IsLetterOrDigit) && customerEmailFromPopup.Contains('@'))
-        {
-            Debug.WriteLine("Customer email: " + customerEmailFromPopup);
-            goToNextPage = true;
-
-        }
-        else
-        {
-            bool emailRetrial = await DisplayEnsureEmailPopup();
-            if (emailRetrial)
-            {
-                goToNextPage = await DisplayEmailPopup();
-            }
-            else
-            {
-                customerEmailFromPopup = null;
-                goToNextPage = false;
-            }
-            
-        }
-        return goToNextPage;
-        
-    }
-
-    //Main Method that includes 3 others to display Popup windows and ask for customer's email
-    async Task<bool> DisplayConfirmPopup()
-    {
-        bool confirmation = await DisplayEnsureConfirmPopup();
-        if (confirmation)
-        {
-            bool goToNextPage = await DisplayEmailPopup();
-            return goToNextPage;
-        }
-        else
-        {
-            return false;
-        }
+        popup.Close();
     }
 
     private void LoadRealCart(Order order)
 	{
 		foreach (Cabinet cabinet in order.Cart)
 		{
-			Cart.Add(new CartViewModel(cabinet));
+			Cart.Add(new CartViewModel(cabinet,this));
 		}
 
         ListCabinets.ItemsSource = Cart;
@@ -105,33 +65,13 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         UpdateCart();
     }
 
-    private void LoadCart()
-	{
-			string color1 = "red";
-			Door door1 = new Door(color1, "wood", 50, 50); // 50x50 door (example)
-			Door door1bis = new Door(color1, "wood", 50, 50);
-			Locker locker1 = new Locker(50, 20, 50, color1, door1, 25);
-			Locker locker1bis = new Locker(50, 20, 50, color1, door1bis, 25);
-			List<Locker> lockers1 = new List<Locker>();
-            lockers1.Add(locker1);
-			lockers1.Add(locker1bis);
-			Cabinet cabinet1 = new Cabinet(lockers1, 50, 75, 1, 3);
-			CartViewModel cabinet1view = new CartViewModel(cabinet1);
-
-			Cart.Add(cabinet1view);
-
-			ListCabinets.ItemsSource = Cart;
-
-            UpdateTotalPrice();
-    }
-
 	public void UpdateCart() 
 	{
         Cart.Clear();
 
         foreach (var cabinet in order.Cart)
         {
-            CartViewModel cabinetview = new CartViewModel(cabinet);
+            CartViewModel cabinetview = new CartViewModel(cabinet, this);
             Cart.Add(cabinetview);
         }
 
@@ -167,14 +107,16 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
 		order.Status = "Waiting Confirmation";
-        bool goToNextPage = await DisplayConfirmPopup();
-        
+
+        bool goToNextPage = false;
+        DisplayPopup();
+
         if (goToNextPage)
         {
             OrdersPage newActiveOrdersPage = new OrdersPage();
 
-            newActiveOrdersPage.Orders.Add(order);
-            newActiveOrdersPage.UpdateOrdersFromAfar(order);
+            //newActiveOrdersPage.Orders.Add(order);
+            //newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
             await Navigation.PushAsync(newActiveOrdersPage);
         }

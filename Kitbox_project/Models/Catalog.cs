@@ -1,26 +1,134 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Kitbox_project.DataBase;
-using Kitbox_project.Utilities;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace Kitbox_project.Models
 {
-    /// <summary> The ONLY method you need to use in this class is <c>GetValues</c>. OTHER METHODS are used INTERNALLY to format the data.
+    /// <summary> THE ONLY METHOD YOU NEED IN THIS CLASS IS <c>GetValues</c>. OTHER METHODS are used INTERNALLY to format the data.
+    /// TO USE THIS CLASS, YOU NEED TO INSTANTIATE IT WITH A <c>DatabaseCatalog</c> OBJECT AND A DICTIONARY OF PARAMETERS. THE PARAMETERS ARE THE FILTERS THAT THE CLIENT HAS SELECTED.
+    /// THEN YOU CALL THE <c>GetValues</c> METHOD. THIS METHOD RETURNS A TUPLE WHERE THE FIRST ELEMENT IS A DICTIONARY WHERE EACH KEY IS THE REFERENCE OF A PRODUCT AND THE VALUE IS THE QUANTITY OF THIS PRODUCT IN THE CATALOG TABLE. THE SECOND ELEMENT IS A DICTIONARY WHERE EACH KEY
     /// </summary>
-    public class Catalog
+    internal class Catalog
     {
+        private Dictionary<string, string> _regexes = new Dictionary<string, string> { { "Color", @"^(.*?)_color$" }, { "Material", @"^(.*?)_material" } };
+        private bool _requiresDoor;
+        private int? _totalHeight;
+        private int _maxHeight;
+        private Dictionary<string, string> _colorDetails = new Dictionary<string, string>();
+        private Dictionary<string, string> _materialDetails = new Dictionary<string, string>();
+        private Dictionary<string, object> param;
         private readonly DatabaseCatalog _databaseCatalog;
-        public Catalog(DatabaseCatalog databaseCatalog)
+
+        public Catalog(DatabaseCatalog databaseCatalog, Dictionary<string, object> param)
         {
             _databaseCatalog = databaseCatalog;
+            this.param = param;
+        }
+        public int MaxHeight { get => _maxHeight; set => _maxHeight = value; }
+        public Dictionary<string, string> Regexes { get => _regexes; set => _regexes = value; }
+        public bool RequiresDoor { get => _requiresDoor; set => _requiresDoor = value; }
+        public int? TotalHeight { get => _totalHeight; set => _totalHeight = value; }
+        public Dictionary<string, string> ColorDetails { get => _colorDetails; set => _colorDetails = value; }
+        public Dictionary<string, string> MaterialDetails { get => _materialDetails; set => _materialDetails = value; }
+
+        /// <summary>
+        /// This method checks if the query contains a door. If it does, it sets the <c>RequiresDoor</c> property to <c>true</c>. Otherwise, it sets it to <c>false</c>.
+        /// </summary>
+        private void CheckDoor()
+        {
+            if (this.param.ContainsKey("Door"))
+            {
+                if (this.param["Door"] is string) //check if the door is selected
+                {
+                    RequiresDoor = this.param["Door"] == "True" ? true : false;
+                }
+                else
+                {
+                    RequiresDoor = this.param["Door"] != null ? (bool)this.param["Door"] : false;
+                }
+            }
         }
 
         /// <summary>
-        /// This method returns a dictionary of lists of objects, where each key represents a column name and each value is a list of unique values for that column.
+        /// This method calculates the maximum cabinet height among the items in the catalog table.
+        /// </summary>
+        private void GetMaxHeight(List<Dictionary<string, string>> res)
+        {
+            MaxHeight = 0;
+            foreach (var item in res)
+            {
+                if (item.TryGetValue("Cabinet_Height", out var cabinetHeightStr) && int.TryParse(cabinetHeightStr, out var cabinetHeight))
+                {
+                    if (cabinetHeight > MaxHeight)
+                    {
+                        MaxHeight = cabinetHeight;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method checks if the query contains a total height. If it does, it sets the <c>TotalHeight</c> property to the value of the total height. Otherwise, it sets it to <c>0</c>.
+        /// </summary>
+        private void CheckTotalHeight()
+        {
+            if (this.param.ContainsKey("TotalHeight"))
+            {
+                if (this.param["TotalHeight"] is string)
+                {
+                    int.TryParse(this.param["TotalHeight"]?.ToString(), out int intValue);
+                    TotalHeight = intValue;
+                }
+                else
+                {
+                    TotalHeight = (int)this.param["TotalHeight"];
+                }
+            }
+            else
+            {
+                TotalHeight = 0;
+            }
+        }
+
+        /// <summary>
+        /// This method checks if the query contains a color or material filter. If it does, it assigns the color or material to the corresponding element.
+        /// </summary>
+        private void CheckColorMaterialFilter()
+        {
+            foreach (var item in this.param)
+            {
+                if (item.Value != null) {
+                    var key = item.Key;
+                    var value = item.Value.ToString();
+
+                    if (key.EndsWith("_color"))
+                    {
+                        // Extract element name and assign the color to it
+                        var element = key.Substring(0, key.IndexOf("_color"));
+                        ColorDetails[element] = value;
+                    }
+                    else if (key.EndsWith("_material"))
+                    {
+                        // Extract element name and assign the material to it
+                        var element = key.Substring(0, key.IndexOf("_material"));
+                        MaterialDetails[element] = value;
+                    }
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// This method returns a tuple where the first element is a dictionary where each key is the reference of a product and the value is the quantity of this product in the catalog table. The second element is a dictionary where each key 
+        /// is the name of a column in the catalog table and the value is a list of all the possible values for this column. The list is then used to display the values of each key of the returned dictionary in the client application.
         /// The list is then used to display the values of each key of the returned dictionary in the client application.
         /// Examples of parameters <paramref name="param"/> are :
         /// <list type="bullet">
@@ -44,169 +152,311 @@ namespace Kitbox_project.Models
         /// <code>{}</code>
         /// </description>
         /// </item>
+        /// <item>
+        /// <description> This is the most complete example. You typically use this when the client has selected every possible value and you want to send the reference of the product to the order page.
+        /// <code>{ { "Width", 52 }, { "Depth", 32 }, { "Panel side_color", "Brown" }, { "Panel horizontal_color", "Brown" }, { "Panel back_color", "Brown" }, { "Door_color", "Transparent" }, { "Angle_color", "Black" }, { "TotalHeight", 209 }, { "Height", 32 }, { "Door", true } }</code>
+        /// </description>
+        /// </item>
         /// </list>
         /// </summary>
-        /// <param name="param">The dictionary containing the values selected by the client. Example : <code>{ { "Width", 52 }, { "Depth", null }, { "Panel_color", "Brown" }, { "Height", 52 }, { "Door", true }, {"Door_color", "Glass"} }</code> </param>
-        /// <param name="columns">The columns that will be selected. Example : <code>{ "Width", "Height"}</code>By default, these columns will be selected : <code>{ "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color" }</code></param>
-        /// <returns>A dictionary that can directly be used to display the options in the client interface</returns>
-        public async Task<Dictionary<string, List<object>>> GetValues(Dictionary<string, object> param, List<string> columns = null)
+        /// <param name="dims">The columns that set the dimensions of the cabinet (you don't need to touch it). By default : <code>{ "Width", "Height", "Depth" }</code> </param>
+        /// <param name="columns">The columns that the query to the database will use. Example : <code>{ "Width", "Height"}</code>By default, these columns will be selected : <code>{ "Reference", "Code", "Width", "Height", "Depth", "Color", "Material", "Cabinet_Height", "Price", "Quantity" }</code></param>
+        /// <returns>tuple[0] informations for the order and to check part number; tuple[1] informations for the pickers</returns>
+        public async Task<(Dictionary<string, int>, Dictionary<string, List<string>>)> GetValues(List<string> columns = null, List<string> dims = null)
         {
+            var request = new Dictionary<string, string>();
+
+            if (dims == null)
+            {
+                dims = new List<string> { "Width", "Height", "Depth" };
+            }
+
             if (columns == null)
             {
-                columns = new List<string> { "Width", "Height", "Depth", "Panel_color", "Door_color", "Angle_color", "Door_material" }; //columns that will be selected by default in the database
+                columns = new List<string> { "Reference", "Code", "Width", "Height", "Depth", "Color", "Material", "Cabinet_Height", "Price", "Quantity" };
             }
 
-            var ans = new List<Dictionary<string, string>>();
-
-            var selectedValues = CorrectValues(param);
-
-            (bool door, List<int> maxs) = await CheckDoor(param);
-
-            if (selectedValues.Count == 0)
+            foreach (var item in dims)
             {
-                ans = await _databaseCatalog.LoadAll(columns);
-                return FormatValues(ans, door, maxs[0], maxs[1], columns);
+                if (param.ContainsKey(item) && param[item] != null)
+                {
+                    request.Add(item, param[item].ToString());
+                }
             }
-                        
-            ans = _databaseCatalog.GetCatalogData(selectedValues, columns);
 
-            return FormatValues(ans, door, maxs[0], maxs[1], columns);
+            CheckDoor();
+            CheckTotalHeight();
+            CheckColorMaterialFilter();
+
+            //var res = _databaseCatalog.GetCatalogData(request, columnsParameter: columns);
+            var taskRequestDB = _databaseCatalog.GetCatalogData(request, columnsParameter: columns);
+            var result = await taskRequestDB;
+            var filtered = FilterItems(result);
+            var orderAns = FormatValues(filtered);
+            var pickerAns = PickerValues(filtered, dims);
+
+            return (orderAns, pickerAns);
+        }
+
+
+        private List<Dictionary<string, string>> FilterItems(List<Dictionary<string, string>> items)
+        {
+            GetMaxHeight(items);
+
+            var filteredItems = new List<Dictionary<string, string>>();
+            var eligibleItems = new List<Dictionary<string, string>>();
+
+            // Calculate the maximum height among items
+            int maxHeightAmongItems = items
+                .Where(item => item.TryGetValue("Height", out var heightStr) && int.TryParse(heightStr, out int height))
+                .Select(item => int.Parse(item["Height"]))
+                .DefaultIfEmpty(0) // Use 0 if there are no items with "Height"
+                .Max();
+
+            foreach (var item in items)
+            {
+                // Color filtering
+                if (ColorDetails.ContainsKey(item["Reference"].ToString()))
+                {
+                    if (item.ContainsKey("Color") && !item["Color"].Equals(ColorDetails[item["Reference"].ToString()], StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue; // Skip this item if color doesn't match
+                    }
+                }
+
+                // Material filtering
+                if (MaterialDetails.ContainsKey(item["Reference"].ToString()))
+                {
+                    if (item.ContainsKey("Material") && !item["Material"].Equals(MaterialDetails[item["Reference"].ToString()], StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue; // Skip this item if material doesn't match
+                    }
+                }
+
+                // Door requirement filtering
+                if (!RequiresDoor && item.ContainsKey("Reference") && item["Reference"].Contains("Door", StringComparison.OrdinalIgnoreCase))
+                {
+                    //var hasDoor = item["Reference"].Contains("Door", StringComparison.OrdinalIgnoreCase);
+                    if (!RequiresDoor)
+                    {
+                        continue; // Skip this item if door requirement doesn't match
+                    }
+                }
+
+                // Height filtering
+                if (item.TryGetValue("Height", out var heightStr) && int.TryParse(heightStr, out var height))
+                {
+                    if (height + TotalHeight > MaxHeight)
+                    {
+                        continue; // Skip this item if it's too tall
+                    }
+                }
+
+                // Cabinet height filtering
+                if (item.TryGetValue("Cabinet_Height", out var cabinetHeightStr) && int.TryParse(cabinetHeightStr, out var cabinetHeight))
+                {
+                    if (cabinetHeight >= TotalHeight + maxHeightAmongItems)
+                    {
+                        eligibleItems.Add(item); // Add this item to the list of eligible items
+                        continue;
+
+                    }
+                    continue;
+                }
+                // This item passes all criteria, so add it to the list
+                filteredItems.Add(item);
+            }
+
+            // Now find the item with the smallest "Cabinet_Height" among eligible items
+            var itemWithSmallestCabinetHeight = eligibleItems
+                .Where(item => item.ContainsKey("Cabinet_Height"))
+                .OrderBy(item => int.Parse(item["Cabinet_Height"]))
+                .FirstOrDefault();
+
+            filteredItems.Add(itemWithSmallestCabinetHeight); //Add the angle with the smallest height among the eligible angles
+
+            return filteredItems;
         }
 
         /// <summary>
-        /// This method removes the null and bool values from the dictionary <paramref name="selectedValues"/> and returns a new dictionary with the correct values.
+        /// This method sorts the values of the dictionary <paramref name="param"/>. It sorts the values of the keys that are not in the <paramref name="ignoredColumns"/> list. If the first element of the list is numeric, it sorts the list as integers and removes duplicates. Otherwise, it leaves the list as is.
         /// </summary>
-        /// <param name="selectedValues"></param>
-        /// <returns></returns>
-        public Dictionary<string, string> CorrectValues(Dictionary<string, object> selectedValues) //
+        /// <param name="param">The dictionary to sort (it typically is the result of the database query).</param>
+        /// <param name="ignoredColumns">The columns (=keys) to don't sort.</param>
+        /// <returns>The sorted dictionary.</returns>
+        private Dictionary<string, List<string>> SortList(Dictionary<string, List<string>> param, List<string> ignoredColumns = null)
         {
-            return selectedValues // Remove null and bool values from the dictionary
-                .Where(item => !(item.Value is bool) && item.Value != null)
-                .ToDictionary(item => item.Key, item => Utils.ValueToString(item.Value));
-        }
+            ignoredColumns ??= new List<string> { "Quantity", "Price", "Color", "Material" };
 
-        /// <summary>
-        /// This method sorts the values of the dictionary <paramref name="param"/> and returns a new dictionary with the sorted values.
-        /// </summary>
-        /// <param name="param"></param>
-        /// <returns></returns>
-        public Dictionary<string, List<object>> SortList(Dictionary<string, List<object>> param)
-        {
-            var res = new Dictionary<string, List<object>>();
+            var sortedResult = new Dictionary<string, List<string>>();
 
             foreach (var item in param)
             {
-                if (item.Value.Count > 0 && item.Value[0] is int) //check if the list contains integers
+                if (ignoredColumns.Contains(item.Key))
                 {
-                    var list = new List<int>(); //create a new list to store the unique values
-
-                    list = Utils.ConvertToInt(item.Value); //get the list of values
-                    HashSet<int> set = new HashSet<int>(list); //create a hashset to store the unique values
-                    list = set.ToList(); //convert the hashset back to a list
-                    list.Sort(); //sort the list
-
-                    res.Add(item.Key, Utils.ConvertToObject(list)); //add the unique values to the dictionary
-                }
-                else if (item.Value.Count > 0 && item.Value[0] is string)
-                {
-
-                    var list = new List<string>(); //create a new list to store the unique values
-
-                    list = item.Value.Cast<string>().ToList(); //get the list of values
-                    HashSet<string> set = new HashSet<string>(list); //create a hashset to store the unique values
-                    list = set.ToList(); //convert the hashset back to a list
-                    list.Sort(); //sort the list
-
-                    res.Add(item.Key, list.Cast<object>().ToList()); //add the unique values to the dictionary
-
+                    sortedResult.Add(item.Key, item.Value);
                 }
                 else
                 {
-                    res.Add(item.Key, item.Value); //add the non-integer values to the dictionary
+                    // Check if the first element is numeric to determine sort behavior
+                    if (item.Value.Count > 0 && int.TryParse(item.Value.First(), out _))
+                    {
+                        // If numeric, sort as integers and remove duplicates
+                        var numericSortedSet = new SortedSet<int>(item.Value.Select(int.Parse));
+                        sortedResult.Add(item.Key, numericSortedSet.Select(n => n.ToString()).ToList());
+                    }
+                    else
+                    {
+                        // Leave as is for non-numeric lists
+                        // If uniqueness is also required for non-numeric, consider applying a similar pattern with SortedSet or a distinct operation.
+                        sortedResult.Add(item.Key, item.Value.Distinct().ToList()); // Distinct() is used here to remove duplicates for consistency
+                    }
                 }
             }
 
-            return res;
+            return sortedResult;
         }
 
         /// <summary>
-        /// This method checks if the door is in <paramref name="param"/> and returns a tuple with a boolean (<c>true</c> if there is a door and <c>false</c> if there isn't)  and a list of two integers.
-        /// The FIRST INTEGER is the maximum height of the doors and the SECOND INTEGER is the maximum width of the doors.
+        /// This method formats the values of the dictionary <paramref name="res"/>. It returns a dictionary where the key is the code of the product and the value is the quantity of this product.
         /// </summary>
-        /// <param name="param">The same dictionary as the <c>GetValues</c> method.</param>
-        /// <param name="doorRealWidthFactor">The max width possible with two doors</param>
-        /// <returns><c>(bool, List(height, width)</c> </returns>
-        public async Task<(bool, List<int>)> CheckDoor(Dictionary<string, object> param, int doorRealWidthFactor = 2)
+        /// <param name="res"> The dictionary to format. It typically is the result of the database query.
+        /// </param>
+        /// <returns> The formatted dictionary.
+        /// </returns>
+        private Dictionary<string, int> FormatValues(List<Dictionary<string, string>> res)
         {
-            bool door = false;
+            string columnKey = "Code";
+            string columnValue = "Quantity";
 
-            if (param.ContainsKey("Door"))
+            var retVal = new Dictionary<string, int>();
+            string code = null;
+
+            foreach (var item in res)
             {
-                if (param["Door"] is string) //check if the door is selected
+                foreach (var key in item.Keys)
                 {
-                    door = param["Door"] == "True" ? true : false;
-                }
-                else
-                {
-                    door = param["Door"] != null ? (bool)param["Door"] : false;
-                }
-            }
-
-            var doors = await _databaseCatalog.GetData(new Dictionary<string, string> { { "Reference", "Door" } });
-
-            var heights = new List<int>();
-            var widths = new List<int>();
-
-            foreach (var item in doors)
-            {
-                foreach (var entry in item)
-                {
-                    bool isIntValue = int.TryParse(entry.Value?.ToString(), out int intValue); //check if the value is an integer
-                    if (entry.Key == "Height" && isIntValue)
+                    if (key == columnKey)
                     {
-                        heights.Add(intValue);
+                        code = item[key];
                     }
-                    else if (entry.Key == "Width" && isIntValue)
+
+                    if (key == columnValue)
                     {
-                        widths.Add(intValue * doorRealWidthFactor);
+                        if (int.TryParse(item[key], out int intValue))
+                        {
+                            retVal[code] = intValue;
+                        }
                     }
                 }
             }
-
-            return (door, new List<int> { heights.Max(), widths.Max() });
+            return retVal;
         }
 
-        public Dictionary<string, List<object>> FormatValues(List<Dictionary<string, string>> values, bool door, int widthMax, int heightMax, List<string> columns)
+        /// <summary>
+        /// This method returns a dictionary where the key is the name of a column in the catalog table and the value is a list of all the possible values for this column. The list is then used to display the values of each key of the returned dictionary in the client application.
+        /// </summary>
+        /// <param name="res"> The dictionary to format. It typically is the result of the database query.
+        /// </param>
+        /// <param name="dims"> The columns that set the dimensions of the cabinet (you don't need to touch it). By default : <code>{ "Width", "Height", "Depth" }</code>
+        /// </param>
+        /// <returns> The formatted dictionary.
+        /// </returns>
+        private Dictionary<string, List<string>> PickerValues(List<Dictionary<string, string>> res, List<string> dims)
         {
-            // Initialize the result dictionary with empty lists for each column
-            var res = columns.ToDictionary(column => column, column => new List<object>());
+            var retVal = new Dictionary<string, List<string>>();
 
-            foreach (var elem in values)
+            string ref_ = null;
+
+            foreach (var item in res)
             {
-                foreach (var column
-                    in columns)
+                foreach (var key in item.Keys)
                 {
-                    // Check if the current element has the column
-                    if (elem.TryGetValue(column, out var value) && !string.IsNullOrEmpty(value))
+                    if (key == "Reference")
                     {
-                        // Handle numeric values specifically for "Width" and "Height" due to additional checks
-                        if (int.TryParse(value, out int intValue))
+                        ref_ = item[key];
+                    }
+
+                    if (key == "Color" || key == "Material")
+                    {
+                        if (retVal.ContainsKey(ref_ + " " + key))
                         {
-                            if (!door || (column == "Width" && intValue <= widthMax) || (column == "Height" && intValue <= heightMax) || column == "Depth")
+                            retVal[ref_ + " " + key].Add(item[key]);
+                        }
+                        else
+                        {
+                            retVal[ref_ + " " + key] = new List<string> { item[key] };
+                        }
+                    }
+
+                    if (dims.Contains(key))
+                    {
+                        if (item[key] != null && item[key] != "")
+                        {
+                            if (retVal.ContainsKey(key))
                             {
-                                res[column].Add(intValue);
+                                retVal[key].Add(item[key]);
+                            }
+                            else
+                            {
+                                retVal[key] = new List<string> { item[key] };
                             }
                         }
-                        else // Directly add strings to the result
+
+                    }
+                }
+            }
+            return SortList(retVal, ignoredColumns: new List<string> { });
+        }
+
+        public async Task<Dictionary<string, List<string>>> GetPickerValues()
+        {
+            List<string> availableWidth = new List<string>();
+            List<string> availableHeight = new List<string>();  
+            List<string> availableDepth = new List<string>();
+            List<string> availablePanelColor = new List<string>();
+            List<string> availableAngleColor = new List<string>();  
+            List<string> availableDoorColor = new List<string>();
+            List<string> availableDoorMaterial = new List<string>();
+
+            var newData = await GetValues();
+            Dictionary<string, List<string>> partDict = newData.Item2;
+
+            bool panelColorflag = false;
+
+            foreach (var part in partDict)
+            {
+                if (part.Value != null)
+                {
+                    if (part.Key.Contains("Panel", StringComparison.OrdinalIgnoreCase) && part.Key.Contains("color", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (!panelColorflag)
                         {
-                            res[column].Add(value);
+                            availablePanelColor = part.Value;
+                            panelColorflag = true;
+                        }
+                        else
+                        {
+                            availablePanelColor = availablePanelColor.Intersect(part.Value).ToList();
                         }
                     }
                 }
             }
 
-            // Assuming SortList is capable of sorting the lists in 'res' by their natural order
-            return SortList(res);
-        }
+            if (partDict.ContainsKey("Height") && partDict["Height"] != null)         { availableHeight = partDict["Height"]; }
+            if (partDict.ContainsKey("Depth") && partDict["Depth"] != null)          { availableDepth = partDict["Depth"]; }
+            if (partDict.ContainsKey("Width") && partDict["Width"] != null)          { availableWidth = partDict["Width"]; }
+            if (partDict.ContainsKey("Door Color") && partDict["Door Color"] != null)     { availableDoorColor = partDict["Door Color"]; }
+            if (partDict.ContainsKey("Door Material") && partDict["Door Material"] != null)  { availableDoorMaterial = partDict["Door Material"]; }
+            if (partDict.ContainsKey("Angle Color") && partDict["Angle Color"]!= null)     {availableAngleColor = partDict["Angle Color"]; }
+
+            Dictionary<string,List<string>> returnValues = new Dictionary<string, List<string>> {
+                                { "Width", availableWidth }, { "Depth", availableDepth },
+                                { "Panel_color", availablePanelColor }, { "Height", availableHeight },
+                                { "Door_color", availableDoorColor }, {"Angle_color", availableAngleColor }, 
+                                {"Door_material", availableDoorMaterial}};
+
+            return returnValues;
+        }     
     }
 }

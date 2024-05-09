@@ -12,7 +12,22 @@ namespace Kitbox_project.ViewModels
         public int LockerID
         {
             get => _lockerID;
-            set => _lockerID = value;
+            set {
+                _lockerID = value;
+                OnPropertyChanged();
+                 }
+        }
+
+        //Locker contained in the LockerViewModel
+        private Locker _locker;
+        public Locker Locker
+        {
+            get => _locker;
+            set
+            {
+                _locker = value;
+                OnPropertyChanged();
+            }
         }
 
 

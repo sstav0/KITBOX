@@ -11,6 +11,7 @@ namespace Kitbox_project.Views
     {
         private Cabinet _cabinet;
         private CabinetViewModel _viewModel;
+        private LogOutViewModel _logOutViewModel;
         int indexLock = 0;
         int index = 1;
 
@@ -21,15 +22,34 @@ namespace Kitbox_project.Views
             InitializeComponent();
             _cabinet = cabinet;
             _viewModel = new CabinetViewModel();
+            _logOutViewModel = new LogOutViewModel();
             BindingContext = _viewModel;
+            LogOutButton.BindingContext = _logOutViewModel;
             LoadAvailableLockers();
             DefaultPickers();
-            
+            DisablePickers();
+
+
+        }
+
+        private void DisablePickers()
+        {
+            if (_viewModel.AvailableLockers.Count() == 0)
+            {
+                CabinetWidth.IsEnabled = true;
+                CabinetDepth.IsEnabled = true;
+                AngleIronColor.IsEnabled = true;
+            }
+            else
+            {
+                CabinetWidth.IsEnabled = false;
+                CabinetDepth.IsEnabled = false;
+                AngleIronColor.IsEnabled = false;
+            }
         }
 
         private void LoadAvailableLockers()
         {
-
 
 
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
@@ -40,7 +60,11 @@ namespace Kitbox_project.Views
 
         private void DefaultPickers()
         {
-            
+            Debug.WriteLine(_cabinet.Depth.ToString());
+            _viewModel.SelectedDepthItem = _cabinet.Depth.ToString();
+            _viewModel.SelectedWidthItem = _cabinet.Length.ToString();
+
+
             foreach (var locker in _cabinet.GetObservableLockers())
             {
                 Door door = new Door(locker.Door.Color, locker.Door.Material, Convert.ToInt32(locker.Width), Convert.ToInt32(locker.Height)); // Assuming default material and dimensions
@@ -61,7 +85,7 @@ namespace Kitbox_project.Views
             }
 
         }
-
+         
         private void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
@@ -88,15 +112,15 @@ namespace Kitbox_project.Views
             newLocker.LockerID = index;
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
-            System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            DisablePickers();
+
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
             if (indexLock is not 0)
             {
-
-
                 var locker = _viewModel.AvailableLockers[indexLock - 1];
                 Debug.WriteLine(locker);
                 locker.Color = _viewModel.SelectedLockerColorItem;
@@ -135,19 +159,39 @@ namespace Kitbox_project.Views
                     Debug.WriteLine("Error: No locker selected.");
                 }
             }
+            DisablePickers();
+
         }
+
+        private void OnDeleteLockerClicked(object sender, EventArgs e)
+        {
+            index = 1;
+            var button = sender as Button;
+            var locker = button?.BindingContext as LockerViewModel;
+            if (locker != null)
+            {
+                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel
+            }
+            //Debug.WriteLine("NOMBRE DE LOCKERS");
+            //Debug.WriteLine(_viewModel.AvailableLockers.Count());
+
+            foreach (var locke in _viewModel.AvailableLockers)
+            {
+                //Debug.WriteLine(locke);
+                //Debug.WriteLine(index);
+                locke.LockerID = index;
+                index +=1;
+            }
+        }
+
 
         private async void OnUpdateButtonClicked(object sender, EventArgs e)
         {
 
             // Implement logic to update cabinet details based on user input
-            // Example:
-            // _cabinet.Lockers[0].Color = LockerColorEntry.Text;
-            // _cabinet.Lockers[0].Height = Convert.ToInt32(LockerHeightEntry.Text);
-            // ...
-            //_cabinet.Length = Convert.ToInt32(CabinetWidth);
-            Debug.WriteLine(Convert.ToInt32(CabinetWidth.SelectedItem));
-            Debug.WriteLine(Convert.ToInt32(CabinetDepth.SelectedItem));
+
+            //Debug.WriteLine(Convert.ToInt32(CabinetWidth.SelectedItem));
+            //Debug.WriteLine(Convert.ToInt32(CabinetDepth.SelectedItem));
             _cabinet.Depth = Convert.ToInt32(_viewModel.SelectedDepthItem);
             _cabinet.Length = Convert.ToInt32(_viewModel.SelectedWidthItem);
             foreach (var locker in _cabinet.GetObservableLockers())

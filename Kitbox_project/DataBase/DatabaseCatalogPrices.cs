@@ -10,7 +10,7 @@ public class DatabaseCatalogPrices : Database
 {
     public DatabaseCatalogPrices(string id, string password) : base(id, password)
     {
-        tablename = "Catalog_save";
+        tablename = "Catalog";
 
     }
 

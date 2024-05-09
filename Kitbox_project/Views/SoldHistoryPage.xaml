@@ -7,13 +7,55 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Kitbox_project.Views"
     mc:Ignorable="d">
-    <ContentPage.Content>
-        <Grid>
-            <Label
-                HorizontalOptions="Center"
-                Text="Welcome to .NET MAUI!!!"
-                TextColor="Purple"
-                VerticalOptions="Center"/>
-        </Grid>
-    </ContentPage.Content>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.75*"/>
+            <RowDefinition Height="0.75*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="20"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Text="Sold History of :" Margin="0,0,0,10" HorizontalOptions="Start" 
+               FontSize="Header"
+               Grid.ColumnSpan="2" Grid.Column="1" />
+
+        <Label Text="{Binding Code}" Margin="0,0,0,10" HorizontalOptions="Center" 
+               FontSize="Header" FontAttributes="Bold"
+               Grid.Column="3" />
+
+        <Label Text="Choose the MINIMUM date:" HorizontalOptions="Start"
+               Padding="10" FontSize="Medium"
+               Grid.Row="1" Grid.Column="1" />
+
+        <DatePicker Date="{Binding SelectedMinDate}"
+                    Grid.Row="1" Grid.ColumnSpan="1" Grid.Column="2"/>
+
+        <Label Text="Choose the MAXIMUM date:" HorizontalOptions="Start"
+               Padding="10" FontSize="Medium"
+               Grid.Row="2" Grid.Column="1" />
+
+        <DatePicker Date="{Binding SelectedMaxDate}"
+                    Grid.Row="2" Grid.ColumnSpan="1" Grid.Column="2"/>
+
+        <Border BackgroundColor="#fdfdfd" Padding="20"
+                StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" 
+                Grid.Row="3" Grid.ColumnSpan="4" Grid.Column="1">
+
+            <Label Text="Graph Here" HorizontalOptions="Start"/>
+
+
+        </Border>
+    </Grid>
+    
 </ContentPage>

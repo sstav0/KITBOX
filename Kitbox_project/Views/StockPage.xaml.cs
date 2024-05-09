@@ -1,4 +1,6 @@
+using CommunityToolkit.Maui.Views;
 using Kitbox_project.ViewModels;
+using System.Diagnostics;
 
 namespace Kitbox_project.Views;
 
@@ -18,6 +20,18 @@ public partial class StockPage : ContentPage
         }
     }
 
+    private void OpenPopupStockPrices(object sender, TappedEventArgs e)
+    {
+        if (sender is Grid grid && grid.BindingContext is StockViewModel.StockItemViewModel selectedItem)
+        {
+            Debug.WriteLine("OpenPopupStockPrices");
+            selectedItem.LoadPricesData();
+            // Open popup with the stock prices
+            var popup = new PopupStockPrices(selectedItem);
+            this.ShowPopup(popup);
+        }
+    }
+
     private void OnOrderButtonClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)
@@ -33,5 +47,4 @@ public partial class StockPage : ContentPage
             stockViewModel.ApplyFilter(searchBar.Text);
         }
     }
-
 }
