@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Maui.Controls.Compatibility;
 using System.Windows.Input;
+using Syncfusion.Maui.Core.Carousel;
 //using Java.Lang;
 
 namespace Kitbox_project.Views
@@ -34,12 +35,14 @@ namespace Kitbox_project.Views
         int indexLock = 0;
         int totalSize = 0;
 
-        public CabinetCreatorPage(Order Order)
+        private List<Dictionary<string, int>> registeredPartsRefQuantity = new List<Dictionary<string, int>>();
+        public CabinetCreatorPage(Order Order, List<Dictionary<string, int>> registeredPartsRefQuantity = null)
         {
-            order = Order;
+            this.order = Order;
+            if (registeredPartsRefQuantity != null) { this.registeredPartsRefQuantity = registeredPartsRefQuantity; }
 
             InitializeComponent();
-            _viewModel = new CabinetViewModel();
+            _viewModel = new CabinetViewModel(this.registeredPartsRefQuantity);
             _logOutViewModel = new LogOutViewModel();
 
             BindingContext = _viewModel;
@@ -137,13 +140,22 @@ namespace Kitbox_project.Views
             }
 
             // Create a new LockerViewModel based on the selected parameters
-            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            Door door;
+            if (_viewModel.SelectedDoorColorItem != null && _viewModel.SelectedDoorMaterialItem != null)
+            {
+                door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            }
+            else
+            {
+                door = null;
+            }
+            
             Locker lockerToAdd = new Locker(Convert.ToInt32(_viewModel.SelectedHeightItem),
                                             Convert.ToInt32(_viewModel.SelectedDepthItem),
                                             Convert.ToInt32(_viewModel.SelectedWidthItem),
                                             _viewModel.SelectedLockerColorItem,
                                             door,
-                                            99999);
+                                            0);
 
             LockerViewModel newLocker = new LockerViewModel
             {
@@ -242,7 +254,7 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
+                viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
                 0 // Price
             )).ToList();
 
@@ -279,7 +291,7 @@ namespace Kitbox_project.Views
             order.Cart.Add(newCabinet);
 
             // Create the cart page
-            CartPage newCartPage = new CartPage(order);
+            CartPage newCartPage = new CartPage(order, _viewModel.registeredPartsRefQuantityList);
 
             // Make the cart page visible
             await Navigation.PushAsync(newCartPage);
