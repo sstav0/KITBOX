@@ -119,12 +119,6 @@ namespace Kitbox_project.ViewModels
                 DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
                 DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
-                //double price = 0; 
-                //string code = "";
-                //string reference = "";
-                //int quantity = 0;
-                //double unitPrice = 0;
-
                 foreach (var item in items)
                 {
                     string code = item["codeItem"];
