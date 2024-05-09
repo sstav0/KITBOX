@@ -547,8 +547,11 @@ namespace Kitbox_project.ViewModels
             {
                 AvailableLockers.Clear();
             }
+            OnPropertyChanged(nameof(AvailableLockers));
 
         }
+  
+        
         private void ExecuteOnResetLockerButtonClicked()
         {
             Debug.WriteLine("ExecuteOnResetLockerButtonClicked");

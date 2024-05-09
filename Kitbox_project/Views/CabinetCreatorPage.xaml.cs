@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Maui.Controls.Compatibility;
 using System.Windows.Input;
+using System.ComponentModel;
 //using Java.Lang;
 
 namespace Kitbox_project.Views
@@ -40,6 +41,7 @@ namespace Kitbox_project.Views
 
             InitializeComponent();
             _viewModel = new CabinetViewModel();
+            _viewModel.PropertyChanged += ViewModel_PropertyChanged;
             _logOutViewModel = new LogOutViewModel();
 
             BindingContext = _viewModel;
@@ -48,6 +50,7 @@ namespace Kitbox_project.Views
 
             // Load available lockers into the view model
             LoadAvailableLockers();
+            DisablePickers();
         }
 
         private void LoadAvailableLockers()
@@ -85,6 +88,13 @@ namespace Kitbox_project.Views
             _viewModel.UpdatePickerList("Angle_color");
         }
 
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_viewModel.AvailableLockers))
+            {
+                DisablePickers();
+            }
+        }
 
         private void OnDeleteLockerClicked(object sender, EventArgs e)
         {
