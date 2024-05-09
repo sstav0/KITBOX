@@ -102,7 +102,7 @@ namespace Kitbox_project.Views
                 locke.LockerID = index;
                 index += 1;
             }
-            //DisablePickers();
+            DisablePickers();
 
         }
 
@@ -161,7 +161,7 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
-            //DisablePickers();
+            DisablePickers();
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -184,7 +184,7 @@ namespace Kitbox_project.Views
             }
 
         }
-/*
+
         private void DisablePickers()
         {
             if (_viewModel.AvailableLockers.Count() == 0)
@@ -201,7 +201,7 @@ namespace Kitbox_project.Views
             }
         }
 
-*/
+
 
         private void OnEditButtonClicked(object sender, EventArgs e)
         {
