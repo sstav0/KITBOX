@@ -119,28 +119,32 @@ namespace Kitbox_project.ViewModels
                 DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
                 DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
-                double price = 0; 
-                string code = "";
-                string reference = "";
-                int quantity = 0;
-                double unitPrice = 0;
+                //double price = 0; 
+                //string code = "";
+                //string reference = "";
+                //int quantity = 0;
+                //double unitPrice = 0;
 
                 foreach (var item in items)
                 {
-                    code = item["codeItem"];
-                    quantity = int.Parse(item["quantity"]);
+                    string code = item["codeItem"];
+                    int quantity = int.Parse(item["quantity"]);
 
                     // Get "Price" from PnD where "Code" = codeItem (from step 1 below) and "idSupplier" = SupplierId (property from SupplierOrder class) 
                     var resPnD = await databasePnD.GetData(new Dictionary<string, string> { { "Code", code }, { "idSupplier", SupplierId.ToString() } }, new List<string> { "Price"} );
-                    
+
+                    double unitPrice; 
                     if (int.TryParse(resPnD[0]["Price"], out int result))
                     {
                         unitPrice = result;
+                    }else
+                    {
+                        throw new Exception("Price is not a number");
                     }
 
                     // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
                     var resCatalog = await databaseCatalog.GetData(new Dictionary<string, string> { { "Code", code } }, new List<string> { "Reference" });
-                    reference = resCatalog[0]["Reference"];
+                    string reference = resCatalog[0]["Reference"];
 
                     // Step 3 => Construct a new SupplierOrderItem with the infos from step 2 and add it to the list of SupplierOrderItems
                     SupplierOrderItems.Add(new SupplierOrderItem(reference, code, quantity, unitPrice));

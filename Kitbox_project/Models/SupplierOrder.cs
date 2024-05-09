@@ -22,11 +22,7 @@ namespace Kitbox_project.Models
             _delay = delay;
             _price = price;
             _status = status;
-            _supplierOrderItems = new List<SupplierOrderItem>()
-            {
-                new SupplierOrderItem("Panel", "PAN", 10, 0.94),
-                new SupplierOrderItem("Door", "DOR", 22, 1.29)
-            };
+            _supplierOrderItems = new List<SupplierOrderItem>();
         }
 
         public int OrderID
