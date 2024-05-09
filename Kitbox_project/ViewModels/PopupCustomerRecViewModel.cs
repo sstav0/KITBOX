@@ -13,7 +13,6 @@ using CommunityToolkit.Maui.Views;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
-using TEST_ORM;
 using Kitbox_project.DataBase;
 
 namespace Kitbox_project.ViewModels
