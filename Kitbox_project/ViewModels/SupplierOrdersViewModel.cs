@@ -143,7 +143,7 @@ namespace Kitbox_project.ViewModels
                     reference = resCatalog[0]["Reference"];
 
                     // Step 3 => Construct a new SupplierOrderItem with the infos from step 2 and add it to the list of SupplierOrderItems
-                    //_supplierOrderItems.Add(new );
+                    SupplierOrderItems.Add(new SupplierOrderItem(reference, code, quantity, unitPrice));
                 }
             }
 
