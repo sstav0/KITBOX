@@ -117,8 +117,8 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         {
             OrdersPage newActiveOrdersPage = new OrdersPage();
 
-            newActiveOrdersPage.Orders.Add(order);
-            newActiveOrdersPage.UpdateOrdersFromAfar(order);
+            //newActiveOrdersPage.Orders.Add(order);
+            //newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
             await Navigation.PushAsync(newActiveOrdersPage);
         }
