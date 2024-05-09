@@ -9,7 +9,6 @@ using Kitbox_project.ViewModels;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using Microsoft.Maui.Controls;
-using Microsoft.UI.Xaml.Controls;
 using Kitbox_project.DataBase;
 using Microsoft.EntityFrameworkCore.Storage;
 
