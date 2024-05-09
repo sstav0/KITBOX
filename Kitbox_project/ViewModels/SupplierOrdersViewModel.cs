@@ -27,7 +27,7 @@ namespace Kitbox_project.ViewModels
         private async void LoadDataAsync()
         {
             var supplierOrders = await DBSupplierOrders.LoadAll();
-            SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(await DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
+            SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
         }
 
         public List<SupplierOrderViewModel> SupplierOrders
@@ -76,18 +76,12 @@ namespace Kitbox_project.ViewModels
             private bool _supplierOrderVisibility;
             private string _date;
             private string _supplierName;
-            private List<StockItem> _supplierOrderItems = new List<StockItem>()
-            {
-                new StockItem(1, "Panel", "PAN", 5, 2, 0, true),
-                new StockItem(2, "Door", "DOR", 4, 1, 6, false),
-            };
-            public List<StockItem> SupplierOrderItems => _supplierOrderItems;
             public ICommand OnReceivedClicked { get; }
             // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
             private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
             private DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
 
-            public SupplierOrderViewModel(int orderID, StockItem item, int supplierId, int delay, int quantity, double price, string status) : base(orderID, item, supplierId, delay, quantity, price, status)
+            public SupplierOrderViewModel(int orderID, int supplierId, int delay, double price, string status) : base(orderID, supplierId, delay, price, status)
             {
                 _supplierOrderVisibility = true;
                 _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
@@ -110,7 +104,6 @@ namespace Kitbox_project.ViewModels
                     OnPropertyChanged(nameof(Status));
                 }
                 UpdateDBOrderStatus();
-                LoadSupplierName();
             }
 
             private async void LoadSupplierName()
@@ -164,10 +157,8 @@ namespace Kitbox_project.ViewModels
             {
                 return supplierOrders.Select(order => new SupplierOrderViewModel(
                         order.OrderID,
-                        order.Item,
                         order.SupplierId,
                         order.Delay,
-                        order.Quantity,
                         order.Price,
                         order.Status
                     )).ToList();

@@ -146,11 +146,11 @@
                                                     <Label Grid.Column="1" Margin="10,5" FontSize="Body" Text="{Binding Code}" VerticalOptions="Center" />
                                                     <Label Grid.Column="2" Margin="10,5" FontSize="Body" Text="{Binding Quantity}" VerticalOptions="Center" />
                                                     <HorizontalStackLayout Grid.Column="3" Margin="10,5" VerticalOptions="Center">
-                                                        <Label FontSize="Body" Text="Bind to Unit Price" />
+                                                        <Label FontSize="Body" Text="{Binding UnitPrice}" />
                                                         <Label FontSize="Body" Text="€" />
                                                     </HorizontalStackLayout>
                                                     <HorizontalStackLayout Grid.Column="4" Margin="10,5" VerticalOptions="Center">
-                                                        <Label FontSize="Body" Text="Bind to Total Price" />
+                                                        <Label FontSize="Body" Text="{Binding TotalPrice}" />
                                                         <Label FontSize="Body" Text="€" />
                                                     </HorizontalStackLayout>
                                                 </Grid>
