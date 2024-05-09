@@ -22,7 +22,7 @@ public class OrderViewModel : INotifyPropertyChanged
         set
         {
             _orders = value;
-            OnPropertyChanged(nameof(_orders));
+            OnPropertyChanged(nameof(Orders));
         }
     }
 
@@ -42,6 +42,8 @@ public class OrderViewModel : INotifyPropertyChanged
     public class OrderItemViewModel : OrderItem
     {
         private List<OrderStockItem> _orderStockItems;
+        private string _stringedOrderStatus;
+        private string _stringedCreationTime;
         private bool _orderItemVisibility;
         private string _notifaction;
 
@@ -50,9 +52,12 @@ public class OrderViewModel : INotifyPropertyChanged
         private DatabaseStock _dBStock = new("kitboxer", "kitboxing");
         
         private Dictionary<string, int> _refsAndQuantities = new();
-        public OrderItemViewModel(int idOrder, int idCustomer, Status.OrderStatus status, DateTime creationTime) : base(idOrder, idCustomer, status, creationTime)
+        public OrderItemViewModel(int idOrder, int idCustomer, OrderStatus orderStatus, DateTime creationTime) : base(idOrder, idCustomer, orderStatus, creationTime)
         {
             //LoadOrderStockItems();
+            _stringedOrderStatus = Status.ConvertOrderStatusToString(orderStatus);
+            _stringedCreationTime = creationTime.ToString();
+            
             _orderItemVisibility = true;
             _notifaction = NotificationFromOrderStatus();
         }
@@ -63,7 +68,27 @@ public class OrderViewModel : INotifyPropertyChanged
             set
             {
                 _orderStockItems = value;
-                OnPropertyChanged(nameof(_orderStockItems));
+                OnPropertyChanged(nameof(OrderStockItems));
+            }
+        }
+
+        public string StringedOrderStatus
+        {
+            get => _stringedOrderStatus;
+            set
+            {
+                _stringedOrderStatus = value;
+                OnPropertyChanged(nameof(StringedOrderStatus));
+            }
+        }
+
+        public string StringedCreationTime
+        {
+            get => _stringedCreationTime;
+            set
+            {
+                _stringedCreationTime = value;
+                OnPropertyChanged(nameof(StringedCreationTime));
             }
         }
 
@@ -73,7 +98,7 @@ public class OrderViewModel : INotifyPropertyChanged
             set
             {
                 _orderItemVisibility = value;
-                OnPropertyChanged(nameof(_orderItemVisibility));
+                OnPropertyChanged(nameof(OrderItemVisibility));
             }
         }
 
@@ -89,7 +114,7 @@ public class OrderViewModel : INotifyPropertyChanged
 
         public string NotificationFromOrderStatus()
         {
-            switch (Status)
+            switch (OrderStatus)
             {
                 case OrderStatus.WaitingConfirmation:
                     {
@@ -120,7 +145,7 @@ public class OrderViewModel : INotifyPropertyChanged
 
         public static List<OrderItemViewModel> ConvertToViewModels(List<OrderItem> orderItems)
         {
-            return orderItems.Select(orderItem => new OrderItemViewModel(orderItem.IdOrder, orderItem.IdCustomer, orderItem.Status, orderItem.CreationTime)).ToList();
+            return orderItems.Select(orderItem => new OrderItemViewModel(orderItem.IdOrder, orderItem.IdCustomer, orderItem.OrderStatus, orderItem.CreationTime)).ToList();
         }
 
         public async Task LoadOrderStockItems()

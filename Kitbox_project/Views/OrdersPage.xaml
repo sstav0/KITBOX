@@ -24,11 +24,11 @@
 
                 <Button Text="Active Orders" Clicked="OnActiveOrdersClicked" IsEnabled="True"
                         BackgroundColor="Gray" TextColor="Black" x:Name="ActiveOrdersButton" 
-                        MaximumWidthRequest="150" Margin="0, 0, 40, 20"/>
+                        MaximumWidthRequest="200" Margin="0, 0, 40, 20"/>
 
-                <Button x:Name="FinishedOrdersButton" Text="Finished Orders" Clicked="OnFinishedOrdersClicked" IsEnabled="True"
-                        BackgroundColor="#512BD4" TextColor="White"
-                        MaximumWidthRequest="150"  Margin="0, 0, 40, 20"/>
+                <Button Text="Finished Orders" Clicked="OnFinishedOrdersClicked" IsEnabled="True"
+                        BackgroundColor="#512BD4" TextColor="White" x:Name="FinishedOrdersButton" 
+                        MaximumWidthRequest="200"  Margin="0, 0, 40, 20"/>
 
             </HorizontalStackLayout>
 
@@ -67,9 +67,9 @@
                                 </Grid.ColumnDefinitions>
                                 <Label Grid.Column="0" HorizontalTextAlignment="Center" Text="{Binding IdOrder}"/>
 
-                                <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="{Binding Status}"/>
+                                <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="{Binding StringedOrderStatus}"/>
 
-                                <Label Grid.Column="2" HorizontalTextAlignment="Center" Text="{Binding CreationTime}"/>
+                                <Label Grid.Column="2" HorizontalTextAlignment="Center" Text="{Binding StringedCreationTime}"/>
 
                                 <Button Text="Confirm" Grid.Column="4" Clicked="OnConfirmOrderButtonClicked"/>
                                 

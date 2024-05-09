@@ -13,14 +13,14 @@ public class OrderItem : INotifyPropertyChanged
 {
     private int _idOrder;
     private int _idCustomer;
-    private Status.OrderStatus _status;
+    private Status.OrderStatus _orderStatus;
     private DateTime _creationTime;
 
-    public OrderItem(int idOrder, int idCustomer, Status.OrderStatus status, DateTime creationTime)
+    public OrderItem(int idOrder, int idCustomer, Status.OrderStatus orderStatus, DateTime creationTime)
     {
         _idOrder = idOrder;
         _idCustomer = idCustomer;
-        _status = status;
+        _orderStatus = orderStatus;
         _creationTime = creationTime;
     }
 
@@ -34,13 +34,13 @@ public class OrderItem : INotifyPropertyChanged
         get => _idCustomer;
     }
 
-    public Status.OrderStatus Status
+    public Status.OrderStatus OrderStatus
     {
-        get => _status;
+        get => _orderStatus;
         set
         {
-            _status = value;
-            OnPropertyChanged(nameof(_status));
+            _orderStatus = value;
+            OnPropertyChanged(nameof(OrderStatus));
         }
     }
 
