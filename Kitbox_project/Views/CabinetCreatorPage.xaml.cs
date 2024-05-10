@@ -32,9 +32,19 @@ namespace Kitbox_project.Views
 
         private Order order;
 
+        private int _totalSize;
+        public int TotalSize
+        {
+            get => _totalSize;
+            set
+            {
+                _totalSize = value;
+                OnPropertyChanged(); // Implement INotifyPropertyChanged if needed
+            }
+        }
+
 
         int indexLock = 0;
-        int totalSize = 0;
 
         private List<Dictionary<string, int>> registeredPartsRefQuantity = new List<Dictionary<string, int>>();
         public CabinetCreatorPage(Order Order, List<Dictionary<string, int>> registeredPartsRefQuantity = null)
@@ -55,6 +65,8 @@ namespace Kitbox_project.Views
             // Load available lockers into the view model
             LoadAvailableLockers();
             DisablePickers();
+            calculateTotalSize();
+
         }
 
         private void LoadAvailableLockers()
@@ -97,6 +109,7 @@ namespace Kitbox_project.Views
             if (e.PropertyName == nameof(_viewModel.AvailableLockers))
             {
                 DisablePickers();
+                calculateTotalSize();
             }
         }
 
@@ -127,6 +140,8 @@ namespace Kitbox_project.Views
                 Debug.WriteLine(locke.NotePartsAvailability);
             }
             DisablePickers();
+            calculateTotalSize();
+
 
         }
 
@@ -195,6 +210,7 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             DisablePickers();
+            calculateTotalSize();
         }
 
         private async void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -217,6 +233,23 @@ namespace Kitbox_project.Views
                 Debug.WriteLine("Please Select a locker");
             }
         }
+        private void calculateTotalSize()
+        
+            {
+                // Convert ObservableCollection<LockerViewModel> to List<Locker>
+                List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                    Convert.ToInt32(viewModel.Height),
+                    Convert.ToInt32(_viewModel.SelectedDepthItem),
+                    Convert.ToInt32(_viewModel.SelectedWidthItem),
+                    viewModel.Color,
+                    viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
+                    0 // Price
+                )).ToList();
+
+                TotalSize = lockers.Sum(locker => locker.Height);
+            Debug.WriteLine(TotalSize);
+            }
+
 
         private void DisablePickers()
         {
@@ -272,9 +305,9 @@ namespace Kitbox_project.Views
                 0 // Price
             )).ToList();
 
-            totalSize = lockers.Sum(locker => locker.Height);
+            TotalSize = lockers.Sum(locker => locker.Height);
             Debug.WriteLine("La taille totale est");
-            Debug.WriteLine(totalSize);
+            Debug.WriteLine(TotalSize);
 
 
             //On crée un nouveau cabinet
@@ -282,7 +315,7 @@ namespace Kitbox_project.Views
                 lockers,
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
-                totalSize, // Height pour le moment mais faudra remplacer par angle iron
+                TotalSize, // Height pour le moment mais faudra remplacer par angle iron
                 1
             ); 
 
