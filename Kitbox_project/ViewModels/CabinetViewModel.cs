@@ -21,8 +21,6 @@ namespace Kitbox_project.ViewModels
 
         private bool selectColorEnabler = true;
 
-
-
         private List<string> oldItemSourceLockerColor = ["empty"];
         private List<string> oldItemSourceLockerHeight = ["empty"];
         private List<string> oldItemSourceLockerDepth = ["empty"];
@@ -31,7 +29,7 @@ namespace Kitbox_project.ViewModels
         private List<string> oldItemSourceDoorPickerMaterial = ["empty"];
         private List<string> oldItemSourceDoorPicker = ["empty"];
 
-        private Dictionary<string,int> registeredPartsRefQuantity = new Dictionary<string,int>();
+        public List<Dictionary<string, int>> registeredPartsRefQuantityList = new List<Dictionary<string, int>>();
 
         private List<Locker> availableLocker = new List<Locker>();
         public Dictionary<string,object> selectedValues = new Dictionary<string,object>();
@@ -136,12 +134,14 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public CabinetViewModel()
+        public CabinetViewModel(List<Dictionary<string, int>> registeredPartsRefQuantity = null)
         {
             Lockers = new ObservableCollection<LockerViewModel>();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalPrice();
             Lockers.CollectionChanged += (sender, e) => CalculateTotalSize();
             OnResetLockerButtonClicked = new Command(ExecuteOnResetLockerButtonClicked);
+
+            if (registeredPartsRefQuantity != null) { this.registeredPartsRefQuantityList = registeredPartsRefQuantity; Debug.WriteLine("ViewModel Dict Passed"); }
 
             ResetLocker();
 
@@ -155,8 +155,6 @@ namespace Kitbox_project.ViewModels
             get => _lockers;
             set
             {
-                Debug.WriteLine("Setting Lockers property...");
-
                 _lockers = value;
                 OnPropertyChanged();
                 CalculateTotalSize(); // Pas sûr d'en avoir besoin si j'ai mes Lockers.CollectionChanged quelques lignes au dessus
@@ -247,7 +245,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedAngleIronColor = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("2");
                 }
             }
         }
@@ -262,7 +259,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedLockerColorItem = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("3");
                 }
             }
         }
@@ -276,7 +272,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedHeightItem = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("4");
                 }
             }
         }
@@ -290,7 +285,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedDoorColorItem = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("5");
                 }
             }
         }
@@ -305,7 +299,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedDoorMaterialItem = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("6");
                 }
             }
         }
@@ -320,7 +313,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedDepthItem = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("7");
                 }
             }
         }
@@ -334,7 +326,6 @@ namespace Kitbox_project.ViewModels
                 {
                     _selectedWidthItem = value;
                     OnPropertyChanged();
-                    Debug.WriteLine("8");
                 }
             }
         }
@@ -449,8 +440,6 @@ namespace Kitbox_project.ViewModels
         /// </remarks>
         public async void UpdatePickerList(string param)//, string selectedItem)
         {
-            Debug.WriteLine("--- UpdatePickerList ---");
-
             List<string> newValue = new List<string>(); 
             selectedValues = new Dictionary<string, object> {
                                 { "Width", _selectedWidthItem }, { "Depth", _selectedDepthItem },
@@ -495,8 +484,6 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-
-
         /// <summary>
         /// Updates the availability of selectable items for all pickers based on currently selected values.
         /// </summary>
@@ -507,8 +494,6 @@ namespace Kitbox_project.ViewModels
         /// </remarks>
         private void UpdateAvailability()
         {
-            Debug.WriteLine("UpdateAvailability ---");
-
             UpdatePickerList("Depth");
             UpdatePickerList("Panel_color");
             UpdatePickerList("Height");
@@ -520,11 +505,12 @@ namespace Kitbox_project.ViewModels
 
         public async Task<string> NotePartsAvailabilityAsync(Locker lockerToAdd)
         {
-            Debug.WriteLine("NotePartsAvailability ---");
-            string message = "Somme parts are currently not in our stock";
+            Debug.WriteLine("--- NotePartsAvailability ---");
+            string message = "Some parts are currently not in our stock for this locker";
 
-            var partAvailabilityResult = await lockerToAdd.ArePartsAvailable(registeredPartsRefQuantity);
-            registeredPartsRefQuantity = partAvailabilityResult.Item2;
+            var partAvailabilityResult = await lockerToAdd.ArePartsAvailable(registeredPartsRefQuantityList);
+
+            registeredPartsRefQuantityList.Add(partAvailabilityResult.Item2);
             
             if(partAvailabilityResult.Item1 == true)
             {
@@ -538,6 +524,8 @@ namespace Kitbox_project.ViewModels
         private void ResetLocker()
         {
             Debug.WriteLine("ResetLocker");
+
+            //registeredPartsRefQuantity = null;
 
             EnablecheckDoor = true; IsDoorChecked = false; IsDoorPickerVisible = false;
 
@@ -555,6 +543,7 @@ namespace Kitbox_project.ViewModels
         private void ExecuteOnResetLockerButtonClicked()
         {
             Debug.WriteLine("ExecuteOnResetLockerButtonClicked");
+            registeredPartsRefQuantityList = null;
             ResetLocker();
         }
 
