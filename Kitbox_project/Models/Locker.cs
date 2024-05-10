@@ -279,6 +279,7 @@ namespace Kitbox_project.Models
             bool returnBool = true;
             //setup registererRef Dictionary
             Dictionary<string, int> registeredRef = new Dictionary<string, int>();
+            Dictionary<string, int> returnRegisteredRefDict = new Dictionary<string, int>();
 
             if (registeredCatalogRef != null)
             {
@@ -293,12 +294,15 @@ namespace Kitbox_project.Models
             }
 
             //for every parts needed in a locker
-            foreach (string threeLetterRef in partsToBuildALockerDict.Keys)
+            foreach (string threeLetterRef in partsToBuildALockerDict.Keys.ToList())
             {
                 //Get the catalog reference for this part
                 string catalogRef = await GetCatalogRef(threeLetterRef);
+
+                returnRegisteredRefDict.Add(catalogRef, partsToBuildALockerDict[threeLetterRef]);
+
                 //if the reference isn't already used for other lockers of this same cabinet
-                if (!registeredRef.ContainsKey(catalogRef)) 
+                if (!registeredRef.ContainsKey(catalogRef))
                 {
                     registeredRef.Add(catalogRef, 0);
                 }
@@ -309,7 +313,7 @@ namespace Kitbox_project.Models
                     returnBool = false;
                 }
             }
-            return (returnBool, registeredRef);
+            return (returnBool, returnRegisteredRefDict);
         }
     }
 }

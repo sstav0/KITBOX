@@ -440,8 +440,6 @@ namespace Kitbox_project.ViewModels
         /// </remarks>
         public async void UpdatePickerList(string param)//, string selectedItem)
         {
-            Debug.WriteLine("--- UpdatePickerList ---");
-
             List<string> newValue = new List<string>(); 
             selectedValues = new Dictionary<string, object> {
                                 { "Width", _selectedWidthItem }, { "Depth", _selectedDepthItem },
@@ -486,8 +484,6 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-
-
         /// <summary>
         /// Updates the availability of selectable items for all pickers based on currently selected values.
         /// </summary>
@@ -498,8 +494,6 @@ namespace Kitbox_project.ViewModels
         /// </remarks>
         private void UpdateAvailability()
         {
-            Debug.WriteLine("UpdateAvailability ---");
-
             UpdatePickerList("Depth");
             UpdatePickerList("Panel_color");
             UpdatePickerList("Height");
@@ -511,7 +505,7 @@ namespace Kitbox_project.ViewModels
 
         public async Task<string> NotePartsAvailabilityAsync(Locker lockerToAdd)
         {
-            Debug.WriteLine("NotePartsAvailability ---");
+            Debug.WriteLine("--- NotePartsAvailability ---");
             string message = "Some parts are currently not in our stock";
 
             var partAvailabilityResult = await lockerToAdd.ArePartsAvailable(registeredPartsRefQuantityList);

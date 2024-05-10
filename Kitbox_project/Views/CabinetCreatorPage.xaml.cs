@@ -89,21 +89,31 @@ namespace Kitbox_project.Views
         }
 
 
-        private void OnDeleteLockerClicked(object sender, EventArgs e)
+        private async void OnDeleteLockerClicked(object sender, EventArgs e)
         {
             int index = 1;
             var button = sender as Button;
             var locker = button?.BindingContext as LockerViewModel;
+            int delIndex1 = _viewModel.registeredPartsRefQuantityList.Count - _viewModel.AvailableLockers.Count;
+            int delCount = _viewModel.AvailableLockers.Count;
+
             if (locker != null)
             {
-                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel
+                _viewModel.registeredPartsRefQuantityList.RemoveRange(delIndex1,delCount);
+                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel          
             }
 
-            foreach (var locke in _viewModel.AvailableLockers)
+            foreach (LockerViewModel locke in _viewModel.AvailableLockers)
             {
                 //On redonne un bon index à chacun 
                 locke.LockerID = index;
                 index += 1;
+
+                locke.NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(locke.Locker);
+
+                Debug.WriteLine(locke.LockerID);
+                Debug.WriteLine(locke.Locker.ToString());
+                Debug.WriteLine(locke.NotePartsAvailability);
             }
             //DisablePickers();
 
@@ -127,13 +137,11 @@ namespace Kitbox_project.Views
                     data.Remove("Door_material");
                     if (data.ContainsValue(null))
                     {
-                        Debug.WriteLine(" -- Empty Pickers !! -- ");
                         return;
                     }
                 }
                 else
                 {
-                    Debug.WriteLine(" -- Empty Pickers !! -- ");
                     return;
                 }
 
@@ -143,7 +151,10 @@ namespace Kitbox_project.Views
             Door door;
             if (_viewModel.SelectedDoorColorItem != null && _viewModel.SelectedDoorMaterialItem != null)
             {
-                door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+                door = new Door(_viewModel.SelectedDoorColorItem, 
+                    _viewModel.SelectedDoorMaterialItem, 
+                    Convert.ToInt32(_viewModel.SelectedHeightItem), 
+                    Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
             }
             else
             {
@@ -174,6 +185,8 @@ namespace Kitbox_project.Views
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
             //DisablePickers();
+
+            Debug.WriteLine("-- AvailableLockers count :" + _viewModel.AvailableLockers.Count());
         }
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
