@@ -56,17 +56,13 @@ public class OrderItem : INotifyPropertyChanged
     }
 }
 
-public class OrderStockItem
+public class OrderStockItem : StockItem
 {
-    private StockItem _stockItem;
-    private int _quantity;
+    private int _quantityInOrder;
 
-    public OrderStockItem(StockItem stockItem, int quantity)
+    public OrderStockItem(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
     {
-        _stockItem = stockItem;
-        _quantity = quantity;
     }
 
-    public StockItem StockItem { get => _stockItem; set => _stockItem = value; }
-    public int Quantity { get => _quantity; set => _quantity = value; }
+    public int QuantityInOrder { get => _quantityInOrder; set => _quantityInOrder = value; }
 }
