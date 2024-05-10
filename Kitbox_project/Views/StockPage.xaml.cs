@@ -11,12 +11,12 @@ public partial class StockPage : ContentPage
 		InitializeComponent();
 	}
 
-    private void OnEditUpdateClicked(object sender, EventArgs e)
+    private async void OnEditUpdateClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)
         {
             // Call the method in the ViewModel
-            (BindingContext as StockViewModel)?.EditUpdateQuantity(stockItem);
+            await stockItem.EditUpdateQuantity();
         }
     }
 

@@ -178,9 +178,10 @@ namespace Kitbox_project.ViewModels
             //Update the status of an order in the DB.dbo.SupplierOrder
             private async void UpdateDBOrderStatus()
             {
-                Dictionary<string, object> newData = new Dictionary<string, object> { { "status", this.Status } };
-                Dictionary<string, object> whereQuery = new Dictionary<string, object> { { "idSupplierOrder", this.OrderID} };
-                await DBSupplierOrder.Update(newData, whereQuery);
+                await DBSupplierOrder.Update(
+                    new Dictionary<string, object> { { "status", Status } },
+                    new Dictionary<string, object> { { "idSupplierOrder", OrderID.ToString()} }
+                );
             }
 
             public bool SupplierOrderVisibility

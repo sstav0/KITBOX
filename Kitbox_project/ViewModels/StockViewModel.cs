@@ -16,7 +16,6 @@ namespace Kitbox_project.ViewModels
     {
         private List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
-        private readonly DatabaseCatalogPrices DBCatalog = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
         public StockViewModel()
         {
@@ -52,77 +51,7 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public async Task EditUpdateQuantity(StockItemViewModel stockItem)
-        {
-            // If Update button pressed
-            if (stockItem.IsEditing)
-            {
-                // If the input quantity is a number and non-negative
-                if (stockItem.IsValidQuantity)
-                {
-                    stockItem.InputQuantity = stockItem.InputQuantity.TrimStart('0') != "" ? stockItem.InputQuantity.TrimStart('0') : "0";
-
-                    stockItem.Quantity = Convert.ToInt32(stockItem.InputQuantity);
-                    await DBStock.Update(
-                        new Dictionary<string, object> { { "Quantity", stockItem.Quantity } },
-                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
-
-                    stockItem.IsEditing = false;
-                    stockItem.ButtonText = "Edit";
-                    stockItem.ButtonColor = Color.Parse("#512BD4");
-                }
-                // If the input quantity is not a number or negative, keep the previous quantity
-                else
-                {
-                    stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
-                    stockItem.ButtonText = "Update";
-                    stockItem.ButtonColor = Color.Parse("green");
-                }
-            }
-            // If Edit button pressed
-            else
-            {
-                stockItem.IsEditing = true;
-                stockItem.ButtonText = "Update";
-                stockItem.ButtonColor = Color.Parse("green");
-            }
-        }
-
-        public async Task EditUpdatePrice(StockItemViewModel stockItem)
-        {
-            // If Update button pressed
-            if (stockItem.IsEditingPrice)
-            {
-                // If the input price is a number and non-negative
-                if (stockItem.IsValidPrice)
-                {
-                    stockItem.InputPrice = stockItem.InputPrice.TrimStart('0') != "" ? stockItem.InputPrice.TrimStart('0') : "0";
-
-                    stockItem.CatalogPrice = Convert.ToInt32(stockItem.InputPrice);
-                    await DBCatalog.Update(
-                        new Dictionary<string, object> { { "Price", stockItem.CatalogPrice } },
-                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
-
-                    stockItem.IsEditingPrice = false;
-                    stockItem.PriceButtonText = "Edit";
-                    stockItem.PriceButtonColor = Color.Parse("#512BD4");
-                }
-                // If the input price is not a number or negative, keep the previous price
-                else
-                {
-                    stockItem.InputPrice = Convert.ToString(stockItem.CatalogPrice);
-                    stockItem.PriceButtonText = "Update";
-                    stockItem.PriceButtonColor = Color.Parse("green");
-                }
-            }
-            // If Edit button pressed
-            else
-            {
-                stockItem.IsEditingPrice = true;
-                stockItem.PriceButtonText = "Update";
-                stockItem.PriceButtonColor = Color.Parse("green");
-            }
-        }
+        
 
         public async Task EditIsInCatalog(StockItemViewModel stockItem)
         {
@@ -173,9 +102,10 @@ namespace Kitbox_project.ViewModels
             private bool _isValidPrice;
             private string _inputPrice;
 
-            private DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
-            private DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
-            private DatabaseCatalogPrices DBCatalogPrices = new DatabaseCatalogPrices("kitboxer", "kitboxing");
+            private readonly DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
+            private readonly DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
+            private readonly DatabaseCatalogPrices DBCatalog = new DatabaseCatalogPrices("kitboxer", "kitboxing");
+            private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
 
             public StockItemViewModel(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
             {
@@ -346,6 +276,80 @@ namespace Kitbox_project.ViewModels
                 return stockItems.Select(item => new StockItemViewModel(item.Id, item.Reference, item.Code, item.Quantity, item.IncomingQuantity, item.OutgoingQuantity, item.InCatalog)).ToList();
             }
 
+            public async Task EditUpdateQuantity()
+            {
+                // If Update button pressed
+                if (IsEditing)
+                {
+                    // If the input quantity is a number and non-negative
+                    if (IsValidQuantity)
+                    {
+                        InputQuantity = InputQuantity.TrimStart('0') != "" ? InputQuantity.TrimStart('0') : "0";
+
+                        Quantity = Convert.ToInt32(InputQuantity);
+                        await DBStock.Update(
+                            new Dictionary<string, object> { { "Quantity", Quantity.ToString() } },
+                            new Dictionary<string, object> { { "idStock", Id.ToString() } });
+
+                        IsEditing = false;
+                        ButtonText = "Edit";
+                        ButtonColor = Color.Parse("#512BD4");
+                    }
+                    // If the input quantity is not a number or negative, keep the previous quantity
+                    else
+                    {
+                        InputQuantity = Convert.ToString(Quantity);
+                        ButtonText = "Update";
+                        ButtonColor = Color.Parse("green");
+                    }
+                }
+                // If Edit button pressed
+                else
+                {
+                    IsEditing = true;
+                    ButtonText = "Update";
+                    ButtonColor = Color.Parse("green");
+                }
+            }
+
+            public async Task EditUpdatePrice()
+            {
+                Debug.WriteLine("EditUpdatePrice");
+                // If Update button pressed
+                if (IsEditingPrice)
+                {
+                    // If the input price is a number and non-negative
+                    if (IsValidPrice)
+                    {
+                        InputPrice = InputPrice.TrimStart('0') != "" ? InputPrice.TrimStart('0') : "0";
+
+                        CatalogPrice = Convert.ToInt32(InputPrice);
+                        await DBCatalog.Update(
+                            new Dictionary<string, object> { { "Price", CatalogPrice.ToString() } },
+                            new Dictionary<string, object> { { "Code", Code } });
+
+                        IsEditingPrice = false;
+                        PriceButtonText = "Edit";
+                        PriceButtonColor = Color.Parse("#512BD4");
+                    }
+                    // If the input price is not a number or negative, keep the previous price
+                    else
+                    {
+                        InputPrice = Convert.ToString(CatalogPrice);
+                        PriceButtonText = "Update";
+                        PriceButtonColor = Color.Parse("green");
+                    }
+                }
+                // If Edit button pressed
+                else
+                {
+                    IsEditingPrice = true;
+                    PriceButtonText = "Update";
+                    PriceButtonColor = Color.Parse("green");
+                    Debug.WriteLine("Edit Button Pressed");
+                }
+            }
+
             public void ValidateQuantity()
             {
                 IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
@@ -378,7 +382,7 @@ namespace Kitbox_project.ViewModels
                     }
                 }
 
-                var catalogPrice = await DBCatalogPrices.GetData(
+                var catalogPrice = await DBCatalog.GetData(
                     new Dictionary<string, string> { { "Code", Code } },
                     new List<string> { "Price" });
 
