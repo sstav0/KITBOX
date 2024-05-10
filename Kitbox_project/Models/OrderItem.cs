@@ -62,7 +62,16 @@ public class OrderStockItem : StockItem
 
     public OrderStockItem(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
     {
+        _quantityInOrder = 0;
     }
 
-    public int QuantityInOrder { get => _quantityInOrder; set => _quantityInOrder = value; }
+    public int QuantityInOrder 
+    { 
+        get => _quantityInOrder;
+        set
+        {
+            _quantityInOrder = value;
+            OnPropertyChanged(nameof(QuantityInOrder));
+        }
+    }
 }

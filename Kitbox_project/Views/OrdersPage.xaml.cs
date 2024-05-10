@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Views;
 using Kitbox_project.ViewModels;
 
 namespace Kitbox_project.Views;
@@ -7,10 +8,6 @@ public partial class OrdersPage : ContentPage
     public OrdersPage()
     {
         InitializeComponent();
-    }
-
-    public void ApplyFilter(string searchText)
-    {
     }
 
     private void OnActiveOrdersClicked(object sender, EventArgs e)
@@ -55,19 +52,22 @@ public partial class OrdersPage : ContentPage
         }
     }
 
-    private void OnUpdateOrdersClicked(object sender, EventArgs e)
+    private void OpenPopupStockItems(object sender, EventArgs e)
     {
-
-    }
-
-    private void LoadFalseOrdersClicked(object sender, EventArgs e)
-    {
-
+        if (sender is Grid grid && grid.BindingContext is OrderViewModel.OrderItemViewModel selectedOrderItemVM)
+        {
+            // Open popup with the stock prices
+            var popup = new PopupOrderStockItems(selectedOrderItemVM);
+            this.ShowPopup(popup);
+        }
     }
 
     private void OnTextChanged(object sender, EventArgs e)
     {
-
+        if (sender is SearchBar searchBar && BindingContext is OrderViewModel orderViewModel)
+        {
+            orderViewModel.ApplyFilter(searchBar.Text);
+        }
     }
 
     private void OnConfirmOrderButtonClicked(object sender, EventArgs e)

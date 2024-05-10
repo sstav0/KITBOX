@@ -30,6 +30,24 @@ public class DatabaseStock : Database
         return stockItems;
     }
 
+    public static List<OrderStockItem> ConvertToOrderStockItem(List<Dictionary<string, string>> data)
+    {
+        List<OrderStockItem> stockItems = new List<OrderStockItem>();
+        foreach (var item in data)
+        {
+            stockItems.Add(new(
+                int.Parse(item["idStock"]),
+                item["Reference"],
+                item["Code"],
+                int.Parse(item["Quantity"]),
+                int.Parse(item["IncomingQuantity"]),
+                int.Parse(item["OutgoingQuantity"]),
+                ParseStockBool(item["InCatalog"])
+            ));
+        }
+        return stockItems;
+    }
+
     private static bool ParseStockBool(string str)
     {
         if (string.IsNullOrEmpty(str) || str is "0")
