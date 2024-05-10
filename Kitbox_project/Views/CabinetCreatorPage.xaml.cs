@@ -43,7 +43,8 @@ namespace Kitbox_project.Views
             if (registeredPartsRefQuantity != null) { this.registeredPartsRefQuantity = registeredPartsRefQuantity; }
 
             InitializeComponent();
-            _viewModel = new CabinetViewModel();
+
+            _viewModel = new CabinetViewModel(registeredPartsRefQuantity);
             _viewModel.PropertyChanged += ViewModel_PropertyChanged;
             _logOutViewModel = new LogOutViewModel();
 

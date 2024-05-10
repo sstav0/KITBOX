@@ -506,7 +506,7 @@ namespace Kitbox_project.ViewModels
         public async Task<string> NotePartsAvailabilityAsync(Locker lockerToAdd)
         {
             Debug.WriteLine("--- NotePartsAvailability ---");
-            string message = "Some parts are currently not in our stock";
+            string message = "Some parts are currently not in our stock for this locker";
 
             var partAvailabilityResult = await lockerToAdd.ArePartsAvailable(registeredPartsRefQuantityList);
 
