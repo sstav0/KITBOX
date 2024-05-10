@@ -15,14 +15,18 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Kitbox_project.ViewModels
 {
     internal class SupplierOrdersViewModel : INotifyPropertyChanged
-    {
-        public ICommand OnReceivedClicked2 { get; }
-        
+    {        
         private List<SupplierOrderViewModel> _supplierOrders;
         private DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
 
         public SupplierOrdersViewModel()
         {
+            LoadDataAsync();
+        }
+
+        public SupplierOrdersViewModel(StockItem stockItem)
+        {
+            StockItem itemFromStockButton = stockItem; // Item to use to pre-fill the SupplierOrder form
             LoadDataAsync();
         }
 
@@ -41,6 +45,8 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged(nameof(SupplierOrders));
             }
         }
+
+        public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
 
         public void ApplyFilter(string searchText)
         {
@@ -76,6 +82,7 @@ namespace Kitbox_project.ViewModels
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
         {
             private bool _supplierOrderVisibility;
+            private bool _isExpanded;
             private string _date;
             private string _supplierName;
             public ICommand OnReceivedClicked { get; }
@@ -86,6 +93,7 @@ namespace Kitbox_project.ViewModels
             public SupplierOrderViewModel(int orderID, int supplierId, int delay, double price, string status) : base(orderID, supplierId, delay, price, status)
             {
                 _supplierOrderVisibility = true;
+                _isExpanded = false;
                 _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
                 LoadSupplierName();
                 OnReceivedClicked = new Command(ModifyOrderStatus);
@@ -110,8 +118,9 @@ namespace Kitbox_project.ViewModels
 
             public async void GetAllItems()
             {
-                //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
+                if (IsExpanded) return; // Don't load items if closing the expander
 
+                //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
                 DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
                 var items = await databaseSupplierOrderItem.GetData(
                         new Dictionary<string, string> { { "idOrder", OrderID.ToString() } }, 
@@ -181,6 +190,16 @@ namespace Kitbox_project.ViewModels
                 {
                     _supplierOrderVisibility = value;
                     OnPropertyChanged(nameof(SupplierOrderVisibility));
+                }
+            }
+
+            public bool IsExpanded
+            {
+                get => _isExpanded;
+                set
+                {
+                    _isExpanded = value;
+                    OnPropertyChanged(nameof(IsExpanded));
                 }
             }
 

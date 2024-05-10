@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
 using Kitbox_project.Views;
 using System.Diagnostics;
@@ -11,6 +12,12 @@ public partial class SupplierOrdersPage : ContentPage
     public SupplierOrdersPage()
 	{
         InitializeComponent();
+    }
+
+    public SupplierOrdersPage(StockItem stockItem)
+    {
+        InitializeComponent();
+        BindingContext = new SupplierOrdersViewModel(stockItem); // Creating the SupplierOrdersPage with the stock item from the StockPage 'Order' button
     }
 
     private void OnTextChanged(object sender, EventArgs e)

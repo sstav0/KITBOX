@@ -91,7 +91,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <HorizontalStackLayout IsVisible="{Binding SupplierOrderVisibility}" >
-                                <uranium:ExpanderView WidthRequest="970">
+                                <uranium:ExpanderView WidthRequest="970" IsExpanded="{Binding IsExpanded}">
                                     <uranium:ExpanderView.Header>
                                         <Grid HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="940">
                                             <Grid.GestureRecognizers>
