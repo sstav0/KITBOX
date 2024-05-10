@@ -62,7 +62,7 @@ namespace Kitbox_project.ViewModels
 
                     priceItem.Price = Convert.ToDouble(priceItem.InputPrice);
                     await DBCatalogPrices.Update(
-                        new Dictionary<string, object> { { "Price", priceItem.Price } },
+                        new Dictionary<string, object> { { "Price", priceItem.Price.ToString() } },
                         new Dictionary<string, object> { { "Code", priceItem.ItemCode } });
 
                     priceItem.IsEditing = false;

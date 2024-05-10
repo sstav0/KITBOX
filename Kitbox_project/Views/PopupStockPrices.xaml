@@ -54,7 +54,7 @@
                     </Entry.Triggers>
                 </Entry>
                 <Label Text="€" FontSize="Body" VerticalOptions="Center"/>
-                <Button Text="{Binding PriceButtonText}" Clicked="OnEditPriceClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="5,5,0,5" Padding="14,5" HeightRequest="35" FontSize="Body">
+                <Button Text="{Binding PriceButtonText}" Clicked="OnEditPriceClicked" BackgroundColor="{Binding PriceButtonColor}" VerticalOptions="Center" Margin="5,5,0,5" Padding="14,5" HeightRequest="35" FontSize="Body">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding IsValidPrice}" Value="True">
                             <Setter Property="BackgroundColor" Value="{Binding PriceButtonColor}" />

@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Views;
 using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
+using System.Diagnostics;
 
 namespace Kitbox_project.Views;
 
@@ -20,15 +21,16 @@ public partial class PopupStockPrices : Popup
     //    await SelectedItem.LoadPricesData();
     //}
 
-    private void OnEditPriceClicked(object sender, EventArgs e)
+    private async void OnEditPriceClicked(object sender, EventArgs e)
     {
-        // Call the method in the ViewModel
-        (BindingContext as StockViewModel)?.EditUpdatePrice(SelectedItem);
+        Debug.WriteLine("OnEditPriceClicked");
+        // Call the method EditUpdatePrice in the ViewModel
+        await SelectedItem.EditUpdatePrice();
     }
 
-    private void DirectorButtonCLicked(object sender, EventArgs e)
+    private async void DirectorButtonCLicked(object sender, EventArgs e)
     {
         // Call the method in the ViewModel
-        (BindingContext as StockViewModel)?.EditIsInCatalog(SelectedItem);
+        await (BindingContext as StockViewModel).EditIsInCatalog(SelectedItem);
     }
 }
