@@ -194,32 +194,28 @@ namespace Kitbox_project.Views
             newLocker.LockerID = index;
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
-            System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
             DisablePickers();
-            //DisablePickers();
-
-            Debug.WriteLine("-- AvailableLockers count :" + _viewModel.AvailableLockers.Count());
         }
 
-        private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
+        private async void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
             if( indexLock is not 0)
-            {
+            {            
+                var locker = _viewModel.AvailableLockers[indexLock - 1];
+                Debug.WriteLine(locker);
+                locker.Color = _viewModel.SelectedLockerColorItem;
+                locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
+                Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+                locker.Door = door;
+                _viewModel.registeredPartsRefQuantityList[_viewModel.registeredPartsRefQuantityList.Count - _viewModel.AvailableLockers.Count - 1 + indexLock] = new Dictionary<string, int>();
+                locker.NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(locker.Locker, indexLock);
 
-            
-            var locker = _viewModel.AvailableLockers[indexLock - 1];
-            Debug.WriteLine(locker);
-            locker.Color = _viewModel.SelectedLockerColorItem;
-            locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
-            locker.Door = door;
             }
 
             if(indexLock is 0)
             {
                 Debug.WriteLine("Please Select a locker");
             }
-
         }
 
         private void DisablePickers()
@@ -238,8 +234,6 @@ namespace Kitbox_project.Views
             }
         }
 
-
-
         private void OnEditButtonClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -252,23 +246,18 @@ namespace Kitbox_project.Views
 
                     _viewModel.SelectedLockerColorItem = locker.Color;
                     _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
-                    if(locker.Door.Color is not null)
+                    if(locker.Door != null && locker.Door.Color is not null)
                     {
-                    _viewModel.SelectedDoorColorItem = locker.Door.Color;
+                        _viewModel.SelectedDoorColorItem = locker.Door.Color;
                         _viewModel.SelectedDoorMaterialItem = locker.Door.Material;
-
                     }
                 }
                 else
                 {
                     Debug.WriteLine("Error: No locker selected.");
                 }
-
             }
-
         }
-
-
 
 
         private async void OnConfimButtonClicked (object sender, EventArgs e)
