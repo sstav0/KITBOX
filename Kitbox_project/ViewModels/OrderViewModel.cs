@@ -104,7 +104,7 @@ public class OrderViewModel : INotifyPropertyChanged
 
         await _dBOrders.Update(
             new Dictionary<string, object> { { "status", newOrderStatus } },
-            new Dictionary<string, object> { { "idOrder", orderItemVM.IdOrder } });
+            new Dictionary<string, object> { { "idOrder", orderItemVM.IdOrder.ToString() } });
     }
 
     public void ApplyFilter(string searchText)
