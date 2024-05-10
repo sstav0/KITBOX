@@ -15,8 +15,8 @@ namespace Kitbox_project.ViewModels
     public class StockViewModel : INotifyPropertyChanged
     {
         private List<StockItemViewModel> _stockData;
-        private DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
-        private DatabaseCatalogPrices DBCatalog_save = new DatabaseCatalogPrices("kitboxer", "kitboxing");
+        private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+        private readonly DatabaseCatalogPrices DBCatalog = new DatabaseCatalogPrices("kitboxer", "kitboxing");
 
         public StockViewModel()
         {
@@ -99,7 +99,7 @@ namespace Kitbox_project.ViewModels
                     stockItem.InputPrice = stockItem.InputPrice.TrimStart('0') != "" ? stockItem.InputPrice.TrimStart('0') : "0";
 
                     stockItem.CatalogPrice = Convert.ToInt32(stockItem.InputPrice);
-                    await DBCatalog_save.Update(
+                    await DBCatalog.Update(
                         new Dictionary<string, object> { { "Price", stockItem.CatalogPrice } },
                         new Dictionary<string, object> { { "idStock", stockItem.Id } });
 
@@ -132,7 +132,7 @@ namespace Kitbox_project.ViewModels
 
                 stockItem.DirectorButtonText = "Add to Catalog";
 
-                //await DBCatalog_save.Update(
+                //await DBCatalog.Update(
                 //        new Dictionary<string, object> { { "BoolInCatalog", stockItem.IsInCatalog } },
                 //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
             }
@@ -142,7 +142,7 @@ namespace Kitbox_project.ViewModels
 
                 stockItem.DirectorButtonText = "Remove from Catalog";
 
-                //await DBCatalog_save.Update(
+                //await DBCatalog.Update(
                 //        new Dictionary<string, object> { { "Price", stockItem.IsInCatalog } },
                 //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
             }

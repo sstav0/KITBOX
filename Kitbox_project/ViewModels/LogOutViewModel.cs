@@ -15,10 +15,10 @@ namespace Kitbox_project.ViewModels
         public ICommand LogoutCommand { get; private set; }
         public LogOutViewModel()
         {
-            LogoutCommand = new Command(LogoutButton_Clicked);
+            LogoutCommand = new Command(LogoutButtonClicked);
         }
 
-        public async void LogoutButton_Clicked()
+        public static void LogoutButtonClicked()
         {
             Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
         }

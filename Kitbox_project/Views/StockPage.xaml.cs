@@ -32,11 +32,13 @@ public partial class StockPage : ContentPage
         }
     }
 
-    private void OnOrderButtonClicked(object sender, EventArgs e)
+    private async void OnOrderButtonClicked(object sender, EventArgs e)
     {
         if (sender is Button button && button.BindingContext is StockViewModel.StockItemViewModel stockItem)
         {
             // Go to the Supplier Orders page with pre-fill data
+            var supplierOrdersPage = new SupplierOrdersPage(stockItem);
+            await Navigation.PushAsync(supplierOrdersPage);
         }
     }
 
