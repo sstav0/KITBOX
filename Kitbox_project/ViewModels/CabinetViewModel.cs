@@ -503,14 +503,18 @@ namespace Kitbox_project.ViewModels
             UpdatePickerList("Door_material");
         }
 
-        public async Task<string> NotePartsAvailabilityAsync(Locker lockerToAdd)
+        public async Task<string> NotePartsAvailabilityAsync(Locker lockerToAdd, int modifyIndex = -1)
         {
             Debug.WriteLine("--- NotePartsAvailability ---");
             string message = "Some parts are currently not in our stock for this locker";
 
             var partAvailabilityResult = await lockerToAdd.ArePartsAvailable(registeredPartsRefQuantityList);
-
-            registeredPartsRefQuantityList.Add(partAvailabilityResult.Item2);
+            if(modifyIndex < 0) { registeredPartsRefQuantityList.Add(partAvailabilityResult.Item2); }
+            else if (modifyIndex >= 0)
+            {
+                registeredPartsRefQuantityList[registeredPartsRefQuantityList.Count - AvailableLockers.Count - 1 + modifyIndex] = partAvailabilityResult.Item2;
+            }
+            
             
             if(partAvailabilityResult.Item1 == true)
             {
@@ -525,7 +529,7 @@ namespace Kitbox_project.ViewModels
         {
             Debug.WriteLine("ResetLocker");
 
-            //registeredPartsRefQuantity = null;
+            
 
             EnablecheckDoor = true; IsDoorChecked = false; IsDoorPickerVisible = false;
 
@@ -533,7 +537,9 @@ namespace Kitbox_project.ViewModels
             SelectedHeightItem = null; SelectedWidthItem = null; SelectedLockerColorItem = null;
             if (AvailableLockers != null)
             {
+                registeredPartsRefQuantityList.RemoveRange(registeredPartsRefQuantityList.Count - AvailableLockers.Count, AvailableLockers.Count);
                 AvailableLockers.Clear();
+                
             }
             OnPropertyChanged(nameof(AvailableLockers));
 
@@ -543,7 +549,6 @@ namespace Kitbox_project.ViewModels
         private void ExecuteOnResetLockerButtonClicked()
         {
             Debug.WriteLine("ExecuteOnResetLockerButtonClicked");
-            registeredPartsRefQuantityList = null;
             ResetLocker();
         }
 
