@@ -76,7 +76,12 @@ public class OrderViewModel : INotifyPropertyChanged
     private async void LoadAllOrders()
     {
         var orders = await _dBOrders.LoadAll();
-        Orders = OrderItemViewModel.ConvertToViewModels(DatabaseOrder.ConvertToStockItem(orders));
+        Orders = OrderItemViewModel.ConvertToViewModels(DatabaseOrder.ConvertToOrderItem(orders));
+
+        foreach (OrderItemViewModel orderItemVM in Orders)
+        {
+            await orderItemVM.LoadOrderStockItems();
+        }
     }
 
     public async void ConfirmOrderStatus(OrderItemViewModel orderItemVM)
@@ -102,36 +107,16 @@ public class OrderViewModel : INotifyPropertyChanged
             new Dictionary<string, object> { { "idOrder", orderItemVM.IdOrder } });
     }
 
-    public async Task LoadOrderStockItems()
+    public void ApplyFilter(string searchText)
     {
-        foreach(OrderItemViewModel orderItemVM in Orders)
+        searchText = searchText.Trim();
+        foreach (var item in Orders)
         {
-            List<StockItem> stockItems = new();
-            Dictionary<string, int> refsAndQuantities = await orderItemVM.GetRefsAndQuantity();
-
-            List<int> quantities = refsAndQuantities.Values.ToList();
-            List<string> refs = refsAndQuantities.Keys.ToList();
-            Dictionary<string, string> conditionRefs = new();
-            foreach (string reference in refs)
-            {
-                conditionRefs.Add("Code", reference);
-            }
-            var stockDict = await _dBStock.GetData(
-                conditionRefs, new List<string> { "idStock", "Reference", "Code", "Quantity",
-                    "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
-
-            stockItems = DatabaseStock.ConvertToStockItem(stockDict);
-
-            List<OrderStockItem> orderStockItems = new();
-
-            int i = 0;
-            foreach (OrderStockItem stockItem in stockItems)
-            {
-                stockItem.QuantityInOrder = quantities[i];
-                orderStockItems.Add(stockItem);
-                i++;
-            }
-            orderItemVM.OrderStockItems = orderStockItems;
+            // Filter items based on search text
+            item.OrderItemVisibility =
+                string.IsNullOrWhiteSpace(searchText) ||
+                item.IdOrder.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                item.IdCustomer.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase);
         }
     }
 
@@ -153,11 +138,10 @@ public class OrderViewModel : INotifyPropertyChanged
 
         private DatabaseLocker _dBLockers = new("kitboxer", "kitboxing");
         private DatabaseCabinet _dBCabinets = new("kitboxer", "kitboxing");
-        
+        private DatabaseStock _dBStock = new("kitboxer", "kitboxing");
+
         public OrderItemViewModel(int idOrder, int idCustomer, OrderStatus orderStatus, DateTime creationTime) : base(idOrder, idCustomer, orderStatus, creationTime)
-        {
-            //LoadOrderStockItems();
-            
+        {            
             if (OrderStatus is OrderStatus.Canceled || OrderStatus is OrderStatus.PickedUp)
             {
                 _orderItemVisibility = false;
@@ -169,7 +153,6 @@ public class OrderViewModel : INotifyPropertyChanged
 
             _stringedCreationTime = creationTime.ToString();
             _stringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
-            _notifaction = NotificationFromOrderStatus();
             _confirmButtonText = ConfirmButtonTextFromOrderStatus();
 
             PropertyChanged += (sender, e) =>
@@ -179,8 +162,11 @@ public class OrderViewModel : INotifyPropertyChanged
                     // Update properties dependent on OrderStatus
 
                     StringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
-                    Notification = NotificationFromOrderStatus();
                     ConfirmButtonText = ConfirmButtonTextFromOrderStatus();
+                }
+                if (e.PropertyName == nameof(OrderStockItems))
+                {
+                    UpdateNotification();
                 }
             };
         }
@@ -245,34 +231,22 @@ public class OrderViewModel : INotifyPropertyChanged
             }
         }
 
-        private string NotificationFromOrderStatus()
+        private void UpdateNotification()
         {
-            switch (OrderStatus)
+            foreach(OrderStockItem orderStockItem in OrderStockItems)
             {
-                case OrderStatus.WaitingConfirmation:
-                    {
-                        return "WaitingConfirmation";
-                    }
-                case OrderStatus.Ordered:
-                    {
-                        return "Ordered";
-                    }
-                case OrderStatus.WaitingPickup:
-                    {
-                        return "WaitingPickup";
-                    }
-                case OrderStatus.PickedUp:
-                    {
-                        return "PickedUp";
-                    }
-                case OrderStatus.Canceled:
-                    {
-                        return "Canceled";
-                    }
-                default:
-                    {
-                        throw new NotImplementedException();
-                    }
+                if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder)
+                {
+                    Notification = "Not enough items to fulfill the order";
+
+                    break;
+                }
+                if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder + 10)
+                {
+                    Notification = "Nearly not enough items to fulfill the order";
+
+                    break;
+                }
             }
         }
         private string ConfirmButtonTextFromOrderStatus()
@@ -351,34 +325,35 @@ public class OrderViewModel : INotifyPropertyChanged
             return orderItems.Select(orderItem => new OrderItemViewModel(orderItem.IdOrder, orderItem.IdCustomer, orderItem.OrderStatus, orderItem.CreationTime)).ToList();
         }
 
-        //public async Task LoadOrderStockItems()
-        //{
-        //    List<StockItem> stockItems = new();
+        public async Task LoadOrderStockItems()
+        {
+            List<OrderStockItem> stockItems = new();
+            Dictionary<string, int> refsAndQuantities = await GetRefsAndQuantity();
 
-        //    await GetRefsAndQuantity();
-        //    List<int> quantities = _refsAndQuantities.Values.ToList();
-        //    List<string> refs = _refsAndQuantities.Keys.ToList();
-        //    Dictionary<string, string> conditionRefs = new();
-        //    foreach(string reference in refs)
-        //    {
-        //        conditionRefs.Add("Code", reference);
-        //    }
-        //    var stockDict = await _dBStock.GetData(
-        //        conditionRefs, new List<string> { "idStock", "Reference", "Code", "Quantity", 
-        //            "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
+            if(refsAndQuantities is not null)
+            {
 
-        //    stockItems = DatabaseStock.ConvertToStockItem(stockDict);
+                List<int> quantities = refsAndQuantities.Values.ToList();
+                List<string> refs = refsAndQuantities.Keys.ToList();
 
-        //    List<OrderStockItem> orderStockItems = new();
+                List<Dictionary<string, string>> stockDictList = new();
+                foreach (string reference in refs)
+                {
+                    var newStockDictList = await _dBStock.GetData(
+                        new Dictionary<string, string> { { "Code", reference } },
+                        new List<string> { "idStock", "Reference", "Code", "Quantity",
+                    "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
 
-        //    int i = 0;
-        //    foreach (var stockItem in stockItems)
-        //    {
-        //        orderStockItems.Add(new(stockItem, quantities[i]));
-        //        i++;
-        //    }
-        //    OrderStockItems = orderStockItems;
-        //}
+                    stockDictList = stockDictList.Concat(newStockDictList).ToList();
+                }
+
+                stockItems = DatabaseStock.ConvertToOrderStockItem(stockDictList);
+
+                List<OrderStockItem> orderStockItems = AddQuantities(stockItems, quantities);
+
+                OrderStockItems = orderStockItems;
+            }
+        }
 
         public async Task<Dictionary<string, int>> GetRefsAndQuantity()
         {
@@ -388,31 +363,95 @@ public class OrderViewModel : INotifyPropertyChanged
                 new List<string> { "idCabinet", "IronAngleRef" });
             // A list with each reference present in the lockers and cabinets
             List<string> refs = new();
-            foreach (var cabinet in CabinetDict)
+            if(CabinetDict is not null)
             {
-                // Gets the value of the idCabinet, then uses it to get the other refs
-                if (cabinet.TryGetValue("idCabinet", out string idCabinet))
+                foreach (var cabinet in CabinetDict)
                 {
-                    var LockerDict = await _dBLockers.GetData(
-                    new Dictionary<string, string> { { "idCabinet", idCabinet } },
-                    new List<string> { "sidePanelRef", "backPanelRef", "verticalBattenRef", "horizontalPanelRef",
-                        "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef"});
-                    foreach (var lockerRefs in LockerDict)
+                    // Gets the value of the idCabinet, then uses it to get the other refs
+                    if (cabinet.TryGetValue("idCabinet", out string idCabinet))
                     {
-                        foreach (var lockerRef in lockerRefs.Values.ToList())
+                        var lockerDict = await _dBLockers.GetData(
+                        new Dictionary<string, string> { { "idCabinet", idCabinet } },
+                        new List<string> { "sidePanelRef", "backPanelRef", "verticalBattenRef", "horizontalPanelRef",
+                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef"});
+                        if (lockerDict is not null) 
                         {
-                            refs.Add(lockerRef);
+                            foreach (var lockerRefs in lockerDict)
+                            {
+                                foreach (var lockerRef in lockerRefs.Values.ToList())
+                                {
+                                    refs.Add(lockerRef);
+                                }
+
+                            }
                         }
                     }
+                    if (cabinet.TryGetValue("IronAngleRef", out string ironAngleRef))
+                    {
+                        refs.Add(ironAngleRef);
+                    }
                 }
-                if (cabinet.TryGetValue("IronAngleRef", out string ironAngleRef))
-                {
-                    refs.Add(ironAngleRef);
-                }
+                 return refsAndQuantities = refs.GroupBy(str => str).
+                    ToDictionary(group => group.Key, group => group.Count());
             }
-             return refsAndQuantities = refs.GroupBy(str => str).
-                ToDictionary(group => group.Key, group => group.Count());
+            else
+            {
+                return refsAndQuantities;
+            }
+        }
+
+        private List<OrderStockItem> AddQuantities(List<OrderStockItem> orderStockItems, List<int> quantities)
+        {
+            int i = 0;
+            foreach (var orderStockItem in orderStockItems)
+            {
+                string firstLetters = orderStockItem.Code.Substring(0, 3);
+
+                switch (firstLetters)
+                {
+                    case "COR":
+                        // vertical battens = 4 per lvl
+                        quantities[i] = quantities[i] * 4;
+                        break;
+                    case "PAH":
+                        // horizontal panels = 2 per lvl
+                        quantities[i] = quantities[i] * 2;
+                        break;
+                    case "PAG":
+                        // side panels = 2 per lvl
+                        quantities[i] = quantities[i] * 2;
+                        break;
+                    case "PAR":
+                        // back panel = 1 per lvl
+                        quantities[i] = quantities[i];
+                        break;
+                    case "POR":
+                        // door panel = 1 per lvl (if present)
+                        quantities[i] = quantities[i];
+                        break;
+                    case "TAS":
+                        // vertical battens = 4 per cabinet
+                        quantities[i] = quantities[i] * 4;
+                        break;
+                    case "TRF":
+                        // front crossbars = 2 per lvl
+                        quantities[i] = quantities[i] * 2;
+                        break;
+                    case "TRG":
+                        // side crossbars = 4 per lvl
+                        quantities[i] = quantities[i] * 4;
+                        break;
+                    case "TRR":
+                        // back crossbars = 2 per lvl
+                        quantities[i] = quantities[i] * 2;
+                        break;
+                    default:
+                        break;
+                }
+                orderStockItem.QuantityInOrder = quantities[i];
+                i++;
+            }
+            return orderStockItems;
         }
     }
-
 }
