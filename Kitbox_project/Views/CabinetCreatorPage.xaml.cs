@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Maui.Controls.Compatibility;
 using System.Windows.Input;
+using System.ComponentModel;
 using Syncfusion.Maui.Core.Carousel;
 //using Java.Lang;
 
@@ -42,7 +43,8 @@ namespace Kitbox_project.Views
             if (registeredPartsRefQuantity != null) { this.registeredPartsRefQuantity = registeredPartsRefQuantity; }
 
             InitializeComponent();
-            _viewModel = new CabinetViewModel(this.registeredPartsRefQuantity);
+            _viewModel = new CabinetViewModel();
+            _viewModel.PropertyChanged += ViewModel_PropertyChanged;
             _logOutViewModel = new LogOutViewModel();
 
             BindingContext = _viewModel;
@@ -51,6 +53,7 @@ namespace Kitbox_project.Views
 
             // Load available lockers into the view model
             LoadAvailableLockers();
+            DisablePickers();
         }
 
         private void LoadAvailableLockers()
@@ -88,6 +91,13 @@ namespace Kitbox_project.Views
             _viewModel.UpdatePickerList("Angle_color");
         }
 
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_viewModel.AvailableLockers))
+            {
+                DisablePickers();
+            }
+        }
 
         private async void OnDeleteLockerClicked(object sender, EventArgs e)
         {
@@ -115,7 +125,7 @@ namespace Kitbox_project.Views
                 Debug.WriteLine(locke.Locker.ToString());
                 Debug.WriteLine(locke.NotePartsAvailability);
             }
-            //DisablePickers();
+            DisablePickers();
 
         }
 
@@ -184,6 +194,7 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
+            DisablePickers();
             //DisablePickers();
 
             Debug.WriteLine("-- AvailableLockers count :" + _viewModel.AvailableLockers.Count());
@@ -209,7 +220,7 @@ namespace Kitbox_project.Views
             }
 
         }
-/*
+
         private void DisablePickers()
         {
             if (_viewModel.AvailableLockers.Count() == 0)
@@ -226,7 +237,7 @@ namespace Kitbox_project.Views
             }
         }
 
-*/
+
 
         private void OnEditButtonClicked(object sender, EventArgs e)
         {

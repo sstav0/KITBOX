@@ -10,10 +10,57 @@ public class OrderViewModel : INotifyPropertyChanged
 {
     private List<OrderItemViewModel> _orders;
     private DatabaseOrder _dBOrders = new("kitboxer", "kitboxing");
+    private DatabaseStock _dBStock = new("kitboxer", "kitboxing");
+
+    private bool _activeOrdersVisible;
+    private bool _unactiveOrdersVisible;
+
+    public bool ActiveOrdersVisible
+    {
+        get => _activeOrdersVisible;
+        set
+        {
+            _activeOrdersVisible = value;
+            OnPropertyChanged(nameof(ActiveOrdersVisible));
+        }
+    }
+    public bool UnactiveOrdersVisible
+    {
+        get => _unactiveOrdersVisible;
+        set
+        {
+            _unactiveOrdersVisible = value;
+            OnPropertyChanged(nameof(UnactiveOrdersVisible));
+        }
+    }
 
     public OrderViewModel()
     {
+        PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName == nameof(ActiveOrdersVisible) || e.PropertyName == nameof(UnactiveOrdersVisible))
+            {
+                // Update visibilities 
+                UpdateOrdersVisibilities();
+            }
+        };
+
+        _activeOrdersVisible = true;
+        _unactiveOrdersVisible = false;
+
         LoadAllOrders();
+    }
+
+    private void UpdateOrdersVisibilities()
+    {
+        foreach (OrderItemViewModel orderItemVM in Orders)
+        {
+            bool isActive = orderItemVM.OrderStatus != OrderStatus.Canceled && 
+                orderItemVM.OrderStatus != OrderStatus.PickedUp;
+
+            orderItemVM.OrderItemVisibility = (ActiveOrdersVisible && isActive) || 
+                (UnactiveOrdersVisible && !isActive);
+        }
     }
 
     public List<OrderItemViewModel> Orders
@@ -22,7 +69,7 @@ public class OrderViewModel : INotifyPropertyChanged
         set
         {
             _orders = value;
-            OnPropertyChanged(nameof(_orders));
+            OnPropertyChanged(nameof(Orders));
         }
     }
 
@@ -30,6 +77,62 @@ public class OrderViewModel : INotifyPropertyChanged
     {
         var orders = await _dBOrders.LoadAll();
         Orders = OrderItemViewModel.ConvertToViewModels(DatabaseOrder.ConvertToStockItem(orders));
+    }
+
+    public async void ConfirmOrderStatus(OrderItemViewModel orderItemVM)
+    {
+        orderItemVM.ConfirmOrderStatus();
+
+        await UpdateOrderStatus(orderItemVM);
+    }
+
+    public async void CancelOrder(OrderItemViewModel orderItemVM)
+    {
+        orderItemVM.CancelOrderStatus();
+
+        await UpdateOrderStatus(orderItemVM);
+    }
+
+    private async Task UpdateOrderStatus(OrderItemViewModel orderItemVM)
+    {
+        string newOrderStatus = ConvertOrderStatusToString(orderItemVM.OrderStatus);
+
+        await _dBOrders.Update(
+            new Dictionary<string, object> { { "status", newOrderStatus } },
+            new Dictionary<string, object> { { "idOrder", orderItemVM.IdOrder } });
+    }
+
+    public async Task LoadOrderStockItems()
+    {
+        foreach(OrderItemViewModel orderItemVM in Orders)
+        {
+            List<StockItem> stockItems = new();
+            Dictionary<string, int> refsAndQuantities = await orderItemVM.GetRefsAndQuantity();
+
+            List<int> quantities = refsAndQuantities.Values.ToList();
+            List<string> refs = refsAndQuantities.Keys.ToList();
+            Dictionary<string, string> conditionRefs = new();
+            foreach (string reference in refs)
+            {
+                conditionRefs.Add("Code", reference);
+            }
+            var stockDict = await _dBStock.GetData(
+                conditionRefs, new List<string> { "idStock", "Reference", "Code", "Quantity",
+                    "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
+
+            stockItems = DatabaseStock.ConvertToStockItem(stockDict);
+
+            List<OrderStockItem> orderStockItems = new();
+
+            int i = 0;
+            foreach (OrderStockItem stockItem in stockItems)
+            {
+                stockItem.QuantityInOrder = quantities[i];
+                orderStockItems.Add(stockItem);
+                i++;
+            }
+            orderItemVM.OrderStockItems = orderStockItems;
+        }
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -43,18 +146,43 @@ public class OrderViewModel : INotifyPropertyChanged
     {
         private List<OrderStockItem> _orderStockItems;
         private bool _orderItemVisibility;
+        private string _stringedCreationTime;
+        private string _stringedOrderStatus;
         private string _notifaction;
+        private string _confirmButtonText;
 
         private DatabaseLocker _dBLockers = new("kitboxer", "kitboxing");
         private DatabaseCabinet _dBCabinets = new("kitboxer", "kitboxing");
-        private DatabaseStock _dBStock = new("kitboxer", "kitboxing");
         
-        private Dictionary<string, int> _refsAndQuantities = new();
-        public OrderItemViewModel(int idOrder, int idCustomer, Status.OrderStatus status, DateTime creationTime) : base(idOrder, idCustomer, status, creationTime)
+        public OrderItemViewModel(int idOrder, int idCustomer, OrderStatus orderStatus, DateTime creationTime) : base(idOrder, idCustomer, orderStatus, creationTime)
         {
             //LoadOrderStockItems();
-            _orderItemVisibility = true;
+            
+            if (OrderStatus is OrderStatus.Canceled || OrderStatus is OrderStatus.PickedUp)
+            {
+                _orderItemVisibility = false;
+            }
+            else
+            {
+                _orderItemVisibility = true;
+            }
+
+            _stringedCreationTime = creationTime.ToString();
+            _stringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
             _notifaction = NotificationFromOrderStatus();
+            _confirmButtonText = ConfirmButtonTextFromOrderStatus();
+
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(OrderStatus))
+                {
+                    // Update properties dependent on OrderStatus
+
+                    StringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
+                    Notification = NotificationFromOrderStatus();
+                    ConfirmButtonText = ConfirmButtonTextFromOrderStatus();
+                }
+            };
         }
 
         public List<OrderStockItem> OrderStockItems
@@ -63,7 +191,27 @@ public class OrderViewModel : INotifyPropertyChanged
             set
             {
                 _orderStockItems = value;
-                OnPropertyChanged(nameof(_orderStockItems));
+                OnPropertyChanged(nameof(OrderStockItems));
+            }
+        }
+
+        public string StringedOrderStatus
+        {
+            get => _stringedOrderStatus;
+            set
+            {
+                _stringedOrderStatus = value;
+                OnPropertyChanged(nameof(StringedOrderStatus));
+            }
+        }
+
+        public string StringedCreationTime
+        {
+            get => _stringedCreationTime;
+            set
+            {
+                _stringedCreationTime = value;
+                OnPropertyChanged(nameof(StringedCreationTime));
             }
         }
 
@@ -73,7 +221,7 @@ public class OrderViewModel : INotifyPropertyChanged
             set
             {
                 _orderItemVisibility = value;
-                OnPropertyChanged(nameof(_orderItemVisibility));
+                OnPropertyChanged(nameof(OrderItemVisibility));
             }
         }
 
@@ -87,9 +235,19 @@ public class OrderViewModel : INotifyPropertyChanged
             }
         }
 
-        public string NotificationFromOrderStatus()
+        public string ConfirmButtonText
         {
-            switch (Status)
+            get => _confirmButtonText;
+            set
+            {
+                _confirmButtonText = value;
+                OnPropertyChanged(nameof(ConfirmButtonText));
+            }
+        }
+
+        private string NotificationFromOrderStatus()
+        {
+            switch (OrderStatus)
             {
                 case OrderStatus.WaitingConfirmation:
                     {
@@ -117,43 +275,114 @@ public class OrderViewModel : INotifyPropertyChanged
                     }
             }
         }
+        private string ConfirmButtonTextFromOrderStatus()
+        {
+            switch (OrderStatus)
+            {
+                case OrderStatus.WaitingConfirmation:
+                    {
+                        return "Confirm Order";
+                    }
+                case OrderStatus.Ordered:
+                    {
+                        return "Confirm Readiness";
+                    }
+                case OrderStatus.WaitingPickup:
+                    {
+                        return "Confirm Pickup";
+                    }
+                case OrderStatus.PickedUp:
+                    {
+                        return "Close Order";
+                    }
+                case OrderStatus.Canceled:
+                    {
+                        return "Uncancel Order";
+                    }
+                default:
+                    {
+                        throw new NotImplementedException();
+                    }
+            }
+        }
+
+        public void ConfirmOrderStatus()
+        {
+            switch (OrderStatus)
+            {
+                case OrderStatus.WaitingConfirmation:
+                    {
+                        OrderStatus = OrderStatus.Ordered;
+                        break;
+                    }
+                case OrderStatus.Ordered:
+                    {
+                        OrderStatus = OrderStatus.WaitingPickup;
+                        break;
+                    }
+                case OrderStatus.WaitingPickup:
+                    {
+                        OrderStatus = OrderStatus.PickedUp;
+                        break;
+                    }
+                case OrderStatus.PickedUp:
+                    {
+                        break;
+                    }
+                case OrderStatus.Canceled:
+                    {
+                        OrderStatus = OrderStatus.WaitingConfirmation;
+                        break;
+                    }
+                default:
+                    {
+                        throw new NotImplementedException();
+                    }
+            }
+        }
+
+        public void CancelOrderStatus()
+        {
+            OrderStatus = OrderStatus.Canceled;
+        }
 
         public static List<OrderItemViewModel> ConvertToViewModels(List<OrderItem> orderItems)
         {
-            return orderItems.Select(orderItem => new OrderItemViewModel(orderItem.IdOrder, orderItem.IdCustomer, orderItem.Status, orderItem.CreationTime)).ToList();
+            return orderItems.Select(orderItem => new OrderItemViewModel(orderItem.IdOrder, orderItem.IdCustomer, orderItem.OrderStatus, orderItem.CreationTime)).ToList();
         }
 
-        public async Task LoadOrderStockItems()
+        //public async Task LoadOrderStockItems()
+        //{
+        //    List<StockItem> stockItems = new();
+
+        //    await GetRefsAndQuantity();
+        //    List<int> quantities = _refsAndQuantities.Values.ToList();
+        //    List<string> refs = _refsAndQuantities.Keys.ToList();
+        //    Dictionary<string, string> conditionRefs = new();
+        //    foreach(string reference in refs)
+        //    {
+        //        conditionRefs.Add("Code", reference);
+        //    }
+        //    var stockDict = await _dBStock.GetData(
+        //        conditionRefs, new List<string> { "idStock", "Reference", "Code", "Quantity", 
+        //            "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
+
+        //    stockItems = DatabaseStock.ConvertToStockItem(stockDict);
+
+        //    List<OrderStockItem> orderStockItems = new();
+
+        //    int i = 0;
+        //    foreach (var stockItem in stockItems)
+        //    {
+        //        orderStockItems.Add(new(stockItem, quantities[i]));
+        //        i++;
+        //    }
+        //    OrderStockItems = orderStockItems;
+        //}
+
+        public async Task<Dictionary<string, int>> GetRefsAndQuantity()
         {
-            List<StockItem> stockItems = new();
-
-            await GetRefsAndQuantity();
-            List<int> quantities = _refsAndQuantities.Values.ToList();
-            List<string> refs = _refsAndQuantities.Keys.ToList();
-            Dictionary<string, string> conditionRefs = new();
-            foreach(string reference in refs)
-            {
-                conditionRefs.Add("Code", reference);
-            }
-            var stockDict = await _dBStock.GetData(
-                conditionRefs, new List<string> { "idStock", "Reference", "Code", "Quantity", 
-                    "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
-
-            stockItems = DatabaseStock.ConvertToStockItem(stockDict);
-
-            List<OrderStockItem> orderStockItems = new();
-
-            int i = 0;
-            foreach (var stockItem in stockItems)
-            {
-                orderStockItems.Add(new(stockItem, quantities[i]));
-                i++;
-            }
-            OrderStockItems = orderStockItems;
-        }
-
-        private async Task GetRefsAndQuantity()
-        {
+            Dictionary<string, int> refsAndQuantities = new();
             var CabinetDict = await _dBCabinets.GetData(
                 new Dictionary<string, string> { { "idOrder", IdOrder.ToString() } },
                 new List<string> { "idCabinet", "IronAngleRef" });
@@ -181,7 +410,7 @@ public class OrderViewModel : INotifyPropertyChanged
                     refs.Add(ironAngleRef);
                 }
             }
-            _refsAndQuantities = refs.GroupBy(str => str).
+             return refsAndQuantities = refs.GroupBy(str => str).
                 ToDictionary(group => group.Key, group => group.Count());
         }
     }

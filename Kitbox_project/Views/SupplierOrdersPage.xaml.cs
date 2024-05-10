@@ -1,6 +1,7 @@
 using CommunityToolkit.Maui.Views;
 using Kitbox_project.ViewModels;
 using Kitbox_project.Views;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace Kitbox_project.Views;
@@ -35,12 +36,11 @@ public partial class SupplierOrdersPage : ContentPage
         }
     }
 
-    private void OnExpanderClicked(object sender, EventArgs e)
+    private void OnExpanderClicked(object sender, TappedEventArgs e)
     {
-        if (sender is Expander expander && expander.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
+        if (sender is Grid grid && grid.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
         {
-            expander.IsExpanded = !expander.IsExpanded;
-
+            Debug.WriteLine("Expander clicked");
             supplierOrderViewModel.GetAllItems(); // Load all items for the supplier order
         }
     }

@@ -113,36 +113,48 @@ namespace Kitbox_project.ViewModels
                 //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
 
                 DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
-                var items = await databaseSupplierOrderItem.GetData(new Dictionary<string, string> { { "idSupplierOrder", OrderID.ToString() } }, new List<string> {"codeItem", "quantity"});
+                var items = await databaseSupplierOrderItem.GetData(
+                        new Dictionary<string, string> { { "idOrder", OrderID.ToString() } }, 
+                        new List<string> {"codeItem", "quantity"}
+                    );
 
                 //Step 2 Get the infos to construct each SupplierOrderItem
                 DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
                 DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
+                List<SupplierOrderItem> orderItems = new List<SupplierOrderItem>();
                 foreach (var item in items)
                 {
                     string code = item["codeItem"];
                     int quantity = int.Parse(item["quantity"]);
 
                     // Get "Price" from PnD where "Code" = codeItem (from step 1 below) and "idSupplier" = SupplierId (property from SupplierOrder class) 
-                    var resPnD = await databasePnD.GetData(new Dictionary<string, string> { { "Code", code }, { "idSupplier", SupplierId.ToString() } }, new List<string> { "Price"} );
+                    var resPnD = await databasePnD.GetData(
+                            new Dictionary<string, string> { { "Code", code }, { "idSupplier", SupplierId.ToString() } }, 
+                            new List<string> { "Price" }
+                        );
 
                     double unitPrice; 
-                    if (int.TryParse(resPnD[0]["Price"], out int result))
+                    if (double.TryParse(resPnD[0]["Price"], out double result))
                     {
                         unitPrice = result;
-                    }else
+                    } else
                     {
                         throw new Exception("Price is not a number");
                     }
 
                     // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
-                    var resCatalog = await databaseCatalog.GetData(new Dictionary<string, string> { { "Code", code } }, new List<string> { "Reference" });
+                    var resCatalog = await databaseCatalog.GetData(
+                            new Dictionary<string, string> { { "Code", code } },
+                            new List<string> { "Reference" }
+                        );
                     string reference = resCatalog[0]["Reference"];
 
                     // Step 3 => Construct a new SupplierOrderItem with the infos from step 2 and add it to the list of SupplierOrderItems
-                    SupplierOrderItems.Add(new SupplierOrderItem(reference, code, quantity, unitPrice));
+                    orderItems.Add(new SupplierOrderItem(reference, code, quantity, unitPrice));
                 }
+                SupplierOrderItems = orderItems;
+                OnPropertyChanged(nameof(SupplierOrderItems));
             }
 
             private async void LoadSupplierName()

@@ -531,7 +531,15 @@ namespace Kitbox_project.ViewModels
 
             SelectedDepthItem = null; SelectedAngleIronColor = null; SelectedDoorColorItem = null;
             SelectedHeightItem = null; SelectedWidthItem = null; SelectedLockerColorItem = null;
+            if (AvailableLockers != null)
+            {
+                AvailableLockers.Clear();
+            }
+            OnPropertyChanged(nameof(AvailableLockers));
+
         }
+  
+        
         private void ExecuteOnResetLockerButtonClicked()
         {
             Debug.WriteLine("ExecuteOnResetLockerButtonClicked");
