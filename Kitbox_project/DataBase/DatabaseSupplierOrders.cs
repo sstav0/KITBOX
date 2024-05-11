@@ -23,7 +23,7 @@ namespace Kitbox_project
                 supplierOrders.Add(new SupplierOrder(
                     int.Parse(order["idSupplierOrder"]),
                     int.Parse(order["idSupplier"]),
-                    int.Parse(order["delay"]),
+                    order["deliveryDate"],
                     double.Parse(order["price"]),
                     order["status"]
                 ));
