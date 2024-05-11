@@ -60,7 +60,7 @@ namespace Kitbox_project.ViewModels
                     order.Item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     order.Item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     order.SupplierName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    order.Date.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+                    order.DeliveryDate.Contains(searchText, StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -83,18 +83,16 @@ namespace Kitbox_project.ViewModels
         {
             private bool _supplierOrderVisibility;
             private bool _isExpanded;
-            private string _date;
             private string _supplierName;
             public ICommand OnReceivedClicked { get; }
-            // private DatabaseSupplier DBSuppliers = new DatabaseSupplier("kitboxer", "kitboxing");
-            private DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
-            private DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
+            private readonly DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
+            private readonly DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
 
-            public SupplierOrderViewModel(int orderID, int supplierId, int delay, double price, string status) : base(orderID, supplierId, delay, price, status)
+            public SupplierOrderViewModel(int orderID, int supplierId, string deliveryDate, double price, string status) : base(orderID, supplierId, deliveryDate, price, status)
             {
                 _supplierOrderVisibility = true;
                 _isExpanded = false;
-                _date = DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
+                // DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
                 LoadSupplierName();
                 OnReceivedClicked = new Command(ModifyOrderStatus);
             }
@@ -102,17 +100,9 @@ namespace Kitbox_project.ViewModels
             //Launch a popup window to odify the status of the Supplier Order on the frontEnd and in the DB.dbo.SupplierOrder
             public async void ModifyOrderStatus()
             {
-                bool orderReceived = await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Order Received ?", "Confirm you received this order ?", "Yes", "No");
-                if(orderReceived)
-                {
-                    this.Status = "Received";
-                    OnPropertyChanged(nameof(Status));
-                }
-                else
-                {
-                    this.Status = "Ordered";
-                    OnPropertyChanged(nameof(Status));
-                }
+                bool orderReceived = await Application.Current.MainPage.DisplayAlert("Order Received ?", "Confirm you received this order ?", "Yes", "No");
+                Status = orderReceived ? "Received" : "Ordered";
+                OnPropertyChanged(nameof(Status));
                 UpdateDBOrderStatus();
             }
 
@@ -143,14 +133,8 @@ namespace Kitbox_project.ViewModels
                             new List<string> { "Price" }
                         );
 
-                    double unitPrice; 
-                    if (double.TryParse(resPnD[0]["Price"], out double result))
-                    {
-                        unitPrice = result;
-                    } else
-                    {
-                        throw new Exception("Price is not a number");
-                    }
+                    double unitPrice;
+                    unitPrice = double.TryParse(resPnD[0]["Price"], out double result) ? result : throw new Exception("Price is not a number");
 
                     // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
                     var resCatalog = await databaseCatalog.GetData(
@@ -204,16 +188,6 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-            public string Date
-            {
-                get => _date;
-                set
-                {
-                    _date = value;
-                    OnPropertyChanged(nameof(Date));
-                }
-            }
-
             public string SupplierName
             {
                 get => _supplierName;
@@ -229,7 +203,7 @@ namespace Kitbox_project.ViewModels
                 return supplierOrders.Select(order => new SupplierOrderViewModel(
                         order.OrderID,
                         order.SupplierId,
-                        order.Delay,
+                        order.DeliveryDate,
                         order.Price,
                         order.Status
                     )).ToList();
