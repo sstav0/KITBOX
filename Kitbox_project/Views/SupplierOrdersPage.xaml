@@ -161,7 +161,7 @@
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </uranium:ExpanderView>
-                                <Button Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
+                                <Button Command="{Binding OnCancelClicked}" Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
                                 <Button Command="{Binding OnReceivedClicked}" Margin="5,5" Padding="14,5" BackgroundColor="Green" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
                             </HorizontalStackLayout>
                         </DataTemplate>

@@ -47,7 +47,6 @@ public partial class SupplierOrdersPage : ContentPage
     {
         if (sender is Grid grid && grid.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
         {
-            Debug.WriteLine("Expander clicked");
             supplierOrderViewModel.GetAllItems(); // Load all items for the supplier order
         }
     }
