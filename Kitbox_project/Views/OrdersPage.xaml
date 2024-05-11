@@ -11,28 +11,39 @@
     </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout Margin="40">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1000"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+        
+            <Label Text="Orders" FontSize="Header" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"
+               HorizontalOptions="Start" VerticalOptions="Center" Margin="0, 10, 0, 10"/>
 
-            <Label Text="Orders" FontSize="Header" FontAttributes="Bold"
-               HorizontalOptions="Start" VerticalOptions="Center"/>
+            <Border StrokeShape="RoundRectangle 10" WidthRequest="300"  Margin="0, 0, 40, 20" 
+                    Stroke="{StaticResource Tertiary}" Grid.Column="1" Grid.Row="1" HorizontalOptions="Start">
+                <SearchBar Placeholder="Search by Order or Customer ID..." TextChanged="OnTextChanged" />
+            </Border>
 
-            <HorizontalStackLayout>
-
-                <Border StrokeShape="RoundRectangle 10" WidthRequest="300"  Margin="0, 0, 40, 20" Stroke="{StaticResource Tertiary}">
-                    <SearchBar Placeholder="Search by Order or Customer ID..." TextChanged="OnTextChanged" />
-                </Border>
-
-                <Button Text="Active Orders" Clicked="OnActiveOrdersClicked" IsEnabled="True"
+            <Button Text="Active Orders" Clicked="OnActiveOrdersClicked" IsEnabled="True" HorizontalOptions="End"
                         BackgroundColor="#512BD4" TextColor="White" x:Name="ActiveOrdersButton" 
-                        MaximumWidthRequest="200" Margin="0, 0, 40, 20"/>
+                        MinimumWidthRequest="150"  Margin="0, 0, 0, 20"  Grid.Column="2" Grid.Row="1"/>
 
-                <Button Text="Unactive Orders" Clicked="OnUnactiveOrdersClicked" IsEnabled="True"
-                        BackgroundColor="Gray" TextColor="Black" x:Name="UnactiveOrdersButton" 
-                        MaximumWidthRequest="200"  Margin="0, 0, 40, 20"/>
+            <Button Text="Unactive Orders" Clicked="OnUnactiveOrdersClicked" IsEnabled="True" HorizontalOptions="End"
+                    BackgroundColor="Gray" TextColor="Black" x:Name="UnactiveOrdersButton" 
+                    MinimumWidthRequest="150"  Margin="0, 0, 20, 20" Grid.Column="3" Grid.Row="1"/>
 
-            </HorizontalStackLayout>
-
-            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1800" Padding="20">
+            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" 
+                    StrokeThickness="2" Padding="20" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2">
 
                 <CollectionView ItemsSource="{Binding Orders}" SelectionMode="Single">
                     <CollectionView.Header>
@@ -48,12 +59,12 @@
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Text="ID Order" Grid.Column="0" HorizontalTextAlignment="Center" Margin="10,0,10,10"/>
-                            <Label Text="ID Customer" Grid.Column="1" HorizontalTextAlignment="Center" Margin="10,0,10,10"/>
-                            <Label Text="Status" Grid.Column="2" HorizontalTextAlignment="Center" Margin="10,0,10,10"/>
-                            <Label Text="Notification" Grid.Column="3" HorizontalTextAlignment="Center" Margin="10,0,10,10"/>
-                            <Label Text="Creation Date" Grid.Column="4" HorizontalTextAlignment="Center" Margin="10,0,10,10"/>
-                            
+                            <Label FontAttributes="Bold" Text="ID Order" Grid.Column="0" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="ID Customer" Grid.Column="1" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="Status" Grid.Column="2" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="Notification" Grid.Column="3" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="Creation Date" Grid.Column="4" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+
                         </Grid>
                     </CollectionView.Header>
 
@@ -73,32 +84,32 @@
                                     <ColumnDefinition Width="225"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" HorizontalTextAlignment="Center" 
+                                <Label Grid.Column="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                                        Text="{Binding IdOrder}"/>
-                                
-                                <Label Grid.Column="1" HorizontalTextAlignment="Center" 
+
+                                <Label Grid.Column="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                                        Text="{Binding IdCustomer}"/>
 
-                                <Label Grid.Column="2" HorizontalTextAlignment="Center" 
+                                <Label Grid.Column="2" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                                        Text="{Binding StringedOrderStatus}"/>
 
-                                <Label Grid.Column="3" HorizontalTextAlignment="Center" 
+                                <Label Grid.Column="3" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                                        Text="{Binding Notification}" TextColor="Orange"/>
 
-                                <Label Grid.Column="4" HorizontalTextAlignment="Center" 
+                                <Label Grid.Column="4" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                                        Text="{Binding StringedCreationTime}"/>
 
-                                <Button Grid.Column="6" Clicked="OnConfirmOrderButtonClicked" 
+                                <Button Grid.Column="6" Clicked="OnConfirmOrderButtonClicked" VerticalOptions="Center"
                                         Text="{Binding ConfirmButtonText}"/>
 
-                                <Button Grid.Column="7" Clicked="OnCancelOrderButtonClicked" 
+                                <Button Grid.Column="7" Clicked="OnCancelOrderButtonClicked" VerticalOptions="Center"
                                         Text="Cancel"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Border>
-        </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>
