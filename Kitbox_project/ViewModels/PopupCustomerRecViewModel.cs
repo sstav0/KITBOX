@@ -128,20 +128,25 @@ namespace Kitbox_project.ViewModels
         public bool IsDataInvalid()
         {
             bool invalidData = false;
-
-            if (_entryEmail.Any(char.IsLetterOrDigit)  && !string.IsNullOrWhiteSpace(_entryEmail) &&  _entryEmail.Contains('@'))
+            if (_entryEmail != null)
             {
-                if (!string.IsNullOrWhiteSpace(_entryFirstName) && (_entryFirstName.All(char.IsLetter) || _entryLastName.Any(char.IsWhiteSpace)))
+                if (_entryEmail.Any(char.IsLetterOrDigit) && !string.IsNullOrWhiteSpace(_entryEmail) && _entryEmail.Contains('@'))
                 {
-                    if (!string.IsNullOrWhiteSpace(_entryLastName) && (_entryLastName.All(char.IsLetter) || _entryLastName.Any(char.IsWhiteSpace)))
+                    if (!string.IsNullOrWhiteSpace(_entryFirstName) && (_entryFirstName.All(char.IsLetter) || _entryLastName.Any(char.IsWhiteSpace)))
                     {
-                        invalidData = false;
+                        if (!string.IsNullOrWhiteSpace(_entryLastName) && (_entryLastName.All(char.IsLetter) || _entryLastName.Any(char.IsWhiteSpace)))
+                        {
+                            invalidData = false;
+                        }
+                        else { invalidData = true; }
                     }
                     else { invalidData = true; }
                 }
                 else { invalidData = true; }
             }
-            else { invalidData = true; }
+            else
+            { invalidData = true; }
+
             return invalidData;
         }
 
@@ -279,10 +284,12 @@ namespace Kitbox_project.ViewModels
         /// </remarks>
         private async Task<bool> RegisterCart(bool goToCartStep)
         {
-            bool cartRegistered = false;
-            for(int i = 0; i < Cart.Count(); i++)
+            if (!IsDataInvalid())
             {
-                Dictionary<string, object> cabinetToBeRegistered = new Dictionary<string, object>
+                bool cartRegistered = false;
+                for (int i = 0; i < Cart.Count(); i++)
+                {
+                    Dictionary<string, object> cabinetToBeRegistered = new Dictionary<string, object>
                 { { "price",Cart[i].Price},
                 { "width",Cart[i].Length},
                 { "height",Cart[i].Height},
@@ -290,34 +297,34 @@ namespace Kitbox_project.ViewModels
                 {"idOrder",idOrder},
                 {"IronAngleRef", await Cart[i].Cabinet.GetObservableLockers()[Cart[i].Cabinet.GetObservableLockers().Count()-1].GetCatalogRef("COR")} };
 
-                await databaseCabinet.Add(cabinetToBeRegistered);
+                    await databaseCabinet.Add(cabinetToBeRegistered);
 
-                //Get CabinetID from DB
-                Dictionary<string, string> dataCabinetString = new Dictionary<string, string>();
+                    //Get CabinetID from DB
+                    Dictionary<string, string> dataCabinetString = new Dictionary<string, string>();
 
-                foreach (var kvp in cabinetToBeRegistered)
-                {
-                    dataCabinetString.Add(kvp.Key, kvp.Value.ToString());
-                }
-                List<Dictionary<string, string>> cabinetDataList = await databaseCabinet.GetData(dataCabinetString);
-
-                if (dataCabinetString.Count <= 0 || cabinetDataList == null)
-                {
-                    cabinetDataList = await databaseCabinet.GetData(dataCabinetString);
-                    await Application.Current.MainPage.DisplayAlert("ERROR 3", "We encounter problems trying to get your order registered", "OK"); 
-                }
-                else
-                {
-                    idCabinet = cabinetDataList[cabinetDataList.Count- 1]["idCabinet"].ToString();
-                    Debug.WriteLine(Cart[i].Cabinet.GetObservableLockers().Count());
-
-                    // Register every Locker of the Cabinet in the DB
-                    for(int j = 0; j < Cart[i].Cabinet.GetObservableLockers().Count(); j++)
+                    foreach (var kvp in cabinetToBeRegistered)
                     {
-                        Debug.WriteLine("***** Loop Lockers Regestery *****");
+                        dataCabinetString.Add(kvp.Key, kvp.Value.ToString());
+                    }
+                    List<Dictionary<string, string>> cabinetDataList = await databaseCabinet.GetData(dataCabinetString);
 
-                        Dictionary<string, object> lockerToBeRegistered = new Dictionary<string, object>
-                        { 
+                    if (dataCabinetString.Count <= 0 || cabinetDataList == null)
+                    {
+                        cabinetDataList = await databaseCabinet.GetData(dataCabinetString);
+                        await Application.Current.MainPage.DisplayAlert("ERROR 3", "We encounter problems trying to get your order registered", "OK");
+                    }
+                    else
+                    {
+                        idCabinet = cabinetDataList[cabinetDataList.Count - 1]["idCabinet"].ToString();
+                        Debug.WriteLine(Cart[i].Cabinet.GetObservableLockers().Count());
+
+                        // Register every Locker of the Cabinet in the DB
+                        for (int j = 0; j < Cart[i].Cabinet.GetObservableLockers().Count(); j++)
+                        {
+                            Debug.WriteLine("***** Loop Lockers Regestery *****");
+
+                            Dictionary<string, object> lockerToBeRegistered = new Dictionary<string, object>
+                        {
                         { "height", Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
                         { "color",Cart[i].Cabinet.GetObservableLockers()[j].Color.ToString()},
                         { "door",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("DOORBOOL")},
@@ -333,23 +340,25 @@ namespace Kitbox_project.ViewModels
                         { "backCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRR")}
                         };
 
-                        //Debug
-                        foreach (var kvp in lockerToBeRegistered)
-                        {
-                            Debug.WriteLine(kvp.Value.ToString());
-                            Debug.WriteLine(kvp.Key.ToString());
-                            Debug.WriteLine("_________");
-                        }
-                        await databaseLocker.Add(lockerToBeRegistered);
+                            //Debug
+                            foreach (var kvp in lockerToBeRegistered)
+                            {
+                                Debug.WriteLine(kvp.Value.ToString());
+                                Debug.WriteLine(kvp.Key.ToString());
+                                Debug.WriteLine("_________");
+                            }
+                            await databaseLocker.Add(lockerToBeRegistered);
 
-                        if (j >= Cart[i].Cabinet.GetObservableLockers().Count()-1 && i >= Cart.Count() - 1)
-                        {
-                            cartRegistered = true;
+                            if (j >= Cart[i].Cabinet.GetObservableLockers().Count() - 1 && i >= Cart.Count() - 1)
+                            {
+                                cartRegistered = true;
+                            }
                         }
                     }
-                }    
+                }
+                return cartRegistered;
             }
-            return cartRegistered;
+            else { return false; }
         } 
     }
 }
