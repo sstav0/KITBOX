@@ -31,10 +31,10 @@
             ContentTemplate="{DataTemplate views:OrdersPage}"
             Route="OrdersPage" />
 
-        <!--<ShellContent
+        <ShellContent
             Title="Supplier Orders"
             ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
-            Route="SupplierOrdersPage" />-->
+            Route="SupplierOrdersPage" />
 
         <!--<ShellContent
             Title="History of sold products Example"
