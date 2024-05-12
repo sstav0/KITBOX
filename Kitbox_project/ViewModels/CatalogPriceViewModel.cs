@@ -24,7 +24,7 @@ namespace Kitbox_project.ViewModels
         private async void LoadDataAsync()
         {
             var CatalogItems = await DBCatalog.LoadAll();
-            CatalogPricesData = CatalogPriceItemViewModel.ConvertToViewModels(DatabaseCatalogPrices.ConvertToPriceItem(CatalogItems));
+            CatalogPricesData = CatalogPriceItemViewModel.ConvertToViewModels(DatabaseCatalog.ConvertToPriceItem(CatalogItems));
         }
 
         public List<CatalogPriceItemViewModel> CatalogPricesData
