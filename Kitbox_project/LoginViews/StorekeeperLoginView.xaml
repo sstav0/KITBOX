@@ -18,9 +18,9 @@
             ContentTemplate="{DataTemplate views:OrdersPage}"
             Route="OrdersPage" />
         <ShellContent
-            Title="Cabinet Creator"
-            ContentTemplate="{DataTemplate views:CabinetCreatorPage}"
-            Route="CabinetCreatorPage" />
+            Title="Supplier Orders"
+            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
+            Route="SupplierOrdersPage" />
     </TabBar>
 
 </Shell>

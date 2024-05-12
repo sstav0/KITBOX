@@ -1,7 +1,7 @@
 ﻿
 namespace Kitbox_project.Utilities;
 
-static class Users
+public static class Users
 {
     public enum User 
     {

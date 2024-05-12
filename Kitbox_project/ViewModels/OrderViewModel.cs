@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Kitbox_project.Utilities;
+using Kitbox_project.ViewModels;
 using static Kitbox_project.Utilities.Status;
+using System.Windows.Input;
 
 namespace Kitbox_project.ViewModels;
 
@@ -24,6 +26,7 @@ public class OrderViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(ActiveOrdersVisible));
         }
     }
+    public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
     public bool UnactiveOrdersVisible
     {
         get => _unactiveOrdersVisible;

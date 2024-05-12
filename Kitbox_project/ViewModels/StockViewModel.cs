@@ -1,5 +1,7 @@
 ﻿using Kitbox_project.DataBase;
 using Kitbox_project.Models;
+using Kitbox_project.Utilities;
+using Kitbox_project.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,18 +11,37 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Kitbox_project.ViewModels
 {
     public class StockViewModel : INotifyPropertyChanged
     {
+        private Users.User _user;
         private List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
         private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
+        private bool _isSeller = false;
+        private bool _isCustomer = false;
+        private bool _isDirector = false;
+        private bool _isSecretary = false;
+        private bool _isStorekeeper = false;
+
         public StockViewModel()
         {
             LoadDataAsync();
+
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(User))
+                {
+                    // Update visibilities 
+                    SetRights();
+                }
+            };
+
+            User = Users.User.Director;
         }
 
         private async void LoadDataAsync()
@@ -39,6 +60,62 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public Users.User User
+        {
+            get => _user;
+            set
+            {
+                _user = value;
+                OnPropertyChanged(nameof(User));
+            }
+        }
+
+        public bool IsDirector
+        {
+            get => _isDirector;
+            set
+            {
+                _isDirector = value;
+                OnPropertyChanged(nameof(IsDirector));
+            }
+        }
+        public bool IsSeller
+        {
+            get => _isSeller;
+            set
+            {
+                _isSeller = value;
+                OnPropertyChanged(nameof(IsSeller));
+            }
+        }
+        public bool IsCustomer
+        {
+            get => _isCustomer;
+            set
+            {
+                _isCustomer = value;
+                OnPropertyChanged(nameof(IsCustomer));
+            }
+        }
+        public bool IsStorekeeper
+        {
+            get => _isStorekeeper;
+            set
+            {
+                _isStorekeeper = value;
+                OnPropertyChanged(nameof(IsStorekeeper));
+            }
+        }
+        public bool IsSecretary
+        {
+            get => _isSecretary;
+            set
+            {
+                _isSecretary = value;
+                OnPropertyChanged(nameof(IsSecretary));
+            }
+        }
+
         public void ApplyFilter(string searchText)
         {
             searchText = searchText.Trim();
@@ -49,6 +126,31 @@ namespace Kitbox_project.ViewModels
                     string.IsNullOrWhiteSpace(searchText) ||
                     item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+            }
+        }
+
+        private void SetRights()
+        {
+             switch (User)
+            {
+                case Users.User.Customer:
+                    IsCustomer = true;
+                    break;
+                case Users.User.Seller:
+                    IsSeller = true;
+                    break;
+                case Users.User.Secretary:
+                    IsSecretary = true;
+                    break;
+                case Users.User.Director:
+                    IsDirector = true;
+                    break;
+                case Users.User.Storekeeper:
+                    IsStorekeeper = true;
+                    break;
+                default:
+                    break;
+                
             }
         }
 
@@ -112,7 +214,7 @@ namespace Kitbox_project.ViewModels
 
             private readonly DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
             private readonly DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
-            private readonly DatabaseCatalogPrices DBCatalog = new DatabaseCatalogPrices("kitboxer", "kitboxing");
+            private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
             private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
 
             public StockItemViewModel(int? id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
@@ -433,7 +535,7 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-
+            public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
             public event PropertyChangedEventHandler PropertyChanged;
             protected void OnPropertyChanged([CallerMemberName] string name = null)
             {

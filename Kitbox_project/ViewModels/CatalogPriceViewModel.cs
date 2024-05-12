@@ -11,12 +11,11 @@ using System.Threading.Tasks;
 using static Kitbox_project.ViewModels.StockViewModel;
 
 namespace Kitbox_project.ViewModels
-
 {
     internal class CatalogPriceViewModel : INotifyPropertyChanged
     {
         private List<CatalogPriceItemViewModel> _catalogPricesData;
-        private DatabaseCatalogPrices DBCatalogPrices = new DatabaseCatalogPrices("kitboxer", "kitboxing");
+        private DatabaseCatalog DBCatalog= new DatabaseCatalog("kitboxer", "kitboxing");
 
         public CatalogPriceViewModel()
         {
@@ -24,8 +23,8 @@ namespace Kitbox_project.ViewModels
         }
         private async void LoadDataAsync()
         {
-            var CatalogItems = await DBCatalogPrices.LoadAll();
-            CatalogPricesData = CatalogPriceItemViewModel.ConvertToViewModels(DatabaseCatalogPrices.ConvertToPriceItem(CatalogItems));
+            var CatalogItems = await DBCatalog.LoadAll();
+            CatalogPricesData = CatalogPriceItemViewModel.ConvertToViewModels(DatabaseCatalog.ConvertToPriceItem(CatalogItems));
         }
 
         public List<CatalogPriceItemViewModel> CatalogPricesData
@@ -61,7 +60,7 @@ namespace Kitbox_project.ViewModels
                     priceItem.InputPrice = priceItem.InputPrice.TrimStart('0') != "" ? priceItem.InputPrice.TrimStart('0') : "0";
 
                     priceItem.Price = Convert.ToDouble(priceItem.InputPrice);
-                    await DBCatalogPrices.Update(
+                    await DBCatalog.Update(
                         new Dictionary<string, object> { { "Price", priceItem.Price.ToString() } },
                         new Dictionary<string, object> { { "Code", priceItem.ItemCode } });
 
