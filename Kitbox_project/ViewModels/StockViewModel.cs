@@ -214,7 +214,7 @@ namespace Kitbox_project.ViewModels
 
             private readonly DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
             private readonly DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
-            private readonly DatabaseCatalogPrices DBCatalog = new DatabaseCatalogPrices("kitboxer", "kitboxing");
+            private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
             private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
 
             public StockItemViewModel(int? id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)

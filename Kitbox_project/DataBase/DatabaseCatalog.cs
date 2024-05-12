@@ -110,4 +110,17 @@ public class DatabaseCatalog : Database
 
         return dbCatalogItem;
     }
+
+    public static List<CatalogPriceItem> ConvertToPriceItem(List<Dictionary<string, string>> data)
+    {
+        List<CatalogPriceItem> priceItems = new List<CatalogPriceItem>();
+        foreach (var item in data)
+        {
+            priceItems.Add(new CatalogPriceItem(
+                item["Code"],
+                double.Parse(item["Price"])
+            ));
+        }
+        return priceItems;
+    }
 }
