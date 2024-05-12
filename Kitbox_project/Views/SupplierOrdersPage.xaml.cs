@@ -31,16 +31,16 @@ public partial class SupplierOrdersPage : ContentPage
 
     private async void OpenPopupNewSupplierOrder(object sender, EventArgs e)
     {
-        bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
+        bool answer = await DisplayAlert("Order Confirmation", "Do you want to confirm your order ?", "Yes", "No");
         if (answer)
         {
             if (sender is Button button && button.BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
             {
                 supplierOrdersViewModel.AddNewSupplierOrder();
+                PickerSupplier.SelectedIndex = -1;
             }
         }
     }
-
 
     private void OnCheckBoxCheckedChanged(object sender, CheckedChangedEventArgs e)
     {
@@ -63,7 +63,14 @@ public partial class SupplierOrdersPage : ContentPage
     {
         if (sender is Button button && button.BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
         {
-            supplierOrdersViewModel.AddNewItem(ItemCode.Text, PickerSupplier.SelectedItem, int.Parse(Quantity.Text));
+            if (PickerSupplier.SelectedIndex != -1)
+            {
+                supplierOrdersViewModel.AddNewItem(ItemCode.Text, (Supplier)PickerSupplier.SelectedItem, int.Parse(Quantity.Text));
+            }
+            else
+            {
+                DisplayAlert("Error", "Please select a supplier", "OK");
+            }
         }
     }
 
@@ -71,7 +78,7 @@ public partial class SupplierOrdersPage : ContentPage
     {
         if (sender is Button button && button.BindingContext is SupplierOrderItem supplierOrderItem)
         {
-            ((SupplierOrdersViewModel)BindingContext).DeleteItem(supplierOrderItem);
+            (BindingContext as SupplierOrdersViewModel).DeleteItem(supplierOrderItem);
         }
     }
 }

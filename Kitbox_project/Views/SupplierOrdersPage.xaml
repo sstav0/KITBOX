@@ -35,28 +35,12 @@
                 Text="Supplier Orders" />
             <StackLayout Margin="20">
                 <!-- Border for item entry -->
-                <Border BackgroundColor="#fff7f2" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20">
-                    <StackLayout>
-                        <Entry x:Name="ItemCode" Placeholder="Item Code" Text="{Binding InputCode}" Margin="0,0,0,10">
-                            <Entry.Triggers>
-                                <DataTrigger TargetType="Entry" Binding="{Binding IsValidCode}" Value="False">
-                                    <Setter Property="BackgroundColor" Value="White"/>
-                                    <Setter Property="TextColor" Value="Red"/>
-                                </DataTrigger>
-                            </Entry.Triggers>
-                        </Entry>
-
-                        <Entry x:Name="Quantity" Placeholder="Quantity" Margin="0,0,0,10" Keyboard="Numeric" Text="{Binding InputQuantity}">
-                            <Entry.Triggers>
-                                <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
-                                    <Setter Property="BackgroundColor" Value="White" />
-                                    <Setter Property="TextColor" Value="Red"/>
-                                </DataTrigger>
-                            </Entry.Triggers>
-                        </Entry>
+                <Border BackgroundColor="#fff7f2" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="400" Padding="20">
+                    <StackLayout Spacing="10">
                         <Picker x:Name="PickerSupplier" Title="Select Supplier" 
-                           ItemsSource="{Binding Suppliers}"
-                           ItemDisplayBinding="{Binding Name}">
+                                ItemsSource="{Binding Suppliers}"
+                                ItemDisplayBinding="{Binding Name}"
+                                BackgroundColor="White">
                             <Picker.Triggers>
                                 <DataTrigger TargetType="Picker" Binding="{Binding IsOrderNotEmpty}" Value="False">
                                     <Setter Property="IsEnabled" Value="True"/>
@@ -66,6 +50,23 @@
                                 </DataTrigger>
                             </Picker.Triggers>
                         </Picker>
+                        <HorizontalStackLayout Spacing="15">
+                            <Entry x:Name="ItemCode" Placeholder="Item Code" Text="{Binding InputCode}" BackgroundColor="White" Margin="0,0,0,10" WidthRequest="220">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry" Binding="{Binding IsValidCode}" Value="False">
+                                        <Setter Property="TextColor" Value="Red"/>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                            <Entry x:Name="Quantity" Placeholder="Quantity" Text="{Binding InputQuantity}" BackgroundColor="White" Margin="0,0,0,10" WidthRequest="120" Keyboard="Numeric">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
+                                        <Setter Property="TextColor" Value="Red"/>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                        </HorizontalStackLayout>
+
                         <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="10,5">
                             <Label Text="Total Price: " Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
                             <Label Text="{Binding TempOrderTotalPrice}" FontSize="Medium" FontAttributes="Bold" TextColor="Green"/>
