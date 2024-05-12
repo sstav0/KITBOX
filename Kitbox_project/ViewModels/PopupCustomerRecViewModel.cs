@@ -175,7 +175,8 @@ namespace Kitbox_project.ViewModels
                 //Clsoe Popup
                 _parentPage.ClosePopup();
                 //Back to Main Page (Customer)
-                Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
+                await Application.Current.MainPage.Navigation.PushAsync(new HomeClientPage());
+
                 //Display message on a new popup (with ID order & customer)
                 string orderIdMessage = $"Validate your Order with one of our sellers \nCustomer ID : {idCustomer} \nOrder ID : {idOrder}";
                 await Application.Current.MainPage.DisplayAlert("Successfully Registered your Order", orderIdMessage, "OK");
