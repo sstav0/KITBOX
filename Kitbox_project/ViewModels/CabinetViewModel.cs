@@ -440,12 +440,13 @@ namespace Kitbox_project.ViewModels
         /// </remarks>
         public async void UpdatePickerList(string param)//, string selectedItem)
         {
+            int totalHeight = availableLocker.Sum(locker => locker.Height);
             List<string> newValue = new List<string>(); 
             selectedValues = new Dictionary<string, object> {
                                 { "Width", _selectedWidthItem }, { "Depth", _selectedDepthItem },
                                 { "Panel_color", _selectedLockerColorItem }, { "Height", _selectedHeightItem },
                                 { "Door", _isDoorChecked }, { "Door_color", _selectedDoorColorItem },
-                                {"Angle_color", _selectedAngleIronColor }, {"Door_material", _selectedDoorMaterialItem}};
+                                { "Angle_color", _selectedAngleIronColor }, {"Door_material", _selectedDoorMaterialItem}, {"TotalHeight", totalHeight} };
 
             //The method is called when the picker is open so we can ignore the picker for the catalog search and set it to 'null'
             var savedSelectedValue = selectedValues[param];
@@ -515,7 +516,6 @@ namespace Kitbox_project.ViewModels
                 registeredPartsRefQuantityList[registeredPartsRefQuantityList.Count - AvailableLockers.Count - 1 + modifyIndex] = partAvailabilityResult.Item2;
             }
             
-            
             if(partAvailabilityResult.Item1 == true)
             {
                 message = "";
@@ -529,8 +529,6 @@ namespace Kitbox_project.ViewModels
         {
             Debug.WriteLine("ResetLocker");
 
-            
-
             EnablecheckDoor = true; IsDoorChecked = false; IsDoorPickerVisible = false;
 
             SelectedDepthItem = null; SelectedAngleIronColor = null; SelectedDoorColorItem = null;
@@ -542,7 +540,6 @@ namespace Kitbox_project.ViewModels
                 
             }
             OnPropertyChanged(nameof(AvailableLockers));
-
         }
   
         

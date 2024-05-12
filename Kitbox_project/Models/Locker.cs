@@ -45,7 +45,7 @@ namespace Kitbox_project.Models
             {"TRG", 4 }, //Side Crossbar
             {"TRF", 2 }, //Front Crossbar
             {"TRR", 2 }, //Back Crossbar
-            {"COU", 2 }, //Coupelle
+            {"COU", 2 }  //Coupelle
         };
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Kitbox_project.Models
                 { "Door Color"          ,doorColor },
                 { "Door Material"       ,doorMaterial },
                 { "Door"                ,isDoor },
-                { "Panel Color"         ,this.Color }
+                { "Panel Color"         ,this.Color },
             };
             return selectedValues;
         }
@@ -205,9 +205,14 @@ namespace Kitbox_project.Models
         /// Additionally, it explains the special case when the two-letter reference code is "DOORBOOL" which checks for the presence of a door.
         /// </para>
         /// </remarks>
-        public async Task<string> GetCatalogRef(string threeLetterRef)
+        public async Task<string> GetCatalogRef(string threeLetterRef, object totalHeight = null)
         {
             Dictionary<string, object> selectedValues = SelectedValues();
+
+            if(totalHeight != null)
+            {
+                selectedValues.Add("TotalHeight", totalHeight.ToString());
+            }
 
             Catalog catalog = new Catalog(databaseCatalog, selectedValues);
             string returnString = "";

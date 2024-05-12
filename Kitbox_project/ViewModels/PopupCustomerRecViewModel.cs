@@ -297,7 +297,7 @@ namespace Kitbox_project.ViewModels
                 { "height",Cart[i].Height},
                 {"quantity",Cart[i].Quantity},
                 {"idOrder",idOrder},
-                {"IronAngleRef", await Cart[i].Cabinet.GetObservableLockers()[Cart[i].Cabinet.GetObservableLockers().Count()-1].GetCatalogRef("COR")} };
+                {"IronAngleRef", await Cart[i].Cabinet.GetObservableLockers()[Cart[i].Cabinet.GetObservableLockers().Count()-1].GetCatalogRef("COR", Cart[i].Cabinet.Height)} };
 
                     await databaseCabinet.Add(cabinetToBeRegistered);
 
