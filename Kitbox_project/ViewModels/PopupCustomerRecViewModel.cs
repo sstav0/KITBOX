@@ -183,6 +183,7 @@ namespace Kitbox_project.ViewModels
             }
             else
             {
+                _parentPage.ClosePopup();
                 await Application.Current.MainPage.DisplayAlert("ERROR 4", "We encounter problems trying to get your order registered", "OK");
             }
         }
@@ -233,7 +234,7 @@ namespace Kitbox_project.ViewModels
                 List<Dictionary<string, string>> customerDataList = await databaseCustomer.GetData(dataCustomerString);
 
                 if (dataCustomerString.Count <= 0 || customerDataList == null) {
-                    customerDataList = await databaseCustomer.GetData(dataCustomerString);
+                    _parentPage.ClosePopup();
                     await Application.Current.MainPage.DisplayAlert("ERROR 1", "We encounter problems trying to get your order registered", "OK");
                 }
 
@@ -258,7 +259,7 @@ namespace Kitbox_project.ViewModels
                     List<Dictionary<string, string>> orderDataList = await databaseOrder.GetData(dataOrderString);
                     if (dataOrderString.Count <= 0 || orderDataList == null)
                     {
-                        orderDataList = await databaseOrder.GetData(dataOrderString);
+                        _parentPage.ClosePopup();
                         await Application.Current.MainPage.DisplayAlert("ERROR 2", "We encounter problems trying to get your order registered", "OK");
                     }
                     else
@@ -311,7 +312,7 @@ namespace Kitbox_project.ViewModels
 
                     if (dataCabinetString.Count <= 0 || cabinetDataList == null)
                     {
-                        cabinetDataList = await databaseCabinet.GetData(dataCabinetString);
+                        _parentPage.ClosePopup();
                         await Application.Current.MainPage.DisplayAlert("ERROR 3", "We encounter problems trying to get your order registered", "OK");
                     }
                     else
