@@ -494,7 +494,7 @@ public class OrderViewModel : ILoginViewModel
                         var lockerDict = await _dBLockers.GetData(
                         new Dictionary<string, string> { { "idCabinet", idCabinet } },
                         new List<string> { "sidePanelRef", "backPanelRef", "verticalBattenRef", "horizontalPanelRef",
-                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef"});
+                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef", "coupelles"});
                         if (lockerDict is not null) 
                         {
                             foreach (var lockerRefs in lockerDict)
@@ -548,7 +548,7 @@ public class OrderViewModel : ILoginViewModel
                         break;
                     case "POR":
                         // door panel = 1 per lvl (if present)
-                        quantities[i] = quantities[i];
+                        quantities[i] = quantities[i] * 2;
                         break;
                     case "TAS":
                         // vertical battens = 4 per cabinet
@@ -564,6 +564,10 @@ public class OrderViewModel : ILoginViewModel
                         break;
                     case "TRR":
                         // back crossbars = 2 per lvl
+                        quantities[i] = quantities[i] * 2;
+                        break;
+                    case "COU":
+                        // coupelles = 2 par locker
                         quantities[i] = quantities[i] * 2;
                         break;
                     default:
