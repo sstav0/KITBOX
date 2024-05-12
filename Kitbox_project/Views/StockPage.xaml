@@ -4,16 +4,18 @@
              xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
              x:Class="Kitbox_project.Views.StockPage"
              BackgroundColor="White"
-             Title="StockPage">
+             Title="StockPage"
+             Shell.NavBarIsVisible="True"
+             Shell.TabBarIsVisible="True">
             
 
-     <ContentPage.ToolbarItems FontSize="10">
+    <ContentPage.ToolbarItems FontSize="10">
         <ToolbarItem
             x:Name="LogOutButton"
             Command="{Binding LogoutCommand}"
             Text="Log off" />
     </ContentPage.ToolbarItems>       
-     
+
     <ContentPage.BindingContext>
         <viewModels:StockViewModel />
     </ContentPage.BindingContext>

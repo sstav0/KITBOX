@@ -89,9 +89,6 @@
 		<Compile Update="Views\LoginPage.xaml.cs">
 			<DependentUpon>LoginPage.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="Views\SoldHistoryPage.xaml.cs">
-			<DependentUpon>SoldHistoryPage.xaml</DependentUpon>
-		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -123,9 +120,6 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\LoginPage.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\SoldHistoryPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\StockPage.xaml">
