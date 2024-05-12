@@ -259,13 +259,19 @@ namespace Kitbox_project.ViewModels
                     }
                 }
 
+                SupplierOrderViewModel newSupplierOrder = new SupplierOrderViewModel(
+                    orderId, SelectedSupplier.Id, DateTime.Now.AddDays(orderWorstDelay).ToString("dd-MM-yyyy"), TempOrderTotalPrice, "Ordered");
+                Debug.WriteLine("Order total price: " + TempOrderTotalPrice);
+                Debug.WriteLine("Order string total price: " + TempOrderTotalPrice.ToString());
+
                 await DBSupplierOrders.Add(new Dictionary<string, object>
                         {
-                            {"idSupplier", SelectedSupplier.Id.ToString()},
-                            {"deliveryDate", DateTime.Now.AddDays(orderWorstDelay).ToString("dd-MM-yyyy")},
-                            {"price", TempOrderTotalPrice.ToString()},
-                            {"status", "Ordered" }
+                            {"idSupplier", newSupplierOrder.SupplierId},
+                            {"deliveryDate", newSupplierOrder.DeliveryDate},
+                            {"price", newSupplierOrder.Price},
+                            {"status", newSupplierOrder.Status }
                         });
+                SupplierOrders = SupplierOrders.Append(newSupplierOrder).ToList();
             }
             TempOrderItems.Clear();
             UpdateTempOrderTotalPrice(); 
@@ -299,6 +305,17 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        //Launch a popup window to cancel the Supplier Order on the frontEnd and in the DB.dbo.SupplierOrder
+        public async void CancelOrder(SupplierOrderViewModel order)
+        {
+            bool orderCancelled = await Application.Current.MainPage.DisplayAlert("Order Cancellation", "Confirm you want to cancel this order ?", "Yes", "No");
+            if (orderCancelled)
+            {
+                await DBSupplierOrders.Delete(new Dictionary<string, object> { { "idSupplierOrder", order.OrderID } });
+                SupplierOrders = SupplierOrders.Where(o => o.OrderID != order.OrderID).ToList();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
@@ -310,18 +327,18 @@ namespace Kitbox_project.ViewModels
             private bool _supplierOrderVisibility;
             private bool _isExpanded;
             private string _supplierName;
+            private bool _cancelButtonVisibility;
             private readonly DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
             private readonly DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
             public ICommand OnReceivedClicked { get; }
-            public ICommand OnCancelClicked { get; }
 
             public SupplierOrderViewModel(int orderID, int supplierId, string deliveryDate, double price, string status) : base(orderID, supplierId, deliveryDate, price, status)
             {
                 _supplierOrderVisibility = true;
                 _isExpanded = false;
                 LoadSupplierName();
+                CheckCancelButtonVisibility();
                 OnReceivedClicked = new Command(ModifyOrderStatus);
-                OnCancelClicked = new Command(CancelOrder);
             }
 
             //Launch a popup window to modify the status of the Supplier Order on the frontEnd and in the DB.dbo.SupplierOrder
@@ -330,17 +347,8 @@ namespace Kitbox_project.ViewModels
                 bool orderReceived = await Application.Current.MainPage.DisplayAlert("Order Reception", "Confirm you received this order ?", "Yes", "No");
                 Status = orderReceived ? "Received" : "Ordered";
                 OnPropertyChanged(nameof(Status));
+                CheckCancelButtonVisibility();
                 UpdateDBOrderStatus();
-            }
-
-            //Launch a popup window to cancel the Supplier Order on the frontEnd and in the DB.dbo.SupplierOrder
-            private async void CancelOrder()
-            {
-                bool orderCancelled = await Application.Current.MainPage.DisplayAlert("Order Cancellation", "Confirm you want to cancel this order ?", "Yes", "No");
-                if (orderCancelled)
-                {
-                    //await DBSupplierOrder.Delete(new Dictionary<string, object> { { "idSupplierOrder", OrderID.ToString() } });
-                }
             }
 
             public async void GetAllItems()
@@ -350,7 +358,7 @@ namespace Kitbox_project.ViewModels
                 //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
                 DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
                 var items = await databaseSupplierOrderItem.GetData(
-                        new Dictionary<string, string> { { "idOrder", OrderID.ToString() } }, 
+                        new Dictionary<string, string> { { "idSupplierOrder", OrderID.ToString() } }, 
                         new List<string> {"codeItem", "quantity"});
 
                 //Step 2 Get the infos to construct each SupplierOrderItem
@@ -391,6 +399,11 @@ namespace Kitbox_project.ViewModels
                     new List<string> { "NameofSuppliers" });
                 SupplierName = supplierName[0]["NameofSuppliers"];
             }
+            
+            private void CheckCancelButtonVisibility()
+            {
+                CancelButtonVisibility = Status == "Ordered";
+            }
 
             //Update the status of an order in the DB.dbo.SupplierOrder
             private async void UpdateDBOrderStatus()
@@ -427,6 +440,16 @@ namespace Kitbox_project.ViewModels
                 {
                     _supplierName = value;
                     OnPropertyChanged(nameof(SupplierName));
+                }
+            }
+
+            public bool CancelButtonVisibility
+            {
+                get => _cancelButtonVisibility;
+                set
+                {
+                    _cancelButtonVisibility = value;
+                    OnPropertyChanged(nameof(CancelButtonVisibility));
                 }
             }
 
