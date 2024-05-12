@@ -134,7 +134,7 @@ namespace Kitbox_project.Views
 
             foreach (LockerViewModel locke in _viewModel.AvailableLockers)
             {
-                //On redonne un bon index à chacun 
+                //On redonne un bon index ï¿½ chacun 
                 locke.LockerID = index;
                 index += 1;
 
@@ -315,7 +315,7 @@ namespace Kitbox_project.Views
             Debug.WriteLine(TotalSize);
 
 
-            //On crée un nouveau cabinet
+            //On crï¿½e un nouveau cabinet
             Cabinet newCabinet = new Cabinet(
                 lockers,
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
