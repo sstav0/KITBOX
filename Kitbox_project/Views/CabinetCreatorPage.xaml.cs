@@ -81,6 +81,11 @@ namespace Kitbox_project.Views
         }
         void DoorMaterialPickerFocused (object sender, FocusEventArgs e)
         {
+            if (_viewModel.SelectedDoorColorItem != null) 
+            {
+                _viewModel.SelectedDoorColorItem = null;
+                _viewModel.UpdatePickerList("Door_color"); 
+            }
             _viewModel.UpdatePickerList("Door_material");
         }
         void DoorColorPickerFocused (object sender, FocusEventArgs e)
