@@ -175,13 +175,15 @@ namespace Kitbox_project.ViewModels
                 //Clsoe Popup
                 _parentPage.ClosePopup();
                 //Back to Main Page (Customer)
-                Microsoft.Maui.Controls.Application.Current.MainPage = new AppShell();
+                await Application.Current.MainPage.Navigation.PushAsync(new HomeClientPage());
+
                 //Display message on a new popup (with ID order & customer)
                 string orderIdMessage = $"Validate your Order with one of our sellers \nCustomer ID : {idCustomer} \nOrder ID : {idOrder}";
                 await Application.Current.MainPage.DisplayAlert("Successfully Registered your Order", orderIdMessage, "OK");
             }
             else
             {
+                _parentPage.ClosePopup();
                 await Application.Current.MainPage.DisplayAlert("ERROR 4", "We encounter problems trying to get your order registered", "OK");
             }
         }
@@ -232,7 +234,7 @@ namespace Kitbox_project.ViewModels
                 List<Dictionary<string, string>> customerDataList = await databaseCustomer.GetData(dataCustomerString);
 
                 if (dataCustomerString.Count <= 0 || customerDataList == null) {
-                    customerDataList = await databaseCustomer.GetData(dataCustomerString);
+                    _parentPage.ClosePopup();
                     await Application.Current.MainPage.DisplayAlert("ERROR 1", "We encounter problems trying to get your order registered", "OK");
                 }
 
@@ -257,7 +259,7 @@ namespace Kitbox_project.ViewModels
                     List<Dictionary<string, string>> orderDataList = await databaseOrder.GetData(dataOrderString);
                     if (dataOrderString.Count <= 0 || orderDataList == null)
                     {
-                        orderDataList = await databaseOrder.GetData(dataOrderString);
+                        _parentPage.ClosePopup();
                         await Application.Current.MainPage.DisplayAlert("ERROR 2", "We encounter problems trying to get your order registered", "OK");
                     }
                     else
@@ -310,7 +312,7 @@ namespace Kitbox_project.ViewModels
 
                     if (dataCabinetString.Count <= 0 || cabinetDataList == null)
                     {
-                        cabinetDataList = await databaseCabinet.GetData(dataCabinetString);
+                        _parentPage.ClosePopup();
                         await Application.Current.MainPage.DisplayAlert("ERROR 3", "We encounter problems trying to get your order registered", "OK");
                     }
                     else
