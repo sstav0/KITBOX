@@ -8,22 +8,9 @@ namespace Kitbox_project.Views;
 
 public partial class StockPage : ContentPage
 {
-    private User _user;
-    private bool isDirector;
-
-    private string _newReference;
-    private string _newCode;
-
 	public StockPage()
 	{
 		InitializeComponent();
-
-        _user = User.Director;
-
-        if(_user is User.Director)
-        {
-            isDirector = true;
-        }
 	}
 
     private async void OnEditUpdateClicked(object sender, EventArgs e)
@@ -72,7 +59,7 @@ public partial class StockPage : ContentPage
             if (!string.IsNullOrEmpty(ReferenceEntry.Text) && !string.IsNullOrEmpty(CodeEntry.Text))
             {
                 StockItem newStockItem = new(
-                null, ReferenceEntry.Text, CodeEntry.Text, 0, 0, 0, false);
+                null, ReferenceEntry.Text, CodeEntry.Text, 0, 0, 0, IsInCatalogCheckBox.IsChecked);
 
                 List<object> list = new List<object>
                 {
@@ -81,13 +68,9 @@ public partial class StockPage : ContentPage
                     ColorEntry.Text, PriceEntry.Text, MaterialEntry.Text
                 };
 
-                //foreach (string item in list)
-                //{
-                //    if (string.IsNullOrEmpty(item))
-                //    {
-                //        item = null;
-                //    }
-                //}
+                // Converts the empty strings with a null object
+
+                list = list.Select(item => item is string && string.IsNullOrEmpty((string)item) ? null : item).ToList();
 
                 stockViewModel.AddInStock(newStockItem, list);
 

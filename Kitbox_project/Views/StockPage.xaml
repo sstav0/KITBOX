@@ -19,51 +19,58 @@
                 <SearchBar Placeholder="Search by reference or code..." TextChanged="OnTextChanged" />
             </Border>
 
-            <Grid IsVisible="{Binding isDirector}" HorizontalOptions="Center" Margin="0,0,0,20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Border StrokeShape="RoundRectangle 10" Stroke="{StaticResource Tertiary}" Padding="10"
+                    IsVisible="{Binding IsDirector}" HorizontalOptions="Center" Margin="0,0,0,20">
+                <Grid RowSpacing="10" ColumnSpacing="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.1*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <Label Text="Parameters of the new part" FontAttributes="Bold"
-                       Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"/>
+                    <Label Text="Add a new part in stock" FontAttributes="Bold" FontSize="Medium"
+                           Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
 
-                <Entry Placeholder="Enter the reference" x:Name="ReferenceEntry"
-                       MinimumWidthRequest="250" Grid.Row="1" Grid.Column="0"/>
-                <Entry Placeholder="Enter the code" x:Name="CodeEntry"
-                       MinimumWidthRequest="250" Grid.Row="1" Grid.Column="1"/>
+                    <Entry Placeholder="Enter the reference" x:Name="ReferenceEntry"
+                           MinimumWidthRequest="250" Grid.Row="1" Grid.Column="0"/>
+                    <Entry Placeholder="Enter the code" x:Name="CodeEntry"
+                           MinimumWidthRequest="250" Grid.Row="1" Grid.Column="1"/>
+                    <HorizontalStackLayout Grid.Row="1" Grid.Column="2" HorizontalOptions="Center">
+                        <CheckBox x:Name="IsInCatalogCheckBox"/>
+                        <Label Text="Is in Catalog" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
 
-                <Entry Placeholder="Enter the dimensions" x:Name="DimensionsEntry"
-                       MinimumWidthRequest="250" Grid.Row="2" Grid.Column="0"/>
-                <Entry Placeholder="Enter the width" x:Name="WidthEntry"
-                       MinimumWidthRequest="250" Grid.Row="2" Grid.Column="1"/>
-                <Entry Placeholder="Enter the height" x:Name="HeightEntry"
-                       MinimumWidthRequest="250" Grid.Row="2" Grid.Column="2"/>
-                <Entry Placeholder="Enter the depth" x:Name="DepthEntry"
-                       MinimumWidthRequest="250" Grid.Row="2" Grid.Column="3"/>
+                    <Entry Placeholder="Enter the dimensions" x:Name="DimensionsEntry"
+                           MinimumWidthRequest="250" Grid.Row="2" Grid.Column="0"/>
+                    <Entry Placeholder="Enter the width" x:Name="WidthEntry"
+                           MinimumWidthRequest="250" Grid.Row="2" Grid.Column="1"/>
+                    <Entry Placeholder="Enter the height" x:Name="HeightEntry"
+                           MinimumWidthRequest="250" Grid.Row="2" Grid.Column="2"/>
+                    <Entry Placeholder="Enter the depth" x:Name="DepthEntry"
+                           MinimumWidthRequest="250" Grid.Row="2" Grid.Column="3"/>
 
-                <Entry Placeholder="(Angle) Enter the cabinet Height" x:Name="CabinetHeightEntry"
-                       MinimumWidthRequest="250" Grid.Row="3" Grid.Column="0"/>
-                <Entry Placeholder="Enter the Color" x:Name="ColorEntry"
-                       MinimumWidthRequest="250" Grid.Row="3" Grid.Column="1"/>
-                <Entry Placeholder="Enter the Price" x:Name="PriceEntry"
-                       MinimumWidthRequest="250" Grid.Row="3" Grid.Column="2"/>
-                <Entry Placeholder="Enter the Material" x:Name="MaterialEntry"
-                       MinimumWidthRequest="250" Grid.Row="3" Grid.Column="3"/>
+                    <Entry Placeholder="(Angle only) Enter the cabinet Height" x:Name="CabinetHeightEntry"
+                           MinimumWidthRequest="250" Grid.Row="3" Grid.Column="0"/>
+                    <Entry Placeholder="Enter the Color" x:Name="ColorEntry"
+                           MinimumWidthRequest="250" Grid.Row="3" Grid.Column="1"/>
+                    <Entry Placeholder="Enter the Price" x:Name="PriceEntry"
+                           MinimumWidthRequest="250" Grid.Row="3" Grid.Column="2"/>
+                    <Entry Placeholder="Enter the Material" x:Name="MaterialEntry"
+                           MinimumWidthRequest="250" Grid.Row="3" Grid.Column="3"/>
 
-                <Button Text="Confirm" Clicked="OnAddStockItemButtonClicked"
-                        Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
+                    <Button Text="Confirm" Clicked="OnAddStockItemButtonClicked" 
+                            Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
 
-            </Grid>
+                </Grid>
+            </Border>
 
             <!-- ListView to display stock data -->
             <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1100" Padding="20">
