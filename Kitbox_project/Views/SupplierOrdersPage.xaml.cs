@@ -1,3 +1,4 @@
+using CommunityToolkit.Maui.Behaviors;
 using CommunityToolkit.Maui.Views;
 using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
@@ -10,7 +11,7 @@ namespace Kitbox_project.Views;
 public partial class SupplierOrdersPage : ContentPage
 {
     public SupplierOrdersPage()
-	{
+    {
         InitializeComponent();
     }
 
@@ -30,7 +31,14 @@ public partial class SupplierOrdersPage : ContentPage
 
     private async void OpenPopupNewSupplierOrder(object sender, EventArgs e)
     {
-        bool answer = await  DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
+        bool answer = await DisplayAlert("Done ?", "Do you want to confirm your order ?", "Yes", "No");
+        if (answer)
+        {
+            if (sender is Button button && button.BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
+            {
+                supplierOrdersViewModel.AddNewSupplierOrder();
+            }
+        }
     }
 
 
@@ -48,6 +56,22 @@ public partial class SupplierOrdersPage : ContentPage
         if (sender is Grid grid && grid.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
         {
             supplierOrderViewModel.GetAllItems(); // Load all items for the supplier order
+        }
+    }
+
+    private void OnAddClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
+        {
+            supplierOrdersViewModel.AddNewItem(ItemCode.Text, PickerSupplier.SelectedItem, int.Parse(Quantity.Text));
+        }
+    }
+
+    private void OnDeleteClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is SupplierOrderItem supplierOrderItem)
+        {
+            ((SupplierOrdersViewModel)BindingContext).DeleteItem(supplierOrderItem);
         }
     }
 }
