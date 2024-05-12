@@ -48,7 +48,7 @@ namespace Kitbox_project.Models
                 this._price = 0; //reset the price
                 foreach (Locker locker in this._lockers)
                 {
-                    this._price += locker.Price;
+                    this._price += Convert.ToDouble(locker.Price);
                 }
                 return this._price;
             }

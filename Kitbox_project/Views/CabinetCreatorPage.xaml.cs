@@ -326,7 +326,7 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
                 viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
-                0 // Price
+                Math.Round(Convert.ToDouble(viewModel.Locker.Price),2)
             )).ToList();
 
             TotalSize = lockers.Sum(locker => locker.Height);

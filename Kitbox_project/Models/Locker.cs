@@ -128,7 +128,6 @@ namespace Kitbox_project.Models
                 { "Door Material"       ,doorMaterial },
                 { "Door"                ,isDoor },
                 { "Panel Color"         ,this.Color }
-                //{ "Angle Color"         ,this.Depth }
             };
             return selectedValues;
         }
@@ -248,7 +247,7 @@ namespace Kitbox_project.Models
                     }
                     else if (threeLetterRef == "COU")
                     {
-                        if( ! this.Door.Material.Contains("glass",StringComparison.OrdinalIgnoreCase))
+                        if(this.Door != null && ! this.Door.Material.Contains("glass",StringComparison.OrdinalIgnoreCase))
                         {
                             returnString = item;
                         }
