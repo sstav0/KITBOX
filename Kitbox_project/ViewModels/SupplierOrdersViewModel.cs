@@ -16,15 +16,14 @@ namespace Kitbox_project.ViewModels
 {
     internal class SupplierOrdersViewModel : INotifyPropertyChanged
     {
-        private DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
-        private DatabaseSuppliers databaseSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
-        private DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
-        private DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
-        private DatabaseSupplierOrders databaseSupplierOrders = new("kitboxer", "kitboxing");
-        private DatabaseSupplierOrderItem databaseSupplierOrderItem = new("kitboxer", "kitboxing");
+        private readonly DatabaseSuppliers databaseSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
+        private readonly DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
+        private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
+        private readonly DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
+        private readonly DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
         private List<SupplierOrderViewModel> _supplierOrders;
         private ObservableCollection<Supplier> _suppliers;
-        private ObservableCollection<SupplierOrderItem> _tempOrderItems = new();
+        private ObservableCollection<SupplierOrderItem> _tempOrderItems = [];
         private Supplier _selectedSupplier;
         private string _inputQuantity;
         private string _inputCode;
@@ -40,8 +39,7 @@ namespace Kitbox_project.ViewModels
 
         public SupplierOrdersViewModel(StockItem stockItem)
         {
-            StockItem itemFromStockButton = stockItem; // Item to use to pre-fill the SupplierOrder form
-            _inputCode = stockItem.Code;
+            _inputCode = stockItem.Code; // Pre-fill the SupplierOrder form with item code
             LoadDataAsync();
         }
 
@@ -163,14 +161,7 @@ namespace Kitbox_project.ViewModels
 
         public void CheckSupplierSelection()
         {
-            if (TempOrderItems.Count > 0)
-            {
-                IsOrderNotEmpty = true;
-            }
-            else
-            {
-                IsOrderNotEmpty = false;
-            }
+            IsOrderNotEmpty = TempOrderItems.Count > 0;
         }
 
         public void UpdateTempOrderTotalPrice()
@@ -199,13 +190,23 @@ namespace Kitbox_project.ViewModels
             return lastID + 1;
         }
 
-        public async void AddNewItem(string itemCode, Object obj, int quantity)
+        public void ValidateQuantity()
         {
-            SelectedSupplier = (Supplier)obj;
+            IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
+        }
+
+        public async void ValidateCode()
+        {
+            var res = await databaseStock.GetData(new Dictionary<string, string> { { "Code", InputCode } });
+            IsValidCode = res != null && !TempOrderItems.Any(item => item.Code == InputCode);
+        }
+
+        public async void AddNewItem(string itemCode, Supplier supplier, int quantity)
+        {
+            SelectedSupplier = supplier;
 
             var data = await databasePnD.GetData(
-                               new Dictionary<string, string> { { "Code", itemCode }, { "idSupplier", SelectedSupplier.Id.ToString() } }
-                               );
+                               new Dictionary<string, string> { { "Code", itemCode }, { "idSupplier", SelectedSupplier.Id.ToString() } });
 
             if (data.Count == 1)
             {
@@ -224,6 +225,53 @@ namespace Kitbox_project.ViewModels
 
             UpdateTempOrderTotalPrice();
             CheckSupplierSelection();
+            ValidateCode();
+        }
+
+        public void DeleteItem(SupplierOrderItem item)
+        {
+            TempOrderItems.Remove(item);
+            UpdateTempOrderTotalPrice();
+            CheckSupplierSelection();
+            ValidateCode();
+        }
+
+        public async void AddNewSupplierOrder()
+        {
+            int orderId = GetLastOrderID();
+            int orderWorstDelay = 0;
+
+            if (TempOrderItems is not null)
+            {
+                foreach (var item in TempOrderItems)
+                {
+                    await databaseSupplierOrderItem.Add(new Dictionary<string, object>
+                            {
+                                {"idSupplierOrder", orderId.ToString() },
+                                {"codeItem", item.Code },
+                                {"quantity", item.Quantity.ToString() }
+                            });
+
+                    var itemPnDTable = await databasePnD.GetData(new Dictionary<string, string> { { "Code", item.Code }, { "idSupplier", SelectedSupplier.Id.ToString() } });
+                    if (int.TryParse(itemPnDTable[0]["Delay"], out int itemDelay) && itemDelay > orderWorstDelay)
+                    {
+                        orderWorstDelay = itemDelay;
+                    }
+                }
+
+                await DBSupplierOrders.Add(new Dictionary<string, object>
+                        {
+                            {"idSupplier", SelectedSupplier.Id.ToString()},
+                            {"deliveryDate", DateTime.Now.AddDays(orderWorstDelay).ToString("dd-MM-yyyy")},
+                            {"price", TempOrderTotalPrice.ToString()},
+                            {"status", "Ordered" }
+                        });
+            }
+            TempOrderItems.Clear();
+            UpdateTempOrderTotalPrice(); 
+            CheckSupplierSelection();
+            InputCode = "";
+            InputQuantity = "";
         }
 
         public void ApplyFilter(string searchText)
@@ -257,72 +305,6 @@ namespace Kitbox_project.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public void ValidateQuantity()
-        {
-            IsValidQuantity = int.TryParse(InputQuantity, out int parsedQuantity) && parsedQuantity >= 0;
-        }
-
-        public async void ValidateCode()
-        {
-            var res = await databaseStock.GetData(new Dictionary<string, string> { { "Code", InputCode } });
-
-            if (res != null)
-            {
-                IsValidCode = true;
-            }
-            else
-            {
-                IsValidCode = false;
-            }
-        }
-
-        public void DeleteItem(SupplierOrderItem item)
-        {
-            TempOrderItems.Remove(item);
-            UpdateTempOrderTotalPrice();
-            CheckSupplierSelection();
-        }
-
-        public async void AddNewSupplierOrder()
-        {
-            int orderId = GetLastOrderID();
-            int orderWorstDelay = 0;
-
-            if (TempOrderItems is not null)
-            {
-                foreach (var item in TempOrderItems)
-                {
-                    var itemPnDTable = await databasePnD.GetData(new Dictionary<string, string> { { "Code", item.Code }, { "idSupplier", SelectedSupplier.Id.ToString() } });
-
-                    await databaseSupplierOrderItem.Add(new Dictionary<string, object>
-                            {
-                                {"idSupplierOrder", orderId.ToString() },
-                                {"codeItem", item.Code },
-                                {"quantity", item.Quantity.ToString() }
-                            });
-
-
-                    if (int.TryParse(itemPnDTable[0]["Delay"], out int itemDelay) && itemDelay > orderWorstDelay)
-                    {
-                        orderWorstDelay = itemDelay;
-                    }
-                }
-
-                await databaseSupplierOrders.Add(new Dictionary<string, object>
-                        {
-                            {"idSupplier", SelectedSupplier.Id.ToString()},
-                            {"deliveryDate", DateTime.Now.AddDays(orderWorstDelay).ToString("dd-MM-yyyy")},
-                            {"price", TempOrderTotalPrice.ToString()},
-                            {"status", "Ordered" }
-                        });
-            }
-
-            TempOrderItems.Clear();
-            UpdateTempOrderTotalPrice(); 
-            CheckSupplierSelection();
-            InputCode = "";
-            InputQuantity = "";
-        }
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
         {
             private bool _supplierOrderVisibility;
@@ -337,7 +319,6 @@ namespace Kitbox_project.ViewModels
             {
                 _supplierOrderVisibility = true;
                 _isExpanded = false;
-                // DateTime.Now.AddDays(delay).ToString("dd/MM/yyyy");
                 LoadSupplierName();
                 OnReceivedClicked = new Command(ModifyOrderStatus);
                 OnCancelClicked = new Command(CancelOrder);
