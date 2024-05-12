@@ -6,10 +6,20 @@
              BackgroundColor="White"
              Title="StockPage">
             
+
+     <ContentPage.ToolbarItems FontSize="10">
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
+    </ContentPage.ToolbarItems>       
+     
     <ContentPage.BindingContext>
         <viewModels:StockViewModel />
     </ContentPage.BindingContext>
-    
+
+   
+
     <ScrollView>
         <VerticalStackLayout Margin="40">
             <!-- Title -->

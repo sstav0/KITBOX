@@ -1,6 +1,7 @@
 ﻿using Kitbox_project.DataBase;
 using Kitbox_project.Models;
 using Kitbox_project.Utilities;
+using Kitbox_project.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Kitbox_project.ViewModels
 {
@@ -533,7 +535,7 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-
+            public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
             public event PropertyChangedEventHandler PropertyChanged;
             protected void OnPropertyChanged([CallerMemberName] string name = null)
             {
