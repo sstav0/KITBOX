@@ -4,8 +4,17 @@
              xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
              x:Class="Kitbox_project.Views.OrdersPage"
              BackgroundColor="White"
-             Title="OrdersPage">
+             Title="OrdersPage"
+             Shell.NavBarIsVisible="True"
+             Shell.TabBarIsVisible="True">
 
+
+     <ContentPage.ToolbarItems FontSize="10">
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
+    </ContentPage.ToolbarItems>   
     <ContentPage.BindingContext>
         <viewModels:OrderViewModel/>
     </ContentPage.BindingContext>

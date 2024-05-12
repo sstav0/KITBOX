@@ -133,7 +133,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
             Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
             // Navigate to EditCabinetPage for editing with selected cabinet as parameter
-            await Navigation.PushAsync(new EditCabinetPage(order, selectedCabinet));
+            await Navigation.PushAsync(new EditCabinetPage(order, selectedCabinet, registeredPartsRefQuantity));
         }
     }
 
