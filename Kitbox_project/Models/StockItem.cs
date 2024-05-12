@@ -24,7 +24,7 @@ namespace Kitbox_project.Models
     /// </summary>
     public class StockItem : INotifyPropertyChanged
     {
-        private int _id;
+        private int? _id;
         private string _reference;
         private string _code;
         private int _quantity;
@@ -32,7 +32,7 @@ namespace Kitbox_project.Models
         private int _outgoingQuantity;
         private bool _inCatalog;
 
-        public StockItem(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog)
+        public StockItem(int? id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog)
         {
             _id = id;
             _reference = reference;
@@ -43,7 +43,7 @@ namespace Kitbox_project.Models
             _inCatalog = inCatalog;
         }
 
-        public int Id
+        public int? Id
         {
             get => _id;
             set

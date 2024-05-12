@@ -16,6 +16,7 @@ namespace Kitbox_project.ViewModels
     {
         private List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+        private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
         public StockViewModel()
         {
@@ -51,8 +52,6 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        
-
         public async Task EditIsInCatalog(StockItemViewModel stockItem)
         {
             if(stockItem.InCatalog == true)
@@ -75,6 +74,15 @@ namespace Kitbox_project.ViewModels
                 //        new Dictionary<string, object> { { "Price", stockItem.IsInCatalog } },
                 //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
             }
+        }
+
+        public async void AddInStock(StockItem stockItem, List<object> list)
+        {
+            Dictionary<string, object> dbStockItem = DatabaseStock.ConvertFromStockItem(stockItem);
+            Dictionary<string, object> dbCatalogItem = DatabaseCatalog.ConvertFromStockItemAndStringList(stockItem, list);
+
+            await DBStock.Add(dbStockItem);
+            await DBCatalog.Add(dbCatalogItem);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -107,7 +115,7 @@ namespace Kitbox_project.ViewModels
             private readonly DatabaseCatalogPrices DBCatalog = new DatabaseCatalogPrices("kitboxer", "kitboxing");
             private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
 
-            public StockItemViewModel(int id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
+            public StockItemViewModel(int? id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
             {
                 IsEditing = false;
                 ButtonText = "Edit";

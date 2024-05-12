@@ -48,6 +48,23 @@ public class DatabaseStock : Database
         return stockItems;
     }
 
+    public static Dictionary<string, object> ConvertFromStockItem(StockItem stockItem)
+    {
+        Dictionary<string, object> DBStockItem = new();
+        if (stockItem.Id is not null)
+        {
+            DBStockItem.Add("idStock", stockItem.Id);            
+        }
+        DBStockItem.Add("Reference", stockItem.Reference);
+        DBStockItem.Add("Code", stockItem.Code );
+        DBStockItem.Add("Quantity", stockItem.Quantity );
+        DBStockItem.Add("IncomingQuantity", stockItem.IncomingQuantity );
+        DBStockItem.Add("OutgoingQuantity", stockItem.OutgoingQuantity );
+        DBStockItem.Add("InCatalog", ParseStockBool(stockItem.InCatalog) );
+
+        return DBStockItem;
+    }
+
     private static bool ParseStockBool(string str)
     {
         if (string.IsNullOrEmpty(str) || str is "0")
@@ -55,5 +72,14 @@ public class DatabaseStock : Database
             return false;
         }
         return true;
+    }
+
+    private static string ParseStockBool(bool itemBool)
+    { 
+        if(itemBool)
+        {
+            return "0";
+        }
+        return "1";
     }
 }
