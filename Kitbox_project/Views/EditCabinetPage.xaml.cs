@@ -14,23 +14,23 @@ namespace Kitbox_project.Views
         private LogOutViewModel _logOutViewModel;
         int indexLock = 0;
         int index = 1;
+        List<Dictionary<string, int>> registeredPartsRefQuantity = new List<Dictionary<string, int>>();
 
 
 
-        public EditCabinetPage(Order order, Cabinet cabinet)
+        public EditCabinetPage(Order order, Cabinet cabinet, List<Dictionary<string, int>> registeredPartsRefQuantity = null)
         {
             InitializeComponent();
             _cabinet = cabinet;
             _viewModel = new CabinetViewModel();
             _logOutViewModel = new LogOutViewModel();
+            if (registeredPartsRefQuantity != null) { this.registeredPartsRefQuantity = registeredPartsRefQuantity; }   
             BindingContext = _viewModel;
             LogOutButton.BindingContext = _logOutViewModel;
             LoadAvailableLockers();
             Debug.WriteLine("Debug1");
             DefaultPickers();
             DisablePickers();
-
-
         }
 
         private void DisablePickers()
@@ -51,15 +51,13 @@ namespace Kitbox_project.Views
 
         private void LoadAvailableLockers()
         {
-
-
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
 
             };
         }
 
-        private void DefaultPickers()
+        private async void DefaultPickers()
         {
             Debug.WriteLine(_cabinet.Depth.ToString());
             _viewModel.SelectedDepthItem = _cabinet.Depth.ToString();
@@ -81,15 +79,19 @@ namespace Kitbox_project.Views
                 {
                     door = null;
                 }
-                
+
+                //put the needed dictionary at the end of the list
+                registeredPartsRefQuantity.Remove(locker.partsAvailabilityDict);
+                registeredPartsRefQuantity.Add(locker.partsAvailabilityDict);
+                _viewModel.registeredPartsRefQuantityList = registeredPartsRefQuantity;
 
                 LockerViewModel newLocker = new LockerViewModel
                 {
                     Height = Convert.ToInt32(locker.Height),
                     Color = locker.Color,
                     Door = door,
-                    NotePartsAvailability = "NotePartsAvailability(ARTHUR)"
-                };
+                    NotePartsAvailability = locker.partsAvailabilityBool ?  "" : "Some parts are currently out of stocks"
+            };
                 newLocker.LockerID = index;
 
                 _viewModel.AvailableLockers.Add(newLocker);
@@ -101,7 +103,7 @@ namespace Kitbox_project.Views
 
         }
          
-        private void AddSelectedLocker_Clicked(object sender, EventArgs e)
+        private async void AddSelectedLocker_Clicked(object sender, EventArgs e)
         {
             // Check if the maximum number of lockers has been reached
             if (_viewModel.AvailableLockers.Count >= 7)
@@ -110,15 +112,53 @@ namespace Kitbox_project.Views
                 return;
             }
 
+            //Check if pickers are correctly completed
+            if (_viewModel.selectedValues.ContainsValue(null))
+            {
+                if (!_viewModel.IsDoorChecked)
+                {
+                    Dictionary<string, object> data = _viewModel.selectedValues;
+                    data.Remove("Door_color");
+                    data.Remove("Door_material");
+                    if (data.ContainsValue(null))
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
             // Create a new LockerViewModel based on the selected parameters
-            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            Door door;
+            if (_viewModel.SelectedDoorColorItem != null && _viewModel.SelectedDoorMaterialItem != null)
+            {
+                door = new Door(_viewModel.SelectedDoorColorItem,
+                    _viewModel.SelectedDoorMaterialItem,
+                    Convert.ToInt32(_viewModel.SelectedHeightItem),
+                    Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            }
+            else
+            {
+                door = null;
+            }
+
+            Locker lockerToAdd = new Locker(Convert.ToInt32(_viewModel.SelectedHeightItem),
+                                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                                _viewModel.SelectedLockerColorItem,
+                                door,
+                                0);
 
             LockerViewModel newLocker = new LockerViewModel
             {
+                Locker = lockerToAdd,
                 Height = Convert.ToInt32(_viewModel.SelectedHeightItem),
                 Color = _viewModel.SelectedLockerColorItem,
                 Door = door,
-                NotePartsAvailability = "NotePartsAvailability(ARTHUR)"
+                NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(lockerToAdd)
             };
 
             int index = _viewModel.AvailableLockers.Count + 1;
@@ -204,17 +244,12 @@ namespace Kitbox_project.Views
         {
 
             // Implement logic to update cabinet details based on user input
-
-            //Debug.WriteLine(Convert.ToInt32(CabinetWidth.SelectedItem));
-            //Debug.WriteLine(Convert.ToInt32(CabinetDepth.SelectedItem));
             _cabinet.Depth = Convert.ToInt32(_viewModel.SelectedDepthItem);
             _cabinet.Length = Convert.ToInt32(_viewModel.SelectedWidthItem);
             foreach (var locker in _cabinet.GetObservableLockers())
             {
                 _cabinet.TestRemoveLocker(locker);  
             }
-
-
             _cabinet.GetObservableLockers().Clear();
             List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel =>
             {

@@ -43,6 +43,17 @@ namespace Kitbox_project.Views
             }
         }
 
+        private float _totalPrice;
+        public float TotalPrice
+        {
+            get => _totalPrice;
+            set
+            {
+                _totalPrice = value;
+                OnPropertyChanged(); // Implement INotifyPropertyChanged if needed
+            }
+        }
+
 
         int indexLock = 0;
 
@@ -175,9 +186,7 @@ namespace Kitbox_project.Views
                 {
                     return;
                 }
-
             }
-
             // Create a new LockerViewModel based on the selected parameters
             Door door;
             if (_viewModel.SelectedDoorColorItem != null && _viewModel.SelectedDoorMaterialItem != null)
@@ -216,6 +225,7 @@ namespace Kitbox_project.Views
             _viewModel.AvailableLockers.Add(newLocker);
             DisablePickers();
             calculateTotalSize();
+            calculateTotalPrice();
         }
 
         private async void ModifySelectedLocker_Clicked(object sender, EventArgs e)
@@ -239,21 +249,30 @@ namespace Kitbox_project.Views
             }
         }
         private void calculateTotalSize()
-        
-            {
-                // Convert ObservableCollection<LockerViewModel> to List<Locker>
-                List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
-                    Convert.ToInt32(viewModel.Height),
-                    Convert.ToInt32(_viewModel.SelectedDepthItem),
-                    Convert.ToInt32(_viewModel.SelectedWidthItem),
-                    viewModel.Color,
-                    viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
-                    0 // Price
-                )).ToList();
+        {
+            // Convert ObservableCollection<LockerViewModel> to List<Locker>
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                Convert.ToInt32(viewModel.Height),
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                viewModel.Color,
+                viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
+                0 // Price
+            )).ToList();
 
-                TotalSize = lockers.Sum(locker => locker.Height);
-            Debug.WriteLine(TotalSize);
+            TotalSize = lockers.Sum(locker => locker.Height);
+        Debug.WriteLine(TotalSize);
+        }
+
+        private async  void calculateTotalPrice()
+        {
+            TotalPrice = 0;
+            foreach (LockerViewModel locker in _viewModel.AvailableLockers)
+            {
+                TotalPrice += Convert.ToSingle(await locker.Locker.GetPrice());
+                Math.Round(TotalPrice, 2);
             }
+        }
 
 
         private void DisablePickers()
