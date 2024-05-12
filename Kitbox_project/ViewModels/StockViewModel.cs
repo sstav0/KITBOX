@@ -13,18 +13,11 @@ using System.Threading.Tasks;
 
 namespace Kitbox_project.ViewModels
 {
-    public class StockViewModel : INotifyPropertyChanged
+    public class StockViewModel : ILoginViewModel
     {
-        private Users.User _user;
         private List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
         private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
-
-        private bool _isSeller = false;
-        private bool _isCustomer = false;
-        private bool _isDirector = false;
-        private bool _isSecretary = false;
-        private bool _isStorekeeper = false;
 
         public StockViewModel()
         {
@@ -35,11 +28,13 @@ namespace Kitbox_project.ViewModels
                 if (e.PropertyName == nameof(User))
                 {
                     // Update visibilities 
-                    SetRights();
+                    UpdateUserRights(User);
                 }
             };
 
-            User = Users.User.Director;
+            //User = Login.login;
+
+            User = "director";
         }
 
         private async void LoadDataAsync()
@@ -58,62 +53,6 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public Users.User User
-        {
-            get => _user;
-            set
-            {
-                _user = value;
-                OnPropertyChanged(nameof(User));
-            }
-        }
-
-        public bool IsDirector
-        {
-            get => _isDirector;
-            set
-            {
-                _isDirector = value;
-                OnPropertyChanged(nameof(IsDirector));
-            }
-        }
-        public bool IsSeller
-        {
-            get => _isSeller;
-            set
-            {
-                _isSeller = value;
-                OnPropertyChanged(nameof(IsSeller));
-            }
-        }
-        public bool IsCustomer
-        {
-            get => _isCustomer;
-            set
-            {
-                _isCustomer = value;
-                OnPropertyChanged(nameof(IsCustomer));
-            }
-        }
-        public bool IsStorekeeper
-        {
-            get => _isStorekeeper;
-            set
-            {
-                _isStorekeeper = value;
-                OnPropertyChanged(nameof(IsStorekeeper));
-            }
-        }
-        public bool IsSecretary
-        {
-            get => _isSecretary;
-            set
-            {
-                _isSecretary = value;
-                OnPropertyChanged(nameof(IsSecretary));
-            }
-        }
-
         public void ApplyFilter(string searchText)
         {
             searchText = searchText.Trim();
@@ -124,31 +63,6 @@ namespace Kitbox_project.ViewModels
                     string.IsNullOrWhiteSpace(searchText) ||
                     item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
-            }
-        }
-
-        private void SetRights()
-        {
-             switch (User)
-            {
-                case Users.User.Customer:
-                    IsCustomer = true;
-                    break;
-                case Users.User.Seller:
-                    IsSeller = true;
-                    break;
-                case Users.User.Secretary:
-                    IsSecretary = true;
-                    break;
-                case Users.User.Director:
-                    IsDirector = true;
-                    break;
-                case Users.User.Storekeeper:
-                    IsStorekeeper = true;
-                    break;
-                default:
-                    break;
-                
             }
         }
 
@@ -185,11 +99,6 @@ namespace Kitbox_project.ViewModels
             await DBCatalog.Add(dbCatalogItem);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         // ViewModel for stock items
         public class StockItemViewModel : StockItem

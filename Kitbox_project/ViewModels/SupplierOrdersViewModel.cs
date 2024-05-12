@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Kitbox_project.ViewModels
 {
-    internal class SupplierOrdersViewModel : INotifyPropertyChanged
+    internal class SupplierOrdersViewModel : ILoginViewModel
     {
         private readonly DatabaseSuppliers databaseSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
         private readonly DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
@@ -34,6 +34,14 @@ namespace Kitbox_project.ViewModels
 
         public SupplierOrdersViewModel()
         {
+            PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(User))
+                {
+                    UpdateUserRights(User);
+                }
+            };
+
             LoadDataAsync();
         }
 
@@ -314,12 +322,6 @@ namespace Kitbox_project.ViewModels
                 await DBSupplierOrders.Delete(new Dictionary<string, object> { { "idSupplierOrder", order.OrderID } });
                 SupplierOrders = SupplierOrders.Where(o => o.OrderID != order.OrderID).ToList();
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         public class SupplierOrderViewModel : SupplierOrder, INotifyPropertyChanged
