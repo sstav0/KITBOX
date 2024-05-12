@@ -5,10 +5,12 @@
     xmlns:panel="clr-namespace:Kitbox_project.Utilities"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:uranium="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    x:Name="cabinetCreatorPage"
     Title="Cabinet Creator Page"
     BackgroundColor="White"
     Shell.NavBarIsVisible="True"
     Shell.TabBarIsVisible="False">
+
 
 
 
@@ -55,6 +57,8 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -105,6 +109,41 @@
                     HorizontalOptions="Start"
                     Text="cm"
                     VerticalOptions="Center" />
+
+                <!--  Size and Price  -->
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Cabinet Size: " />
+                            <Span FontAttributes="Bold" Text="{Binding TotalSize, Source={x:Reference Name=cabinetCreatorPage}}" />
+                            <Span Text="  cm" />
+
+                        </FormattedString>
+                    </Label.FormattedText>
+
+                </Label>
+                <Label
+                    Grid.Row="3"
+                    Grid.Column="5"
+                    Grid.ColumnSpan="2">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Price: " />
+                            <Span FontAttributes="Bold" Text="{Binding TotalPrice, Source={x:Reference Name=cabinetCreatorPage}}" />
+                            <Span Text="  euros" />
+
+                        </FormattedString>
+                    </Label.FormattedText>
+
+                </Label>
+
+
+
+
+
                 <!--  All the Pickers inside the Cabinet Size  -->
 
                 <Picker

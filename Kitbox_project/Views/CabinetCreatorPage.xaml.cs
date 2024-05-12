@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.Maui.Controls.Compatibility;
 using System.Windows.Input;
+using System.ComponentModel;
+using Syncfusion.Maui.Core.Carousel;
 //using Java.Lang;
 
 namespace Kitbox_project.Views
@@ -30,16 +32,30 @@ namespace Kitbox_project.Views
 
         private Order order;
 
+        private int _totalSize;
+        public int TotalSize
+        {
+            get => _totalSize;
+            set
+            {
+                _totalSize = value;
+                OnPropertyChanged(); // Implement INotifyPropertyChanged if needed
+            }
+        }
+
 
         int indexLock = 0;
-        int totalSize = 0;
 
-        public CabinetCreatorPage(Order Order)
+        private List<Dictionary<string, int>> registeredPartsRefQuantity = new List<Dictionary<string, int>>();
+        public CabinetCreatorPage(Order Order, List<Dictionary<string, int>> registeredPartsRefQuantity = null)
         {
-            order = Order;
+            this.order = Order;
+            if (registeredPartsRefQuantity != null) { this.registeredPartsRefQuantity = registeredPartsRefQuantity; }
 
             InitializeComponent();
-            _viewModel = new CabinetViewModel();
+
+            _viewModel = new CabinetViewModel(registeredPartsRefQuantity);
+            _viewModel.PropertyChanged += ViewModel_PropertyChanged;
             _logOutViewModel = new LogOutViewModel();
 
             BindingContext = _viewModel;
@@ -48,6 +64,9 @@ namespace Kitbox_project.Views
 
             // Load available lockers into the view model
             LoadAvailableLockers();
+            DisablePickers();
+            calculateTotalSize();
+
         }
 
         private void LoadAvailableLockers()
@@ -62,6 +81,11 @@ namespace Kitbox_project.Views
         }
         void DoorMaterialPickerFocused (object sender, FocusEventArgs e)
         {
+            if (_viewModel.SelectedDoorColorItem != null) 
+            {
+                _viewModel.SelectedDoorColorItem = null;
+                _viewModel.UpdatePickerList("Door_color"); 
+            }
             _viewModel.UpdatePickerList("Door_material");
         }
         void DoorColorPickerFocused (object sender, FocusEventArgs e)
@@ -85,24 +109,44 @@ namespace Kitbox_project.Views
             _viewModel.UpdatePickerList("Angle_color");
         }
 
+        private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_viewModel.AvailableLockers))
+            {
+                DisablePickers();
+                calculateTotalSize();
+            }
+        }
 
-        private void OnDeleteLockerClicked(object sender, EventArgs e)
+        private async void OnDeleteLockerClicked(object sender, EventArgs e)
         {
             int index = 1;
             var button = sender as Button;
             var locker = button?.BindingContext as LockerViewModel;
+            int delIndex1 = _viewModel.registeredPartsRefQuantityList.Count - _viewModel.AvailableLockers.Count;
+            int delCount = _viewModel.AvailableLockers.Count;
+
             if (locker != null)
             {
-                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel
+                _viewModel.registeredPartsRefQuantityList.RemoveRange(delIndex1,delCount);
+                _viewModel.AvailableLockers.Remove(locker); // Remove the locker from the ViewModel          
             }
 
-            foreach (var locke in _viewModel.AvailableLockers)
+            foreach (LockerViewModel locke in _viewModel.AvailableLockers)
             {
-                //On redonne un bon index à chacun 
+                //On redonne un bon index ï¿½ chacun 
                 locke.LockerID = index;
                 index += 1;
+
+                locke.NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(locke.Locker);
+
+                Debug.WriteLine(locke.LockerID);
+                Debug.WriteLine(locke.Locker.ToString());
+                Debug.WriteLine(locke.NotePartsAvailability);
             }
-            //DisablePickers();
+            DisablePickers();
+            calculateTotalSize();
+
 
         }
 
@@ -124,26 +168,36 @@ namespace Kitbox_project.Views
                     data.Remove("Door_material");
                     if (data.ContainsValue(null))
                     {
-                        Debug.WriteLine(" -- Empty Pickers !! -- ");
                         return;
                     }
                 }
                 else
                 {
-                    Debug.WriteLine(" -- Empty Pickers !! -- ");
                     return;
                 }
 
             }
 
             // Create a new LockerViewModel based on the selected parameters
-            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            Door door;
+            if (_viewModel.SelectedDoorColorItem != null && _viewModel.SelectedDoorMaterialItem != null)
+            {
+                door = new Door(_viewModel.SelectedDoorColorItem, 
+                    _viewModel.SelectedDoorMaterialItem, 
+                    Convert.ToInt32(_viewModel.SelectedHeightItem), 
+                    Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+            }
+            else
+            {
+                door = null;
+            }
+            
             Locker lockerToAdd = new Locker(Convert.ToInt32(_viewModel.SelectedHeightItem),
                                             Convert.ToInt32(_viewModel.SelectedDepthItem),
                                             Convert.ToInt32(_viewModel.SelectedWidthItem),
                                             _viewModel.SelectedLockerColorItem,
                                             door,
-                                            99999);
+                                            0);
 
             LockerViewModel newLocker = new LockerViewModel
             {
@@ -160,31 +214,48 @@ namespace Kitbox_project.Views
             newLocker.LockerID = index;
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
-            System.Diagnostics.Debug.WriteLine(_viewModel.AvailableLockers.Count());
-            //DisablePickers();
+            DisablePickers();
+            calculateTotalSize();
         }
 
-        private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
+        private async void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
             if( indexLock is not 0)
-            {
+            {            
+                var locker = _viewModel.AvailableLockers[indexLock - 1];
+                Debug.WriteLine(locker);
+                locker.Color = _viewModel.SelectedLockerColorItem;
+                locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
+                Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
+                locker.Door = door;
+                _viewModel.registeredPartsRefQuantityList[_viewModel.registeredPartsRefQuantityList.Count - _viewModel.AvailableLockers.Count - 1 + indexLock] = new Dictionary<string, int>();
+                locker.NotePartsAvailability = await _viewModel.NotePartsAvailabilityAsync(locker.Locker, indexLock);
 
-            
-            var locker = _viewModel.AvailableLockers[indexLock - 1];
-            Debug.WriteLine(locker);
-            locker.Color = _viewModel.SelectedLockerColorItem;
-            locker.Height = Convert.ToInt32(_viewModel.SelectedHeightItem);
-            Door door = new Door(_viewModel.SelectedDoorColorItem, _viewModel.SelectedDoorMaterialItem, Convert.ToInt32(_viewModel.SelectedHeightItem), Convert.ToInt32(_viewModel.SelectedWidthItem)); // Assuming default material and dimensions
-            locker.Door = door;
             }
 
             if(indexLock is 0)
             {
                 Debug.WriteLine("Please Select a locker");
             }
-
         }
-/*
+        private void calculateTotalSize()
+        
+            {
+                // Convert ObservableCollection<LockerViewModel> to List<Locker>
+                List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                    Convert.ToInt32(viewModel.Height),
+                    Convert.ToInt32(_viewModel.SelectedDepthItem),
+                    Convert.ToInt32(_viewModel.SelectedWidthItem),
+                    viewModel.Color,
+                    viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
+                    0 // Price
+                )).ToList();
+
+                TotalSize = lockers.Sum(locker => locker.Height);
+            Debug.WriteLine(TotalSize);
+            }
+
+
         private void DisablePickers()
         {
             if (_viewModel.AvailableLockers.Count() == 0)
@@ -201,8 +272,6 @@ namespace Kitbox_project.Views
             }
         }
 
-*/
-
         private void OnEditButtonClicked(object sender, EventArgs e)
         {
             var button = sender as Button;
@@ -215,23 +284,18 @@ namespace Kitbox_project.Views
 
                     _viewModel.SelectedLockerColorItem = locker.Color;
                     _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
-                    if(locker.Door.Color is not null)
+                    if(locker.Door != null && locker.Door.Color is not null)
                     {
-                    _viewModel.SelectedDoorColorItem = locker.Door.Color;
+                        _viewModel.SelectedDoorColorItem = locker.Door.Color;
                         _viewModel.SelectedDoorMaterialItem = locker.Door.Material;
-
                     }
                 }
                 else
                 {
                     Debug.WriteLine("Error: No locker selected.");
                 }
-
             }
-
         }
-
-
 
 
         private async void OnConfimButtonClicked (object sender, EventArgs e)
@@ -242,21 +306,21 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 viewModel.Color,
-                new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)), 
+                viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
                 0 // Price
             )).ToList();
 
-            totalSize = lockers.Sum(locker => locker.Height);
+            TotalSize = lockers.Sum(locker => locker.Height);
             Debug.WriteLine("La taille totale est");
-            Debug.WriteLine(totalSize);
+            Debug.WriteLine(TotalSize);
 
 
-            //On crée un nouveau cabinet
+            //On crï¿½e un nouveau cabinet
             Cabinet newCabinet = new Cabinet(
                 lockers,
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
-                totalSize, // Height pour le moment mais faudra remplacer par angle iron
+                TotalSize, // Height pour le moment mais faudra remplacer par angle iron
                 1
             ); 
 
@@ -279,7 +343,7 @@ namespace Kitbox_project.Views
             order.Cart.Add(newCabinet);
 
             // Create the cart page
-            CartPage newCartPage = new CartPage(order);
+            CartPage newCartPage = new CartPage(order, _viewModel.registeredPartsRefQuantityList);
 
             // Make the cart page visible
             await Navigation.PushAsync(newCartPage);

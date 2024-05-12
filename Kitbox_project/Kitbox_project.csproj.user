@@ -44,6 +44,9 @@
     <MauiXaml Update="Views\PopupCustomerRec.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
+    <MauiXaml Update="Views\PopupOrderStockItems.xaml">
+      <SubType>Designer</SubType>
+    </MauiXaml>
     <MauiXaml Update="Views\PopupStockPrices.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
@@ -63,9 +66,6 @@
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\LoginPage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
-    <MauiXaml Update="Views\SoldHistoryPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
     <MauiXaml Update="Views\StockPage.xaml">

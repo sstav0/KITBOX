@@ -12,4 +12,22 @@ public class DatabaseSuppliers : Database
         tablename = "Suppliers";
 
     }
+
+    public static List<Supplier> ConvertToSupplier(List<Dictionary<string, string>> data)
+    {
+        List<Supplier> suppliers = new List<Supplier>();   
+        foreach (var supplier in data)
+        {
+            suppliers.Add(new Supplier(
+                            int.Parse(supplier["idSuppliers"]),
+                            supplier["NameofSuppliers"],
+                            supplier["Address"],
+                            supplier["City"],
+                            int.Parse(supplier["Postal Code"]),
+                            supplier["Country"]
+                            ));
+        }
+
+        return suppliers;
+    }
 }

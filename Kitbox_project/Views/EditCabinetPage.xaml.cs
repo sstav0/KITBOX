@@ -26,6 +26,7 @@ namespace Kitbox_project.Views
             BindingContext = _viewModel;
             LogOutButton.BindingContext = _logOutViewModel;
             LoadAvailableLockers();
+            Debug.WriteLine("Debug1");
             DefaultPickers();
             DisablePickers();
 
@@ -67,7 +68,20 @@ namespace Kitbox_project.Views
 
             foreach (var locker in _cabinet.GetObservableLockers())
             {
-                Door door = new Door(locker.Door.Color, locker.Door.Material, Convert.ToInt32(locker.Width), Convert.ToInt32(locker.Height)); // Assuming default material and dimensions
+                Door door;
+
+                if (locker.Door != null)
+                {
+                    door = new Door(locker.Door.Color, 
+                        locker.Door.Material,
+                        Convert.ToInt32(locker.Width), 
+                        Convert.ToInt32(locker.Height)); // Assuming default material and dimensions
+                }
+                else
+                {
+                    door = null;
+                }
+                
 
                 LockerViewModel newLocker = new LockerViewModel
                 {
@@ -80,7 +94,8 @@ namespace Kitbox_project.Views
 
                 _viewModel.AvailableLockers.Add(newLocker);
                 // Display locker details as per your requirement
-                Debug.WriteLine($"Locker Color: {locker.Color}, Height: {locker.Height}, Width: {locker.Width}, Depth: {locker.Depth}, Door Color: {locker.Door.Color}");
+                Debug.WriteLine($"Locker Color: {locker.Color}, Height: {locker.Height}, Width: {locker.Width}, Depth: {locker.Depth}" +
+                               (locker.Door != null ? $", Door Color: {locker.Door.Color}" : ""));
                 index++;
             }
 
@@ -148,7 +163,7 @@ namespace Kitbox_project.Views
 
                     _viewModel.SelectedLockerColorItem = locker.Color;
                     _viewModel.SelectedHeightItem = Convert.ToString(locker.Height);
-                    if (locker.Door.Color is not null)
+                    if (locker.Door is not null)
                     {
                         _viewModel.SelectedDoorColorItem = locker.Door.Color;
                         _viewModel.SelectedDoorMaterialItem = locker.Door.Material;
@@ -201,15 +216,22 @@ namespace Kitbox_project.Views
 
 
             _cabinet.GetObservableLockers().Clear();
-            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
-                Convert.ToInt32(viewModel.Height),
-                Convert.ToInt32(_viewModel.SelectedDepthItem),
-                Convert.ToInt32(_viewModel.SelectedWidthItem),
-                viewModel.Color,
-                new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)),
-                0 // Price
-            )).ToList();
-            
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel =>
+            {
+                Door door = viewModel.Door != null ?
+                    new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) :
+                    null;
+
+                return new Locker(
+                    Convert.ToInt32(viewModel.Height),
+                    Convert.ToInt32(_viewModel.SelectedDepthItem),
+                    Convert.ToInt32(_viewModel.SelectedWidthItem),
+                    viewModel.Color,
+                    door,
+                    0 // Price
+                );
+            }).ToList();
+
 
             foreach (var locker in lockers)
             {

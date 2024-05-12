@@ -12,7 +12,7 @@ public class DatabaseOrder : Database
         tablename = "OrderTable";
     }
 
-    public static List<OrderItem> ConvertToStockItem(List<Dictionary<string, string>> data)
+    public static List<OrderItem> ConvertToOrderItem(List<Dictionary<string, string>> data)
     {
         List<OrderItem> orderItems = new();
         foreach (var item in data)

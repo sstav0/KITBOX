@@ -33,7 +33,125 @@
                 FontSize="Header"
                 HorizontalOptions="Center"
                 Text="Supplier Orders" />
+            <StackLayout Margin="20">
+                <!-- Border for item entry -->
+                <Border BackgroundColor="#fff7f2" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="400" Padding="20">
+                    <StackLayout Spacing="10">
+                        <Picker x:Name="PickerSupplier" Title="Select Supplier" 
+                                ItemsSource="{Binding Suppliers}"
+                                ItemDisplayBinding="{Binding Name}"
+                                BackgroundColor="White">
+                            <Picker.Triggers>
+                                <DataTrigger TargetType="Picker" Binding="{Binding IsOrderNotEmpty}" Value="False">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Picker" Binding="{Binding IsOrderNotEmpty}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Picker.Triggers>
+                        </Picker>
+                        <HorizontalStackLayout Spacing="15">
+                            <Entry x:Name="ItemCode" Placeholder="Item Code" Text="{Binding InputCode}" BackgroundColor="White" Margin="0,0,0,10" WidthRequest="220">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry" Binding="{Binding IsValidCode}" Value="False">
+                                        <Setter Property="TextColor" Value="Red"/>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                            <Entry x:Name="Quantity" Placeholder="Quantity" Text="{Binding InputQuantity}" BackgroundColor="White" Margin="0,0,0,10" WidthRequest="120" Keyboard="Numeric">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry" Binding="{Binding IsValidQuantity}" Value="False">
+                                        <Setter Property="TextColor" Value="Red"/>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                            </Entry>
+                        </HorizontalStackLayout>
 
+                        <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="10,5">
+                            <Label Text="Total Price: " Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
+                            <Label Text="{Binding TempOrderTotalPrice}" FontSize="Medium" FontAttributes="Bold" TextColor="Green"/>
+                            <Label Text="€" TextColor="Green" FontSize="Medium" FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+                        <Button Text="Add" Clicked="OnAddClicked" HorizontalOptions="End">
+                            <Button.Triggers>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="True"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </MultiTrigger>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="False"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Text" Value="Invalid Quantity"/>
+                                </MultiTrigger>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="True"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Text" Value="Invalid Item Code"/>
+                                </MultiTrigger>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="False"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Text" Value="Invalid Item Code and Quantity"/>
+                                </MultiTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </StackLayout>
+                </Border>
+
+                <!-- Border for added items list -->
+                <Border BackgroundColor="Coral" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20" IsVisible="{Binding IsOrderNotEmpty}">
+                    <CollectionView ItemsSource="{Binding TempOrderItems}" SelectionMode="Single" IsVisible="{Binding IsOrderNotEmpty}">
+                        <CollectionView.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Grid.Column="0" Text="Item Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                <Label Grid.Column="1" Text="Item Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                <Label Grid.Column="2" Text="Item Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                <Label Grid.Column="3" Text="Calculated Price" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10"/>
+                            </Grid>
+                        </CollectionView.Header>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="80"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                    <Label Grid.Column="1" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                    <Label Grid.Column="2" Text="{Binding Quantity}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                    <Label Grid.Column="3" Text="{Binding TotalPrice}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                    <Button Grid.Column="4" Text="Delete" Clicked="OnDeleteClicked"  HorizontalOptions="End"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Border>
+            </StackLayout>
+            
             <StackLayout
                 Margin="0,0,0,20"
                 HorizontalOptions="Center"
@@ -90,10 +208,13 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <HorizontalStackLayout IsVisible="{Binding SupplierOrderVisibility}">
-                                <uranium:ExpanderView WidthRequest="970">
+                            <HorizontalStackLayout IsVisible="{Binding SupplierOrderVisibility}" >
+                                <uranium:ExpanderView WidthRequest="970" IsExpanded="{Binding IsExpanded}">
                                     <uranium:ExpanderView.Header>
                                         <Grid HorizontalOptions="Start" VerticalOptions="Center" WidthRequest="940">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="OnExpanderClicked" />
+                                            </Grid.GestureRecognizers>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="3*" />
@@ -104,7 +225,7 @@
 
                                             <Label Grid.Column="0" Margin="10,5" FontSize="Body" Text="{Binding OrderID}" VerticalOptions="Center" />
                                             <Label Grid.Column="1" Margin="10,5" FontSize="Body" Text="{Binding SupplierName}" VerticalOptions="Center" />
-                                            <Label Grid.Column="2" Margin="10,5" FontSize="Body" Text="{Binding Date}" VerticalOptions="Center" />
+                                            <Label Grid.Column="2" Margin="10,5" FontSize="Body" Text="{Binding DeliveryDate}" VerticalOptions="Center" />
                                             <HorizontalStackLayout Grid.Column="3" Margin="10,5" VerticalOptions="Center">
                                                 <Label FontSize="Body" Text="{Binding Price}" />
                                                 <Label FontSize="Body" Text="€" />
@@ -158,8 +279,8 @@
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </uranium:ExpanderView>
-                                <Button Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
                                 <Button Command="{Binding OnReceivedClicked}" Margin="5,5" Padding="14,5" BackgroundColor="Green" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
+                                <Button Clicked="OnCancelClicked" IsVisible="{Binding CancelButtonVisibility}" Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
                             </HorizontalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

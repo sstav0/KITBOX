@@ -4,82 +4,121 @@
              xmlns:viewModels="clr-namespace:Kitbox_project.ViewModels;assembly=Kitbox_project"
              x:Class="Kitbox_project.Views.OrdersPage"
              BackgroundColor="White"
-             Title="OrdersPage">
+             Title="OrdersPage"
+             Shell.NavBarIsVisible="True"
+             Shell.TabBarIsVisible="True">
 
+
+     <ContentPage.ToolbarItems FontSize="10">
+        <ToolbarItem
+            x:Name="LogOutButton"
+            Command="{Binding LogoutCommand}"
+            Text="Log off" />
+    </ContentPage.ToolbarItems>   
     <ContentPage.BindingContext>
         <viewModels:OrderViewModel/>
     </ContentPage.BindingContext>
 
     <ScrollView>
-        <VerticalStackLayout Margin="40">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1000"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="75"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+        
+            <Label Text="Orders" FontSize="Header" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"
+               HorizontalOptions="Start" VerticalOptions="Center" Margin="0, 10, 0, 10"/>
 
-            <Label Text="Orders" FontSize="Header" FontAttributes="Bold"
-               HorizontalOptions="Start" VerticalOptions="Center"/>
+            <Border StrokeShape="RoundRectangle 10" WidthRequest="300"  Margin="0, 0, 40, 20" 
+                    Stroke="{StaticResource Tertiary}" Grid.Column="1" Grid.Row="1" HorizontalOptions="Start">
+                <SearchBar Placeholder="Search by Order or Customer ID..." TextChanged="OnTextChanged" />
+            </Border>
 
-            <HorizontalStackLayout>
+            <Button Text="Active Orders" Clicked="OnActiveOrdersClicked" IsEnabled="True" HorizontalOptions="End"
+                        BackgroundColor="#512BD4" TextColor="White" x:Name="ActiveOrdersButton" 
+                        MinimumWidthRequest="150"  Margin="0, 0, 0, 20"  Grid.Column="2" Grid.Row="1"/>
 
-                <Border StrokeShape="RoundRectangle 10" WidthRequest="300"  Margin="0, 0, 40, 20" Stroke="{StaticResource Tertiary}">
-                    <SearchBar Placeholder="Search by ID..." TextChanged="OnTextChanged" />
-                </Border>
+            <Button Text="Unactive Orders" Clicked="OnUnactiveOrdersClicked" IsEnabled="True" HorizontalOptions="End"
+                    BackgroundColor="Gray" TextColor="Black" x:Name="UnactiveOrdersButton" 
+                    MinimumWidthRequest="150"  Margin="0, 0, 20, 20" Grid.Column="3" Grid.Row="1"/>
 
-                <Button Text="Active Orders" Clicked="OnActiveOrdersClicked" IsEnabled="True"
-                        BackgroundColor="Gray" TextColor="Black" x:Name="ActiveOrdersButton" 
-                        MaximumWidthRequest="150" Margin="0, 0, 40, 20"/>
-
-                <Button x:Name="FinishedOrdersButton" Text="Finished Orders" Clicked="OnFinishedOrdersClicked" IsEnabled="True"
-                        BackgroundColor="#512BD4" TextColor="White"
-                        MaximumWidthRequest="150"  Margin="0, 0, 40, 20"/>
-
-            </HorizontalStackLayout>
-
-            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1100" Padding="20">
+            <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" 
+                    StrokeThickness="2" Padding="20" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="2">
 
                 <CollectionView ItemsSource="{Binding Orders}" SelectionMode="Single">
                     <CollectionView.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="0.5*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="225"/>
+                                <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Text="ID" Grid.Column="0"/>
-                            <Label Text="Notification" Grid.Column="1"/>
-                            <Label Text="Creation Date" Grid.Column="2"/>
-                            
+                            <Label FontAttributes="Bold" Text="ID Order" Grid.Column="0" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="ID Customer" Grid.Column="1" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="Status" Grid.Column="2" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="Notification" Grid.Column="3" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+                            <Label FontAttributes="Bold" Text="Creation Date" Grid.Column="4" HorizontalTextAlignment="Center" Margin="10,0,10,20"/>
+
                         </Grid>
                     </CollectionView.Header>
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid IsVisible="{Binding OrderItemVisibility}">
-
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OpenPopupStockItems"/>
+                                </Grid.GestureRecognizers>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="0.5*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="225"/>
+                                    <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Grid.Column="0" HorizontalTextAlignment="Center" Text="{Binding IdOrder}"/>
+                                <Label Grid.Column="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                       Text="{Binding IdOrder}"/>
 
-                                <Label Grid.Column="1" HorizontalTextAlignment="Center" Text="{Binding Status}"/>
+                                <Label Grid.Column="1" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                       Text="{Binding IdCustomer}"/>
 
-                                <Label Grid.Column="2" HorizontalTextAlignment="Center" Text="{Binding CreationTime}"/>
+                                <Label Grid.Column="2" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                       Text="{Binding StringedOrderStatus}"/>
 
-                                <Button Text="Confirm" Grid.Column="4" Clicked="OnConfirmOrderButtonClicked"/>
-                                
-                                <Button Text="Cancel" Grid.Column="5" Clicked="OnCancelOrderButtonClicked"/>
+                                <Label Grid.Column="3" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                       Text="{Binding Notification}" TextColor="Orange"/>
+
+                                <Label Grid.Column="4" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                       Text="{Binding StringedCreationTime}"/>
+
+                                <Button Grid.Column="6" Clicked="OnConfirmOrderButtonClicked" VerticalOptions="Center"
+                                        Text="{Binding ConfirmButtonText}"/>
+
+                                <Button Grid.Column="7" Clicked="OnCancelOrderButtonClicked" VerticalOptions="Center"
+                                        Text="Cancel"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </Border>
-        </VerticalStackLayout>
+        </Grid>
     </ScrollView>
 
 </ContentPage>
