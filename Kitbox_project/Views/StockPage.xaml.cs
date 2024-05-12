@@ -1,14 +1,29 @@
 using CommunityToolkit.Maui.Views;
+using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
 using System.Diagnostics;
+using static Kitbox_project.Utilities.Users;
 
 namespace Kitbox_project.Views;
 
 public partial class StockPage : ContentPage
 {
+    private User _user;
+    private bool isDirector;
+
+    private string _newReference;
+    private string _newCode;
+
 	public StockPage()
 	{
 		InitializeComponent();
+
+        _user = User.Director;
+
+        if(_user is User.Director)
+        {
+            isDirector = true;
+        }
 	}
 
     private async void OnEditUpdateClicked(object sender, EventArgs e)
@@ -47,6 +62,51 @@ public partial class StockPage : ContentPage
         if (sender is SearchBar searchBar && BindingContext is StockViewModel stockViewModel)
         {
             stockViewModel.ApplyFilter(searchBar.Text);
+        }
+    }
+
+    private void OnAddStockItemButtonClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && BindingContext is StockViewModel stockViewModel)
+        {
+            if (!string.IsNullOrEmpty(ReferenceEntry.Text) && !string.IsNullOrEmpty(CodeEntry.Text))
+            {
+                StockItem newStockItem = new(
+                null, ReferenceEntry.Text, CodeEntry.Text, 0, 0, 0, false);
+
+                List<object> list = new List<object>
+                {
+                    DimensionsEntry.Text, WidthEntry.Text, HeightEntry.Text,
+                    CabinetHeightEntry.Text, DepthEntry.Text, 0,
+                    ColorEntry.Text, PriceEntry.Text, MaterialEntry.Text
+                };
+
+                //foreach (string item in list)
+                //{
+                //    if (string.IsNullOrEmpty(item))
+                //    {
+                //        item = null;
+                //    }
+                //}
+
+                stockViewModel.AddInStock(newStockItem, list);
+
+                ResetEntries();
+            }
+        }
+    }
+
+    private void ResetEntries()
+    {
+        List<object> list = new List<object>
+        {
+            ReferenceEntry, CodeEntry, DimensionsEntry, WidthEntry, HeightEntry,
+            CabinetHeightEntry, DepthEntry, ColorEntry, PriceEntry, MaterialEntry
+        };
+
+        foreach(Entry item in list)
+        {
+            item.Text = null;
         }
     }
 }
