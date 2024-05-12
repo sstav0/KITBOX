@@ -51,6 +51,14 @@ public partial class SupplierOrdersPage : ContentPage
         }
     }
 
+    private void OnCancelClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
+        {
+            (BindingContext as SupplierOrdersViewModel).CancelOrder(supplierOrderViewModel);
+        }
+    }
+
     private void OnExpanderClicked(object sender, TappedEventArgs e)
     {
         if (sender is Grid grid && grid.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)

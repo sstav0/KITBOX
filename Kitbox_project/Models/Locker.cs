@@ -54,7 +54,7 @@ namespace Kitbox_project.Models
         /// <param name="color">Color of the panels</param>
         /// <param name="door">Door object associated with this locker</param>
         /// <param name="price">Calculated price of the locker</param>
-        public Locker(int height, int depth, int width, string color, Door door, double price) 
+        public Locker(int height, int depth, int width, string color, Door door, double price)
         {
             this._height = height;
             this._width = width;
@@ -66,7 +66,7 @@ namespace Kitbox_project.Models
 
         public override string ToString()
         {
-            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _width.ToString(), _depth.ToString(), _color,_door != null ? _door.ToString() : null, this._price.ToString());
+            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _width.ToString(), _depth.ToString(), _color, _door != null ? _door.ToString() : null, this._price.ToString());
         }
 
         public int Height
@@ -109,13 +109,13 @@ namespace Kitbox_project.Models
             set => _lockerID = value;
         }
 
-        private Dictionary<string,object> SelectedValues()
+        private Dictionary<string, object> SelectedValues()
         {
             bool isDoor = false;
             string doorColor = null;
             string doorMaterial = null;
-            if (this.Door != null) { isDoor = true; doorColor = this.Door.Color ; doorMaterial = this.Door.Material; }
-            
+            if (this.Door != null) { isDoor = true; doorColor = this.Door.Color; doorMaterial = this.Door.Material; }
+
             Dictionary<string, object> selectedValues = new Dictionary<string, object>
             {
                 { "Height"              ,this.Height },
@@ -128,7 +128,7 @@ namespace Kitbox_project.Models
                 //{ "Angle Color"         ,this.Depth }
             };
             return selectedValues;
-        } 
+        }
 
         /// <summary>
         /// Retrieves the catalog reference based on the specified two-letter reference code.
@@ -162,7 +162,7 @@ namespace Kitbox_project.Models
         /// </remarks>
         public async Task<string> GetCatalogRef(string threeLetterRef)
         {
-            Dictionary<string,object> selectedValues = SelectedValues();
+            Dictionary<string, object> selectedValues = SelectedValues();
 
             Catalog catalog = new Catalog(databaseCatalog, selectedValues);
             string returnString = "";
@@ -172,13 +172,51 @@ namespace Kitbox_project.Models
 
             foreach (string item in references.Keys)
             {
-                if (item.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase)) 
+                if (item.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase))
                 {
-                    returnString = item;
-                }  
+                    Debug.WriteLine("-- 1");
+                    if (threeLetterRef == "PAG" || threeLetterRef == "PAR" || threeLetterRef == "PAH") 
+                    {
+                        Debug.WriteLine("-- 2");
+                        if (item.Substring(item.Length - 2).Contains("Bl", StringComparison.OrdinalIgnoreCase) && this.Color.Contains("White", StringComparison.OrdinalIgnoreCase)) 
+                        {
+                            returnString = item;
+                            Debug.WriteLine("-- 3");
+                        }
+                        if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                            Debug.WriteLine("-- 4");
+                        }
+                    }
+                    else if ( threeLetterRef == "POR")
+                    {
+                        Debug.WriteLine("-- 5");
+                        if (item.Substring(item.Length - 2).Contains("Ve", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Transparent", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                            Debug.WriteLine("-- 6");
+                        }
+                        else if (item.Substring(item.Length - 2).Contains("Bl", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("White", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                            Debug.WriteLine("-- 7");
+                        }
+                        else if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                            Debug.WriteLine("-- 8");
+                        }
+                    }
+                    else
+                    {
+                        returnString = item;
+                    }
+                }
                 else if (threeLetterRef == "DOORBOOL" && this.Door != null)
                 {
                     returnString = "1";
+                    Debug.WriteLine("-- 9");
                 }
             }
             return returnString;
@@ -238,6 +276,8 @@ namespace Kitbox_project.Models
             Dictionary<string, int> partsAvailabilityDict = data.Item1;
 
             string catalogRef = await this.GetCatalogRef(threeLetterRef);
+            Debug.WriteLine("catalogRef");
+            Debug.WriteLine(catalogRef);
 
             if (partsAvailabilityDict.ContainsKey(catalogRef) && partsToBuildALockerDict.ContainsKey(threeLetterRef)) 
             { 
@@ -298,8 +338,8 @@ namespace Kitbox_project.Models
             {
                 //Get the catalog reference for this part
                 string catalogRef = await GetCatalogRef(threeLetterRef);
-
-                returnRegisteredRefDict.Add(catalogRef, partsToBuildALockerDict[threeLetterRef]);
+                if (catalogRef != null && !returnRegisteredRefDict.ContainsKey(catalogRef)) { returnRegisteredRefDict.Add(catalogRef, partsToBuildALockerDict[threeLetterRef]); }
+               
 
                 //if the reference isn't already used for other lockers of this same cabinet
                 if (!registeredRef.ContainsKey(catalogRef))
