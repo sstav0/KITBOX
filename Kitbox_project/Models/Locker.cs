@@ -246,6 +246,13 @@ namespace Kitbox_project.Models
                             returnString = item;
                         }
                     }
+                    else if (threeLetterRef == "COU")
+                    {
+                        if( ! this.Door.Material.Contains("glass",StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                        }
+                    }
                     else
                     {
                         returnString = item;
