@@ -159,8 +159,12 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {
-            selectedCabinet.Quantity -= 1;
-            UpdateCart();
+            if (selectedCabinet.Quantity > 1)
+            {
+                selectedCabinet.Quantity -= 1;
+                order.Cart[selectedCabinet.CabinetID].Quantity -= 1;
+                UpdateCart();
+            }
         }
     }
 
