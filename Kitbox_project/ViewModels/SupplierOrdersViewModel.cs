@@ -310,10 +310,10 @@ namespace Kitbox_project.ViewModels
                 order.SupplierOrderVisibility =
                     string.IsNullOrWhiteSpace(searchText) ||
                     order.OrderID.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    order.Item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    order.Item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     order.SupplierName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                    order.DeliveryDate.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+                    order.DeliveryDate.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Price.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                    order.Status.Contains(searchText, StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -363,7 +363,6 @@ namespace Kitbox_project.ViewModels
             private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
             private readonly DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
             private readonly DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
-            private readonly DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
             public ICommand OnReceivedClicked { get; }
 
             public SupplierOrderViewModel(int orderID, int supplierId, string deliveryDate, double price, string status) : base(orderID, supplierId, deliveryDate, price, status)
@@ -430,7 +429,7 @@ namespace Kitbox_project.ViewModels
                         unitPrice = double.TryParse(resPnD[0]["Price"], out double result) ? result : throw new Exception("Price is not a number");
 
                         // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
-                        var resCatalog = await databaseCatalog.GetData(
+                        var resCatalog = await databaseStock.GetData(
                                 new Dictionary<string, string> { { "Code", code } },
                                 new List<string> { "Reference" });
                         string reference = resCatalog[0]["Reference"];

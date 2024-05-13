@@ -9,7 +9,6 @@ namespace Kitbox_project.Models
     public class SupplierOrder
     {
         private int _orderID;
-        private StockItem _item;
         private List<SupplierOrderItem> _supplierOrderItems;
         private int _supplierId;
         private string _deliveryDate;
@@ -29,12 +28,6 @@ namespace Kitbox_project.Models
         {
             get => _orderID;
             set => _orderID = value;
-        }
-
-        public StockItem Item
-        {
-            get => _item;
-            set => _item = value;
         }
 
         public List<SupplierOrderItem> SupplierOrderItems
