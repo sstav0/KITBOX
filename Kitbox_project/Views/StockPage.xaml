@@ -26,11 +26,7 @@
         <VerticalStackLayout Margin="40">
             <!-- Title -->
             <Label Text="Stock" FontSize="Header" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,40"/>
-
-            <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
-                <SearchBar Placeholder="Search by reference or code..." TextChanged="OnTextChanged" />
-            </Border>
-
+            
             <Border StrokeShape="RoundRectangle 10" Stroke="{StaticResource Tertiary}" Padding="10" MinimumWidthRequest="950"
                     IsVisible="{Binding IsDirector}" HorizontalOptions="Center" Margin="0,0,0,20">
                 <Grid RowSpacing="10" ColumnSpacing="5">
@@ -47,10 +43,8 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-
                     <Label Text="Add a new part in stock" FontAttributes="Bold" FontSize="Medium"
                            Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
-
                     <Entry Placeholder="Enter the reference" x:Name="ReferenceEntry"
                            MinimumWidthRequest="150" Grid.Row="1" Grid.Column="0"/>
                     <Entry Placeholder="Enter the code" x:Name="CodeEntry"
@@ -59,7 +53,6 @@
                         <CheckBox x:Name="IsInCatalogCheckBox"/>
                         <Label Text="Is in Catalog" VerticalOptions="Center"/>
                     </HorizontalStackLayout>
-
                     <Entry Placeholder="Enter the dimensions" x:Name="DimensionsEntry"
                            MinimumWidthRequest="150" Grid.Row="2" Grid.Column="0"/>
                     <Entry Placeholder="Enter the width" x:Name="WidthEntry"
@@ -68,7 +61,6 @@
                            MinimumWidthRequest="150" Grid.Row="2" Grid.Column="2"/>
                     <Entry Placeholder="Enter the depth" x:Name="DepthEntry"
                            MinimumWidthRequest="150" Grid.Row="2" Grid.Column="3"/>
-
                     <Entry Placeholder="(Angle only) Enter the cabinet Height" x:Name="CabinetHeightEntry"
                            MinimumWidthRequest="150" Grid.Row="3" Grid.Column="0"/>
                     <Entry Placeholder="Enter the Color" x:Name="ColorEntry"
@@ -77,11 +69,13 @@
                            MinimumWidthRequest="150" Grid.Row="3" Grid.Column="2"/>
                     <Entry Placeholder="Enter the Material" x:Name="MaterialEntry"
                            MinimumWidthRequest="150" Grid.Row="3" Grid.Column="3"/>
-
                     <Button Text="Confirm" Clicked="OnAddStockItemButtonClicked" 
                             Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalOptions="Center"/>
-
                 </Grid>
+            </Border>
+
+            <Border StrokeShape="RoundRectangle 10" WidthRequest="300" Margin="0,0,0,20" Stroke="{StaticResource Tertiary}">
+                <SearchBar Placeholder="Search by reference or code..." TextChanged="OnTextChanged" />
             </Border>
 
             <!-- ListView to display stock data -->

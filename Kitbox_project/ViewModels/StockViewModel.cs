@@ -33,9 +33,7 @@ namespace Kitbox_project.ViewModels
                     UpdateUserRights(User);
                 }
             };
-
             //User = Login.login;
-
             User = "director";
         }
 
@@ -56,6 +54,8 @@ namespace Kitbox_project.ViewModels
         }
 
         public List<StockItemViewModel> DisplayedStockData => StockData;
+
+        public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
 
         public static void UpdateStockQuantities(string code, int? quantity = null, int? incomingQuantity = null, int? outgoingQuantity = null)
         {
@@ -151,16 +151,10 @@ namespace Kitbox_project.ViewModels
                 IsEditingPrice = false;
                 PriceButtonText = "Edit";
                 PriceButtonColor = Color.Parse("#512BD4");
-                if (inCatalog) 
-                { 
-                    DirectorButtonText = "Remove from Catalog";
-                }
-                else
-                {
-                    DirectorButtonText = "Add to Catalog";
-                }
+                DirectorButtonText = inCatalog ? "Remove from Catalog" : "Add to Catalog";
 
             }
+
             public bool IsEditing
             {
                 get => _isEditing;
@@ -458,7 +452,6 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-            public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
             public event PropertyChangedEventHandler PropertyChanged;
             protected void OnPropertyChanged([CallerMemberName] string name = null)
             {
