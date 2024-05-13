@@ -1,12 +1,19 @@
 # KITBOX
 
 ## Description
-Application designed to digitalize the cabinet selling process for the **Kitbox company**. The application streamlines the entire workflow, from encoding customer orders to optimizing stock management. The project is done using *C#* and *MAUI .NET 7* which can be used on any platform and all data is stored in a distant *MySQL* cloud database.
+Application designed to digitalize the cabinet selling process for the **Kitbox company**. The application streamlines the entire workflow, from encoding customer/supplier orders to optimizing stock management. The project is done using *C#* and *MAUI .NET 7* which can be used on any platform and all data is stored in a distant *MySQL* cloud database.
 
 ## 1. Features
 - Locker composition
 - Cabinet composition
 - Manage cart
+- Creating customer orders
+- Viewing current customer orders
+- Stock quantities management
+- Adding new items to the catalog/stock
+- Creating supplier orders
+- Viewing all supplier orders
+- User interfaces controlled by Log In
 
 ## 2. Installation
 ### Requirements

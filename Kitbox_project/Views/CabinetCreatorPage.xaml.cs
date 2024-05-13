@@ -126,6 +126,7 @@ namespace Kitbox_project.Views
             {
                 DisablePickers();
                 calculateTotalSize();
+                calculateTotalPrice();
             }
         }
 
@@ -157,6 +158,7 @@ namespace Kitbox_project.Views
             }
             DisablePickers();
             calculateTotalSize();
+            calculateTotalPrice();
 
 
         }
@@ -247,6 +249,8 @@ namespace Kitbox_project.Views
             {
                 Debug.WriteLine("Please Select a locker");
             }
+            calculateTotalPrice();
+            calculateTotalSize();
         }
         private void calculateTotalSize()
         {
@@ -314,6 +318,7 @@ namespace Kitbox_project.Views
                     Debug.WriteLine("Error: No locker selected.");
                 }
             }
+
         }
 
 
@@ -339,8 +344,9 @@ namespace Kitbox_project.Views
                 lockers,
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
-                TotalSize, // Height pour le moment mais faudra remplacer par angle iron
-                1
+                TotalSize, // Height
+                1,
+                _viewModel.SelectedAngleIronColor
             ); 
 
             // Add the new Cabinet to the Order's cart
@@ -357,7 +363,6 @@ namespace Kitbox_project.Views
                 newCabinet.CabinetID = 0;
             }
 
-            Debug.WriteLine(newCabinet.ToString());
 
             order.Cart.Add(newCabinet);
 

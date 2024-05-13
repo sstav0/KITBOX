@@ -89,4 +89,21 @@ public partial class SupplierOrdersPage : ContentPage
             (BindingContext as SupplierOrdersViewModel).DeleteItem(supplierOrderItem);
         }
     }
+
+    private void OnCheckClicked(object sender, EventArgs e)
+    {
+        if (sender is Button button && button.BindingContext is SupplierOrdersViewModel supplierOrdersViewModel)
+        {
+            if (PickerSupplier.SelectedIndex != -1)
+            {
+                supplierOrdersViewModel.CheckItems((Supplier)PickerSupplier.SelectedItem);
+            }
+            else
+            {
+                DisplayAlert("Error", "Please select a supplier", "OK");
+            }
+        }
+    }
+
+    
 }

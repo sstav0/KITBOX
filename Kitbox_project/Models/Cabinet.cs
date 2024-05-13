@@ -19,13 +19,14 @@ namespace Kitbox_project.Models
         private int _cabinetID;
         private string _angleIronColor;
 
-        public Cabinet(List<Locker> lockers, int depth, int length, int height, int quantity)
+        public Cabinet(List<Locker> lockers, int depth, int length, int height, int quantity, string angleIronColor)
         {
             this._lockers = lockers;
             this._depth = depth;
             this._length = length;
             this._height = height;
             this._quantity = quantity;
+            this._angleIronColor = angleIronColor;
         }
 
         public int Height
@@ -113,6 +114,12 @@ namespace Kitbox_project.Models
         {
             get => _cabinetID;
             set => _cabinetID = value;
+        }
+
+        public string AngleIronColor
+        {
+            get => _angleIronColor;
+            set => _angleIronColor = value;
         }
 
         public void AddLocker(Locker locker)

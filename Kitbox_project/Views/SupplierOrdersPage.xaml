@@ -70,11 +70,44 @@
                             </Entry>
                         </HorizontalStackLayout>
 
+                        <HorizontalStackLayout HorizontalOptions="Center" WidthRequest="700">
+                            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Margin="10,5" WidthRequest="200">
+                                <Label Text="Delivery Time : " Margin="0,0,5,0" FontSize="Body" FontAttributes="Bold"/>
+                                <Label Text="{Binding DeliveryTime}" FontSize="Body" FontAttributes="Bold" TextColor="Green"/>
+                                <Label Text=" days" TextColor="Green" FontSize="Body" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="200">
+                                <Label Text="Item Price per Unit : " Margin="0,0,5,0" FontSize="Body" FontAttributes="Bold"/>
+                                <Label Text="{Binding ItemPrice}" FontSize="Body" FontAttributes="Bold" TextColor="Green"/>
+                                <Label Text="€" TextColor="Green" FontSize="Body" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout HorizontalOptions="Center" WidthRequest="150">
+                                <Button Text="Check" Clicked="OnCheckClicked">
+                                    <Button.Triggers>
+                                        <MultiTrigger TargetType="Button">
+                                            <MultiTrigger.Conditions>
+                                                <BindingCondition Binding="{Binding IsValidCode}" Value="True"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                        </MultiTrigger>
+                                        <MultiTrigger TargetType="Button">
+                                            <MultiTrigger.Conditions>
+                                                <BindingCondition Binding="{Binding IsValidCode}" Value="False"/>
+                                            </MultiTrigger.Conditions>
+                                            <Setter Property="IsEnabled" Value="False"/>
+                                            <Setter Property="Text" Value="Invalid Item Code"/>
+                                        </MultiTrigger>
+                                    </Button.Triggers>
+                                </Button>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+
                         <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="10,5">
-                            <Label Text="Total Price: " Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
+                            <Label Text="Total Price : " Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
                             <Label Text="{Binding TempOrderTotalPrice}" FontSize="Medium" FontAttributes="Bold" TextColor="Green"/>
                             <Label Text="€" TextColor="Green" FontSize="Medium" FontAttributes="Bold"/>
                         </HorizontalStackLayout>
+
                         <Button Text="Add" Clicked="OnAddClicked" HorizontalOptions="End">
                             <Button.Triggers>
                                 <MultiTrigger TargetType="Button">

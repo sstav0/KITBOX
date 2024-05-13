@@ -30,6 +30,8 @@ namespace Kitbox_project.ViewModels
         private string _inputCode;
         private bool _isValidQuantity;
         private bool _isValidCode;
+        private int _deliveryTime;
+        private double _itemPrice;
         private bool _isOrderNotEmpty;
         private double _tempOrderTotalPrice;
 
@@ -62,7 +64,6 @@ namespace Kitbox_project.ViewModels
             {
                 SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
             }
-
             Suppliers = new ObservableCollection<Supplier>(DatabaseSuppliers.ConvertToSupplier(suppliers));
         }
 
@@ -128,6 +129,26 @@ namespace Kitbox_project.ViewModels
             }
         }
 
+        public int DeliveryTime
+        {
+            get => _deliveryTime;
+            set
+            {
+                _deliveryTime = value;
+                OnPropertyChanged(nameof(DeliveryTime));
+            }
+        }
+        public double ItemPrice
+        {
+            get => _itemPrice;
+            set
+            {
+                _itemPrice = value;
+                OnPropertyChanged(nameof(ItemPrice));
+            }
+        }
+        
+        
         public bool IsOrderNotEmpty
         {
             get => _isOrderNotEmpty;
@@ -212,10 +233,43 @@ namespace Kitbox_project.ViewModels
             IsValidCode = res != null && !TempOrderItems.Any(item => item.Code == InputCode);
         }
 
+        public async void GetDeliveryTime()
+        {
+            var res = await databasePnD.GetData(new Dictionary<string, string> {{"Code", InputCode},{ "idSupplier", SelectedSupplier.Id.ToString() }}, new List<string> {"Delay"});
+            if (res != null && res.Count > 0 && res[0].ContainsKey("Delay"))
+            {
+                DeliveryTime = int.Parse(res[0]["Delay"]);
+            }
+            else
+            {
+                DeliveryTime = 0;
+            }
+        }
+
+        public async void GetItemPrice()
+        {
+            var res = await databasePnD.GetData(new Dictionary<string, string> {{"Code", InputCode},{ "idSupplier", SelectedSupplier.Id.ToString() }}, new List<string> {"Price"});
+            if (res != null && res.Count > 0 && res[0].ContainsKey("Price"))
+            {
+                ItemPrice = double.Parse(res[0]["Price"]);
+            }
+            else
+            {
+                ItemPrice = 0;
+            }
+        }
+        
+        public void CheckItems(Supplier supplier)
+        {
+            SelectedSupplier = supplier;
+            CheckSupplierSelection();
+            ValidateCode();
+            GetDeliveryTime();
+            GetItemPrice();
+        }
         public async void AddNewItem(string itemCode, Supplier supplier, int quantity)
         {
             SelectedSupplier = supplier;
-
             var data = await databasePnD.GetData(
                                new Dictionary<string, string> { { "Code", itemCode }, { "idSupplier", SelectedSupplier.Id.ToString() } });
 
