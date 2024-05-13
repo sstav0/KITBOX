@@ -14,7 +14,7 @@ namespace Kitbox_project.ViewModels
 {
     public class StockViewModel : INotifyPropertyChanged
     {
-        private List<StockItemViewModel> _stockData;
+        private static List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
         private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
@@ -27,15 +27,29 @@ namespace Kitbox_project.ViewModels
         {
             var stockItems = await DBStock.LoadAll();
             StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
+            OnPropertyChanged(nameof(DisplayedStockData));
         }
 
-        public List<StockItemViewModel> StockData
+        public static List<StockItemViewModel> StockData
         {
             get => _stockData;
             set
             {
                 _stockData = value;
-                OnPropertyChanged(nameof(StockData));
+            }
+        }
+
+        public List<StockItemViewModel> DisplayedStockData => StockData;
+
+        public static void UpdateStockQuantities(string code, int? quantity = null, int? incomingQuantity = null, int? outgoingQuantity = null)
+        {
+            var stockItem = StockData?.FirstOrDefault(item => item.Code == code);
+            if (stockItem != null)
+            {
+                stockItem.Quantity = quantity.HasValue ? (int)quantity : stockItem.Quantity;
+                stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
+                stockItem.IncomingQuantity = incomingQuantity.HasValue ? (int)incomingQuantity : stockItem.IncomingQuantity;
+                stockItem.OutgoingQuantity = outgoingQuantity.HasValue ? (int)outgoingQuantity : stockItem.OutgoingQuantity;
             }
         }
 

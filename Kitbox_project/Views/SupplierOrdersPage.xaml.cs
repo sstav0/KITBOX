@@ -59,11 +59,11 @@ public partial class SupplierOrdersPage : ContentPage
         }
     }
 
-    private void OnExpanderClicked(object sender, TappedEventArgs e)
+    private async void OnExpanderClicked(object sender, TappedEventArgs e)
     {
         if (sender is Grid grid && grid.BindingContext is SupplierOrdersViewModel.SupplierOrderViewModel supplierOrderViewModel)
         {
-            supplierOrderViewModel.GetAllItems(); // Load all items for the supplier order
+            await supplierOrderViewModel.GetAllItems(); // Load all items for the supplier order
         }
     }
 

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Microsoft.Maui.Controls;
 using Kitbox_project.DataBase;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Kitbox_project.ViewModels
 {
@@ -35,12 +36,14 @@ namespace Kitbox_project.ViewModels
         public SupplierOrdersViewModel()
         {
             LoadDataAsync();
+            OnPropertyChanged(nameof(SupplierOrders));
         }
 
         public SupplierOrdersViewModel(StockItem stockItem)
         {
             _inputCode = stockItem.Code; // Pre-fill the SupplierOrder form with item code
             LoadDataAsync();
+            OnPropertyChanged(nameof(SupplierOrders));
         }
 
         private async void LoadDataAsync()
@@ -245,24 +248,14 @@ namespace Kitbox_project.ViewModels
             {
                 foreach (var item in TempOrderItems)
                 {
-                    await databaseSupplierOrderItem.Add(new Dictionary<string, object>
-                            {
-                                {"idSupplierOrder", orderId.ToString() },
-                                {"codeItem", item.Code },
-                                {"quantity", item.Quantity.ToString() }
-                            });
-
                     var itemPnDTable = await databasePnD.GetData(new Dictionary<string, string> { { "Code", item.Code }, { "idSupplier", SelectedSupplier.Id.ToString() } });
                     if (int.TryParse(itemPnDTable[0]["Delay"], out int itemDelay) && itemDelay > orderWorstDelay)
                     {
                         orderWorstDelay = itemDelay;
                     }
                 }
-
                 SupplierOrderViewModel newSupplierOrder = new SupplierOrderViewModel(
                     orderId, SelectedSupplier.Id, DateTime.Now.AddDays(orderWorstDelay).ToString("dd-MM-yyyy"), TempOrderTotalPrice, "Ordered");
-                Debug.WriteLine("Order total price: " + TempOrderTotalPrice);
-                Debug.WriteLine("Order string total price: " + TempOrderTotalPrice.ToString());
 
                 await DBSupplierOrders.Add(new Dictionary<string, object>
                         {
@@ -271,7 +264,27 @@ namespace Kitbox_project.ViewModels
                             {"price", newSupplierOrder.Price},
                             {"status", newSupplierOrder.Status }
                         });
-                SupplierOrders = SupplierOrders.Append(newSupplierOrder).ToList();
+                var tempOrderId = await DBSupplierOrders.LoadAll(new List<string> { "idSupplierOrder" });
+                newSupplierOrder.OrderID = int.Parse(tempOrderId.Last()["idSupplierOrder"]);
+
+                foreach (var item in TempOrderItems)
+                {
+                    await databaseSupplierOrderItem.Add(new Dictionary<string, object>
+                            {
+                                {"idSupplierOrder", tempOrderId.Last()["idSupplierOrder"] },
+                                {"codeItem", item.Code },
+                                {"quantity", item.Quantity }
+                            });
+                    // Update incoming quantity in stock with quantity ordered by adding the quantity ordered to the existing incoming quantity
+                    var tempIncomingQuantity = await databaseStock.GetData(new Dictionary<string, string> { { "Code", item.Code } }, new List<string> { "IncomingQuantity" });
+                    await databaseStock.Update( 
+                        new Dictionary<string, object> { { "IncomingQuantity", int.Parse(tempIncomingQuantity[0]["IncomingQuantity"]) + item.Quantity } }, 
+                        new Dictionary<string, object> { { "Code", item.Code } });
+                    // Also update the IncomingQuantity for the StockItem in the StockData list from the StockPage
+                    StockViewModel.UpdateStockQuantities(item.Code, incomingQuantity: int.Parse(tempIncomingQuantity[0]["IncomingQuantity"]) + item.Quantity);
+                }
+
+                SupplierOrders = SupplierOrders != null ? SupplierOrders.Append(newSupplierOrder).ToList() : new List<SupplierOrderViewModel> { newSupplierOrder };
             }
             TempOrderItems.Clear();
             UpdateTempOrderTotalPrice(); 
@@ -311,7 +324,22 @@ namespace Kitbox_project.ViewModels
             bool orderCancelled = await Application.Current.MainPage.DisplayAlert("Order Cancellation", "Confirm you want to cancel this order ?", "Yes", "No");
             if (orderCancelled)
             {
+                if (order.SupplierOrderItems.Count == 0)
+                {
+                    await order.GetAllItems();
+                }
                 await DBSupplierOrders.Delete(new Dictionary<string, object> { { "idSupplierOrder", order.OrderID } });
+                await databaseSupplierOrderItem.Delete(new Dictionary<string, object> { { "idSupplierOrder", order.OrderID } });
+                foreach (var item in order.SupplierOrderItems)
+                {
+                    // Update incoming quantity in stock with quantity ordered by substracting the quantity ordered from the existing incoming quantity
+                    var tempIncomingQuantity = await databaseStock.GetData(new Dictionary<string, string> { { "Code", item.Code } }, new List<string> { "IncomingQuantity" });
+                    await databaseStock.Update(
+                            new Dictionary<string, object> { { "IncomingQuantity", int.Parse(tempIncomingQuantity[0]["IncomingQuantity"]) - item.Quantity } },
+                            new Dictionary<string, object> { { "Code", item.Code } });
+                    // Also update the IncomingQuantity for the StockItem in the StockData list from the StockPage
+                    StockViewModel.UpdateStockQuantities(item.Code, incomingQuantity: int.Parse(tempIncomingQuantity[0]["IncomingQuantity"]) - item.Quantity);
+                }
                 SupplierOrders = SupplierOrders.Where(o => o.OrderID != order.OrderID).ToList();
             }
         }
@@ -327,9 +355,10 @@ namespace Kitbox_project.ViewModels
             private bool _supplierOrderVisibility;
             private bool _isExpanded;
             private string _supplierName;
-            private bool _cancelButtonVisibility;
+            private bool _isNotReceived;
             private readonly DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
             private readonly DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
+            private readonly DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
             public ICommand OnReceivedClicked { get; }
 
             public SupplierOrderViewModel(int orderID, int supplierId, string deliveryDate, double price, string status) : base(orderID, supplierId, deliveryDate, price, status)
@@ -337,7 +366,7 @@ namespace Kitbox_project.ViewModels
                 _supplierOrderVisibility = true;
                 _isExpanded = false;
                 LoadSupplierName();
-                CheckCancelButtonVisibility();
+                CheckOrderButtonsVisibility();
                 OnReceivedClicked = new Command(ModifyOrderStatus);
             }
 
@@ -347,49 +376,70 @@ namespace Kitbox_project.ViewModels
                 bool orderReceived = await Application.Current.MainPage.DisplayAlert("Order Reception", "Confirm you received this order ?", "Yes", "No");
                 Status = orderReceived ? "Received" : "Ordered";
                 OnPropertyChanged(nameof(Status));
-                CheckCancelButtonVisibility();
+                CheckOrderButtonsVisibility();
                 UpdateDBOrderStatus();
+                if (Status == "Received")
+                {
+                    if (SupplierOrderItems.Count == 0)
+                    {
+                        await GetAllItems();
+                    }
+                    foreach (var item in SupplierOrderItems)
+                    {
+                        // Update Quantity / Incoming Quantity in stock with the quantity received
+                        var tempQuantities = await databaseStock.GetData(new Dictionary<string, string> { { "Code", item.Code } }, new List<string> { "IncomingQuantity", "Quantity" });
+                        await databaseStock.Update(
+                                new Dictionary<string, object> { { "IncomingQuantity", int.Parse(tempQuantities[0]["IncomingQuantity"]) - item.Quantity },
+                                                                 { "Quantity", int.Parse(tempQuantities[0]["Quantity"]) + item.Quantity } },
+                                new Dictionary<string, object> { { "Code", item.Code } });
+                        // Also update the Quantity / IncomingQuantity for the StockItem in the StockData list from the StockPage
+                        StockViewModel.UpdateStockQuantities(item.Code, 
+                                                             incomingQuantity: int.Parse(tempQuantities[0]["IncomingQuantity"]) - item.Quantity, 
+                                                             quantity: int.Parse(tempQuantities[0]["Quantity"]) + item.Quantity);
+                    }
+                }
             }
 
-            public async void GetAllItems()
+            public async Task GetAllItems()
             {
-                if (IsExpanded) return; // Don't load items if closing the expander
-
-                //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
-                DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
-                var items = await databaseSupplierOrderItem.GetData(
-                        new Dictionary<string, string> { { "idSupplierOrder", OrderID.ToString() } }, 
-                        new List<string> {"codeItem", "quantity"});
-
-                //Step 2 Get the infos to construct each SupplierOrderItem
-                DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
-                DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
-
-                List<SupplierOrderItem> orderItems = new List<SupplierOrderItem>();
-                foreach (var item in items)
+                if (!IsExpanded) // Don't load items if closing the expander
                 {
-                    string code = item["codeItem"];
-                    int quantity = int.Parse(item["quantity"]);
+                    //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
+                    DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
+                    var items = await databaseSupplierOrderItem.GetData(
+                            new Dictionary<string, string> { { "idSupplierOrder", OrderID.ToString() } },
+                            new List<string> { "codeItem", "quantity" });
 
-                    // Get "Price" from PnD where "Code" = codeItem (from step 1 below) and "idSupplier" = SupplierId (property from SupplierOrder class) 
-                    var resPnD = await databasePnD.GetData(
-                            new Dictionary<string, string> { { "Code", code }, { "idSupplier", SupplierId.ToString() } }, 
-                            new List<string> { "Price" });
+                    //Step 2 Get the infos to construct each SupplierOrderItem
+                    DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
+                    DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
-                    double unitPrice;
-                    unitPrice = double.TryParse(resPnD[0]["Price"], out double result) ? result : throw new Exception("Price is not a number");
+                    List<SupplierOrderItem> orderItems = new List<SupplierOrderItem>();
+                    foreach (var item in items)
+                    {
+                        string code = item["codeItem"];
+                        int quantity = int.Parse(item["quantity"]);
 
-                    // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
-                    var resCatalog = await databaseCatalog.GetData(
-                            new Dictionary<string, string> { { "Code", code } },
-                            new List<string> { "Reference" });
-                    string reference = resCatalog[0]["Reference"];
+                        // Get "Price" from PnD where "Code" = codeItem (from step 1 below) and "idSupplier" = SupplierId (property from SupplierOrder class) 
+                        var resPnD = await databasePnD.GetData(
+                                new Dictionary<string, string> { { "Code", code }, { "idSupplier", SupplierId.ToString() } },
+                                new List<string> { "Price" });
 
-                    // Step 3 => Construct a new SupplierOrderItem with the infos from step 2 and add it to the list of SupplierOrderItems
-                    orderItems.Add(new SupplierOrderItem(reference, code, quantity, unitPrice));
+                        double unitPrice;
+                        unitPrice = double.TryParse(resPnD[0]["Price"], out double result) ? result : throw new Exception("Price is not a number");
+
+                        // Get "Reference" from Catalog where "Code" = codeItem (from step 1 below)
+                        var resCatalog = await databaseCatalog.GetData(
+                                new Dictionary<string, string> { { "Code", code } },
+                                new List<string> { "Reference" });
+                        string reference = resCatalog[0]["Reference"];
+
+                        // Step 3 => Construct a new SupplierOrderItem with the infos from step 2 and add it to the list of SupplierOrderItems
+                        orderItems.Add(new SupplierOrderItem(reference, code, quantity, unitPrice));
+                    }
+                    SupplierOrderItems = orderItems;
+                    OnPropertyChanged(nameof(SupplierOrderItems));
                 }
-                SupplierOrderItems = orderItems;
-                OnPropertyChanged(nameof(SupplierOrderItems));
             }
 
             private async void LoadSupplierName()
@@ -400,9 +450,9 @@ namespace Kitbox_project.ViewModels
                 SupplierName = supplierName[0]["NameofSuppliers"];
             }
             
-            private void CheckCancelButtonVisibility()
+            private void CheckOrderButtonsVisibility()
             {
-                CancelButtonVisibility = Status == "Ordered";
+                IsNotReceived = Status == "Ordered";
             }
 
             //Update the status of an order in the DB.dbo.SupplierOrder
@@ -443,13 +493,13 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-            public bool CancelButtonVisibility
+            public bool IsNotReceived
             {
-                get => _cancelButtonVisibility;
+                get => _isNotReceived;
                 set
                 {
-                    _cancelButtonVisibility = value;
-                    OnPropertyChanged(nameof(CancelButtonVisibility));
+                    _isNotReceived = value;
+                    OnPropertyChanged(nameof(IsNotReceived));
                 }
             }
 
