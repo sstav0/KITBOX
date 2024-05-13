@@ -47,8 +47,12 @@
             HorizontalOptions="Start"
             Text="CART" />
 
-        <Button Text="Update Cart" Grid.Row="0" Grid.Column="4" Clicked="OnUpdateCartCLicked"
-                BackgroundColor="{StaticResource Primary}"/>
+        <Button
+            Grid.Row="0"
+            Grid.Column="4"
+            BackgroundColor="{StaticResource Primary}"
+            Clicked="OnUpdateCartCLicked"
+            Text="Update Cart" />
         <!--  Command="{Binding UpdateCartClicked}"  -->
 
         <Border
@@ -207,13 +211,28 @@
                                         VerticalOptions="Center" />
                                     <!--  {Binding cabinet.GetPrice()}  -->
 
-                                    <Button Text="Edit" Grid.Column="10" FontAttributes="Bold" Clicked="OnEditClicked" CommandParameter="{Binding .}"
-                                            TextColor="White" BackgroundColor="{StaticResource Primary}" BorderColor="Black" 
-                                            MaximumHeightRequest="9"/>
-                                    <Button Text="X" Grid.Column="11" FontAttributes="Bold" Clicked="OnDeleteClicked" CommandParameter="{Binding .}"
-                                            HorizontalOptions="Start" TextColor="White" BackgroundColor="{StaticResource Primary}" 
-                                            BorderColor="Black" MaximumHeightRequest="9"/>
-                                
+                                    <Button
+                                        Grid.Column="10"
+                                        BackgroundColor="{StaticResource Primary}"
+                                        BorderColor="Black"
+                                        Clicked="OnEditClicked"
+                                        CommandParameter="{Binding .}"
+                                        FontAttributes="Bold"
+                                        MaximumHeightRequest="9"
+                                        Text="Edit"
+                                        TextColor="White" />
+                                    <Button
+                                        Grid.Column="11"
+                                        BackgroundColor="Red"
+                                        BorderColor="Black"
+                                        Clicked="OnDeleteClicked"
+                                        CommandParameter="{Binding .}"
+                                        FontAttributes="Bold"
+                                        HorizontalOptions="Start"
+                                        MaximumHeightRequest="9"
+                                        Text="X"
+                                        TextColor="White" />
+
                                 </Grid>
                             </Border>
                         </ViewCell>

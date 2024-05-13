@@ -296,7 +296,7 @@ namespace Kitbox_project.ViewModels
                 { "height",Cart[i].Height},
                 {"quantity",Cart[i].Quantity},
                 {"idOrder",idOrder},
-                {"IronAngleRef", await Cart[i].Cabinet.GetObservableLockers()[Cart[i].Cabinet.GetObservableLockers().Count()-1].GetCatalogRef("COR")} };
+                {"IronAngleRef", await Cart[i].Cabinet.GetObservableLockers()[Cart[i].Cabinet.GetObservableLockers().Count()-1].GetCatalogRef("COR", Cart[i].Cabinet.Height)} };
 
                     await databaseCabinet.Add(cabinetToBeRegistered);
 
@@ -326,19 +326,20 @@ namespace Kitbox_project.ViewModels
 
                             Dictionary<string, object> lockerToBeRegistered = new Dictionary<string, object>
                             {
-                                { "height", Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
-                                { "color",Cart[i].Cabinet.GetObservableLockers()[j].Color.ToString()},
-                                { "door",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("DOORBOOL")},
-                                { "price",Cart[i].Cabinet.GetObservableLockers()[j].Price.ToString()},
-                                { "idCabinet",idCabinet},
-                                { "sidePanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAG")},
-                                { "verticalBattenRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TAS")},
-                                { "backPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAR")},
-                                { "horizontalPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAH")},
-                                { "doorRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("POR")},
-                                { "sideCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRG")},
-                                { "frontCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRF")},
-                                { "backCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRR")}
+                            { "height", Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
+                            { "color",Cart[i].Cabinet.GetObservableLockers()[j].Color.ToString()},
+                            { "door",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("DOORBOOL")},
+                            { "price",Cart[i].Cabinet.GetObservableLockers()[j].Price.ToString()},
+                            { "idCabinet",idCabinet},
+                            { "sidePanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAG")},
+                            { "verticalBattenRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TAS")},
+                            { "backPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAR")},
+                            { "horizontalPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAH")},
+                            { "doorRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("POR")},
+                            { "sideCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRG")},
+                            { "frontCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRF")},
+                            { "backCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRR")},
+                            { "coupelle",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("COU")}
                             };
 
                             //Debug

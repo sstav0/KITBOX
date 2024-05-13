@@ -33,7 +33,7 @@ namespace Kitbox_project.Models
         private double _price;
         private int _lockerID;
         private DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
-        public Dictionary<string, int> partsAvailabilityDict = new Dictionary<string, int>();
+        public Dictionary<string, int> partsRegisteredForLocker = new Dictionary<string, int>();
         public bool partsAvailabilityBool = false;
         public readonly Dictionary<string, int> partsToBuildALockerDict = new Dictionary<string, int>
         {
@@ -44,9 +44,9 @@ namespace Kitbox_project.Models
             {"POR", 2 }, //Door
             {"TRG", 4 }, //Side Crossbar
             {"TRF", 2 }, //Front Crossbar
-            {"TRR", 2 }  //Back Crossbar
+            {"TRR", 2 }, //Back Crossbar
+            {"COU", 2 }  //Coupelle
         };
-        private Dictionary<string, int> partsRegisteredForCabinet = new Dictionary<string, int>();
 
         /// <summary>
         /// This constructor creates a locker with specified dimensions, color, door characteristics, and price.
@@ -127,8 +127,7 @@ namespace Kitbox_project.Models
                 { "Door Color"          ,doorColor },
                 { "Door Material"       ,doorMaterial },
                 { "Door"                ,isDoor },
-                { "Panel Color"         ,this.Color }
-                //{ "Angle Color"         ,this.Depth }
+                { "Panel Color"         ,this.Color },
             };
             return selectedValues;
         }
@@ -136,7 +135,7 @@ namespace Kitbox_project.Models
         public async Task<double> GetPrice()
         {
             
-            if (partsAvailabilityDict == null) { Price = 0; return 0; }
+            if (partsRegisteredForLocker == null) { Price = 0; return 0; }
             else
             {
                 Price = 0;
@@ -145,7 +144,7 @@ namespace Kitbox_project.Models
 
                 List<Dictionary<string,string>> data = new List<Dictionary<string,string>>();
 
-                foreach(string part in partsAvailabilityDict.Keys)
+                foreach(string part in partsRegisteredForLocker.Keys)
                 {
                     if (part != null)
                     {
@@ -153,7 +152,7 @@ namespace Kitbox_project.Models
                     }
                 }
 
-                foreach(string part in partsAvailabilityDict.Keys)
+                foreach(string part in partsRegisteredForLocker.Keys)
                 {
                     if (part != null && !string.IsNullOrWhiteSpace(part))
                     {
@@ -206,9 +205,14 @@ namespace Kitbox_project.Models
         /// Additionally, it explains the special case when the two-letter reference code is "DOORBOOL" which checks for the presence of a door.
         /// </para>
         /// </remarks>
-        public async Task<string> GetCatalogRef(string threeLetterRef)
+        public async Task<string> GetCatalogRef(string threeLetterRef, object totalHeight = null)
         {
             Dictionary<string, object> selectedValues = SelectedValues();
+
+            if(totalHeight != null)
+            {
+                selectedValues.Add("TotalHeight", totalHeight.ToString());
+            }
 
             Catalog catalog = new Catalog(databaseCatalog, selectedValues);
             string returnString = "";
@@ -231,7 +235,7 @@ namespace Kitbox_project.Models
                             returnString = item;
                         }
                     }
-                    else if ( threeLetterRef == "POR")
+                    else if (threeLetterRef == "POR")
                     {
                         if (item.Substring(item.Length - 2).Contains("Ve", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Transparent", StringComparison.OrdinalIgnoreCase))
                         {
@@ -242,6 +246,13 @@ namespace Kitbox_project.Models
                             returnString = item;
                         }
                         else if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                        }
+                    }
+                    else if (threeLetterRef == "COU")
+                    {
+                        if(this.Door != null && ! this.Door.Material.Contains("glass",StringComparison.OrdinalIgnoreCase))
                         {
                             returnString = item;
                         }
@@ -388,7 +399,7 @@ namespace Kitbox_project.Models
                     returnBool = false;
                 }
             }
-            partsAvailabilityDict = returnRegisteredRefDict;
+            partsRegisteredForLocker = returnRegisteredRefDict;
             partsAvailabilityBool = returnBool;
             return (returnBool, returnRegisteredRefDict);
         }

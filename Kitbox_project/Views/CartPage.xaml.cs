@@ -94,9 +94,9 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         double i = 0;
         foreach (Cabinet item in order.Cart)
         {
-            i += Convert.ToDouble(item.Price);
+            i += Convert.ToDouble(item.Price * item.Quantity);
         }
-        string totalPrice = $"{i.ToString()} €";
+        string totalPrice = $"{Math.Round(i,2).ToString()} €";
         TotalPrice.Text = totalPrice;
     }
 
@@ -109,10 +109,8 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	private async void OnConfirmClicked(object sender, EventArgs e)
 	{
 		order.Status = "Waiting Confirmation";
-
-        bool goToNextPage = false;
         DisplayPopup();
-
+/*
         if (goToNextPage)
         {
             OrdersPage newActiveOrdersPage = new OrdersPage();
@@ -122,8 +120,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
             await Navigation.PushAsync(newActiveOrdersPage);
         }
-
-
+*/
     }
 
     private async void OnEditClicked(object sender, EventArgs e)
@@ -153,6 +150,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {
 			selectedCabinet.Quantity += 1;
+            order.Cart[selectedCabinet.CabinetID].Quantity += 1;
             UpdateCart();
         }
 	}
@@ -161,8 +159,12 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
         if (sender is Button button && button.CommandParameter is CartViewModel selectedCabinet)
         {
-            selectedCabinet.Quantity -= 1;
-            UpdateCart();
+            if (selectedCabinet.Quantity > 1)
+            {
+                selectedCabinet.Quantity -= 1;
+                order.Cart[selectedCabinet.CabinetID].Quantity -= 1;
+                UpdateCart();
+            }
         }
     }
 

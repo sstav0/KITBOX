@@ -81,8 +81,8 @@ namespace Kitbox_project.Views
                 }
 
                 //put the needed dictionary at the end of the list
-                registeredPartsRefQuantity.Remove(locker.partsAvailabilityDict);
-                registeredPartsRefQuantity.Add(locker.partsAvailabilityDict);
+                registeredPartsRefQuantity.Remove(locker.partsRegisteredForLocker);
+                registeredPartsRefQuantity.Add(locker.partsRegisteredForLocker);
                 _viewModel.registeredPartsRefQuantityList = registeredPartsRefQuantity;
 
                 LockerViewModel newLocker = new LockerViewModel

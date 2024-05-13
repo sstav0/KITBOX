@@ -313,7 +313,7 @@
             Grid.ColumnSpan="4"
             Margin="10"
             Aspect="AspectFit"
-            Source="dotnet_bot.png" />
+            Source="kitbox_1_v.png" />
 
 
 
