@@ -86,7 +86,7 @@
 
             <!-- ListView to display stock data -->
             <Border BackgroundColor="#fdfdfd" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1100" Padding="20">
-                <CollectionView ItemsSource="{Binding StockData}" SelectionMode="Single">
+                <CollectionView ItemsSource="{Binding DisplayedStockData}" SelectionMode="Single">
                     <CollectionView.Header>
                         <Grid>
                             <Grid.ColumnDefinitions>

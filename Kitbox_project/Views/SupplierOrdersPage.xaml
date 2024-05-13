@@ -279,8 +279,8 @@
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </uranium:ExpanderView>
-                                <Button Command="{Binding OnReceivedClicked}" Margin="5,5" Padding="14,5" BackgroundColor="Green" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
-                                <Button Clicked="OnCancelClicked" IsVisible="{Binding CancelButtonVisibility}" Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
+                                <Button Command="{Binding OnReceivedClicked}" IsVisible="{Binding IsNotReceived}" Margin="5,5" Padding="14,5" BackgroundColor="Green" FontSize="Body" HeightRequest="35" Text="Received" VerticalOptions="Start" />
+                                <Button Clicked="OnCancelClicked" IsVisible="{Binding IsNotReceived}" Margin="5,5" Padding="14,5" BackgroundColor="Red" FontSize="Body" HeightRequest="35" Text="Cancel" VerticalOptions="Start" />
                             </HorizontalStackLayout>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
