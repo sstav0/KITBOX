@@ -23,11 +23,10 @@ namespace Kitbox_project.ViewModels
         public event EventHandler PopupClosed;
         public Command OnOkButtonClicked { get; }
 
-        DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
-        DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
-        DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
-        DatabaseLocker databaseLocker = new DatabaseLocker("customer", "customer");
-        DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+        private readonly DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
+        private readonly DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
+        private readonly DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
+        private readonly DatabaseLocker databaseLocker = new DatabaseLocker("customer", "customer");
         private CartPage _parentPage;
         private string idOrder;
         private string idCustomer;
@@ -326,21 +325,21 @@ namespace Kitbox_project.ViewModels
                             Debug.WriteLine("***** Loop Lockers Regestery *****");
 
                             Dictionary<string, object> lockerToBeRegistered = new Dictionary<string, object>
-                        {
-                        { "height", Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
-                        { "color",Cart[i].Cabinet.GetObservableLockers()[j].Color.ToString()},
-                        { "door",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("DOORBOOL")},
-                        { "price",Cart[i].Cabinet.GetObservableLockers()[j].Price.ToString()},
-                        { "idCabinet",idCabinet},
-                        { "sidePanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAG")},
-                        { "verticalBattenRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TAS")},
-                        { "backPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAR")},
-                        { "horizontalPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAH")},
-                        { "doorRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("POR")},
-                        { "sideCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRG")},
-                        { "frontCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRF")},
-                        { "backCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRR")}
-                        };
+                            {
+                                { "height", Cart[i].Cabinet.GetObservableLockers()[j].Height.ToString()},
+                                { "color",Cart[i].Cabinet.GetObservableLockers()[j].Color.ToString()},
+                                { "door",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("DOORBOOL")},
+                                { "price",Cart[i].Cabinet.GetObservableLockers()[j].Price.ToString()},
+                                { "idCabinet",idCabinet},
+                                { "sidePanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAG")},
+                                { "verticalBattenRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TAS")},
+                                { "backPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAR")},
+                                { "horizontalPanelRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("PAH")},
+                                { "doorRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("POR")},
+                                { "sideCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRG")},
+                                { "frontCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRF")},
+                                { "backCrossbarRef",await Cart[i].Cabinet.GetObservableLockers()[j].GetCatalogRef("TRR")}
+                            };
 
                             //Debug
                             foreach (var kvp in lockerToBeRegistered)

@@ -360,7 +360,10 @@ namespace Kitbox_project.ViewModels
             private bool _isNotReceived;
             private readonly DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
             private readonly DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
+            private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
             private readonly DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
+            private readonly DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
+            private readonly DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
             public ICommand OnReceivedClicked { get; }
 
             public SupplierOrderViewModel(int orderID, int supplierId, string deliveryDate, double price, string status) : base(orderID, supplierId, deliveryDate, price, status)
@@ -407,15 +410,11 @@ namespace Kitbox_project.ViewModels
                 if (!IsExpanded) // Don't load items if closing the expander
                 {
                     //Step 1 => Get all items "codeItem", "quantity" where "idSupplierOrder" = OrderID
-                    DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
                     var items = await databaseSupplierOrderItem.GetData(
                             new Dictionary<string, string> { { "idSupplierOrder", OrderID.ToString() } },
                             new List<string> { "codeItem", "quantity" });
 
                     //Step 2 Get the infos to construct each SupplierOrderItem
-                    DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
-                    DatabaseCatalog databaseCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
-
                     List<SupplierOrderItem> orderItems = new List<SupplierOrderItem>();
                     foreach (var item in items)
                     {

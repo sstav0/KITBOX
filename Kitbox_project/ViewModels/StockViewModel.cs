@@ -87,7 +87,6 @@ namespace Kitbox_project.ViewModels
             if(stockItem.InCatalog == true)
             {
                 stockItem.InCatalog = false;
-
                 stockItem.DirectorButtonText = "Add to Catalog";
 
                 //await DBCatalog.Update(
@@ -97,7 +96,6 @@ namespace Kitbox_project.ViewModels
             else
             {
                 stockItem.InCatalog = true;
-
                 stockItem.DirectorButtonText = "Remove from Catalog";
 
                 //await DBCatalog.Update(
@@ -459,6 +457,4 @@ namespace Kitbox_project.ViewModels
             }
         }
     }
-
-
 }
