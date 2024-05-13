@@ -2,7 +2,6 @@ using CommunityToolkit.Maui.Views;
 using Kitbox_project.Models;
 using Kitbox_project.ViewModels;
 using System.Diagnostics;
-using static Kitbox_project.Utilities.Users;
 
 namespace Kitbox_project.Views;
 
@@ -26,7 +25,6 @@ public partial class StockPage : ContentPage
     {
         if (sender is Grid grid && grid.BindingContext is StockViewModel.StockItemViewModel selectedItem)
         {
-            Debug.WriteLine("OpenPopupStockPrices");
             selectedItem.LoadPricesData();
             // Open popup with the stock prices
             var popup = new PopupStockPrices(selectedItem);
@@ -69,11 +67,9 @@ public partial class StockPage : ContentPage
                 };
 
                 // Converts the empty strings with a null object
-
                 list = list.Select(item => item is string && string.IsNullOrEmpty((string)item) ? null : item).ToList();
 
                 stockViewModel.AddInStock(newStockItem, list);
-
                 ResetEntries();
             }
         }

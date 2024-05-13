@@ -14,8 +14,9 @@ namespace Kitbox_project.ViewModels;
 
 public class CartViewModel
 {
-    private Cabinet _cabinet;
     private readonly Page _page;
+
+    private Cabinet _cabinet;
     public Cabinet Cabinet
     { get => _cabinet; set => _cabinet = value; }
 
@@ -53,34 +54,34 @@ public class CartViewModel
 
     public CartViewModel(Cabinet cabinet, Page page)
     {
-        this._cabinet = cabinet;
-        this._lockers = cabinet.GetObservableLockers();
-        this._price = $"{cabinet.Price.ToString()} €";
-        this._depth = cabinet.Depth;
-        this._length = cabinet.Length;
-        this._quantity = cabinet.Quantity;
-        this._nbrLockers = cabinet.GetLockerCount();
-        this._height = cabinet.Height;
-        this._cabinetID = cabinet.CabinetID;
+        _cabinet = cabinet;
+        _lockers = cabinet.GetObservableLockers();
+        _price = $"{cabinet.Price} €";
+        _depth = cabinet.Depth;
+        _length = cabinet.Length;
+        _quantity = cabinet.Quantity;
+        _nbrLockers = cabinet.GetLockerCount();
+        _height = cabinet.Height;
+        _cabinetID = cabinet.CabinetID;
         _page = page;
     }
 
     public void AddLocker(Locker locker)
     {
-        this._lockers.Add(locker);
+        _lockers.Add(locker);
     }
 
     public string GetCabinetViewModelStringV2()
     {
         string i = string.Empty;
-        foreach (Locker locker in this._lockers)
+        foreach (Locker locker in _lockers)
         {
-            i += $"{locker.ToString()}, ";
+            i += $"{locker}, ";
         }
-        i += $"{this._price}, ";
-        i += $"{this._depth}, ";
-        i += $"{this._length}, ";
-        i += $"{this._quantity}";
+        i += $"{_price}, ";
+        i += $"{_depth}, ";
+        i += $"{_length}, ";
+        i += $"{_quantity}";
         return i;
     }
 }

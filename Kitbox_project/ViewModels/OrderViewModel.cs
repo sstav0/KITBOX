@@ -11,8 +11,7 @@ namespace Kitbox_project.ViewModels;
 public class OrderViewModel : ILoginViewModel
 {
     private List<OrderItemViewModel> _orders;
-    private DatabaseOrder _dBOrders = new("kitboxer", "kitboxing");
-    private DatabaseStock _dBStock = new("kitboxer", "kitboxing");
+    private readonly DatabaseOrder _dBOrders = new("kitboxer", "kitboxing");
 
     private bool _activeOrdersVisible;
     private bool _unactiveOrdersVisible;
@@ -26,7 +25,9 @@ public class OrderViewModel : ILoginViewModel
             OnPropertyChanged(nameof(ActiveOrdersVisible));
         }
     }
+
     public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
+
     public bool UnactiveOrdersVisible
     {
         get => _unactiveOrdersVisible;
@@ -65,11 +66,9 @@ public class OrderViewModel : ILoginViewModel
                 {
                     IsSellerOrStorekeeperOrDirector = true;
                 }
-
                 UpdateStatusButtonsVisibility();
             }
         };
-
         LoadAllOrders();
 
         _activeOrdersVisible = true;
@@ -99,7 +98,6 @@ public class OrderViewModel : ILoginViewModel
                     orderItemVM.CancelButtonVisibility = true;
                     orderItemVM.UpdateConfirmButtonVisibility();
                 }
-
                 else
                 {
                     orderItemVM.ConfirmButtonVisibility = true;
@@ -188,20 +186,13 @@ public class OrderViewModel : ILoginViewModel
         private bool _confirmButtonVisibility;
         private bool _cancelButtonVisibility;
 
-        private DatabaseLocker _dBLockers = new("kitboxer", "kitboxing");
-        private DatabaseCabinet _dBCabinets = new("kitboxer", "kitboxing");
-        private DatabaseStock _dBStock = new("kitboxer", "kitboxing");
+        private readonly DatabaseLocker _dBLockers = new("kitboxer", "kitboxing");
+        private readonly DatabaseCabinet _dBCabinets = new("kitboxer", "kitboxing");
+        private readonly DatabaseStock _dBStock = new("kitboxer", "kitboxing");
 
         public OrderItemViewModel(int idOrder, int idCustomer, OrderStatus orderStatus, DateTime creationTime) : base(idOrder, idCustomer, orderStatus, creationTime)
         {            
-            if (OrderStatus is OrderStatus.Canceled || OrderStatus is OrderStatus.PickedUp)
-            {
-                _orderItemVisibility = false;
-            }
-            else
-            {
-                _orderItemVisibility = true;
-            }
+            _orderItemVisibility = OrderStatus is not OrderStatus.Canceled && OrderStatus is not OrderStatus.PickedUp;
 
             _stringedCreationTime = creationTime.ToString();
             _stringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
@@ -338,6 +329,7 @@ public class OrderViewModel : ILoginViewModel
                 }
             }
         }
+
         public void UpdateConfirmButtonVisibility()
         {
             if (OrderStatus == OrderStatus.PickedUp)
@@ -448,12 +440,11 @@ public class OrderViewModel : ILoginViewModel
 
         public async Task LoadOrderStockItems()
         {
-            List<OrderStockItem> stockItems = new();
+            List<OrderStockItem> stockItems;
             Dictionary<string, int> refsAndQuantities = await GetRefsAndQuantity();
 
             if(refsAndQuantities is not null)
             {
-
                 List<int> quantities = refsAndQuantities.Values.ToList();
                 List<string> refs = refsAndQuantities.Keys.ToList();
 
@@ -462,8 +453,7 @@ public class OrderViewModel : ILoginViewModel
                 {
                     var newStockDictList = await _dBStock.GetData(
                         new Dictionary<string, string> { { "Code", reference } },
-                        new List<string> { "idStock", "Reference", "Code", "Quantity",
-                    "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
+                        new List<string> { "idStock", "Reference", "Code", "Quantity", "IncomingQuantity", "OutgoingQuantity", "InCatalog" });
 
                     stockDictList = stockDictList.Concat(newStockDictList).ToList();
                 }

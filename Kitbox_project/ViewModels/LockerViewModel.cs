@@ -12,10 +12,11 @@ namespace Kitbox_project.ViewModels
         public int LockerID
         {
             get => _lockerID;
-            set {
+            set 
+            {
                 _lockerID = value;
                 OnPropertyChanged();
-                 }
+            }
         }
 
         //Locker contained in the LockerViewModel
@@ -110,16 +111,12 @@ namespace Kitbox_project.ViewModels
             LockerIndex = LockerID + 1;
         }
 
-
-
-        //Pour voir les lockers. Il faudra peut-être changer ça une fois la DB faite
         public override string ToString()
         {
             return $"Height: {Height}, Color: {Color}, Door: {Door}, Price {Price}";
         }
 
-        public event PropertyChangedEventHandler PropertyChanged; //utilité ?
-
+        public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

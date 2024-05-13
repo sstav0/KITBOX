@@ -35,12 +35,15 @@
                 Text="Supplier Orders" />
             <StackLayout Margin="20">
                 <!-- Border for item entry -->
-                <Border BackgroundColor="#fff7f2" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="400" Padding="20">
+                <Border BackgroundColor="#fff7f2" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="780" Padding="20">
                     <StackLayout Spacing="10">
-                        <Picker x:Name="PickerSupplier" Title="Select Supplier" 
+                        <Label Text="Create an order to supplier" FontSize="Title" Margin="0,0,0,10" FontAttributes="Bold" HorizontalTextAlignment="Center"/>
+                        <Picker x:Name="PickerSupplier" Title="Select Supplier"
                                 ItemsSource="{Binding Suppliers}"
                                 ItemDisplayBinding="{Binding Name}"
-                                BackgroundColor="White">
+                                BackgroundColor="White"
+                                HorizontalOptions="Center"
+                                WidthRequest="355">
                             <Picker.Triggers>
                                 <DataTrigger TargetType="Picker" Binding="{Binding IsOrderNotEmpty}" Value="False">
                                     <Setter Property="IsEnabled" Value="True"/>
@@ -50,7 +53,7 @@
                                 </DataTrigger>
                             </Picker.Triggers>
                         </Picker>
-                        <HorizontalStackLayout Spacing="15">
+                        <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
                             <Entry x:Name="ItemCode" Placeholder="Item Code" Text="{Binding InputCode}" BackgroundColor="White" Margin="0,0,0,10" WidthRequest="220">
                                 <Entry.Triggers>
                                     <DataTrigger TargetType="Entry" Binding="{Binding IsValidCode}" Value="False">
@@ -107,31 +110,9 @@
                                 </MultiTrigger>
                             </Button.Triggers>
                         </Button>
-                    </StackLayout>
-                </Border>
-
-                <!-- Border for added items list -->
-                <Border BackgroundColor="Coral" StrokeShape="RoundRectangle 20" Stroke="{StaticResource Secondary}" StrokeThickness="2" WidthRequest="1200" Padding="20" IsVisible="{Binding IsOrderNotEmpty}">
-                    <CollectionView ItemsSource="{Binding TempOrderItems}" SelectionMode="Single" IsVisible="{Binding IsOrderNotEmpty}">
-                        <CollectionView.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*"/>
-                                    <ColumnDefinition Width="2*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="80"/>
-                                </Grid.ColumnDefinitions>
-
-                                <Label Grid.Column="0" Text="Item Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
-                                <Label Grid.Column="1" Text="Item Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
-                                <Label Grid.Column="2" Text="Item Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
-                                <Label Grid.Column="3" Text="Calculated Price" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
-                                <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10"/>
-                            </Grid>
-                        </CollectionView.Header>
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                        <Label Text="Your current order" IsVisible="{Binding IsOrderNotEmpty}" FontSize="Medium" FontAttributes="Bold" Margin="0,0,0,10"/>
+                        <CollectionView ItemsSource="{Binding TempOrderItems}" SelectionMode="Single" IsVisible="{Binding IsOrderNotEmpty}">
+                            <CollectionView.Header>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="3*"/>
@@ -140,30 +121,39 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="80"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Label Grid.Column="1" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Label Grid.Column="2" Text="{Binding Quantity}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Label Grid.Column="3" Text="{Binding TotalPrice}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
-                                    <Button Grid.Column="4" Text="Delete" Clicked="OnDeleteClicked"  HorizontalOptions="End"/>
+
+                                    <Label Grid.Column="0" Text="Item Reference" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                    <Label Grid.Column="1" Text="Item Code" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                    <Label Grid.Column="2" Text="Quantity" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                    <Label Grid.Column="3" Text="Total Price" VerticalOptions="Center" Margin="10,0,10,10" FontAttributes="Bold"/>
+                                    <Label Grid.Column="4" VerticalOptions="Center" Margin="10,0,10,10"/>
                                 </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                            </CollectionView.Header>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="80"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Text="{Binding Reference}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                        <Label Grid.Column="1" Text="{Binding Code}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                        <Label Grid.Column="2" Text="{Binding Quantity}" VerticalOptions="Center" Margin="10,5" FontSize="Body"/>
+                                        <HorizontalStackLayout Grid.Column="3" Margin="10,5">
+                                            <Label Text="{Binding TotalPrice}" VerticalOptions="Center" FontSize="Body"/>
+                                            <Label Text="€" VerticalOptions="Center" FontSize="Body"/>
+                                        </HorizontalStackLayout>
+                                        <Button Grid.Column="4" Text="Delete" Clicked="OnDeleteClicked"  HorizontalOptions="End"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                        <Button Text="New Supplier Order" Clicked="OpenPopupNewSupplierOrder" IsVisible="{Binding IsOrderNotEmpty}" BackgroundColor="{StaticResource Tertiary}" Margin="5,0,0,0" FontSize="Body" HeightRequest="35" VerticalOptions="CenterAndExpand" />
+                    </StackLayout>
                 </Border>
-            </StackLayout>
-            
-            <StackLayout
-                Margin="0,0,0,20"
-                HorizontalOptions="Center"
-                Orientation="Horizontal">
-                <Button
-                    Margin="5,0,0,0"
-                    BackgroundColor="{StaticResource Tertiary}"
-                    Clicked="OpenPopupNewSupplierOrder"
-                    FontSize="Body"
-                    HeightRequest="35"
-                    Text="New Supplier Order"
-                    VerticalOptions="CenterAndExpand" />
             </StackLayout>
 
             <Border
