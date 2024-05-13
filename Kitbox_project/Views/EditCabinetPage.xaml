@@ -93,6 +93,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Margin="10"
+                    FontAttributes="Bold"
                     HorizontalOptions="Center"
                     Text="{Binding SelectedWidthItem}" />
 
@@ -106,15 +107,14 @@
                     Text="{Binding SelectedDepthItem}" />
 
 
-                <Picker
+                <Label
                     x:Name="AngleIronColor"
                     Grid.Row="2"
                     Grid.Column="2"
                     Margin="10"
-                    BackgroundColor="White"
                     HorizontalOptions="Center"
-                    ItemsSource="{Binding ItemSourceAngleIronColor}"
-                    SelectedItem="{Binding SelectedAngleIronColor}" />
+                    FontAttributes="Bold"
+                    Text="{Binding SelectedAngleIronColor}" />
             </Grid>
         </Border>
 

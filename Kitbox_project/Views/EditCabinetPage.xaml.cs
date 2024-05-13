@@ -59,9 +59,14 @@ namespace Kitbox_project.Views
 
         private async void DefaultPickers()
         {
-            Debug.WriteLine(_cabinet.Depth.ToString());
+            //Debug.WriteLine(_cabinet.AngleIronColor.ToString());
             _viewModel.SelectedDepthItem = _cabinet.Depth.ToString();
             _viewModel.SelectedWidthItem = _cabinet.Length.ToString();
+            _viewModel.SelectedAngleIronColor = _cabinet.AngleIronColor;
+
+            //Debug.WriteLine(_viewModel.SelectedDepthItem);
+            //Debug.WriteLine(_viewModel.SelectedWidthItem);
+            //Debug.WriteLine(_viewModel.SelectedAngleIronColor);
 
 
             foreach (var locker in _cabinet.GetObservableLockers())

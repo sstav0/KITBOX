@@ -340,8 +340,11 @@ namespace Kitbox_project.Views
                 Convert.ToInt32(_viewModel.SelectedDepthItem),
                 Convert.ToInt32(_viewModel.SelectedWidthItem),
                 TotalSize, // Height pour le moment mais faudra remplacer par angle iron
-                1
+                1,
+                _viewModel.SelectedAngleIronColor
             ); 
+            Debug.WriteLine(newCabinet.ToString());
+            Debug.WriteLine(newCabinet.AngleIronColor);
 
             // Add the new Cabinet to the Order's cart
 
@@ -357,7 +360,6 @@ namespace Kitbox_project.Views
                 newCabinet.CabinetID = 0;
             }
 
-            Debug.WriteLine(newCabinet.ToString());
 
             order.Cart.Add(newCabinet);
 
