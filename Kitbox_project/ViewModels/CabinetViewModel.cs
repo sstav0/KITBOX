@@ -34,7 +34,7 @@ namespace Kitbox_project.ViewModels
         private List<Locker> availableLocker = new List<Locker>();
         public Dictionary<string,object> selectedValues = new Dictionary<string,object>();
 
-        public DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+        private readonly DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
 
         //Source Item for picker
         private List<string> _itemSourceAngleIronColor;
@@ -316,6 +316,7 @@ namespace Kitbox_project.ViewModels
                 }
             }
         }
+
         private string _selectedWidthItem;
         public string SelectedWidthItem
         {
@@ -329,8 +330,6 @@ namespace Kitbox_project.ViewModels
                 }
             }
         }
-
-
 
         private float _price;
         public float Price
@@ -401,11 +400,11 @@ namespace Kitbox_project.ViewModels
                 OnPropertyChanged();
             }
         }
+
         private void CalculateTotalPrice()
         {
             TotalPrice = Lockers.Sum(locker => locker.Price);
         }
-
 
         //Setup Visible or Invisible Door selectors when Door Checkbox is checked or unchecked
         private void OnAddDoorClicked()
@@ -537,11 +536,9 @@ namespace Kitbox_project.ViewModels
             {
                 registeredPartsRefQuantityList.RemoveRange(registeredPartsRefQuantityList.Count - AvailableLockers.Count, AvailableLockers.Count);
                 AvailableLockers.Clear();
-                
             }
             OnPropertyChanged(nameof(AvailableLockers));
         }
-  
         
         private void ExecuteOnResetLockerButtonClicked()
         {

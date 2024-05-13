@@ -23,11 +23,10 @@ namespace Kitbox_project.ViewModels
         public event EventHandler PopupClosed;
         public Command OnOkButtonClicked { get; }
 
-        DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
-        DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
-        DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
-        DatabaseLocker databaseLocker = new DatabaseLocker("customer", "customer");
-        DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+        private readonly DatabaseCustomer databaseCustomer = new DatabaseCustomer("customer", "customer");
+        private readonly DatabaseOrder databaseOrder = new DatabaseOrder("customer", "customer");
+        private readonly DatabaseCabinet databaseCabinet = new DatabaseCabinet("customer", "customer");
+        private readonly DatabaseLocker databaseLocker = new DatabaseLocker("customer", "customer");
         private CartPage _parentPage;
         private string idOrder;
         private string idCustomer;

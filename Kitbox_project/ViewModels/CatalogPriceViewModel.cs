@@ -15,7 +15,7 @@ namespace Kitbox_project.ViewModels
     internal class CatalogPriceViewModel : INotifyPropertyChanged
     {
         private List<CatalogPriceItemViewModel> _catalogPricesData;
-        private DatabaseCatalog DBCatalog= new DatabaseCatalog("kitboxer", "kitboxing");
+        private readonly DatabaseCatalog DBCatalog= new DatabaseCatalog("kitboxer", "kitboxing");
 
         public CatalogPriceViewModel()
         {

@@ -17,7 +17,7 @@ namespace Kitbox_project.ViewModels
 {
     public class StockViewModel : ILoginViewModel
     {
-        private List<StockItemViewModel> _stockData;
+        private static List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
         private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
 
@@ -33,9 +33,7 @@ namespace Kitbox_project.ViewModels
                     UpdateUserRights(User);
                 }
             };
-
             //User = Login.login;
-
             User = "director";
         }
 
@@ -43,15 +41,31 @@ namespace Kitbox_project.ViewModels
         {
             var stockItems = await DBStock.LoadAll();
             StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
+            OnPropertyChanged(nameof(DisplayedStockData));
         }
 
-        public List<StockItemViewModel> StockData
+        public static List<StockItemViewModel> StockData
         {
             get => _stockData;
             set
             {
                 _stockData = value;
-                OnPropertyChanged(nameof(StockData));
+            }
+        }
+
+        public List<StockItemViewModel> DisplayedStockData => StockData;
+
+        public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
+
+        public static void UpdateStockQuantities(string code, int? quantity = null, int? incomingQuantity = null, int? outgoingQuantity = null)
+        {
+            var stockItem = StockData?.FirstOrDefault(item => item.Code == code);
+            if (stockItem != null)
+            {
+                stockItem.Quantity = quantity.HasValue ? (int)quantity : stockItem.Quantity;
+                stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
+                stockItem.IncomingQuantity = incomingQuantity.HasValue ? (int)incomingQuantity : stockItem.IncomingQuantity;
+                stockItem.OutgoingQuantity = outgoingQuantity.HasValue ? (int)outgoingQuantity : stockItem.OutgoingQuantity;
             }
         }
 
@@ -73,7 +87,6 @@ namespace Kitbox_project.ViewModels
             if(stockItem.InCatalog == true)
             {
                 stockItem.InCatalog = false;
-
                 stockItem.DirectorButtonText = "Add to Catalog";
 
                 //await DBCatalog.Update(
@@ -83,7 +96,6 @@ namespace Kitbox_project.ViewModels
             else
             {
                 stockItem.InCatalog = true;
-
                 stockItem.DirectorButtonText = "Remove from Catalog";
 
                 //await DBCatalog.Update(
@@ -137,16 +149,10 @@ namespace Kitbox_project.ViewModels
                 IsEditingPrice = false;
                 PriceButtonText = "Edit";
                 PriceButtonColor = Color.Parse("#512BD4");
-                if (inCatalog) 
-                { 
-                    DirectorButtonText = "Remove from Catalog";
-                }
-                else
-                {
-                    DirectorButtonText = "Add to Catalog";
-                }
+                DirectorButtonText = inCatalog ? "Remove from Catalog" : "Add to Catalog";
 
             }
+
             public bool IsEditing
             {
                 get => _isEditing;
@@ -444,7 +450,6 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-            public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
             public event PropertyChangedEventHandler PropertyChanged;
             protected void OnPropertyChanged([CallerMemberName] string name = null)
             {
@@ -452,6 +457,4 @@ namespace Kitbox_project.ViewModels
             }
         }
     }
-
-
 }
