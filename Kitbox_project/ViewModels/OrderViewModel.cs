@@ -11,7 +11,7 @@ namespace Kitbox_project.ViewModels;
 public class OrderViewModel : ILoginViewModel
 {
     private List<OrderItemViewModel> _orders;
-    private readonly DatabaseOrder _dBOrders = new("kitboxer", "kitboxing");
+    private readonly DatabaseOrder _dBOrders = new(Login.login, Password.password);
 
     private bool _activeOrdersVisible;
     private bool _unactiveOrdersVisible;
@@ -186,9 +186,9 @@ public class OrderViewModel : ILoginViewModel
         private bool _confirmButtonVisibility;
         private bool _cancelButtonVisibility;
 
-        private readonly DatabaseLocker _dBLockers = new("kitboxer", "kitboxing");
-        private readonly DatabaseCabinet _dBCabinets = new("kitboxer", "kitboxing");
-        private readonly DatabaseStock _dBStock = new("kitboxer", "kitboxing");
+        private readonly DatabaseLocker _dBLockers = new(Login.login, Password.password);
+        private readonly DatabaseCabinet _dBCabinets = new(Login.login, Password.password);
+        private readonly DatabaseStock _dBStock = new(Login.login, Password.password);
 
         public OrderItemViewModel(int idOrder, int idCustomer, OrderStatus orderStatus, DateTime creationTime) : base(idOrder, idCustomer, orderStatus, creationTime)
         {            

@@ -18,8 +18,8 @@ namespace Kitbox_project.ViewModels
     public class StockViewModel : ILoginViewModel
     {
         private static List<StockItemViewModel> _stockData;
-        private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
-        private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
+        private readonly DatabaseStock DBStock = new DatabaseStock(Login.login, Password.password);
+        private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog(Login.login, Password.password);
 
         public StockViewModel()
         {
@@ -133,10 +133,10 @@ namespace Kitbox_project.ViewModels
             private bool _isValidPrice;
             private string _inputPrice;
 
-            private readonly DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers("kitboxer", "kitboxing");
-            private readonly DatabasePnD DBSupplierPrices = new DatabasePnD("kitboxer", "kitboxing");
-            private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
-            private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
+            private readonly DatabaseSuppliers DBSupplierNames = new DatabaseSuppliers(Login.login, Password.password);
+            private readonly DatabasePnD DBSupplierPrices = new DatabasePnD(Login.login, Password.password);
+            private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog(Login.login, Password.password);
+            private readonly DatabaseStock DBStock = new DatabaseStock(Login.login, Password.password);
 
             public StockItemViewModel(int? id, string reference, string code, int quantity, int incomingQuantity, int outgoingQuantity, bool inCatalog) : base(id, reference, code, quantity, incomingQuantity, outgoingQuantity, inCatalog)
             {

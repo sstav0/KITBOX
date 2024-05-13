@@ -17,11 +17,11 @@ namespace Kitbox_project.ViewModels
 {
     internal class SupplierOrdersViewModel : ILoginViewModel
     {
-        private readonly DatabaseSuppliers databaseSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
-        private readonly DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders("kitboxer", "kitboxing");
-        private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
-        private readonly DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
-        private readonly DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
+        private readonly DatabaseSuppliers databaseSuppliers = new DatabaseSuppliers(Login.login, Password.password);
+        private readonly DatabaseSupplierOrders DBSupplierOrders = new DatabaseSupplierOrders(Login.login, Password.password);
+        private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem(Login.login, Password.password);
+        private readonly DatabasePnD databasePnD = new DatabasePnD(Login.login, Password.password);
+        private readonly DatabaseStock databaseStock = new DatabaseStock(Login.login, Password.password);
         private List<SupplierOrderViewModel> _supplierOrders;
         private ObservableCollection<Supplier> _suppliers;
         private ObservableCollection<SupplierOrderItem> _tempOrderItems = [];
@@ -430,11 +430,11 @@ namespace Kitbox_project.ViewModels
             private bool _isExpanded;
             private string _supplierName;
             private bool _isNotReceived;
-            private readonly DatabaseSuppliers DBSuppliers = new DatabaseSuppliers("kitboxer", "kitboxing");
-            private readonly DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders("kitboxer", "kitboxing");
-            private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem("kitboxer", "kitboxing");
-            private readonly DatabaseStock databaseStock = new DatabaseStock("kitboxer", "kitboxing");
-            private readonly DatabasePnD databasePnD = new DatabasePnD("kitboxer", "kitboxing");
+            private readonly DatabaseSuppliers DBSuppliers = new DatabaseSuppliers(Login.login, Password.password);
+            private readonly DatabaseSupplierOrders DBSupplierOrder = new DatabaseSupplierOrders(Login.login, Password.password);
+            private readonly DatabaseSupplierOrderItem databaseSupplierOrderItem = new DatabaseSupplierOrderItem(Login.login, Password.password);
+            private readonly DatabaseStock databaseStock = new DatabaseStock(Login.login, Password.password);
+            private readonly DatabasePnD databasePnD = new DatabasePnD(Login.login, Password.password);
             public ICommand OnReceivedClicked { get; }
 
             public SupplierOrderViewModel(int orderID, int supplierId, string deliveryDate, double price, string status) : base(orderID, supplierId, deliveryDate, price, status)

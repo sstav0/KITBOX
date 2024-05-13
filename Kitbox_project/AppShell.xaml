@@ -16,30 +16,7 @@
             ContentTemplate="{DataTemplate views:LoginPage}"
             Route="LoginPage" />
         
-        <ShellContent
-            Title="Home Client"
-            ContentTemplate="{DataTemplate views:HomeClientPage}"
-            Route="HomeClientPage" />
-
-        <ShellContent
-            Title="Stock"
-            ContentTemplate="{DataTemplate views:StockPage}"
-            Route="StockPage" />
-
-        <ShellContent
-            Title="Orders"
-            ContentTemplate="{DataTemplate views:OrdersPage}"
-            Route="OrdersPage" />
-
-        <ShellContent
-            Title="Supplier Orders"
-            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
-            Route="SupplierOrdersPage" />
-
-        <!--<ShellContent
-            Title="History of sold products Example"
-            ContentTemplate="{DataTemplate views:SoldHistory}"
-            Route="SoldHistory" />-->
+        
         
     </TabBar>
 
