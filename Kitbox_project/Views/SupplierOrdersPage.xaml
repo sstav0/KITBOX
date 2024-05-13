@@ -71,10 +71,60 @@
                         </HorizontalStackLayout>
 
                         <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="10,5">
+                            <Label Text="Delivery Time" Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
+                            <Label Text="{Binding DeliveryTime}" FontSize="Medium" FontAttributes="Bold" TextColor="Green"/>
+                            <Label Text="days" TextColor="Green" FontSize="Medium" FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="10,5">
+                            <Label Text="Item Price per Unit: " Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
+                            <Label Text="{Binding ItemPrice}" FontSize="Medium" FontAttributes="Bold" TextColor="Green"/>
+                            <Label Text="€" TextColor="Green" FontSize="Medium" FontAttributes="Bold"/>
+                        </HorizontalStackLayout>
+
+                        <HorizontalStackLayout HorizontalOptions="EndAndExpand" VerticalOptions="Center" Margin="10,5">
                             <Label Text="Total Price: " Margin="0,0,5,5" FontSize="Medium" FontAttributes="Bold"/>
                             <Label Text="{Binding TempOrderTotalPrice}" FontSize="Medium" FontAttributes="Bold" TextColor="Green"/>
                             <Label Text="€" TextColor="Green" FontSize="Medium" FontAttributes="Bold"/>
                         </HorizontalStackLayout>
+
+                        <Button Text="Check" Clicked="OnCheckClicked" HorizontalOptions="End">
+                            <Button.Triggers>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="True"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </MultiTrigger>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="False"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Text" Value="Invalid Quantity"/>
+                                </MultiTrigger>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="True"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Text" Value="Invalid Item Code"/>
+                                </MultiTrigger>
+                                <MultiTrigger TargetType="Button">
+                                    <MultiTrigger.Conditions>
+                                        <BindingCondition Binding="{Binding IsValidQuantity}" Value="False"/>
+                                        <BindingCondition Binding="{Binding IsValidCode}" Value="False"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="Text" Value="Invalid Item Code and Quantity"/>
+                                </MultiTrigger>
+                            </Button.Triggers>
+                        </Button>
+
+
                         <Button Text="Add" Clicked="OnAddClicked" HorizontalOptions="End">
                             <Button.Triggers>
                                 <MultiTrigger TargetType="Button">
