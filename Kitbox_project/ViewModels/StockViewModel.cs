@@ -15,18 +15,11 @@ using System.Windows.Input;
 
 namespace Kitbox_project.ViewModels
 {
-    public class StockViewModel : INotifyPropertyChanged
+    public class StockViewModel : ILoginViewModel
     {
-        private Users.User _user;
-        private List<StockItemViewModel> _stockData;
+        private static List<StockItemViewModel> _stockData;
         private readonly DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
         private readonly DatabaseCatalog DBCatalog = new DatabaseCatalog("kitboxer", "kitboxing");
-
-        private bool _isSeller = false;
-        private bool _isCustomer = false;
-        private bool _isDirector = false;
-        private bool _isSecretary = false;
-        private bool _isStorekeeper = false;
 
         public StockViewModel()
         {
@@ -37,82 +30,42 @@ namespace Kitbox_project.ViewModels
                 if (e.PropertyName == nameof(User))
                 {
                     // Update visibilities 
-                    SetRights();
+                    UpdateUserRights(User);
                 }
             };
-
-            User = Users.User.Director;
+            //User = Login.login;
+            User = "director";
         }
 
         private async void LoadDataAsync()
         {
             var stockItems = await DBStock.LoadAll();
             StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
+            OnPropertyChanged(nameof(DisplayedStockData));
         }
 
-        public List<StockItemViewModel> StockData
+        public static List<StockItemViewModel> StockData
         {
             get => _stockData;
             set
             {
                 _stockData = value;
-                OnPropertyChanged(nameof(StockData));
             }
         }
 
-        public Users.User User
-        {
-            get => _user;
-            set
-            {
-                _user = value;
-                OnPropertyChanged(nameof(User));
-            }
-        }
+        public List<StockItemViewModel> DisplayedStockData => StockData;
 
-        public bool IsDirector
+        public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
+
+        public static void UpdateStockQuantities(string code, int? quantity = null, int? incomingQuantity = null, int? outgoingQuantity = null)
         {
-            get => _isDirector;
-            set
+            var stockItem = StockData?.FirstOrDefault(item => item.Code == code);
+            if (stockItem != null)
             {
-                _isDirector = value;
-                OnPropertyChanged(nameof(IsDirector));
-            }
-        }
-        public bool IsSeller
-        {
-            get => _isSeller;
-            set
-            {
-                _isSeller = value;
-                OnPropertyChanged(nameof(IsSeller));
-            }
-        }
-        public bool IsCustomer
-        {
-            get => _isCustomer;
-            set
-            {
-                _isCustomer = value;
-                OnPropertyChanged(nameof(IsCustomer));
-            }
-        }
-        public bool IsStorekeeper
-        {
-            get => _isStorekeeper;
-            set
-            {
-                _isStorekeeper = value;
-                OnPropertyChanged(nameof(IsStorekeeper));
-            }
-        }
-        public bool IsSecretary
-        {
-            get => _isSecretary;
-            set
-            {
-                _isSecretary = value;
-                OnPropertyChanged(nameof(IsSecretary));
+                stockItem.Quantity = quantity.HasValue ? (int)quantity : stockItem.Quantity;
+                stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
+                stockItem.IncomingQuantity = incomingQuantity.HasValue ? (int)incomingQuantity : stockItem.IncomingQuantity;
+                stockItem.OutgoingQuantity = outgoingQuantity.HasValue ? (int)outgoingQuantity : stockItem.OutgoingQuantity;
             }
         }
 
@@ -126,31 +79,6 @@ namespace Kitbox_project.ViewModels
                     string.IsNullOrWhiteSpace(searchText) ||
                     item.Reference.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                     item.Code.Contains(searchText, StringComparison.OrdinalIgnoreCase);
-            }
-        }
-
-        private void SetRights()
-        {
-             switch (User)
-            {
-                case Users.User.Customer:
-                    IsCustomer = true;
-                    break;
-                case Users.User.Seller:
-                    IsSeller = true;
-                    break;
-                case Users.User.Secretary:
-                    IsSecretary = true;
-                    break;
-                case Users.User.Director:
-                    IsDirector = true;
-                    break;
-                case Users.User.Storekeeper:
-                    IsStorekeeper = true;
-                    break;
-                default:
-                    break;
-                
             }
         }
 
@@ -187,11 +115,6 @@ namespace Kitbox_project.ViewModels
             await DBCatalog.Add(dbCatalogItem);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         // ViewModel for stock items
         public class StockItemViewModel : StockItem
@@ -228,16 +151,10 @@ namespace Kitbox_project.ViewModels
                 IsEditingPrice = false;
                 PriceButtonText = "Edit";
                 PriceButtonColor = Color.Parse("#512BD4");
-                if (inCatalog) 
-                { 
-                    DirectorButtonText = "Remove from Catalog";
-                }
-                else
-                {
-                    DirectorButtonText = "Add to Catalog";
-                }
+                DirectorButtonText = inCatalog ? "Remove from Catalog" : "Add to Catalog";
 
             }
+
             public bool IsEditing
             {
                 get => _isEditing;
@@ -535,7 +452,6 @@ namespace Kitbox_project.ViewModels
                 }
             }
 
-            public ICommand LogoutCommand => new Command(LogOutViewModel.LogoutButtonClicked);
             public event PropertyChangedEventHandler PropertyChanged;
             protected void OnPropertyChanged([CallerMemberName] string name = null)
             {

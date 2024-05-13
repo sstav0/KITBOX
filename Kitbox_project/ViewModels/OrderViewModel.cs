@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace Kitbox_project.ViewModels;
 
-public class OrderViewModel : INotifyPropertyChanged
+public class OrderViewModel : ILoginViewModel
 {
     private List<OrderItemViewModel> _orders;
     private DatabaseOrder _dBOrders = new("kitboxer", "kitboxing");
@@ -37,6 +37,17 @@ public class OrderViewModel : INotifyPropertyChanged
         }
     }
 
+    private bool _isSellerOrStorekeeperOrDirector = false;
+    public bool IsSellerOrStorekeeperOrDirector
+    {
+        get => _isSellerOrStorekeeperOrDirector;
+        set
+        {
+            _isSellerOrStorekeeperOrDirector = value;
+            OnPropertyChanged(nameof(IsSellerOrStorekeeperOrDirector));
+        }
+    }
+
     public OrderViewModel()
     {
         PropertyChanged += (sender, e) =>
@@ -46,12 +57,23 @@ public class OrderViewModel : INotifyPropertyChanged
                 // Update visibilities 
                 UpdateOrdersVisibilities();
             }
+            if (e.PropertyName == nameof(User))
+            {
+                UpdateUserRights(User);
+
+                if (IsSeller || IsStorekeeper || IsDirector)
+                {
+                    IsSellerOrStorekeeperOrDirector = true;
+                }
+
+                UpdateStatusButtonsVisibility();
+            }
         };
+
+        LoadAllOrders();
 
         _activeOrdersVisible = true;
         _unactiveOrdersVisible = false;
-
-        LoadAllOrders();
     }
 
     private void UpdateOrdersVisibilities()
@@ -63,6 +85,27 @@ public class OrderViewModel : INotifyPropertyChanged
 
             orderItemVM.OrderItemVisibility = (ActiveOrdersVisible && isActive) || 
                 (UnactiveOrdersVisible && !isActive);
+        }
+    }
+
+    private void UpdateStatusButtonsVisibility()
+    {
+        foreach (OrderItemViewModel orderItemVM in Orders)
+        {
+            if (IsSellerOrStorekeeperOrDirector)
+            {
+                if(orderItemVM.OrderStatus == OrderStatus.PickedUp)
+                {
+                    orderItemVM.CancelButtonVisibility = true;
+                    orderItemVM.UpdateConfirmButtonVisibility();
+                }
+
+                else
+                {
+                    orderItemVM.ConfirmButtonVisibility = true;
+                    orderItemVM.CancelButtonVisibility = true;
+                }
+            }
         }
     }
 
@@ -85,6 +128,8 @@ public class OrderViewModel : INotifyPropertyChanged
         {
             await orderItemVM.LoadOrderStockItems();
         }
+
+        User = Login.login;
     }
 
     public async void ConfirmOrderStatus(OrderItemViewModel orderItemVM)
@@ -99,6 +144,14 @@ public class OrderViewModel : INotifyPropertyChanged
         orderItemVM.CancelOrderStatus();
 
         await UpdateOrderStatus(orderItemVM);
+    }
+
+    public async void DeleteOrder(OrderItemViewModel orderItemVM)
+    {
+        await _dBOrders.Delete(
+            new Dictionary<string, object> { { "idOrder", orderItemVM.IdOrder } });
+
+        Orders.Remove(orderItemVM);
     }
 
     private async Task UpdateOrderStatus(OrderItemViewModel orderItemVM)
@@ -123,13 +176,6 @@ public class OrderViewModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string name = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-
     public class OrderItemViewModel : OrderItem
     {
         private List<OrderStockItem> _orderStockItems;
@@ -138,6 +184,9 @@ public class OrderViewModel : INotifyPropertyChanged
         private string _stringedOrderStatus;
         private string _notifaction;
         private string _confirmButtonText;
+        private string _cancelButtonText;
+        private bool _confirmButtonVisibility;
+        private bool _cancelButtonVisibility;
 
         private DatabaseLocker _dBLockers = new("kitboxer", "kitboxing");
         private DatabaseCabinet _dBCabinets = new("kitboxer", "kitboxing");
@@ -156,7 +205,8 @@ public class OrderViewModel : INotifyPropertyChanged
 
             _stringedCreationTime = creationTime.ToString();
             _stringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
-            _confirmButtonText = ConfirmButtonTextFromOrderStatus();
+            ConfirmButtonTextFromOrderStatus();
+            CancelButtonTextFromOrderStatus();
 
             PropertyChanged += (sender, e) =>
             {
@@ -165,13 +215,19 @@ public class OrderViewModel : INotifyPropertyChanged
                     // Update properties dependent on OrderStatus
 
                     StringedOrderStatus = Status.ConvertOrderStatusToString(OrderStatus);
-                    ConfirmButtonText = ConfirmButtonTextFromOrderStatus();
+                    ConfirmButtonTextFromOrderStatus();
+                    CancelButtonTextFromOrderStatus();
+
+                    UpdateConfirmButtonVisibility();
                 }
                 if (e.PropertyName == nameof(OrderStockItems))
                 {
                     UpdateNotification();
                 }
             };
+
+            _confirmButtonVisibility = false;
+            _cancelButtonVisibility = false;
         }
 
         public List<OrderStockItem> OrderStockItems
@@ -234,6 +290,36 @@ public class OrderViewModel : INotifyPropertyChanged
             }
         }
 
+        public string CancelButtonText
+        {
+            get => _cancelButtonText;
+            set
+            {
+                _cancelButtonText = value;
+                OnPropertyChanged(nameof(CancelButtonText));
+            }
+        }
+
+        public bool ConfirmButtonVisibility
+        {
+            get => _confirmButtonVisibility;
+            set
+            {
+                _confirmButtonVisibility = value;
+                OnPropertyChanged(nameof(ConfirmButtonVisibility));
+            }
+        }
+
+        public bool CancelButtonVisibility
+        {
+            get => _cancelButtonVisibility;
+            set
+            {
+                _cancelButtonVisibility = value;
+                OnPropertyChanged(nameof(CancelButtonVisibility));
+            }
+        }
+
         private void UpdateNotification()
         {
             foreach(OrderStockItem orderStockItem in OrderStockItems)
@@ -252,35 +338,67 @@ public class OrderViewModel : INotifyPropertyChanged
                 }
             }
         }
-        private string ConfirmButtonTextFromOrderStatus()
+        public void UpdateConfirmButtonVisibility()
         {
+            if (OrderStatus == OrderStatus.PickedUp)
+            {
+                ConfirmButtonVisibility = false;
+            }
+        }
+
+        private void ConfirmButtonTextFromOrderStatus()
+        {
+            string newText;
             switch (OrderStatus)
             {
                 case OrderStatus.WaitingConfirmation:
                     {
-                        return "Confirm Order";
+                        newText = "Confirm Order"; break;
                     }
                 case OrderStatus.Ordered:
                     {
-                        return "Confirm Readiness";
+                        newText = "Confirm Readiness"; break;
                     }
                 case OrderStatus.WaitingPickup:
                     {
-                        return "Confirm Pickup";
+                        newText = "Confirm Pickup"; break;
                     }
                 case OrderStatus.PickedUp:
                     {
-                        return "Close Order";
+                        newText = "Close Order"; break;
                     }
                 case OrderStatus.Canceled:
                     {
-                        return "Uncancel Order";
+                        newText = "Uncancel Order"; break;
                     }
                 default:
                     {
                         throw new NotImplementedException();
                     }
             }
+            ConfirmButtonText = newText;
+        }
+
+        private void CancelButtonTextFromOrderStatus()
+        {
+            string newText;
+            switch (OrderStatus)
+            {
+                case OrderStatus.WaitingConfirmation or OrderStatus.Ordered
+                        or OrderStatus.WaitingPickup:
+                    {
+                        newText = "Cancel Order"; break;
+                    }
+                case OrderStatus.Canceled or OrderStatus.PickedUp:
+                    {
+                        newText = "Delete Order"; break;
+                    }
+                default:
+                    {
+                        throw new NotImplementedException();
+                    }
+            }
+            CancelButtonText = newText;
         }
 
         public void ConfirmOrderStatus()
@@ -376,7 +494,7 @@ public class OrderViewModel : INotifyPropertyChanged
                         var lockerDict = await _dBLockers.GetData(
                         new Dictionary<string, string> { { "idCabinet", idCabinet } },
                         new List<string> { "sidePanelRef", "backPanelRef", "verticalBattenRef", "horizontalPanelRef",
-                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef"});
+                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef", "coupelles"});
                         if (lockerDict is not null) 
                         {
                             foreach (var lockerRefs in lockerDict)
@@ -430,7 +548,7 @@ public class OrderViewModel : INotifyPropertyChanged
                         break;
                     case "POR":
                         // door panel = 1 per lvl (if present)
-                        quantities[i] = quantities[i];
+                        quantities[i] = quantities[i] * 2;
                         break;
                     case "TAS":
                         // vertical battens = 4 per cabinet
@@ -446,6 +564,10 @@ public class OrderViewModel : INotifyPropertyChanged
                         break;
                     case "TRR":
                         // back crossbars = 2 per lvl
+                        quantities[i] = quantities[i] * 2;
+                        break;
+                    case "COU":
+                        // coupelles = 2 par locker
                         quantities[i] = quantities[i] * 2;
                         break;
                     default:

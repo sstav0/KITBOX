@@ -79,7 +79,7 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid IsVisible="{Binding OrderItemVisibility}">
+                            <Grid IsVisible="{Binding OrderItemVisibility}" MinimumHeightRequest="35">
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OpenPopupStockItems"/>
                                 </Grid.GestureRecognizers>
@@ -109,10 +109,10 @@
                                        Text="{Binding StringedCreationTime}"/>
 
                                 <Button Grid.Column="6" Clicked="OnConfirmOrderButtonClicked" VerticalOptions="Center"
-                                        Text="{Binding ConfirmButtonText}"/>
+                                        Text="{Binding ConfirmButtonText}" IsVisible="{Binding ConfirmButtonVisibility}"/>
 
                                 <Button Grid.Column="7" Clicked="OnCancelOrderButtonClicked" VerticalOptions="Center"
-                                        Text="Cancel"/>
+                                        Text="{Binding CancelButtonText}" IsVisible="{Binding CancelButtonVisibility}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

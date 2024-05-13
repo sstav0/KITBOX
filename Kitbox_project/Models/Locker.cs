@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 
 namespace Kitbox_project.Models
@@ -32,6 +33,8 @@ namespace Kitbox_project.Models
         private double _price;
         private int _lockerID;
         private DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+        public Dictionary<string, int> partsAvailabilityDict = new Dictionary<string, int>();
+        public bool partsAvailabilityBool = false;
         public readonly Dictionary<string, int> partsToBuildALockerDict = new Dictionary<string, int>
         {
             {"PAG", 2 }, //Side Panel
@@ -130,6 +133,49 @@ namespace Kitbox_project.Models
             return selectedValues;
         }
 
+        public async Task<double> GetPrice()
+        {
+            
+            if (partsAvailabilityDict == null) { Price = 0; return 0; }
+            else
+            {
+                Price = 0;
+                Dictionary<string, string> condition = new Dictionary<string, string>();    
+                List<string> column = new List<string>() { "Price" };
+
+                List<Dictionary<string,string>> data = new List<Dictionary<string,string>>();
+
+                foreach(string part in partsAvailabilityDict.Keys)
+                {
+                    if (part != null)
+                    {
+                        Debug.WriteLine(part);
+                    }
+                }
+
+                foreach(string part in partsAvailabilityDict.Keys)
+                {
+                    if (part != null && !string.IsNullOrWhiteSpace(part))
+                    {
+                        Debug.WriteLine(part);
+                        condition.Clear();
+                        condition.Add("Code", part);
+                        data = await databaseCatalog.GetCatalogData(condition, column);
+                        string price = data[0]["Price"];
+
+                        foreach (string threeLetterRef in partsToBuildALockerDict.Keys)
+                        {
+                            if (part.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Price += Math.Round(partsToBuildALockerDict[threeLetterRef] * float.Parse(price),2);
+                            }
+                        }
+                    }
+                }
+                return Price;
+            }
+        }
+
         /// <summary>
         /// Retrieves the catalog reference based on the specified two-letter reference code.
         /// </summary>
@@ -174,38 +220,30 @@ namespace Kitbox_project.Models
             {
                 if (item.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase))
                 {
-                    Debug.WriteLine("-- 1");
                     if (threeLetterRef == "PAG" || threeLetterRef == "PAR" || threeLetterRef == "PAH") 
                     {
-                        Debug.WriteLine("-- 2");
                         if (item.Substring(item.Length - 2).Contains("Bl", StringComparison.OrdinalIgnoreCase) && this.Color.Contains("White", StringComparison.OrdinalIgnoreCase)) 
                         {
                             returnString = item;
-                            Debug.WriteLine("-- 3");
                         }
                         if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
                         {
                             returnString = item;
-                            Debug.WriteLine("-- 4");
                         }
                     }
                     else if ( threeLetterRef == "POR")
                     {
-                        Debug.WriteLine("-- 5");
                         if (item.Substring(item.Length - 2).Contains("Ve", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Transparent", StringComparison.OrdinalIgnoreCase))
                         {
                             returnString = item;
-                            Debug.WriteLine("-- 6");
                         }
                         else if (item.Substring(item.Length - 2).Contains("Bl", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("White", StringComparison.OrdinalIgnoreCase))
                         {
                             returnString = item;
-                            Debug.WriteLine("-- 7");
                         }
                         else if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
                         {
                             returnString = item;
-                            Debug.WriteLine("-- 8");
                         }
                     }
                     else
@@ -216,7 +254,6 @@ namespace Kitbox_project.Models
                 else if (threeLetterRef == "DOORBOOL" && this.Door != null)
                 {
                     returnString = "1";
-                    Debug.WriteLine("-- 9");
                 }
             }
             return returnString;
@@ -276,8 +313,6 @@ namespace Kitbox_project.Models
             Dictionary<string, int> partsAvailabilityDict = data.Item1;
 
             string catalogRef = await this.GetCatalogRef(threeLetterRef);
-            Debug.WriteLine("catalogRef");
-            Debug.WriteLine(catalogRef);
 
             if (partsAvailabilityDict.ContainsKey(catalogRef) && partsToBuildALockerDict.ContainsKey(threeLetterRef)) 
             { 
@@ -353,6 +388,8 @@ namespace Kitbox_project.Models
                     returnBool = false;
                 }
             }
+            partsAvailabilityDict = returnRegisteredRefDict;
+            partsAvailabilityBool = returnBool;
             return (returnBool, returnRegisteredRefDict);
         }
     }

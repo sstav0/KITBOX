@@ -82,8 +82,15 @@ public partial class OrdersPage : ContentPage
     {
         if (sender is Button button && button.BindingContext is OrderViewModel.OrderItemViewModel orderItemVM)
         {
-            // Call the method in the ViewModel
-            (BindingContext as OrderViewModel)?.CancelOrder(orderItemVM);
+            if (orderItemVM.OrderStatus == Utilities.Status.OrderStatus.Canceled
+                || orderItemVM.OrderStatus == Utilities.Status.OrderStatus.PickedUp)
+            {
+                (BindingContext as OrderViewModel)?.DeleteOrder(orderItemVM);
+            }
+            else
+            {
+                (BindingContext as OrderViewModel)?.CancelOrder(orderItemVM);
+            }
         }
     }
 }
