@@ -124,7 +124,7 @@ namespace Kitbox_project.ViewModels
         /// names are not empty and consist of letters or white spaces. If any of these conditions are not met, the 
         /// method returns true, indicating invalid data; otherwise, it returns false.
         /// </remarks>
-        public bool IsDataInvalid()
+        private bool IsDataInvalid()
         {
             bool invalidData = false;
             if (_entryEmail != null)
@@ -149,7 +149,7 @@ namespace Kitbox_project.ViewModels
             return invalidData;
         }
 
-        public bool IsOrderEmpty()
+        private bool IsOrderEmpty()
         {
             if (Cart.Count() <= 0) { return true; }
             else { return false; }
@@ -165,7 +165,7 @@ namespace Kitbox_project.ViewModels
         /// back to the main page, and displays a success message containing the customer ID and order ID. If any errors 
         /// occur during the registration process, an error message is displayed.
         /// </remarks>
-        public async void RegisterEntry()
+        private async void RegisterEntry()
         {
             bool goToCartStep =await RegisterCustomer();
             bool endRegistery =await RegisterCart(goToCartStep);
@@ -202,7 +202,7 @@ namespace Kitbox_project.ViewModels
         /// appropriate error messages are displayed to the user, and the method returns false. Otherwise, it returns true 
         /// to indicate successful registration.
         /// </remarks>
-        public async Task<bool> RegisterCustomer()
+        private async Task<bool> RegisterCustomer()
         {
             //Check entries & Cart
             bool goNextStep = false;
