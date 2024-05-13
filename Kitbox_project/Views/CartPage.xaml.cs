@@ -19,11 +19,14 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
     private CabinetViewModel _cabviewModel;
     private PopupCustomerRec popup;
 
+    //Shared Dict of every Parts already in the cart to be able to notify customer about parts availability in new cabinet
+    private List<Dictionary<string, int>> registeredPartsRefQuantity = new List<Dictionary<string, int>>();
     //public ICommand OnUpdateButtonClicked { get; }
 
-    public CartPage(Order Order)
+    public CartPage(Order Order, List<Dictionary<string, int>> registeredPartsRefQuantity = null)
 	{
 		order = Order;
+        if(registeredPartsRefQuantity != null) { this.registeredPartsRefQuantity = registeredPartsRefQuantity; }
 
 		InitializeComponent();
 		Cart = new ObservableCollection<CartViewModel>();
@@ -99,8 +102,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 
 	private async void OnAddNewClicked(object sender, EventArgs e)
     {
-		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order);
-
+		CabinetCreatorPage newCabinetCreatorPage = new CabinetCreatorPage(order, this.registeredPartsRefQuantity);
         await Navigation.PushAsync(newCabinetCreatorPage);
     }
 
@@ -115,8 +117,8 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
         {
             OrdersPage newActiveOrdersPage = new OrdersPage();
 
-            newActiveOrdersPage.Orders.Add(order);
-            newActiveOrdersPage.UpdateOrdersFromAfar(order);
+            //newActiveOrdersPage.Orders.Add(order);
+            //newActiveOrdersPage.UpdateOrdersFromAfar(order);
 
             await Navigation.PushAsync(newActiveOrdersPage);
         }
@@ -131,7 +133,7 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
             Cabinet selectedCabinet = selectedCabinetView.Cabinet;
 
             // Navigate to EditCabinetPage for editing with selected cabinet as parameter
-            await Navigation.PushAsync(new EditCabinetPage(order, selectedCabinet));
+            await Navigation.PushAsync(new EditCabinetPage(order, selectedCabinet, registeredPartsRefQuantity));
         }
     }
 

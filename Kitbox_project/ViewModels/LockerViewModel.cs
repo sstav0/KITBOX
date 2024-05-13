@@ -51,6 +51,7 @@ namespace Kitbox_project.ViewModels
             set
             {
                 _height = value;
+                if (Locker != null) { Locker.Height = Convert.ToInt32(_height); }
                 OnPropertyChanged();
             }
         }
@@ -64,6 +65,7 @@ namespace Kitbox_project.ViewModels
             set
             {
                 _color = value;
+                if (Locker != null) { Locker.Color = _color; }
                 OnPropertyChanged();
             }
         }

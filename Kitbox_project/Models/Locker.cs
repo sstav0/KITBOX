@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TEST_ORM;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 
 namespace Kitbox_project.Models
@@ -33,6 +33,8 @@ namespace Kitbox_project.Models
         private double _price;
         private int _lockerID;
         private DatabaseCatalog databaseCatalog = new DatabaseCatalog("storekeeper", "storekeeper");
+        public Dictionary<string, int> partsAvailabilityDict = new Dictionary<string, int>();
+        public bool partsAvailabilityBool = false;
         public readonly Dictionary<string, int> partsToBuildALockerDict = new Dictionary<string, int>
         {
             {"PAG", 2 }, //Side Panel
@@ -55,7 +57,7 @@ namespace Kitbox_project.Models
         /// <param name="color">Color of the panels</param>
         /// <param name="door">Door object associated with this locker</param>
         /// <param name="price">Calculated price of the locker</param>
-        public Locker(int height, int depth, int width, string color, Door door, double price) 
+        public Locker(int height, int depth, int width, string color, Door door, double price)
         {
             this._height = height;
             this._width = width;
@@ -67,7 +69,7 @@ namespace Kitbox_project.Models
 
         public override string ToString()
         {
-            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _width.ToString(), _depth.ToString(), _color, _door.ToString(), this._price.ToString());
+            return String.Format("{0} {1} {2} {3} {4} {5}", _height.ToString(), _width.ToString(), _depth.ToString(), _color, _door != null ? _door.ToString() : null, this._price.ToString());
         }
 
         public int Height
@@ -110,23 +112,69 @@ namespace Kitbox_project.Models
             set => _lockerID = value;
         }
 
-        private Dictionary<string,object> SelectedValues()
+        private Dictionary<string, object> SelectedValues()
         {
             bool isDoor = false;
-            if (this.Door != null) { isDoor = true; }
+            string doorColor = null;
+            string doorMaterial = null;
+            if (this.Door != null) { isDoor = true; doorColor = this.Door.Color; doorMaterial = this.Door.Material; }
+
             Dictionary<string, object> selectedValues = new Dictionary<string, object>
             {
                 { "Height"              ,this.Height },
                 { "Depth"               ,this.Depth },
                 { "Width"               ,this.Width },
-                { "Door Color"          ,this.Door.Color },
-                { "Door Material"       ,this.Door.Material },
+                { "Door Color"          ,doorColor },
+                { "Door Material"       ,doorMaterial },
                 { "Door"                ,isDoor },
-                //{ "Angle Color"         ,this.Depth },
                 { "Panel Color"         ,this.Color }
+                //{ "Angle Color"         ,this.Depth }
             };
             return selectedValues;
-        } 
+        }
+
+        public async Task<double> GetPrice()
+        {
+            
+            if (partsAvailabilityDict == null) { Price = 0; return 0; }
+            else
+            {
+                Price = 0;
+                Dictionary<string, string> condition = new Dictionary<string, string>();    
+                List<string> column = new List<string>() { "Price" };
+
+                List<Dictionary<string,string>> data = new List<Dictionary<string,string>>();
+
+                foreach(string part in partsAvailabilityDict.Keys)
+                {
+                    if (part != null)
+                    {
+                        Debug.WriteLine(part);
+                    }
+                }
+
+                foreach(string part in partsAvailabilityDict.Keys)
+                {
+                    if (part != null && !string.IsNullOrWhiteSpace(part))
+                    {
+                        Debug.WriteLine(part);
+                        condition.Clear();
+                        condition.Add("Code", part);
+                        data = await databaseCatalog.GetCatalogData(condition, column);
+                        string price = data[0]["Price"];
+
+                        foreach (string threeLetterRef in partsToBuildALockerDict.Keys)
+                        {
+                            if (part.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase))
+                            {
+                                Price += Math.Round(partsToBuildALockerDict[threeLetterRef] * float.Parse(price),2);
+                            }
+                        }
+                    }
+                }
+                return Price;
+            }
+        }
 
         /// <summary>
         /// Retrieves the catalog reference based on the specified two-letter reference code.
@@ -160,7 +208,7 @@ namespace Kitbox_project.Models
         /// </remarks>
         public async Task<string> GetCatalogRef(string threeLetterRef)
         {
-            Dictionary<string,object> selectedValues = SelectedValues();
+            Dictionary<string, object> selectedValues = SelectedValues();
 
             Catalog catalog = new Catalog(databaseCatalog, selectedValues);
             string returnString = "";
@@ -170,10 +218,39 @@ namespace Kitbox_project.Models
 
             foreach (string item in references.Keys)
             {
-                if (item.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase)) 
+                if (item.Contains(threeLetterRef, StringComparison.OrdinalIgnoreCase))
                 {
-                    returnString = item;
-                }  
+                    if (threeLetterRef == "PAG" || threeLetterRef == "PAR" || threeLetterRef == "PAH") 
+                    {
+                        if (item.Substring(item.Length - 2).Contains("Bl", StringComparison.OrdinalIgnoreCase) && this.Color.Contains("White", StringComparison.OrdinalIgnoreCase)) 
+                        {
+                            returnString = item;
+                        }
+                        if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                        }
+                    }
+                    else if ( threeLetterRef == "POR")
+                    {
+                        if (item.Substring(item.Length - 2).Contains("Ve", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Transparent", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                        }
+                        else if (item.Substring(item.Length - 2).Contains("Bl", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("White", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                        }
+                        else if (item.Substring(item.Length - 2).Contains("Br", StringComparison.OrdinalIgnoreCase) && this.Door.Color.Contains("Brown", StringComparison.OrdinalIgnoreCase))
+                        {
+                            returnString = item;
+                        }
+                    }
+                    else
+                    {
+                        returnString = item;
+                    }
+                }
                 else if (threeLetterRef == "DOORBOOL" && this.Door != null)
                 {
                     returnString = "1";
@@ -182,6 +259,16 @@ namespace Kitbox_project.Models
             return returnString;
         }
 
+        /// <summary>
+        /// Retrieves the number of available parts in the catalog based on the provided three-letter reference code.
+        /// </summary>
+        /// <param name="threeLetterRef">The reference code of the part, typically a three-letter code.</param>
+        /// <returns>The number of available parts corresponding to the provided reference code in the catalog.</returns>
+        /// <remarks>
+        /// This method asynchronously retrieves data from the catalog and searches for the provided three-letter 
+        /// reference code within the catalog references. It returns the number of available parts associated with 
+        /// the matching reference code. If no matching reference is found, it returns zero.
+        /// </remarks>
         public async Task<int> GetNumberOfPartsAvailable(string threeLetterRef)
         {
             Catalog catalog = new Catalog(databaseCatalog, SelectedValues());
@@ -200,9 +287,24 @@ namespace Kitbox_project.Models
             return returnValue;
         }
 
+        /// <summary>
+        /// Checks the availability of a part in the catalog based on its reference and optional registered quantity.
+        /// </summary>
+        /// <param name="threeLetterRef">The reference code of the part, typically a three-letter code.</param>
+        /// <param name="quantityRegistered">The quantity of the part registered. Default is 0.</param>
+        /// <returns>True if the part is available according to the catalog and optional registered quantity; otherwise, false.</returns>
+        /// <remarks>
+        /// This method asynchronously retrieves data from the catalog and compares it with the provided reference code 
+        /// and registered quantity to determine if the part is available. If the part is found in the catalog and either no 
+        /// quantity is registered or the registered quantity is less than or equal to the available quantity, the method 
+        /// returns true. If the provided reference code corresponds to a part not found in the catalog and the part is 
+        /// expected in the locker, the method also returns true to handle cases where the catalog reference might not exist 
+        /// but the part is still required for the locker assembly.
+        /// </remarks>
         private async Task<bool> IsPartAvailable(string threeLetterRef, int quantityRegistered = 0)
         {
             Dictionary<string, object> selectedValues = SelectedValues();
+
             Catalog catalog = new Catalog(databaseCatalog, selectedValues);
 
             bool returnValue = false;
@@ -232,14 +334,34 @@ namespace Kitbox_project.Models
             return returnValue;
         }
 
-        public async Task<(bool, Dictionary<string, int>)> ArePartsAvailable(Dictionary<string, int> registeredCatalogRef = null)
+
+        /// <summary>
+        /// Checks the availability of multiple parts required for building a locker assembly.
+        /// </summary>
+        /// <param name="registeredCatalogRef">Optional. A dictionary containing the registered catalog references 
+        /// along with their quantities. If null, the default dictionary containing parts required to build the locker 
+        /// will be used.</param>
+        /// <returns>A tuple containing a boolean indicating whether all parts are available, and a dictionary 
+        /// containing the registered catalog references along with their updated quantities.</returns>
+        /// <remarks>
+        /// This method iterates over each part required to build a locker and checks its availability using the 
+        /// <see cref="IsPartAvailable"/> method. It updates the quantity of registered catalog references accordingly 
+        /// based on the parts required for the locker assembly. If any part is not available, the method returns false; 
+        /// otherwise, it returns true along with the updated dictionary of registered catalog references.
+        /// </remarks>
+        public async Task<(bool, Dictionary<string, int>)> ArePartsAvailable(List<Dictionary<string, int>> registeredCatalogRef = null)
         {
             bool returnBool = true;
             //setup registererRef Dictionary
             Dictionary<string, int> registeredRef = new Dictionary<string, int>();
+            Dictionary<string, int> returnRegisteredRefDict = new Dictionary<string, int>();
+
             if (registeredCatalogRef != null)
             {
-                registeredRef = registeredCatalogRef;
+                registeredRef = registeredCatalogRef
+                    .SelectMany(dict => dict)
+                    .GroupBy(kv => kv.Key, kv => kv.Value)
+                    .ToDictionary(g => g.Key, g => g.Sum());
             }
             else
             {
@@ -247,12 +369,15 @@ namespace Kitbox_project.Models
             }
 
             //for every parts needed in a locker
-            foreach (string threeLetterRef in partsToBuildALockerDict.Keys)
+            foreach (string threeLetterRef in partsToBuildALockerDict.Keys.ToList())
             {
                 //Get the catalog reference for this part
                 string catalogRef = await GetCatalogRef(threeLetterRef);
+                if (catalogRef != null && !returnRegisteredRefDict.ContainsKey(catalogRef)) { returnRegisteredRefDict.Add(catalogRef, partsToBuildALockerDict[threeLetterRef]); }
+               
+
                 //if the reference isn't already used for other lockers of this same cabinet
-                if (!registeredRef.ContainsKey(catalogRef)) 
+                if (!registeredRef.ContainsKey(catalogRef))
                 {
                     registeredRef.Add(catalogRef, 0);
                 }
@@ -263,7 +388,9 @@ namespace Kitbox_project.Models
                     returnBool = false;
                 }
             }
-            return (returnBool, registeredRef);
+            partsAvailabilityDict = returnRegisteredRefDict;
+            partsAvailabilityBool = returnBool;
+            return (returnBool, returnRegisteredRefDict);
         }
     }
 }

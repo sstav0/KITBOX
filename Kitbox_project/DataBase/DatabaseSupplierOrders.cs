@@ -15,21 +15,15 @@ namespace Kitbox_project
             tablename = "SupplierOrder";
         }
 
-        public static async Task<List<SupplierOrder>> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
+        public static List<SupplierOrder> ConvertToSupplierOrder(List<Dictionary<string, string>> data)
         {
-            DatabaseStock DBStock = new DatabaseStock("kitboxer", "kitboxing");
-
             List<SupplierOrder> supplierOrders = new List<SupplierOrder>();
             foreach (var order in data)
             {
-                var item = await DBStock.GetData(new Dictionary<string, string> { { "Code", order["itemCode"] } });
-
                 supplierOrders.Add(new SupplierOrder(
                     int.Parse(order["idSupplierOrder"]),
-                    DatabaseStock.ConvertToStockItem(item)[0],
                     int.Parse(order["idSupplier"]),
-                    int.Parse(order["delay"]),
-                    int.Parse(order["quantity"]),
+                    order["deliveryDate"],
                     double.Parse(order["price"]),
                     order["status"]
                 ));

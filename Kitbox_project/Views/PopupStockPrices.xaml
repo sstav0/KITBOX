@@ -20,7 +20,7 @@
             <HorizontalStackLayout Margin="10" Spacing="10">
                 <Label Text="{Binding Code}" FontSize="Title" FontAttributes="Bold" HorizontalOptions="Center" Margin="10"/>
 
-                <Button Text="{Binding DirectorButtonText}" Clicked="DirectorButtonCLicked"  HorizontalOptions="End"/>
+                <Button Text="{Binding DirectorButtonText}" IsVisible="{Binding IsDirector}" Clicked="DirectorButtonCLicked"  HorizontalOptions="End"/>
             </HorizontalStackLayout>
             <ScrollView>
                 <CollectionView ItemsSource="{Binding PriceItems}" SelectionMode="None" HorizontalOptions="Center" Margin="10">
@@ -54,7 +54,7 @@
                     </Entry.Triggers>
                 </Entry>
                 <Label Text="€" FontSize="Body" VerticalOptions="Center"/>
-                <Button Text="{Binding PriceButtonText}" Clicked="OnEditPriceClicked" BackgroundColor="{Binding ButtonColor}" VerticalOptions="Center" Margin="5,5,0,5" Padding="14,5" HeightRequest="35" FontSize="Body">
+                <Button Text="{Binding PriceButtonText}" IsVisible="{Binding IsSecretary}" Clicked="OnEditPriceClicked" BackgroundColor="{Binding PriceButtonColor}" VerticalOptions="Center" Margin="5,5,0,5" Padding="14,5" HeightRequest="35" FontSize="Body">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" Binding="{Binding IsValidPrice}" Value="True">
                             <Setter Property="BackgroundColor" Value="{Binding PriceButtonColor}" />
