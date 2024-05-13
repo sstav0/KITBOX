@@ -96,7 +96,7 @@ public partial class SupplierOrdersPage : ContentPage
         {
             if (PickerSupplier.SelectedIndex != -1)
             {
-                supplierOrdersViewModel.CheckItems(ItemCode.Text, (Supplier)PickerSupplier.SelectedItem, int.Parse(Quantity.Text));
+                supplierOrdersViewModel.CheckItems((Supplier)PickerSupplier.SelectedItem);
             }
             else
             {

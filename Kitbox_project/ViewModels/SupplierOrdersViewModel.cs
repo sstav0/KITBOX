@@ -30,7 +30,7 @@ namespace Kitbox_project.ViewModels
         private string _inputCode;
         private bool _isValidQuantity;
         private bool _isValidCode;
-        private string _deliveryTime;
+        private int _deliveryTime;
         private double _itemPrice;
         private bool _isOrderNotEmpty;
         private double _tempOrderTotalPrice;
@@ -64,7 +64,6 @@ namespace Kitbox_project.ViewModels
             {
                 SupplierOrders = SupplierOrderViewModel.ConvertToViewModels(DatabaseSupplierOrders.ConvertToSupplierOrder(supplierOrders));
             }
-
             Suppliers = new ObservableCollection<Supplier>(DatabaseSuppliers.ConvertToSupplier(suppliers));
         }
 
@@ -107,8 +106,6 @@ namespace Kitbox_project.ViewModels
                 _inputCode = value;
                 OnPropertyChanged(nameof(InputCode));
                 ValidateCode();
-                
-                
             }
         }
 
@@ -119,7 +116,6 @@ namespace Kitbox_project.ViewModels
             {
                 _isValidQuantity = value;
                 OnPropertyChanged(nameof(IsValidQuantity));
-                
             }
         }
 
@@ -133,14 +129,13 @@ namespace Kitbox_project.ViewModels
             }
         }
 
-        public string DeliveryTime
+        public int DeliveryTime
         {
             get => _deliveryTime;
             set
             {
                 _deliveryTime = value;
                 OnPropertyChanged(nameof(DeliveryTime));
-                
             }
         }
         public double ItemPrice
@@ -150,7 +145,6 @@ namespace Kitbox_project.ViewModels
             {
                 _itemPrice = value;
                 OnPropertyChanged(nameof(ItemPrice));
-                
             }
         }
         
@@ -162,7 +156,6 @@ namespace Kitbox_project.ViewModels
             {
                 _isOrderNotEmpty = value;
                 OnPropertyChanged(nameof(IsOrderNotEmpty));
-                
             }
         }
 
@@ -173,8 +166,6 @@ namespace Kitbox_project.ViewModels
             {
                 _suppliers = value;
                 OnPropertyChanged(nameof(Suppliers));
-                
-                
             }
         }
 
@@ -185,7 +176,6 @@ namespace Kitbox_project.ViewModels
             {
                 _selectedSupplier = value;
                 OnPropertyChanged(nameof(SelectedSupplier));
-                
             }
         }
 
@@ -245,25 +235,23 @@ namespace Kitbox_project.ViewModels
 
         public async void GetDeliveryTime()
         {
-            
             var res = await databasePnD.GetData(new Dictionary<string, string> {{"Code", InputCode},{ "idSupplier", SelectedSupplier.Id.ToString() }}, new List<string> {"Delay"});
             if (res != null && res.Count > 0 && res[0].ContainsKey("Delay"))
             {
-                DeliveryTime = res[0]["Delay"];
+                DeliveryTime = int.Parse(res[0]["Delay"]);
             }
             else
             {
-                DeliveryTime = "No delivery";
+                DeliveryTime = 0;
             }
         }
 
         public async void GetItemPrice()
         {
-            
             var res = await databasePnD.GetData(new Dictionary<string, string> {{"Code", InputCode},{ "idSupplier", SelectedSupplier.Id.ToString() }}, new List<string> {"Price"});
             if (res != null && res.Count > 0 && res[0].ContainsKey("Price"))
             {
-                ItemPrice =double.Parse(res[0]["Price"]);
+                ItemPrice = double.Parse(res[0]["Price"]);
             }
             else
             {
@@ -271,14 +259,9 @@ namespace Kitbox_project.ViewModels
             }
         }
         
-        public async void  CheckItems(string itemCode, Supplier supplier, int quantity)
+        public void CheckItems(Supplier supplier)
         {
-           SelectedSupplier = supplier;
-
-            var data = await databasePnD.GetData(
-                               new Dictionary<string, string> { { "Code", itemCode }, { "idSupplier", SelectedSupplier.Id.ToString() } });
-
-            
+            SelectedSupplier = supplier;
             CheckSupplierSelection();
             ValidateCode();
             GetDeliveryTime();
@@ -287,7 +270,6 @@ namespace Kitbox_project.ViewModels
         public async void AddNewItem(string itemCode, Supplier supplier, int quantity)
         {
             SelectedSupplier = supplier;
-
             var data = await databasePnD.GetData(
                                new Dictionary<string, string> { { "Code", itemCode }, { "idSupplier", SelectedSupplier.Id.ToString() } });
 
