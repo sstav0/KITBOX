@@ -16,6 +16,28 @@ namespace Kitbox_project.Views
         int index = 1;
         List<Dictionary<string, int>> registeredPartsRefQuantity = new List<Dictionary<string, int>>();
 
+        private int _totalSize;
+        public int TotalSize
+        {
+            get => _totalSize;
+            set
+            {
+                _totalSize = value;
+                OnPropertyChanged(); // Implement INotifyPropertyChanged if needed
+            }
+        }
+
+        private float _totalPrice;
+        public float TotalPrice
+        {
+            get => _totalPrice;
+
+            set
+            {
+                _totalPrice = value;
+                OnPropertyChanged(); // Implement INotifyPropertyChanged if needed
+            }
+        }
 
 
         public EditCabinetPage(Order order, Cabinet cabinet, List<Dictionary<string, int>> registeredPartsRefQuantity = null)
@@ -28,32 +50,51 @@ namespace Kitbox_project.Views
             BindingContext = _viewModel;
             LogOutButton.BindingContext = _logOutViewModel;
             LoadAvailableLockers();
-            Debug.WriteLine("Debug1");
             DefaultPickers();
-            DisablePickers();
+            calculateTotalSize();
+            calculateTotalPrice();
+
         }
 
-        private void DisablePickers()
+
+        public void LockerDepthPickerFocused(object sender, FocusEventArgs e)
         {
-            if (_viewModel.AvailableLockers.Count() == 0)
+            _viewModel.UpdatePickerList("Depth");
+        }
+        void DoorMaterialPickerFocused(object sender, FocusEventArgs e)
+        {
+            if (_viewModel.SelectedDoorColorItem != null)
             {
-                CabinetWidth.IsEnabled = true;
-                CabinetDepth.IsEnabled = true;
-                AngleIronColor.IsEnabled = true;
+                _viewModel.SelectedDoorColorItem = null;
+                _viewModel.UpdatePickerList("Door_color");
             }
-            else
-            {
-                CabinetWidth.IsEnabled = false;
-                CabinetDepth.IsEnabled = false;
-                AngleIronColor.IsEnabled = false;
-            }
+            _viewModel.UpdatePickerList("Door_material");
+        }
+        void DoorColorPickerFocused(object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Door_color");
+        }
+        void LockerHeightPickerFocused(object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Height");
+        }
+        void LockerWidthPickerFocused(object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Width");
+        }
+        void LockerColorPickerFocused(object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Panel_color");
+        }
+        void AngleIronColorPickerFocused(object sender, FocusEventArgs e)
+        {
+            _viewModel.UpdatePickerList("Angle_color");
         }
 
         private void LoadAvailableLockers()
         {
             _viewModel.AvailableLockers = new ObservableCollection<LockerViewModel>
             {
-
             };
         }
 
@@ -64,6 +105,7 @@ namespace Kitbox_project.Views
             _viewModel.SelectedWidthItem = _cabinet.Length.ToString();
             _viewModel.SelectedAngleIronColor = _cabinet.AngleIronColor;
 
+
             //Debug.WriteLine(_viewModel.SelectedDepthItem);
             //Debug.WriteLine(_viewModel.SelectedWidthItem);
             //Debug.WriteLine(_viewModel.SelectedAngleIronColor);
@@ -71,6 +113,7 @@ namespace Kitbox_project.Views
 
             foreach (var locker in _cabinet.GetObservableLockers())
             {
+
                 Door door;
 
                 if (locker.Door != null)
@@ -90,18 +133,29 @@ namespace Kitbox_project.Views
                 registeredPartsRefQuantity.Add(locker.partsRegisteredForLocker);
                 _viewModel.registeredPartsRefQuantityList = registeredPartsRefQuantity;
 
+
+
+                Locker lockerToAdd = new Locker(Convert.ToInt32(locker.Height),
+                                                Convert.ToInt32(locker.Depth),
+                                                Convert.ToInt32(locker.Width),
+                                                locker.Color,
+                                                door,
+                                                locker.Price);
+                Debug.WriteLine(lockerToAdd);
                 LockerViewModel newLocker = new LockerViewModel
                 {
+                    Locker = lockerToAdd,
                     Height = Convert.ToInt32(locker.Height),
                     Color = locker.Color,
                     Door = door,
-                    NotePartsAvailability = locker.partsAvailabilityBool ?  "" : "Some parts are currently out of stocks"
-            };
+                    Price = Convert.ToInt32(locker.Price),
+
+                };
                 newLocker.LockerID = index;
 
                 _viewModel.AvailableLockers.Add(newLocker);
                 // Display locker details as per your requirement
-                Debug.WriteLine($"Locker Color: {locker.Color}, Height: {locker.Height}, Width: {locker.Width}, Depth: {locker.Depth}" +
+                Debug.WriteLine($"Locker Color: {locker.Color}, Height: {locker.Height}, Width: {locker.Width}, Depth: {locker.Depth}, Price: {locker.Price}" +
                                (locker.Door != null ? $", Door Color: {locker.Door.Color}" : ""));
                 index++;
             }
@@ -120,20 +174,19 @@ namespace Kitbox_project.Views
             //Check if pickers are correctly completed
             if (_viewModel.selectedValues.ContainsValue(null))
             {
+
                 if (!_viewModel.IsDoorChecked)
                 {
                     Dictionary<string, object> data = _viewModel.selectedValues;
                     data.Remove("Door_color");
                     data.Remove("Door_material");
-                    if (data.ContainsValue(null))
-                    {
-                        return;
-                    }
+
                 }
                 else
                 {
                     return;
                 }
+
             }
 
             // Create a new LockerViewModel based on the selected parameters
@@ -173,9 +226,53 @@ namespace Kitbox_project.Views
             // Add the new locker to the AvailableLockers collection
             _viewModel.AvailableLockers.Add(newLocker);
             Debug.WriteLine(_viewModel.AvailableLockers.Count());
-            DisablePickers();
+            calculateTotalSize();
+            calculateTotalPrice();
 
         }
+        private void calculateTotalSize()
+        {
+            // Convert ObservableCollection<LockerViewModel> to List<Locker>
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                Convert.ToInt32(viewModel.Height),
+                Convert.ToInt32(_viewModel.SelectedDepthItem),
+                Convert.ToInt32(_viewModel.SelectedWidthItem),
+                viewModel.Color,
+                viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
+                0 // Price
+            )).ToList();
+
+            TotalSize = lockers.Sum(locker => locker.Height);
+            Debug.WriteLine(TotalSize);
+        }
+
+        private async void calculateTotalPrice()
+        {
+            TotalPrice = 0;
+            foreach (LockerViewModel locker in _viewModel.AvailableLockers)
+            {
+                Debug.WriteLine("The locker are");
+                Debug.WriteLine(locker.Locker);
+                Debug.WriteLine(locker.Locker.Price);
+                if (locker != null && locker.Locker != null)
+                {
+                    if (locker.Locker.Price == 0)
+                    {
+                        Debug.WriteLine(Convert.ToSingle(await locker.Locker.GetPrice()));
+                        TotalPrice += Convert.ToSingle(await locker.Locker.GetPrice());
+                    }
+                    else
+                    {
+                        TotalPrice += Convert.ToInt32(locker.Locker.Price);
+                    }
+
+                    Math.Round(TotalPrice, 2);
+
+                }
+            }
+        }
+
+
 
         private void ModifySelectedLocker_Clicked(object sender, EventArgs e)
         {
@@ -193,6 +290,9 @@ namespace Kitbox_project.Views
             {
                 Debug.WriteLine("Please Select a locker");
             }
+            calculateTotalSize();
+            calculateTotalPrice();
+
 
         }
 
@@ -219,7 +319,7 @@ namespace Kitbox_project.Views
                     Debug.WriteLine("Error: No locker selected.");
                 }
             }
-            DisablePickers();
+            calculateTotalSize();
 
         }
 
@@ -242,6 +342,9 @@ namespace Kitbox_project.Views
                 locke.LockerID = index;
                 index +=1;
             }
+            calculateTotalSize();
+            calculateTotalPrice();
+
         }
 
 
@@ -253,24 +356,24 @@ namespace Kitbox_project.Views
             _cabinet.Length = Convert.ToInt32(_viewModel.SelectedWidthItem);
             foreach (var locker in _cabinet.GetObservableLockers())
             {
+                Debug.WriteLine(locker);
+                Debug.WriteLine(locker.Price);
                 _cabinet.TestRemoveLocker(locker);  
             }
             _cabinet.GetObservableLockers().Clear();
-            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel =>
-            {
-                Door door = viewModel.Door != null ?
-                    new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) :
-                    null;
+            Debug.WriteLine(_cabinet.GetObservableLockers().Count());
+            List<Locker> lockers = _viewModel.AvailableLockers.Select(viewModel => new Locker(
+                            Convert.ToInt32(viewModel.Height),
+                            Convert.ToInt32(_viewModel.SelectedDepthItem),
+                            Convert.ToInt32(_viewModel.SelectedWidthItem),
+                            viewModel.Color,
+                            viewModel.Door != null ? new Door(viewModel.Door.Color, viewModel.Door.Material, Convert.ToInt32(_viewModel.SelectedWidthItem), Convert.ToInt32(_viewModel.SelectedHeightItem)) : null,
+                            Math.Round(Convert.ToDouble(viewModel.Locker.Price), 2)
+                        )).ToList();
 
-                return new Locker(
-                    Convert.ToInt32(viewModel.Height),
-                    Convert.ToInt32(_viewModel.SelectedDepthItem),
-                    Convert.ToInt32(_viewModel.SelectedWidthItem),
-                    viewModel.Color,
-                    door,
-                    0 // Price
-                );
-            }).ToList();
+            TotalSize = lockers.Sum(locker => locker.Height);
+            Debug.WriteLine("La taille totale est");
+            Debug.WriteLine(TotalSize);
 
 
             foreach (var locker in lockers)
