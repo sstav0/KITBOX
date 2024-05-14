@@ -243,7 +243,7 @@ namespace Kitbox_project.ViewModels
                     //system to add the order in the DB
                     Dictionary<string, object> dataOrder = new Dictionary<string, object> {
                     { "idCustomer", Int32.Parse(idCustomer) },
-                    { "status", "Ordered" },
+                    { "status", "waiting confirmation" },
                     { "DateTimeColumn", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}
                     };
                     await databaseOrder.Add(dataOrder);
