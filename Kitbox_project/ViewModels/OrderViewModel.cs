@@ -315,17 +315,25 @@ public class OrderViewModel : ILoginViewModel
         {
             foreach(OrderStockItem orderStockItem in OrderStockItems)
             {
-                if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder)
+                if (OrderStatus != OrderStatus.Canceled || OrderStatus == OrderStatus.PickedUp) 
                 {
-                    Notification = "Not enough items to fulfill the order";
+                    if (OrderStatus == OrderStatus.Ordered || OrderStatus == OrderStatus.WaitingConfirmation)
+                    {
+                        if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder + 10)
+                        {
+                            Notification = "Nearly not enough items to fulfill the order. ";
+                        }
+                        if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder)
+                        {
+                            Notification = "Not enough items to fulfill the order.";
+                        }
+                        if (DateTime.Now > CreationTime.AddDays(14))
+                        {
+                            Notification += "\nOrder older than 2 weeks.";
+                        }
 
-                    break;
-                }
-                if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder + 10)
-                {
-                    Notification = "Nearly not enough items to fulfill the order";
-
-                    break;
+                        break;
+                    }
                 }
             }
         }
