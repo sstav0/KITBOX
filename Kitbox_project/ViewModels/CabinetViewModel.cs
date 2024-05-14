@@ -460,7 +460,7 @@ namespace Kitbox_project.ViewModels
 
             if (data.Keys.Contains(param))
             {
-                newValue = data[param].ConvertAll(obj => obj.ToString());
+                newValue = data[param].ConvertAll(obj => obj.ToString()); 
             }
 
             if (newValue != null) {
