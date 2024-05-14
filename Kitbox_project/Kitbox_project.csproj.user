@@ -50,9 +50,6 @@
     <MauiXaml Update="Views\PopupStockPrices.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>
-    <MauiXaml Update="Views\SecretaryPricePage.xaml">
-      <SubType>Designer</SubType>
-    </MauiXaml>
     <MauiXaml Update="Views\OrdersPage.xaml">
       <SubType>Designer</SubType>
     </MauiXaml>

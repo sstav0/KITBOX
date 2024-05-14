@@ -557,7 +557,7 @@ public class OrderViewModel : ILoginViewModel
                         quantities[i] = quantities[i] * 2;
                         break;
                     case "COU":
-                        // coupelles = 2 par locker
+                        // coupelles = 2 per locker with a wooden door
                         quantities[i] = quantities[i] * 2;
                         break;
                     default:

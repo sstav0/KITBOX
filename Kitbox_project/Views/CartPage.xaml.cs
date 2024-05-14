@@ -110,17 +110,6 @@ public partial class CartPage : ContentPage, INotifyPropertyChanged
 	{
 		order.Status = "Waiting Confirmation";
         DisplayPopup();
-/*
-        if (goToNextPage)
-        {
-            OrdersPage newActiveOrdersPage = new OrdersPage();
-
-            //newActiveOrdersPage.Orders.Add(order);
-            //newActiveOrdersPage.UpdateOrdersFromAfar(order);
-
-            await Navigation.PushAsync(newActiveOrdersPage);
-        }
-*/
     }
 
     private async void OnEditClicked(object sender, EventArgs e)
