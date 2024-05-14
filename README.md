@@ -37,7 +37,8 @@ git clone https://github.com/sstav0/KITBOX.git
 [Class Diagram]
 
 ### Relationship Entity Diagram
-[Relationship Entity Diagram]
+![Relationship Entity Diagram](Kitbox_project/Resources/Images/relationship_entity_diagram_final.jpg)
+![Relationnal Diagram](Kitbox_project/Resources/Images/relationnal_diagram_final.jpg)
 
 ## 4. User Guide
 [Explanations & UI]
