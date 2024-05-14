@@ -484,14 +484,17 @@ public class OrderViewModel : ILoginViewModel
                         var lockerDict = await _dBLockers.GetData(
                         new Dictionary<string, string> { { "idCabinet", idCabinet } },
                         new List<string> { "sidePanelRef", "backPanelRef", "verticalBattenRef", "horizontalPanelRef",
-                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef", "coupelles"});
+                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef", "coupelle"});
                         if (lockerDict is not null) 
                         {
                             foreach (var lockerRefs in lockerDict)
                             {
                                 foreach (var lockerRef in lockerRefs.Values.ToList())
                                 {
-                                    refs.Add(lockerRef);
+                                    if (!string.IsNullOrEmpty(lockerRef))
+                                    {
+                                        refs.Add(lockerRef);
+                                    }
                                 }
 
                             }
