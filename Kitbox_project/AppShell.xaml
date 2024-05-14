@@ -16,7 +16,7 @@
             ContentTemplate="{DataTemplate views:LoginPage}"
             Route="LoginPage" />
         
-        <ShellContent
+        <!--<ShellContent
             Title="Home Client"
             ContentTemplate="{DataTemplate views:HomeClientPage}"
             Route="HomeClientPage" />
@@ -34,7 +34,7 @@
         <ShellContent
             Title="Supplier Orders"
             ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
-            Route="SupplierOrdersPage" />
+            Route="SupplierOrdersPage" />-->
 
         <!--<ShellContent
             Title="History of sold products Example"

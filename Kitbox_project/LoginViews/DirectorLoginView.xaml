@@ -8,16 +8,16 @@
     Shell.FlyoutBehavior="Disabled"
     Shell.NavBarIsVisible="False">
     <TabBar>
+        <ShellContent
+            Title="Supplier Orders"
+            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
+            Route="SupplierOrdersPage" />
 
         <ShellContent
             Title="Stock"
             ContentTemplate="{DataTemplate views:StockPage}"
             Route="StockPage" />
 
-        <ShellContent
-            Title="Supplier Orders"
-            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
-            Route="SupplierOrdersPage" />
     </TabBar>
 
 </Shell>

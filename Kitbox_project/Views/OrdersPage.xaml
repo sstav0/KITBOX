@@ -103,7 +103,7 @@
                                        Text="{Binding StringedOrderStatus}"/>
 
                                 <Label Grid.Column="3" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
-                                       Text="{Binding Notification}" TextColor="Orange"/>
+                                       Text="{Binding Notification}" TextColor="Orange" MaxLines="2" LineHeight="2"/>
 
                                 <Label Grid.Column="4" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
                                        Text="{Binding StringedCreationTime}"/>

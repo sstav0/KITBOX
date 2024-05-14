@@ -32,9 +32,11 @@ namespace Kitbox_project.ViewModels
                     // Update visibilities 
                     UpdateUserRights(User);
                 }
+                if (e.PropertyName == nameof(IsDirector))
+                {
+                    UpdateDirectorRights();
+                }
             };
-            //User = Login.login;
-            User = "director";
         }
 
         private async void LoadDataAsync()
@@ -42,6 +44,8 @@ namespace Kitbox_project.ViewModels
             var stockItems = await DBStock.LoadAll();
             StockData = StockItemViewModel.ConvertToViewModels(DatabaseStock.ConvertToStockItem(stockItems));
             OnPropertyChanged(nameof(DisplayedStockData));
+
+            User = Login.login;
         }
 
         public static List<StockItemViewModel> StockData
@@ -66,6 +70,14 @@ namespace Kitbox_project.ViewModels
                 stockItem.InputQuantity = Convert.ToString(stockItem.Quantity);
                 stockItem.IncomingQuantity = incomingQuantity.HasValue ? (int)incomingQuantity : stockItem.IncomingQuantity;
                 stockItem.OutgoingQuantity = outgoingQuantity.HasValue ? (int)outgoingQuantity : stockItem.OutgoingQuantity;
+            }
+        }
+
+        private void UpdateDirectorRights()
+        {
+            foreach (var item in StockData)
+            {
+                item.IsDirector = IsDirector;
             }
         }
 
@@ -124,6 +136,7 @@ namespace Kitbox_project.ViewModels
             private bool _isValidQuantity;
             private bool _stockItemVisibility;
             private string _directorButtonText;
+            private bool _isDirector;
 
             private List<PriceItem> _priceItems = new List<PriceItem>();
             private double _catalogPrice;
@@ -221,6 +234,16 @@ namespace Kitbox_project.ViewModels
                 {
                     _directorButtonText = value;
                     OnPropertyChanged(nameof(DirectorButtonText));
+                }
+            }
+
+            public bool IsDirector
+            {
+                get => _isDirector;
+                set
+                {
+                    _isDirector = value;
+                    OnPropertyChanged(nameof(IsDirector));
                 }
             }
 

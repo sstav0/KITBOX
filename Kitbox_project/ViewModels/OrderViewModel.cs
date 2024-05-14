@@ -315,17 +315,25 @@ public class OrderViewModel : ILoginViewModel
         {
             foreach(OrderStockItem orderStockItem in OrderStockItems)
             {
-                if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder)
+                if (OrderStatus != OrderStatus.Canceled || OrderStatus == OrderStatus.PickedUp) 
                 {
-                    Notification = "Not enough items to fulfill the order";
+                    if (OrderStatus == OrderStatus.Ordered || OrderStatus == OrderStatus.WaitingConfirmation)
+                    {
+                        if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder + 10)
+                        {
+                            Notification = "Nearly not enough items to fulfill the order. ";
+                        }
+                        if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder)
+                        {
+                            Notification = "Not enough items to fulfill the order.";
+                        }
+                        if (DateTime.Now > CreationTime.AddDays(14))
+                        {
+                            Notification += "\nOrder older than 2 weeks.";
+                        }
 
-                    break;
-                }
-                if (orderStockItem.Quantity <= orderStockItem.QuantityInOrder + 10)
-                {
-                    Notification = "Nearly not enough items to fulfill the order";
-
-                    break;
+                        break;
+                    }
                 }
             }
         }
@@ -484,14 +492,17 @@ public class OrderViewModel : ILoginViewModel
                         var lockerDict = await _dBLockers.GetData(
                         new Dictionary<string, string> { { "idCabinet", idCabinet } },
                         new List<string> { "sidePanelRef", "backPanelRef", "verticalBattenRef", "horizontalPanelRef",
-                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef", "coupelles"});
+                            "sideCrossbarRef", "frontCrossbarRef", "backCrossbarRef", "coupelle"});
                         if (lockerDict is not null) 
                         {
                             foreach (var lockerRefs in lockerDict)
                             {
                                 foreach (var lockerRef in lockerRefs.Values.ToList())
                                 {
-                                    refs.Add(lockerRef);
+                                    if (!string.IsNullOrEmpty(lockerRef))
+                                    {
+                                        refs.Add(lockerRef);
+                                    }
                                 }
 
                             }
@@ -557,7 +568,7 @@ public class OrderViewModel : ILoginViewModel
                         quantities[i] = quantities[i] * 2;
                         break;
                     case "COU":
-                        // coupelles = 2 par locker
+                        // coupelles = 2 per locker with a wooden door
                         quantities[i] = quantities[i] * 2;
                         break;
                     default:

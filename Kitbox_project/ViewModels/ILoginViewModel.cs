@@ -55,8 +55,11 @@ public class ILoginViewModel : INotifyPropertyChanged
         get => _isDirector;
         set
         {
-            _isDirector = value;
-            OnPropertyChanged(nameof(IsDirector));
+            if (value != _isDirector)
+            {
+                _isDirector = value;
+                OnPropertyChanged(nameof(IsDirector));
+            }
         }
     }
     public bool IsSeller
