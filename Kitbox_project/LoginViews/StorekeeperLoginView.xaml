@@ -10,6 +10,10 @@
     <TabBar>
 
         <ShellContent
+            Title="Supplier Orders"
+            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
+            Route="SupplierOrdersPage" />
+        <ShellContent
             Title="Stock"
             ContentTemplate="{DataTemplate views:StockPage}"
             Route="StockPage" />
@@ -17,10 +21,7 @@
             Title="Orders"
             ContentTemplate="{DataTemplate views:OrdersPage}"
             Route="OrdersPage" />
-        <ShellContent
-            Title="Supplier Orders"
-            ContentTemplate="{DataTemplate views:SupplierOrdersPage}"
-            Route="SupplierOrdersPage" />
+        
     </TabBar>
 
 </Shell>

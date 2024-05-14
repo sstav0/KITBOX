@@ -9,19 +9,18 @@
     Shell.NavBarIsVisible="False">
 <TabBar>
 
-         <ShellContent
-            Title="Stock"
-            ContentTemplate="{DataTemplate views:StockPage}"
-            Route="StockPage"/>
         <ShellContent
             Title="Orders"
             ContentTemplate="{DataTemplate views:OrdersPage}"
             Route="OrdersPage"/>
         <ShellContent
+            Title="Stock"
+            ContentTemplate="{DataTemplate views:StockPage}"
+            Route="StockPage"/>
+        <ShellContent
             Title="Home Client"
             ContentTemplate="{DataTemplate views:HomeClientPage}"
             Route="HomeClientPage" />
-
 
     </TabBar>
 
