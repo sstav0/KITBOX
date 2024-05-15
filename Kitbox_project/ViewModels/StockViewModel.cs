@@ -113,18 +113,18 @@ namespace Kitbox_project.ViewModels
                 stockItem.InCatalog = false;
                 stockItem.DirectorButtonText = "Add to Catalog";
 
-                //await DBCatalog.Update(
-                //        new Dictionary<string, object> { { "BoolInCatalog", stockItem.IsInCatalog } },
-                //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
+                await DBCatalog.Update(
+                        new Dictionary<string, object> { { "InCatalog", 0 } },
+                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
             }
             else
             {
                 stockItem.InCatalog = true;
                 stockItem.DirectorButtonText = "Remove from Catalog";
 
-                //await DBCatalog.Update(
-                //        new Dictionary<string, object> { { "Price", stockItem.IsInCatalog } },
-                //        new Dictionary<string, object> { { "idStock", stockItem.Id } });
+                await DBCatalog.Update(
+                        new Dictionary<string, object> { { "InCatalog", 1 } },
+                        new Dictionary<string, object> { { "idStock", stockItem.Id } });
             }
         }
 
