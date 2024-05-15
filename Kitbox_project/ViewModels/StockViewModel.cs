@@ -369,11 +369,16 @@ namespace Kitbox_project.ViewModels
                     // If the input price is a number and non-negative
                     if (IsValidPrice)
                     {
-                        InputPrice = InputPrice.TrimStart('0') != "" ? InputPrice.TrimStart('0') : "0";
+                        InputPrice = InputPrice.Replace(".", ","); // Replace the dot with a comma just in case
+                        CatalogPrice = Convert.ToDouble(InputPrice);
+                        string CatalogPriceString = CatalogPrice.ToString();
+                        CatalogPriceString = CatalogPriceString.Replace(",", "."); // Replace the comma with a dot otherwise DBCatalog.Update bugs
+                        Debug.WriteLine(CatalogPriceString);
 
-                        CatalogPrice = Convert.ToInt32(InputPrice);
+
+
                         await DBCatalog.Update(
-                            new Dictionary<string, object> { { "Price", CatalogPrice.ToString() } },
+                            new Dictionary<string, object> { { "Price", CatalogPriceString } },
                             new Dictionary<string, object> { { "Code", Code } });
 
                         IsEditingPrice = false;

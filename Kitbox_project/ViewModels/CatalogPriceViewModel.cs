@@ -145,7 +145,10 @@ namespace Kitbox_project.ViewModels
                 {
                     _inputPrice = value;
                     OnPropertyChanged(nameof(InputPrice));
-                    ValidatePrice();
+                    
+                    
+                    
+                    //Price();
                 }
             }
 

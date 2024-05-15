@@ -28,13 +28,15 @@ git clone https://github.com/sstav0/KITBOX.git
 
 ## 3. Diagrams
 ### Activity Diagram
-[Activity Diagram]
+![Activity Diagram](Kitbox_project/Resources/Images/activity_diagram_create_customer_order.png)
+![Activity Diagram](Kitbox_project/Resources/Images/activity_diagram_parts_ordering.png)
+![Activity Diagram](Kitbox_project/Resources/Images/activity_diagram_validation_of_a_customers_order.png)
 
 ### Use Case Diagram
-[Use Case Diagram]
+![Use Case Diagram](Kitbox_project/Resources/Images/)
 
 ### Class Diagram
-[Class Diagram]
+![Class Diagram](Kitbox_project/Resources/Images/class_diagram_final.drawio.png)
 
 ### Relationship Entity Diagram
 ![Relationship Entity Diagram](Kitbox_project/Resources/Images/relationship_entity_diagram_final.jpg)
