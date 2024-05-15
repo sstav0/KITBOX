@@ -13,7 +13,7 @@ Application designed to digitalize the cabinet selling process for the **Kitbox 
 - Adding new items to the catalog/stock
 - Creating supplier orders
 - Viewing all supplier orders
-- User interfaces controlled by Log In
+- User interfaces controlled by login
 
 ## 2. Installation
 ### Requirements
@@ -33,7 +33,7 @@ git clone https://github.com/sstav0/KITBOX.git
 ![Activity Diagram](Kitbox_project/Resources/Images/activity_diagram_validation_of_a_customers_order.png)
 
 ### Use Case Diagram
-![Use Case Diagram](Kitbox_project/Resources/Images/)
+![Use Case Diagram](Kitbox_project/Resources/Images/use_case_diagram_final.png)
 
 ### Class Diagram
 ![Class Diagram](Kitbox_project/Resources/Images/class_diagram_final.drawio.png)
@@ -41,6 +41,3 @@ git clone https://github.com/sstav0/KITBOX.git
 ### Relationship Entity Diagram
 ![Relationship Entity Diagram](Kitbox_project/Resources/Images/relationship_entity_diagram_final.jpg)
 ![Relationnal Diagram](Kitbox_project/Resources/Images/relationnal_diagram_final.jpg)
-
-## 4. User Guide
-[Explanations & UI]
