@@ -23,7 +23,6 @@ public partial class PopupStockPrices : Popup
 
     private async void OnEditPriceClicked(object sender, EventArgs e)
     {
-        Debug.WriteLine("OnEditPriceClicked");
         // Call the method EditUpdatePrice in the ViewModel
         await SelectedItem.EditUpdatePrice();
     }

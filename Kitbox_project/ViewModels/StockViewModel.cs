@@ -36,6 +36,10 @@ namespace Kitbox_project.ViewModels
                 {
                     UpdateDirectorRights();
                 }
+                if (e.PropertyName == nameof(IsSecretary))
+                {
+                    UpdateSecretaryRights();
+                }
             };
         }
 
@@ -78,6 +82,14 @@ namespace Kitbox_project.ViewModels
             foreach (var item in StockData)
             {
                 item.IsDirector = IsDirector;
+            }
+        }
+
+        private void UpdateSecretaryRights()
+        {
+            foreach (var item in StockData)
+            {
+                item.IsSecretary = IsSecretary;
             }
         }
 
@@ -137,6 +149,7 @@ namespace Kitbox_project.ViewModels
             private bool _stockItemVisibility;
             private string _directorButtonText;
             private bool _isDirector;
+            private bool _isSecretary;
 
             private List<PriceItem> _priceItems = new List<PriceItem>();
             private double _catalogPrice;
@@ -244,6 +257,16 @@ namespace Kitbox_project.ViewModels
                 {
                     _isDirector = value;
                     OnPropertyChanged(nameof(IsDirector));
+                }
+            }
+
+            public bool IsSecretary
+            {
+                get => _isSecretary;
+                set
+                {
+                    _isSecretary = value;
+                    OnPropertyChanged(nameof(IsSecretary));
                 }
             }
 
@@ -362,7 +385,6 @@ namespace Kitbox_project.ViewModels
 
             public async Task EditUpdatePrice()
             {
-                Debug.WriteLine("EditUpdatePrice");
                 // If Update button pressed
                 if (IsEditingPrice)
                 {
@@ -373,9 +395,6 @@ namespace Kitbox_project.ViewModels
                         CatalogPrice = Convert.ToDouble(InputPrice);
                         string CatalogPriceString = CatalogPrice.ToString();
                         CatalogPriceString = CatalogPriceString.Replace(",", "."); // Replace the comma with a dot otherwise DBCatalog.Update bugs
-                        Debug.WriteLine(CatalogPriceString);
-
-
 
                         await DBCatalog.Update(
                             new Dictionary<string, object> { { "Price", CatalogPriceString } },
@@ -399,7 +418,6 @@ namespace Kitbox_project.ViewModels
                     IsEditingPrice = true;
                     PriceButtonText = "Update";
                     PriceButtonColor = Color.Parse("green");
-                    Debug.WriteLine("Edit Button Pressed");
                 }
             }
 
